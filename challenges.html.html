@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Challenges — Primal Forged</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #050505; color: #fafafa; padding: 20px; line-height: 1.5; }
+    .container { max-width: 800px; margin: 0 auto; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+    .label { font-size: 10px; color: #7f1d1d; text-transform: uppercase; letter-spacing: 0.25em; font-weight: 600; }
+    h1 { font-size: 26px; font-weight: 300; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 6px; }
+    .back-btn { text-decoration: none; color: #737373; font-size: 11px; padding: 8px 16px; border: 1px solid #262626; text-transform: uppercase; letter-spacing: 0.1em; }
+    .card { background: #0a0a0a; border: 1px solid #1c1c1c; padding: 24px; margin-bottom: 16px; }
+    .section-title { font-size: 10px; color: #525252; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 16px; font-weight: 500; }
+    .text-accent { color: #7f1d1d; }
+    .text-success { color: #22c55e; }
+    .text-warning { color: #eab308; }
+    .text-danger { color: #dc2626; }
+    .text-muted { color: #737373; }
+    .text-dim { color: #525252; }
+    .btn { padding: 14px 32px; border: none; font-size: 10px; font-weight: 500; cursor: pointer; text-transform: uppercase; letter-spacing: 0.15em; font-family: inherit; }
+    .btn-primary { background: #7f1d1d; color: #fff; }
+    .btn-secondary { background: transparent; border: 1px solid #262626; color: #737373; }
+    .btn-success { background: #166534; color: #fff; }
+    .btn-small { padding: 8px 16px; font-size: 9px; }
+    .divider { height: 1px; background: #1c1c1c; margin: 32px 0; }
+    .badge { font-size: 8px; padding: 4px 8px; text-transform: uppercase; letter-spacing: 0.1em; }
+    .badge-new { background: rgba(127,29,29,0.2); color: #7f1d1d; }
+    .badge-active { background: rgba(34,197,94,0.2); color: #22c55e; }
+    
+    /* Difficulty badges */
+    .diff-starter { background: rgba(34,197,94,0.2); color: #22c55e; }
+    .diff-medium { background: rgba(234,179,8,0.2); color: #eab308; }
+    .diff-hard { background: rgba(220,38,38,0.2); color: #dc2626; }
+    .diff-extreme { background: rgba(168,85,247,0.2); color: #a855f7; }
+    
+    /* Tabs */
+    .tabs { display: flex; gap: 0; border-bottom: 1px solid #1c1c1c; margin-bottom: 24px; overflow-x: auto; }
+    .tab { padding: 12px 20px; background: transparent; border: none; color: #525252; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; font-family: inherit; border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+    .tab.active { color: #fafafa; border-bottom-color: #7f1d1d; }
+    
+    /* Stats */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+    .stat-mini { text-align: center; padding: 16px; background: #0a0a0a; border: 1px solid #1c1c1c; }
+    .stat-mini-value { font-size: 20px; font-weight: 300; }
+    .stat-mini-label { font-size: 9px; color: #525252; text-transform: uppercase; margin-top: 4px; }
+    
+    /* Active challenge card */
+    .active-challenge { background: linear-gradient(135deg, rgba(127,29,29,0.2) 0%, #0a0a0a 100%); border: 2px solid #7f1d1d; padding: 24px; margin-bottom: 24px; }
+    .active-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .active-title { font-size: 18px; font-weight: 500; margin-bottom: 4px; }
+    .active-subtitle { font-size: 11px; color: #737373; }
+    .active-day { text-align: right; }
+    .active-day-number { font-size: 36px; font-weight: 200; color: #7f1d1d; }
+    .active-day-label { font-size: 9px; color: #525252; }
+    .active-progress { margin: 20px 0; }
+    .active-progress-bar { height: 8px; background: #1c1c1c; }
+    .active-progress-fill { height: 100%; background: linear-gradient(90deg, #7f1d1d, #dc2626); transition: width 0.3s; }
+    .active-progress-label { display: flex; justify-content: space-between; font-size: 10px; color: #525252; margin-top: 8px; }
+    
+    /* Daily check-in */
+    .checkin-card { background: #050505; border: 1px solid #1c1c1c; padding: 20px; margin-top: 16px; }
+    .checkin-title { font-size: 12px; font-weight: 500; margin-bottom: 12px; }
+    .checkin-task { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #1c1c1c; }
+    .checkin-task:last-child { border-bottom: none; }
+    .checkin-check { width: 24px; height: 24px; border: 2px solid #525252; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; }
+    .checkin-check.done { background: #166534; border-color: #166534; color: #fff; }
+    .checkin-text { font-size: 12px; color: #a3a3a3; }
+    .checkin-text.done { text-decoration: line-through; color: #525252; }
+    
+    /* Challenge card (browse) */
+    .challenge-card { background: #0a0a0a; border: 1px solid #1c1c1c; margin-bottom: 12px; overflow: hidden; cursor: pointer; transition: all 0.2s; }
+    .challenge-card:hover { border-color: #7f1d1d; }
+    .challenge-header { padding: 20px; display: flex; gap: 16px; }
+    .challenge-icon { font-size: 32px; }
+    .challenge-info { flex: 1; }
+    .challenge-name { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+    .challenge-desc { font-size: 11px; color: #525252; margin-bottom: 8px; }
+    .challenge-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+    
+    /* Calendar */
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 11px; background: #0a0a0a; border: 1px solid #1c1c1c; }
+    .calendar-day.completed { background: #166534; border-color: #166534; }
+    .calendar-day.failed { background: #7f1d1d; border-color: #7f1d1d; }
+    .calendar-day.today { border-color: #fafafa; border-width: 2px; }
+    .calendar-day.future { opacity: 0.3; }
+    
+    /* History item */
+    .history-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: #0a0a0a; border: 1px solid #1c1c1c; margin-bottom: 8px; }
+    .history-name { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+    .history-date { font-size: 10px; color: #525252; }
+    .history-result { text-align: right; }
+    .history-status { font-size: 12px; font-weight: 500; }
+    .history-days { font-size: 10px; color: #525252; }
+    
+    /* Empty state */
+    .empty-state { text-align: center; padding: 48px 24px; }
+    .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
+    .empty-text { font-size: 14px; color: #525252; margin-bottom: 24px; }
+    
+    /* Loading */
+    .loading { text-align: center; padding: 32px; color: #525252; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <div class="label">Primal Forged</div>
+        <h1>Challenges</h1>
+      </div>
+      <a href="index.html" class="back-btn">← Dashboard</a>
+    </div>
+    
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-tab="active">Actief</button>
+      <button class="tab" data-tab="browse">Alle Challenges</button>
+      <button class="tab" data-tab="history">Geschiedenis</button>
+    </div>
+    
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-mini">
+        <div class="stat-mini-value text-success" id="stat-completed">-</div>
+        <div class="stat-mini-label">Voltooid</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-value" id="stat-active">-</div>
+        <div class="stat-mini-label">Actief</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-value text-warning" id="stat-current-day">-</div>
+        <div class="stat-mini-label">Huidige dag</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-value" id="stat-streak">-</div>
+        <div class="stat-mini-label">Beste streak</div>
+      </div>
+    </div>
+    
+    <!-- Active Tab -->
+    <div id="tab-active" class="tab-content">
+      <div id="active-container">
+        <div class="loading">Actieve challenges laden...</div>
+      </div>
+    </div>
+    
+    <!-- Browse Tab -->
+    <div id="tab-browse" class="tab-content" style="display: none;">
+      <div id="browse-container">
+        <div class="loading">Challenges laden...</div>
+      </div>
+    </div>
+    
+    <!-- History Tab -->
+    <div id="tab-history" class="tab-content" style="display: none;">
+      <div id="history-container">
+        <div class="loading">Geschiedenis laden...</div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const SUPABASE_URL = 'https://dgqfvyjgtkoeiyswgngs.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRncWZ2eWpndGtvZWl5c3dnbmdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU4MzIxMzgsImV4cCI6MjA1MTQwODEzOH0.5y_TE3wv6EcYzhTv_LYvbPmh2OMTOBCugdxkJG_fOus';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    let userId = null;
+    let currentTab = 'active';
+    
+    // Predefined challenges
+    const PREDEFINED_CHALLENGES = [
+      {
+        id: 'cold-7',
+        name: '🥶 7 Dagen Cold Shower',
+        description: 'Start je dag met een koude douche',
+        duration: 7,
+        difficulty: 'starter',
+        category: 'physical'
+      },
+      {
+        id: 'cold-30',
+        name: '🥶 30 Dagen Cold Shower',
+        description: 'Dagelijks minimaal 2 minuten koude douche',
+        duration: 30,
+        difficulty: 'medium',
+        category: 'physical'
+      },
+      {
+        id: 'retention-7',
+        name: '🔥 7 Dagen Retention',
+        description: 'Geen PMO voor 7 dagen',
+        duration: 7,
+        difficulty: 'starter',
+        category: 'mental'
+      },
+      {
+        id: 'retention-14',
+        name: '🔥 14 Dagen Retention',
+        description: 'Geen PMO voor 14 dagen',
+        duration: 14,
+        difficulty: 'medium',
+        category: 'mental'
+      },
+      {
+        id: 'retention-30',
+        name: '🔥 30 Dagen Retention',
+        description: 'Volledige semen retention voor 30 dagen',
+        duration: 30,
+        difficulty: 'hard',
+        category: 'mental'
+      },
+      {
+        id: 'retention-90',
+        name: '🔥 90 Dagen Retention',
+        description: 'De ultieme test - 90 dagen retention',
+        duration: 90,
+        difficulty: 'extreme',
+        category: 'mental'
+      },
+      {
+        id: 'reading-30',
+        name: '📖 30 Dagen Lezen',
+        description: 'Dagelijks minimaal 20 pagina\'s lezen',
+        duration: 30,
+        difficulty: 'medium',
+        category: 'growth'
+      },
+      {
+        id: 'workout-30',
+        name: '💪 30 Dagen Training',
+        description: 'Dagelijkse workout (minimaal 30 min)',
+        duration: 30,
+        difficulty: 'medium',
+        category: 'physical'
+      },
+      {
+        id: 'fasting-30',
+        name: '⏰ 30 Dagen 16:8 Vasten',
+        description: 'Elke dag 16 uur vasten, 8 uur eten',
+        duration: 30,
+        difficulty: 'medium',
+        category: 'nutrition'
+      }
+    ];
+    
+    // Initialize
+    async function init() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+      userId = user.id;
+      
+      setupTabs();
+      loadStats();
+      loadActive();
+      loadBrowse();
+      loadHistory();
+    }
+    
+    // Tab switching
+    function setupTabs() {
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentTab = tab.dataset.tab;
+          
+          document.querySelectorAll('.tab-content').forEach(content => {
+            content.style.display = 'none';
+          });
+          document.getElementById('tab-' + currentTab).style.display = 'block';
+        });
+      });
+    }
+    
+    // Load stats
+    async function loadStats() {
+      try {
+        const { data: challenges, error } = await supabase
+          .from('challenges')
+          .select('*')
+          .eq('user_id', userId);
+        
+        if (error) throw error;
+        
+        const completed = challenges.filter(c => c.status === 'completed').length;
+        const active = challenges.filter(c => c.status === 'active').length;
+        
+        let currentDay = 0;
+        let bestStreak = 0;
+        
+        challenges.forEach(c => {
+          if (c.status === 'active') {
+            const days = calculateCurrentDay(c.start_date);
+            if (days > currentDay) currentDay = days;
+          }
+          if (c.days_completed > bestStreak) bestStreak = c.days_completed;
+        });
+        
+        document.getElementById('stat-completed').textContent = completed;
+        document.getElementById('stat-active').textContent = active;
+        document.getElementById('stat-current-day').textContent = currentDay;
+        document.getElementById('stat-streak').textContent = bestStreak;
+      } catch (error) {
+        console.error('Error loading stats:', error);
+      }
+    }
+    
+    // Load active challenges
+    async function loadActive() {
+      const container = document.getElementById('active-container');
+      
+      try {
+        const { data: challenges, error } = await supabase
+          .from('challenges')
+          .select('*')
+          .eq('user_id', userId)
+          .eq('status', 'active')
+          .order('start_date', { ascending: false });
+        
+        if (error) throw error;
+        
+        if (!challenges || challenges.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">🎯</div>
+              <div class="empty-text">Geen actieve challenges</div>
+              <button class="btn btn-primary" onclick="switchTab('browse')">Kies een Challenge</button>
+            </div>
+          `;
+          return;
+        }
+        
+        container.innerHTML = challenges.map(challenge => renderActiveChallenge(challenge)).join('');
+      } catch (error) {
+        console.error('Error loading active challenges:', error);
+        container.innerHTML = '<div class="loading">Fout bij laden</div>';
+      }
+    }
+    
+    // Render active challenge
+    function renderActiveChallenge(challenge) {
+      const currentDay = calculateCurrentDay(challenge.start_date);
+      const progress = (currentDay / challenge.duration) * 100;
+      const template = PREDEFINED_CHALLENGES.find(t => t.id === challenge.template_id);
+      
+      return `
+        <div class="active-challenge">
+          <div class="active-header">
+            <div>
+              <div class="active-title">${template?.name || challenge.name}</div>
+              <div class="active-subtitle">${template?.description || challenge.description}</div>
+            </div>
+            <div class="active-day">
+              <div class="active-day-number">${currentDay}</div>
+              <div class="active-day-label">/ ${challenge.duration} dagen</div>
+            </div>
+          </div>
+          
+          <div class="active-progress">
+            <div class="active-progress-bar">
+              <div class="active-progress-fill" style="width: ${Math.min(100, progress)}%;"></div>
+            </div>
+            <div class="active-progress-label">
+              <span>${currentDay} dagen voltooid</span>
+              <span>${Math.round(progress)}%</span>
+            </div>
+          </div>
+          
+          <div class="checkin-card">
+            <div class="checkin-title">✓ Vandaag Afvinken</div>
+            <div class="checkin-task">
+              <div class="checkin-check ${challenge.today_completed ? 'done' : ''}" 
+                   onclick="toggleToday('${challenge.id}', ${!challenge.today_completed})">
+                ${challenge.today_completed ? '✓' : ''}
+              </div>
+              <div class="checkin-text ${challenge.today_completed ? 'done' : ''}">
+                Challenge voltooid voor vandaag
+              </div>
+            </div>
+          </div>
+          
+          <div style="margin-top: 16px; display: flex; gap: 12px;">
+            <button class="btn btn-secondary btn-small" onclick="quitChallenge('${challenge.id}')">Challenge Stoppen</button>
+          </div>
+        </div>
+      `;
+    }
+    
+    // Load browse
+    function loadBrowse() {
+      const container = document.getElementById('browse-container');
+      
+      container.innerHTML = PREDEFINED_CHALLENGES.map(challenge => `
+        <div class="challenge-card" onclick="startChallenge('${challenge.id}')">
+          <div class="challenge-header">
+            <div class="challenge-icon">${challenge.name.split(' ')[0]}</div>
+            <div class="challenge-info">
+              <div class="challenge-name">${challenge.name}</div>
+              <div class="challenge-desc">${challenge.description}</div>
+              <div class="challenge-meta">
+                <span class="badge diff-${challenge.difficulty}">${challenge.difficulty.toUpperCase()}</span>
+                <span class="text-dim">${challenge.duration} dagen</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    // Load history
+    async function loadHistory() {
+      const container = document.getElementById('history-container');
+      
+      try {
+        const { data: challenges, error } = await supabase
+          .from('challenges')
+          .select('*')
+          .eq('user_id', userId)
+          .in('status', ['completed', 'failed'])
+          .order('updated_at', { ascending: false });
+        
+        if (error) throw error;
+        
+        if (!challenges || challenges.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">📜</div>
+              <div class="empty-text">Nog geen voltooide challenges</div>
+            </div>
+          `;
+          return;
+        }
+        
+        container.innerHTML = challenges.map(challenge => {
+          const template = PREDEFINED_CHALLENGES.find(t => t.id === challenge.template_id);
+          const date = new Date(challenge.updated_at).toLocaleDateString('nl-NL', { month: 'short', year: 'numeric' });
+          
+          return `
+            <div class="history-item">
+              <div class="history-info">
+                <div class="history-name">${template?.name || challenge.name}</div>
+                <div class="history-date">${date}</div>
+              </div>
+              <div class="history-result">
+                <div class="history-status ${challenge.status === 'completed' ? 'text-success' : 'text-danger'}">
+                  ${challenge.status === 'completed' ? '✓ Voltooid' : '✗ Gestopt'}
+                </div>
+                <div class="history-days">${challenge.days_completed}/${challenge.duration} dagen</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (error) {
+        console.error('Error loading history:', error);
+        container.innerHTML = '<div class="loading">Fout bij laden</div>';
+      }
+    }
+    
+    // Calculate current day
+    function calculateCurrentDay(startDate) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const start = new Date(startDate);
+      start.setHours(0, 0, 0, 0);
+      const diff = today - start;
+      return Math.floor(diff / (1000 * 60 * 60 * 24)) + 1;
+    }
+    
+    // Start challenge
+    async function startChallenge(templateId) {
+      const template = PREDEFINED_CHALLENGES.find(t => t.id === templateId);
+      if (!template) return;
+      
+      if (!confirm(`Start je de ${template.name}?`)) return;
+      
+      try {
+        // Check for existing active challenges
+        const { data: existing } = await supabase
+          .from('challenges')
+          .select('*')
+          .eq('user_id', userId)
+          .eq('status', 'active')
+          .eq('template_id', templateId);
+        
+        if (existing && existing.length > 0) {
+          alert('Je hebt deze challenge al actief!');
+          return;
+        }
+        
+        const { error } = await supabase
+          .from('challenges')
+          .insert([{
+            user_id: userId,
+            template_id: templateId,
+            name: template.name,
+            description: template.description,
+            duration: template.duration,
+            start_date: new Date().toISOString().split('T')[0],
+            status: 'active',
+            days_completed: 0,
+            today_completed: false
+          }]);
+        
+        if (error) throw error;
+        
+        switchTab('active');
+        loadStats();
+        loadActive();
+      } catch (error) {
+        console.error('Error starting challenge:', error);
+        alert('Fout bij starten challenge: ' + error.message);
+      }
+    }
+    
+    // Toggle today completion
+    async function toggleToday(challengeId, completed) {
+      try {
+        const { data: challenge } = await supabase
+          .from('challenges')
+          .select('*')
+          .eq('id', challengeId)
+          .single();
+        
+        if (!challenge) return;
+        
+        const currentDay = calculateCurrentDay(challenge.start_date);
+        const newDaysCompleted = completed ? currentDay : currentDay - 1;
+        
+        let updateData = {
+          today_completed: completed,
+          days_completed: newDaysCompleted,
+          updated_at: new Date().toISOString()
+        };
+        
+        // Check if challenge is complete
+        if (completed && currentDay >= challenge.duration) {
+          updateData.status = 'completed';
+        }
+        
+        const { error } = await supabase
+          .from('challenges')
+          .update(updateData)
+          .eq('id', challengeId);
+        
+        if (error) throw error;
+        
+        loadStats();
+        loadActive();
+        loadHistory();
+      } catch (error) {
+        console.error('Error toggling today:', error);
+        alert('Fout bij bijwerken');
+      }
+    }
+    
+    // Quit challenge
+    async function quitChallenge(challengeId) {
+      if (!confirm('Weet je zeker dat je deze challenge wilt stoppen?')) return;
+      
+      try {
+        const { data: challenge } = await supabase
+          .from('challenges')
+          .select('*')
+          .eq('id', challengeId)
+          .single();
+        
+        if (!challenge) return;
+        
+        const { error } = await supabase
+          .from('challenges')
+          .update({
+            status: 'failed',
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', challengeId);
+        
+        if (error) throw error;
+        
+        loadStats();
+        loadActive();
+        loadHistory();
+      } catch (error) {
+        console.error('Error quitting challenge:', error);
+        alert('Fout bij stoppen challenge');
+      }
+    }
+    
+    // Switch tab
+    function switchTab(tab) {
+      document.querySelector(`[data-tab="${tab}"]`).click();
+    }
+    
+    // Start
+    init();
+  </script>
+</body>
+</html>

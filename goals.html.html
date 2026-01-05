@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doelen — Primal Forged</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #050505; color: #fafafa; padding: 20px; line-height: 1.5; }
+    .container { max-width: 800px; margin: 0 auto; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+    .label { font-size: 10px; color: #7f1d1d; text-transform: uppercase; letter-spacing: 0.25em; font-weight: 600; }
+    h1 { font-size: 26px; font-weight: 300; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 6px; }
+    .back-btn { text-decoration: none; color: #737373; font-size: 11px; padding: 8px 16px; border: 1px solid #262626; text-transform: uppercase; letter-spacing: 0.1em; }
+    .card { background: #0a0a0a; border: 1px solid #1c1c1c; padding: 24px; margin-bottom: 16px; }
+    .section-title { font-size: 10px; color: #525252; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 16px; font-weight: 500; }
+    .text-accent { color: #7f1d1d; }
+    .text-success { color: #22c55e; }
+    .text-warning { color: #eab308; }
+    .text-muted { color: #737373; }
+    .text-dim { color: #525252; }
+    .btn { padding: 14px 32px; border: none; font-size: 10px; font-weight: 500; cursor: pointer; text-transform: uppercase; letter-spacing: 0.15em; font-family: inherit; }
+    .btn-primary { background: #7f1d1d; color: #fff; }
+    .btn-secondary { background: transparent; border: 1px solid #262626; color: #737373; }
+    .btn-small { padding: 8px 16px; font-size: 9px; }
+    .divider { height: 1px; background: #1c1c1c; margin: 32px 0; }
+    
+    /* Tabs */
+    .tabs { display: flex; gap: 0; border-bottom: 1px solid #1c1c1c; margin-bottom: 24px; }
+    .tab { padding: 12px 24px; background: transparent; border: none; color: #525252; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; font-family: inherit; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+    .tab.active { color: #fafafa; border-bottom-color: #7f1d1d; }
+    
+    /* Stats */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+    .stat-mini { text-align: center; padding: 16px; background: #0a0a0a; border: 1px solid #1c1c1c; }
+    .stat-mini-value { font-size: 20px; font-weight: 300; }
+    .stat-mini-label { font-size: 9px; color: #525252; text-transform: uppercase; margin-top: 4px; }
+    
+    /* Goal card */
+    .goal-card { background: #0a0a0a; border: 1px solid #1c1c1c; margin-bottom: 12px; overflow: hidden; }
+    .goal-header { padding: 20px; display: flex; gap: 16px; align-items: flex-start; }
+    .goal-checkbox { width: 24px; height: 24px; border: 2px solid #525252; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; margin-top: 2px; }
+    .goal-checkbox.checked { background: #22c55e; border-color: #22c55e; }
+    .goal-content { flex: 1; }
+    .goal-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+    .goal-meta { font-size: 11px; color: #525252; display: flex; gap: 16px; flex-wrap: wrap; }
+    .goal-progress { padding: 0 20px 20px; }
+    .goal-progress-bar { height: 6px; background: #1c1c1c; }
+    .goal-progress-fill { height: 100%; background: #7f1d1d; transition: width 0.3s; }
+    .goal-progress-label { display: flex; justify-content: space-between; font-size: 10px; color: #525252; margin-top: 8px; }
+    
+    /* Priority badges */
+    .priority { font-size: 9px; padding: 3px 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .priority-high { background: rgba(220,38,38,0.2); color: #dc2626; }
+    .priority-medium { background: rgba(234,179,8,0.2); color: #eab308; }
+    .priority-low { background: rgba(34,197,94,0.2); color: #22c55e; }
+    
+    /* Category badges */
+    .category { font-size: 9px; padding: 3px 8px; background: rgba(127,29,29,0.2); color: #7f1d1d; }
+    
+    /* Form */
+    input[type="text"], textarea, select { width: 100%; padding: 12px 14px; background: #050505; border: 1px solid #1c1c1c; color: #fafafa; font-family: inherit; font-size: 13px; }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: #7f1d1d; }
+    input::placeholder, textarea::placeholder { color: #525252; }
+    textarea { min-height: 80px; resize: vertical; }
+    
+    /* SMART helper */
+    .smart-helper { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 16px; }
+    .smart-letter { text-align: center; padding: 12px 8px; background: #050505; border: 1px solid #1c1c1c; }
+    .smart-letter-char { font-size: 18px; font-weight: 600; color: #7f1d1d; }
+    .smart-letter-word { font-size: 8px; color: #525252; text-transform: uppercase; margin-top: 4px; }
+    
+    /* Completed goal */
+    .goal-completed { opacity: 0.6; }
+    .goal-completed .goal-title { text-decoration: line-through; }
+    
+    /* Modal */
+    .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; padding: 20px; overflow-y: auto; }
+    .modal.active { display: flex; align-items: center; justify-content: center; }
+    .modal-content { background: #0a0a0a; border: 1px solid #1c1c1c; max-width: 600px; width: 100%; padding: 32px; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .modal-title { font-size: 18px; font-weight: 500; }
+    .modal-close { background: none; border: none; color: #737373; font-size: 24px; cursor: pointer; padding: 0; width: 32px; height: 32px; }
+    
+    /* Empty state */
+    .empty-state { text-align: center; padding: 48px 24px; }
+    .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
+    .empty-text { font-size: 14px; color: #525252; margin-bottom: 24px; }
+    
+    /* Loading */
+    .loading { text-align: center; padding: 32px; color: #525252; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <div class="label">Primal Forged</div>
+        <h1>Doelen</h1>
+      </div>
+      <a href="index.html" class="back-btn">← Dashboard</a>
+    </div>
+    
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-mini">
+        <div class="stat-mini-value" id="stat-active">-</div>
+        <div class="stat-mini-label">Actieve doelen</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-value text-success" id="stat-completed">-</div>
+        <div class="stat-mini-label">Voltooid</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-value text-warning" id="stat-avg">-%</div>
+        <div class="stat-mini-label">Gem. voortgang</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-value" id="stat-week">-</div>
+        <div class="stat-mini-label">Deze week af</div>
+      </div>
+    </div>
+    
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-tab="short">Korte termijn</button>
+      <button class="tab" data-tab="medium">Middellang</button>
+      <button class="tab" data-tab="long">Lange termijn</button>
+      <button class="tab" data-tab="completed">Voltooid</button>
+    </div>
+    
+    <!-- Add new goal -->
+    <div class="card">
+      <button class="btn btn-primary" onclick="openAddModal()" style="width: 100%;">+ Nieuw Doel Toevoegen</button>
+    </div>
+    
+    <!-- Goals container -->
+    <div id="goals-container">
+      <div class="loading">Doelen laden...</div>
+    </div>
+  </div>
+  
+  <!-- Add/Edit Goal Modal -->
+  <div class="modal" id="goal-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-title">Nieuw Doel Toevoegen</div>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      
+      <!-- SMART Helper -->
+      <div class="smart-helper">
+        <div class="smart-letter">
+          <div class="smart-letter-char">S</div>
+          <div class="smart-letter-word">Specifiek</div>
+        </div>
+        <div class="smart-letter">
+          <div class="smart-letter-char">M</div>
+          <div class="smart-letter-word">Meetbaar</div>
+        </div>
+        <div class="smart-letter">
+          <div class="smart-letter-char">A</div>
+          <div class="smart-letter-word">Acceptabel</div>
+        </div>
+        <div class="smart-letter">
+          <div class="smart-letter-char">R</div>
+          <div class="smart-letter-word">Realistisch</div>
+        </div>
+        <div class="smart-letter">
+          <div class="smart-letter-char">T</div>
+          <div class="smart-letter-word">Tijdgebonden</div>
+        </div>
+      </div>
+      
+      <div style="display: grid; gap: 16px;">
+        <input type="text" id="goal-title" placeholder="Wat wil je bereiken? (wees specifiek)">
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <select id="goal-category">
+            <option value="">Categorie...</option>
+            <option value="physical">💪 Fysiek</option>
+            <option value="mental">🧠 Mentaal</option>
+            <option value="career">💼 Carrière</option>
+            <option value="financial">💰 Financieel</option>
+            <option value="relationships">❤️ Relaties</option>
+            <option value="growth">📚 Persoonlijke groei</option>
+          </select>
+          
+          <select id="goal-priority">
+            <option value="">Prioriteit...</option>
+            <option value="high">🔴 Hoog</option>
+            <option value="medium">🟡 Medium</option>
+            <option value="low">🟢 Laag</option>
+          </select>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <select id="goal-timeframe">
+            <option value="">Termijn...</option>
+            <option value="short">Kort (1-4 weken)</option>
+            <option value="medium">Middellang (1-3 maanden)</option>
+            <option value="long">Lang (3-12 maanden)</option>
+          </select>
+          
+          <input type="date" id="goal-deadline">
+        </div>
+        
+        <textarea id="goal-description" placeholder="Waarom is dit doel belangrijk voor je? (optioneel)"></textarea>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+          <input type="number" id="goal-start" placeholder="Start waarde" step="0.1">
+          <input type="number" id="goal-current" placeholder="Huidige waarde" step="0.1">
+          <input type="number" id="goal-target" placeholder="Doel waarde" step="0.1">
+        </div>
+        
+        <div style="display: flex; gap: 12px; margin-top: 8px;">
+          <button class="btn btn-primary" onclick="saveGoal()" style="flex: 1;">Opslaan</button>
+          <button class="btn btn-secondary" onclick="closeModal()">Annuleren</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const SUPABASE_URL = 'https://dgqfvyjgtkoeiyswgngs.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRncWZ2eWpndGtvZWl5c3dnbmdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU4MzIxMzgsImV4cCI6MjA1MTQwODEzOH0.5y_TE3wv6EcYzhTv_LYvbPmh2OMTOBCugdxkJG_fOus';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    let currentTab = 'short';
+    let editingGoalId = null;
+    let userId = null;
+    
+    // Initialize
+    async function init() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+      userId = user.id;
+      
+      setupTabs();
+      loadGoals();
+    }
+    
+    // Tab switching
+    function setupTabs() {
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentTab = tab.dataset.tab;
+          loadGoals();
+        });
+      });
+    }
+    
+    // Load goals
+    async function loadGoals() {
+      const container = document.getElementById('goals-container');
+      container.innerHTML = '<div class="loading">Doelen laden...</div>';
+      
+      try {
+        let query = supabase
+          .from('goals')
+          .select('*')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false });
+        
+        if (currentTab === 'completed') {
+          query = query.eq('is_completed', true);
+        } else {
+          query = query.eq('is_completed', false).eq('timeframe', currentTab);
+        }
+        
+        const { data: goals, error } = await query;
+        
+        if (error) throw error;
+        
+        if (!goals || goals.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">🎯</div>
+              <div class="empty-text">Nog geen doelen in deze categorie</div>
+              <button class="btn btn-primary" onclick="openAddModal()">+ Eerste Doel Toevoegen</button>
+            </div>
+          `;
+        } else {
+          container.innerHTML = goals.map(goal => renderGoalCard(goal)).join('');
+        }
+        
+        updateStats();
+      } catch (error) {
+        console.error('Error loading goals:', error);
+        container.innerHTML = '<div class="loading">Fout bij laden van doelen</div>';
+      }
+    }
+    
+    // Render goal card
+    function renderGoalCard(goal) {
+      const progress = calculateProgress(goal);
+      const daysLeft = goal.deadline ? calculateDaysLeft(goal.deadline) : null;
+      
+      const categoryIcons = {
+        physical: '💪',
+        mental: '🧠',
+        career: '💼',
+        financial: '💰',
+        relationships: '❤️',
+        growth: '📚'
+      };
+      
+      const categoryNames = {
+        physical: 'Fysiek',
+        mental: 'Mentaal',
+        career: 'Carrière',
+        financial: 'Financieel',
+        relationships: 'Relaties',
+        growth: 'Persoonlijke groei'
+      };
+      
+      return `
+        <div class="goal-card ${goal.is_completed ? 'goal-completed' : ''}">
+          <div class="goal-header">
+            <div class="goal-checkbox ${goal.is_completed ? 'checked' : ''}" onclick="toggleGoal('${goal.id}', ${!goal.is_completed})">
+              ${goal.is_completed ? '✓' : ''}
+            </div>
+            <div class="goal-content">
+              <div class="goal-title">${goal.title}</div>
+              <div class="goal-meta">
+                ${goal.category ? `<span class="category">${categoryIcons[goal.category]} ${categoryNames[goal.category]}</span>` : ''}
+                ${goal.priority ? `<span class="priority priority-${goal.priority}">${goal.priority === 'high' ? 'Hoog' : goal.priority === 'medium' ? 'Medium' : 'Laag'}</span>` : ''}
+                ${daysLeft !== null ? `<span>📅 ${daysLeft > 0 ? daysLeft + ' dagen over' : daysLeft === 0 ? 'Vandaag!' : 'Verlopen'}</span>` : ''}
+              </div>
+            </div>
+          </div>
+          ${!goal.is_completed && goal.target_value ? `
+            <div class="goal-progress">
+              <div class="goal-progress-bar">
+                <div class="goal-progress-fill" style="width: ${progress}%;"></div>
+              </div>
+              <div class="goal-progress-label">
+                <span>${goal.start_value || 0} → ${goal.current_value || goal.start_value || 0} → ${goal.target_value}</span>
+                <span class="${progress >= 75 ? 'text-success' : progress >= 50 ? 'text-warning' : ''}">${progress}%</span>
+              </div>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+    
+    // Calculate progress percentage
+    function calculateProgress(goal) {
+      if (!goal.target_value || !goal.start_value) return 0;
+      const current = goal.current_value || goal.start_value;
+      const total = goal.target_value - goal.start_value;
+      const progress = ((current - goal.start_value) / total) * 100;
+      return Math.max(0, Math.min(100, Math.round(progress)));
+    }
+    
+    // Calculate days left
+    function calculateDaysLeft(deadline) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const deadlineDate = new Date(deadline);
+      deadlineDate.setHours(0, 0, 0, 0);
+      const diff = deadlineDate - today;
+      return Math.ceil(diff / (1000 * 60 * 60 * 24));
+    }
+    
+    // Update stats
+    async function updateStats() {
+      try {
+        const { data: allGoals } = await supabase
+          .from('goals')
+          .select('*')
+          .eq('user_id', userId);
+        
+        if (!allGoals) return;
+        
+        const active = allGoals.filter(g => !g.is_completed).length;
+        const completed = allGoals.filter(g => g.is_completed).length;
+        
+        let totalProgress = 0;
+        let countWithProgress = 0;
+        allGoals.filter(g => !g.is_completed).forEach(goal => {
+          if (goal.target_value) {
+            totalProgress += calculateProgress(goal);
+            countWithProgress++;
+          }
+        });
+        const avgProgress = countWithProgress > 0 ? Math.round(totalProgress / countWithProgress) : 0;
+        
+        const weekAgo = new Date();
+        weekAgo.setDate(weekAgo.getDate() - 7);
+        const weekCompleted = allGoals.filter(g => g.is_completed && new Date(g.updated_at) > weekAgo).length;
+        
+        document.getElementById('stat-active').textContent = active;
+        document.getElementById('stat-completed').textContent = completed;
+        document.getElementById('stat-avg').textContent = avgProgress + '%';
+        document.getElementById('stat-week').textContent = weekCompleted;
+      } catch (error) {
+        console.error('Error updating stats:', error);
+      }
+    }
+    
+    // Toggle goal completion
+    async function toggleGoal(goalId, completed) {
+      try {
+        const { error } = await supabase
+          .from('goals')
+          .update({ 
+            is_completed: completed,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', goalId);
+        
+        if (error) throw error;
+        loadGoals();
+      } catch (error) {
+        console.error('Error toggling goal:', error);
+        alert('Fout bij bijwerken van doel');
+      }
+    }
+    
+    // Modal functions
+    function openAddModal() {
+      editingGoalId = null;
+      document.getElementById('modal-title').textContent = 'Nieuw Doel Toevoegen';
+      document.getElementById('goal-title').value = '';
+      document.getElementById('goal-category').value = '';
+      document.getElementById('goal-priority').value = '';
+      document.getElementById('goal-timeframe').value = currentTab;
+      document.getElementById('goal-deadline').value = '';
+      document.getElementById('goal-description').value = '';
+      document.getElementById('goal-start').value = '';
+      document.getElementById('goal-current').value = '';
+      document.getElementById('goal-target').value = '';
+      document.getElementById('goal-modal').classList.add('active');
+    }
+    
+    function closeModal() {
+      document.getElementById('goal-modal').classList.remove('active');
+    }
+    
+    // Save goal
+    async function saveGoal() {
+      const title = document.getElementById('goal-title').value.trim();
+      if (!title) {
+        alert('Vul een titel in');
+        return;
+      }
+      
+      const goalData = {
+        user_id: userId,
+        title,
+        category: document.getElementById('goal-category').value || null,
+        priority: document.getElementById('goal-priority').value || null,
+        timeframe: document.getElementById('goal-timeframe').value || 'short',
+        deadline: document.getElementById('goal-deadline').value || null,
+        description: document.getElementById('goal-description').value || null,
+        start_value: parseFloat(document.getElementById('goal-start').value) || null,
+        current_value: parseFloat(document.getElementById('goal-current').value) || parseFloat(document.getElementById('goal-start').value) || null,
+        target_value: parseFloat(document.getElementById('goal-target').value) || null,
+        is_completed: false
+      };
+      
+      try {
+        if (editingGoalId) {
+          const { error } = await supabase
+            .from('goals')
+            .update({ ...goalData, updated_at: new Date().toISOString() })
+            .eq('id', editingGoalId);
+          if (error) throw error;
+        } else {
+          const { error } = await supabase
+            .from('goals')
+            .insert([goalData]);
+          if (error) throw error;
+        }
+        
+        closeModal();
+        loadGoals();
+      } catch (error) {
+        console.error('Error saving goal:', error);
+        alert('Fout bij opslaan van doel: ' + error.message);
+      }
+    }
+    
+    // Start
+    init();
+  </script>
+</body>
+</html>

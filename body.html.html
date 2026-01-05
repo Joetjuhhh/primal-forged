@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lichaam — Primal Forged</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #050505; color: #fafafa; padding: 20px; line-height: 1.5; }
+    .container { max-width: 800px; margin: 0 auto; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+    .label { font-size: 10px; color: #7f1d1d; text-transform: uppercase; letter-spacing: 0.25em; font-weight: 600; }
+    h1 { font-size: 26px; font-weight: 300; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 6px; }
+    .back-btn { text-decoration: none; color: #737373; font-size: 11px; padding: 8px 16px; border: 1px solid #262626; text-transform: uppercase; letter-spacing: 0.1em; }
+    .card { background: #0a0a0a; border: 1px solid #1c1c1c; padding: 24px; margin-bottom: 16px; }
+    .section-title { font-size: 10px; color: #525252; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 16px; font-weight: 500; }
+    .text-accent { color: #7f1d1d; }
+    .text-success { color: #22c55e; }
+    .text-warning { color: #eab308; }
+    .text-muted { color: #737373; }
+    .text-dim { color: #525252; }
+    .btn { padding: 14px 32px; border: none; font-size: 10px; font-weight: 500; cursor: pointer; text-transform: uppercase; letter-spacing: 0.15em; font-family: inherit; }
+    .btn-primary { background: #7f1d1d; color: #fff; }
+    .btn-secondary { background: transparent; border: 1px solid #262626; color: #737373; }
+    .btn-small { padding: 8px 16px; font-size: 9px; }
+    .divider { height: 1px; background: #1c1c1c; margin: 32px 0; }
+    
+    /* Tabs */
+    .tabs { display: flex; gap: 0; border-bottom: 1px solid #1c1c1c; margin-bottom: 24px; overflow-x: auto; }
+    .tab { padding: 12px 20px; background: transparent; border: none; color: #525252; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; font-family: inherit; border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+    .tab.active { color: #fafafa; border-bottom-color: #7f1d1d; }
+    
+    /* Stats */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+    .stat-mini { text-align: center; padding: 16px; background: #0a0a0a; border: 1px solid #1c1c1c; }
+    .stat-mini-value { font-size: 20px; font-weight: 300; }
+    .stat-mini-label { font-size: 9px; color: #525252; text-transform: uppercase; margin-top: 4px; }
+    .stat-mini-change { font-size: 10px; margin-top: 4px; }
+    
+    /* Form inputs */
+    input[type="text"], input[type="number"], input[type="date"], select { 
+      width: 100%; padding: 12px 14px; background: #050505; border: 1px solid #1c1c1c; 
+      color: #fafafa; font-family: inherit; font-size: 13px; 
+    }
+    input:focus, select:focus { outline: none; border-color: #7f1d1d; }
+    input::placeholder { color: #525252; }
+    
+    /* Goal indicator */
+    .goal-indicator { display: flex; align-items: center; gap: 12px; padding: 16px; background: rgba(127,29,29,0.1); border-left: 2px solid #7f1d1d; margin-bottom: 16px; }
+    .goal-indicator-text { font-size: 12px; color: #a3a3a3; }
+    .goal-indicator-value { font-size: 14px; font-weight: 500; color: #fafafa; }
+    
+    /* Measurement row */
+    .measurement-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #1c1c1c; }
+    .measurement-row:last-child { border-bottom: none; }
+    .measurement-name { font-size: 12px; color: #a3a3a3; }
+    .measurement-value { font-size: 14px; font-weight: 500; }
+    .measurement-change { font-size: 11px; margin-left: 8px; }
+    
+    /* History table */
+    .history-table { width: 100%; font-size: 12px; }
+    .history-table th { text-align: left; padding: 12px 8px; border-bottom: 1px solid #1c1c1c; color: #525252; font-weight: 500; text-transform: uppercase; font-size: 10px; }
+    .history-table td { padding: 12px 8px; border-bottom: 1px solid #0f0f0f; color: #a3a3a3; }
+    .history-table tr:hover td { background: #0f0f0f; }
+    
+    /* Modal */
+    .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; padding: 20px; overflow-y: auto; }
+    .modal.active { display: flex; align-items: center; justify-content: center; }
+    .modal-content { background: #0a0a0a; border: 1px solid #1c1c1c; max-width: 600px; width: 100%; padding: 32px; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .modal-title { font-size: 18px; font-weight: 500; }
+    .modal-close { background: none; border: none; color: #737373; font-size: 24px; cursor: pointer; padding: 0; width: 32px; height: 32px; }
+    
+    /* Chart container */
+    .chart-wrapper { position: relative; height: 200px; margin-bottom: 16px; }
+    
+    /* Loading */
+    .loading { text-align: center; padding: 32px; color: #525252; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <div class="label">Primal Forged</div>
+        <h1>Lichaam</h1>
+      </div>
+      <a href="index.html" class="back-btn">← Dashboard</a>
+    </div>
+    
+    <!-- Stats overview -->
+    <div class="stats-row">
+      <div class="stat-mini">
+        <div class="stat-mini-value" id="current-weight">-</div>
+        <div class="stat-mini-label">Gewicht (kg)</div>
+        <div class="stat-mini-change" id="weight-change">-</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-value" id="current-bodyfat">-</div>
+        <div class="stat-mini-label">Vetpercentage</div>
+        <div class="stat-mini-change" id="bodyfat-change">-</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-value" id="current-bmi">-</div>
+        <div class="stat-mini-label">BMI</div>
+        <div class="stat-mini-change text-muted" id="bmi-status">-</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-value" id="current-ffmi">-</div>
+        <div class="stat-mini-label">FFMI</div>
+        <div class="stat-mini-change text-success" id="ffmi-status">-</div>
+      </div>
+    </div>
+    
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-tab="overview">Overzicht</button>
+      <button class="tab" data-tab="measurements">Metingen</button>
+      <button class="tab" data-tab="history">Geschiedenis</button>
+    </div>
+    
+    <!-- Add new entry button -->
+    <div class="card">
+      <button class="btn btn-primary" onclick="openAddModal()" style="width: 100%;">+ Nieuwe Meting Toevoegen</button>
+    </div>
+    
+    <!-- Overview Tab -->
+    <div id="tab-overview" class="tab-content">
+      <!-- Goal indicator -->
+      <div id="goal-container"></div>
+      
+      <!-- Weight chart -->
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <div class="section-title" style="margin: 0;">Gewicht Trend</div>
+          <select id="chart-period" style="width: auto; padding: 6px 12px; font-size: 10px;" onchange="loadChart()">
+            <option value="30">Laatste 30 dagen</option>
+            <option value="90">Laatste 90 dagen</option>
+            <option value="180">Laatste 6 maanden</option>
+            <option value="365">Laatste jaar</option>
+          </select>
+        </div>
+        
+        <div class="chart-wrapper">
+          <canvas id="weight-chart"></canvas>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Measurements Tab -->
+    <div id="tab-measurements" class="tab-content" style="display: none;">
+      <div class="card">
+        <div class="section-title">Lichaamsmetingen</div>
+        <div id="measurements-container">
+          <div class="loading">Metingen laden...</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- History Tab -->
+    <div id="tab-history" class="tab-content" style="display: none;">
+      <div class="card" style="padding: 0; overflow-x: auto;">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Datum</th>
+              <th>Gewicht</th>
+              <th>Vet %</th>
+              <th>BMI</th>
+              <th>FFMI</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="history-tbody">
+            <tr><td colspan="6" class="loading">Geschiedenis laden...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Add/Edit Entry Modal -->
+  <div class="modal" id="entry-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Nieuwe Meting Toevoegen</div>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      
+      <div style="display: grid; gap: 16px;">
+        <input type="date" id="entry-date" value="">
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label style="font-size: 10px; color: #525252; display: block; margin-bottom: 6px;">GEWICHT (KG)</label>
+            <input type="number" id="entry-weight" step="0.1" placeholder="bijv. 82.5">
+          </div>
+          <div>
+            <label style="font-size: 10px; color: #525252; display: block; margin-bottom: 6px;">VETPERCENTAGE (%)</label>
+            <input type="number" id="entry-bodyfat" step="0.1" placeholder="bijv. 16.5">
+          </div>
+        </div>
+        
+        <div class="section-title">Lichaamsomtrek (optioneel)</div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label style="font-size: 10px; color: #525252; display: block; margin-bottom: 6px;">BORST (CM)</label>
+            <input type="number" id="entry-chest" step="0.5" placeholder="bijv. 102">
+          </div>
+          <div>
+            <label style="font-size: 10px; color: #525252; display: block; margin-bottom: 6px;">TAILLE (CM)</label>
+            <input type="number" id="entry-waist" step="0.5" placeholder="bijv. 84">
+          </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label style="font-size: 10px; color: #525252; display: block; margin-bottom: 6px;">HEUPEN (CM)</label>
+            <input type="number" id="entry-hips" step="0.5" placeholder="bijv. 96">
+          </div>
+          <div>
+            <label style="font-size: 10px; color: #525252; display: block; margin-bottom: 6px;">BICEPS (CM)</label>
+            <input type="number" id="entry-biceps" step="0.5" placeholder="bijv. 36">
+          </div>
+        </div>
+        
+        <div>
+          <label style="font-size: 10px; color: #525252; display: block; margin-bottom: 6px;">DIJEN (CM)</label>
+          <input type="number" id="entry-thighs" step="0.5" placeholder="bijv. 58">
+        </div>
+        
+        <div style="display: flex; gap: 12px; margin-top: 8px;">
+          <button class="btn btn-primary" onclick="saveEntry()" style="flex: 1;">Opslaan</button>
+          <button class="btn btn-secondary" onclick="closeModal()">Annuleren</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const SUPABASE_URL = 'https://dgqfvyjgtkoeiyswgngs.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRncWZ2eWpndGtvZWl5c3dnbmdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU4MzIxMzgsImV4cCI6MjA1MTQwODEzOH0.5y_TE3wv6EcYzhTv_LYvbPmh2OMTOBCugdxkJG_fOus';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    let userId = null;
+    let currentTab = 'overview';
+    let weightChart = null;
+    const USER_HEIGHT = 180; // Default height in cm - should be configurable
+    
+    // Initialize
+    async function init() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+      userId = user.id;
+      
+      // Set today's date as default
+      document.getElementById('entry-date').value = new Date().toISOString().split('T')[0];
+      
+      setupTabs();
+      loadStats();
+      loadChart();
+      loadMeasurements();
+      loadHistory();
+    }
+    
+    // Tab switching
+    function setupTabs() {
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentTab = tab.dataset.tab;
+          
+          document.querySelectorAll('.tab-content').forEach(content => {
+            content.style.display = 'none';
+          });
+          document.getElementById('tab-' + currentTab).style.display = 'block';
+        });
+      });
+    }
+    
+    // Load stats
+    async function loadStats() {
+      try {
+        const { data: entries, error } = await supabase
+          .from('body_stats')
+          .select('*')
+          .eq('user_id', userId)
+          .order('entry_date', { ascending: false })
+          .limit(2);
+        
+        if (error) throw error;
+        
+        if (entries && entries.length > 0) {
+          const latest = entries[0];
+          const previous = entries[1];
+          
+          // Weight
+          document.getElementById('current-weight').textContent = latest.weight || '-';
+          if (previous && latest.weight && previous.weight) {
+            const diff = latest.weight - previous.weight;
+            const changeEl = document.getElementById('weight-change');
+            changeEl.textContent = (diff >= 0 ? '↑ ' : '↓ ') + Math.abs(diff).toFixed(1) + 'kg';
+            changeEl.className = 'stat-mini-change ' + (diff < 0 ? 'text-success' : 'text-warning');
+          }
+          
+          // Body fat
+          if (latest.bodyfat_percentage) {
+            document.getElementById('current-bodyfat').textContent = latest.bodyfat_percentage + '%';
+            if (previous && previous.bodyfat_percentage) {
+              const diff = latest.bodyfat_percentage - previous.bodyfat_percentage;
+              const changeEl = document.getElementById('bodyfat-change');
+              changeEl.textContent = (diff >= 0 ? '↑ ' : '↓ ') + Math.abs(diff).toFixed(1) + '%';
+              changeEl.className = 'stat-mini-change ' + (diff < 0 ? 'text-success' : 'text-warning');
+            }
+          }
+          
+          // BMI
+          if (latest.weight) {
+            const bmi = calculateBMI(latest.weight, USER_HEIGHT);
+            document.getElementById('current-bmi').textContent = bmi.toFixed(1);
+            document.getElementById('bmi-status').textContent = getBMIStatus(bmi);
+          }
+          
+          // FFMI
+          if (latest.weight && latest.bodyfat_percentage) {
+            const ffmi = calculateFFMI(latest.weight, latest.bodyfat_percentage, USER_HEIGHT);
+            document.getElementById('current-ffmi').textContent = ffmi.toFixed(1);
+            document.getElementById('ffmi-status').textContent = getFFMIStatus(ffmi);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading stats:', error);
+      }
+    }
+    
+    // Load chart
+    async function loadChart() {
+      try {
+        const days = parseInt(document.getElementById('chart-period').value);
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - days);
+        
+        const { data: entries, error } = await supabase
+          .from('body_stats')
+          .select('*')
+          .eq('user_id', userId)
+          .gte('entry_date', startDate.toISOString().split('T')[0])
+          .order('entry_date', { ascending: true });
+        
+        if (error) throw error;
+        
+        const labels = entries.map(e => new Date(e.entry_date).toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' }));
+        const weights = entries.map(e => e.weight);
+        
+        const ctx = document.getElementById('weight-chart').getContext('2d');
+        
+        if (weightChart) {
+          weightChart.destroy();
+        }
+        
+        weightChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Gewicht (kg)',
+              data: weights,
+              borderColor: '#7f1d1d',
+              backgroundColor: 'rgba(127, 29, 29, 0.1)',
+              tension: 0.4,
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            scales: {
+              y: {
+                grid: {
+                  color: '#1c1c1c'
+                },
+                ticks: {
+                  color: '#737373'
+                }
+              },
+              x: {
+                grid: {
+                  color: '#1c1c1c'
+                },
+                ticks: {
+                  color: '#737373'
+                }
+              }
+            }
+          }
+        });
+      } catch (error) {
+        console.error('Error loading chart:', error);
+      }
+    }
+    
+    // Load measurements
+    async function loadMeasurements() {
+      const container = document.getElementById('measurements-container');
+      
+      try {
+        const { data: entries, error } = await supabase
+          .from('body_stats')
+          .select('*')
+          .eq('user_id', userId)
+          .order('entry_date', { ascending: false })
+          .limit(2);
+        
+        if (error) throw error;
+        
+        if (!entries || entries.length === 0) {
+          container.innerHTML = '<div class="text-dim" style="text-align: center;">Nog geen metingen</div>';
+          return;
+        }
+        
+        const latest = entries[0];
+        const previous = entries[1];
+        
+        const measurements = [
+          { name: 'Borst', current: latest.chest, prev: previous?.chest },
+          { name: 'Taille', current: latest.waist, prev: previous?.waist },
+          { name: 'Heupen', current: latest.hips, prev: previous?.hips },
+          { name: 'Biceps', current: latest.biceps, prev: previous?.biceps },
+          { name: 'Dijen', current: latest.thighs, prev: previous?.thighs }
+        ];
+        
+        container.innerHTML = measurements.map(m => {
+          if (!m.current) return '';
+          
+          let changeHtml = '';
+          if (m.prev) {
+            const diff = m.current - m.prev;
+            if (diff !== 0) {
+              const colorClass = diff > 0 ? 'text-success' : 'text-warning';
+              changeHtml = `<span class="measurement-change ${colorClass}">${diff > 0 ? '+' : ''}${diff.toFixed(1)} cm</span>`;
+            }
+          }
+          
+          return `
+            <div class="measurement-row">
+              <span class="measurement-name">${m.name}</span>
+              <div>
+                <span class="measurement-value">${m.current} cm</span>
+                ${changeHtml}
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (error) {
+        console.error('Error loading measurements:', error);
+        container.innerHTML = '<div class="text-dim">Fout bij laden van metingen</div>';
+      }
+    }
+    
+    // Load history
+    async function loadHistory() {
+      const tbody = document.getElementById('history-tbody');
+      
+      try {
+        const { data: entries, error } = await supabase
+          .from('body_stats')
+          .select('*')
+          .eq('user_id', userId)
+          .order('entry_date', { ascending: false })
+          .limit(20);
+        
+        if (error) throw error;
+        
+        if (!entries || entries.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" class="text-dim" style="text-align: center;">Nog geen geschiedenis</td></tr>';
+          return;
+        }
+        
+        tbody.innerHTML = entries.map(entry => {
+          const date = new Date(entry.entry_date).toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' });
+          const bmi = entry.weight ? calculateBMI(entry.weight, USER_HEIGHT).toFixed(1) : '-';
+          const ffmi = (entry.weight && entry.bodyfat_percentage) ? calculateFFMI(entry.weight, entry.bodyfat_percentage, USER_HEIGHT).toFixed(1) : '-';
+          
+          return `
+            <tr>
+              <td>${date}</td>
+              <td>${entry.weight ? entry.weight + ' kg' : '-'}</td>
+              <td>${entry.bodyfat_percentage ? entry.bodyfat_percentage + '%' : '-'}</td>
+              <td>${bmi}</td>
+              <td>${ffmi}</td>
+              <td style="text-align: right;">
+                <button class="btn btn-secondary btn-small" onclick="deleteEntry('${entry.id}')">Verwijder</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (error) {
+        console.error('Error loading history:', error);
+        tbody.innerHTML = '<tr><td colspan="6">Fout bij laden van geschiedenis</td></tr>';
+      }
+    }
+    
+    // Calculations
+    function calculateBMI(weight, height) {
+      const heightM = height / 100;
+      return weight / (heightM * heightM);
+    }
+    
+    function getBMIStatus(bmi) {
+      if (bmi < 18.5) return 'Ondergewicht';
+      if (bmi < 25) return 'Normaal';
+      if (bmi < 30) return 'Overgewicht';
+      return 'Obesitas';
+    }
+    
+    function calculateFFMI(weight, bodyfatPct, height) {
+      const heightM = height / 100;
+      const leanMass = weight * (1 - bodyfatPct / 100);
+      return leanMass / (heightM * heightM);
+    }
+    
+    function getFFMIStatus(ffmi) {
+      if (ffmi < 17) return 'Laag';
+      if (ffmi < 20) return 'Gemiddeld';
+      if (ffmi < 22) return 'Goed';
+      if (ffmi < 25) return 'Uitstekend';
+      return 'Elite';
+    }
+    
+    // Modal functions
+    function openAddModal() {
+      document.getElementById('entry-date').value = new Date().toISOString().split('T')[0];
+      document.getElementById('entry-weight').value = '';
+      document.getElementById('entry-bodyfat').value = '';
+      document.getElementById('entry-chest').value = '';
+      document.getElementById('entry-waist').value = '';
+      document.getElementById('entry-hips').value = '';
+      document.getElementById('entry-biceps').value = '';
+      document.getElementById('entry-thighs').value = '';
+      document.getElementById('entry-modal').classList.add('active');
+    }
+    
+    function closeModal() {
+      document.getElementById('entry-modal').classList.remove('active');
+    }
+    
+    // Save entry
+    async function saveEntry() {
+      const weight = parseFloat(document.getElementById('entry-weight').value);
+      
+      if (!weight) {
+        alert('Vul minimaal je gewicht in');
+        return;
+      }
+      
+      const entryData = {
+        user_id: userId,
+        entry_date: document.getElementById('entry-date').value,
+        weight: weight,
+        bodyfat_percentage: parseFloat(document.getElementById('entry-bodyfat').value) || null,
+        chest: parseFloat(document.getElementById('entry-chest').value) || null,
+        waist: parseFloat(document.getElementById('entry-waist').value) || null,
+        hips: parseFloat(document.getElementById('entry-hips').value) || null,
+        biceps: parseFloat(document.getElementById('entry-biceps').value) || null,
+        thighs: parseFloat(document.getElementById('entry-thighs').value) || null
+      };
+      
+      try {
+        const { error } = await supabase
+          .from('body_stats')
+          .insert([entryData]);
+        
+        if (error) throw error;
+        
+        closeModal();
+        loadStats();
+        loadChart();
+        loadMeasurements();
+        loadHistory();
+      } catch (error) {
+        console.error('Error saving entry:', error);
+        alert('Fout bij opslaan: ' + error.message);
+      }
+    }
+    
+    // Delete entry
+    async function deleteEntry(id) {
+      if (!confirm('Weet je zeker dat je deze meting wilt verwijderen?')) return;
+      
+      try {
+        const { error } = await supabase
+          .from('body_stats')
+          .delete()
+          .eq('id', id);
+        
+        if (error) throw error;
+        
+        loadStats();
+        loadChart();
+        loadMeasurements();
+        loadHistory();
+      } catch (error) {
+        console.error('Error deleting entry:', error);
+        alert('Fout bij verwijderen');
+      }
+    }
+    
+    // Start
+    init();
+  </script>
+</body>
+</html>
