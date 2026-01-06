@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#050505">
+  <title>Primal Forged</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: #050505; color: #fafafa; }
+    .loading { display: flex; align-items: center; justify-content: center; height: 100vh; }
+    .loading-text { font-size: 12px; color: #525252; text-transform: uppercase; letter-spacing: 0.2em; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; padding-bottom: 100px; }
+    .app-header { position: fixed; top: 0; left: 0; right: 0; background: #050505; border-bottom: 1px solid #1c1c1c; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+    .logo { font-size: 10px; font-weight: 600; letter-spacing: 0.35em; }
+    .logo-accent { color: #7f1d1d; margin-left: 6px; }
+    .user-menu { display: flex; align-items: center; gap: 12px; }
+    .user-email { font-size: 10px; color: #525252; max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
+    .logout-btn { background: transparent; border: 1px solid #1c1c1c; color: #737373; padding: 6px 12px; font-size: 9px; cursor: pointer; font-family: inherit; }
+    .auth-container { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+    .auth-box { width: 100%; max-width: 360px; }
+    .auth-title { font-size: 24px; font-weight: 300; text-align: center; margin-bottom: 8px; letter-spacing: 0.1em; }
+    .auth-subtitle { font-size: 11px; color: #525252; text-align: center; margin-bottom: 32px; }
+    .auth-input { width: 100%; padding: 14px 16px; background: #0a0a0a; border: 1px solid #1c1c1c; color: #fafafa; font-size: 14px; font-family: inherit; margin-bottom: 12px; }
+    .auth-input:focus { outline: none; border-color: #7f1d1d; }
+    .auth-btn { width: 100%; padding: 14px; background: #7f1d1d; border: none; color: #fff; font-size: 11px; font-weight: 500; cursor: pointer; font-family: inherit; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 8px; }
+    .auth-switch { text-align: center; margin-top: 24px; font-size: 12px; color: #525252; }
+    .auth-switch a { color: #7f1d1d; cursor: pointer; text-decoration: none; }
+    .auth-error { background: rgba(220,38,38,0.1); border: 1px solid #dc2626; color: #dc2626; padding: 12px; font-size: 12px; margin-bottom: 16px; }
+    .auth-success { background: rgba(34,197,94,0.1); border: 1px solid #22c55e; color: #22c55e; padding: 12px; font-size: 12px; margin-bottom: 16px; }
+    .nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0a0a0a; border-top: 1px solid #1c1c1c; display: flex; z-index: 100; }
+    .nav-item { flex: 1; padding: 10px 4px; background: transparent; border: none; color: #525252; font-size: 8px; text-transform: uppercase; letter-spacing: 0.02em; cursor: pointer; font-family: inherit; text-align: center; }
+    .nav-item.active { color: #7f1d1d; }
+    .nav-icon { font-size: 18px; display: block; margin-bottom: 2px; }
+    .card { background: #0a0a0a; border: 1px solid #1c1c1c; padding: 20px; margin-bottom: 16px; }
+    .card-accent { border-left: 3px solid #7f1d1d; }
+    .label { font-size: 10px; color: #525252; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 12px; font-weight: 500; display: block; }
+    .page-header { margin-bottom: 24px; padding-top: 60px; }
+    .page-sub { font-size: 10px; color: #7f1d1d; text-transform: uppercase; letter-spacing: 0.25em; margin-bottom: 6px; font-weight: 600; }
+    .page-title { font-size: 26px; font-weight: 300; letter-spacing: 0.08em; text-transform: uppercase; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 24px; }
+    .stat { text-align: center; padding: 16px 8px; background: #0a0a0a; border: 1px solid #1c1c1c; }
+    .stat-value { font-size: 20px; font-weight: 300; }
+    .stat-label { font-size: 8px; color: #525252; text-transform: uppercase; margin-top: 4px; letter-spacing: 0.05em; }
+    .stat-change { font-size: 9px; margin-top: 4px; }
+    .tabs { display: flex; border-bottom: 1px solid #1c1c1c; margin-bottom: 24px; overflow-x: auto; }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab { padding: 12px 16px; background: transparent; border: none; border-bottom: 2px solid transparent; color: #525252; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; font-family: inherit; margin-bottom: -1px; white-space: nowrap; }
+    .tab.active { color: #fafafa; border-bottom-color: #7f1d1d; }
+    .textarea { width: 100%; min-height: 150px; padding: 16px; background: #050505; border: 1px solid #1c1c1c; color: #fafafa; font-family: inherit; font-size: 14px; line-height: 1.7; resize: vertical; }
+    .textarea:focus { outline: none; border-color: #7f1d1d; }
+    .slider-group { margin-bottom: 16px; }
+    .slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .slider-label { font-size: 12px; color: #a3a3a3; }
+    .slider-value { font-size: 14px; font-weight: 500; }
+    .slider { -webkit-appearance: none; width: 100%; height: 8px; background: linear-gradient(to right, #dc2626, #eab308, #22c55e); outline: none; border-radius: 4px; opacity: 0.4; }
+    .slider::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #fafafa; cursor: pointer; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+    .slider-stress { background: linear-gradient(to right, #22c55e, #eab308, #dc2626); }
+    .btn { padding: 14px 28px; border: none; font-size: 11px; font-weight: 500; cursor: pointer; font-family: inherit; text-transform: uppercase; letter-spacing: 0.1em; }
+    .btn-primary { background: #7f1d1d; color: #fff; }
+    .btn-primary:hover { background: #991b1b; }
+    .btn-secondary { background: transparent; border: 1px solid #1c1c1c; color: #737373; }
+    .btn-danger { background: #dc2626; color: #fff; }
+    .btn-success { background: #166534; color: #fff; }
+    .btn-small { padding: 10px 16px; font-size: 10px; }
+    .entry { background: #0a0a0a; border: 1px solid #1c1c1c; padding: 20px; margin-bottom: 12px; }
+    .entry-date { font-size: 11px; color: #525252; margin-bottom: 12px; }
+    .entry-scores { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+    .entry-score { font-size: 10px; padding: 4px 8px; background: #1c1c1c; }
+    .entry-content { font-size: 13px; color: #a3a3a3; line-height: 1.7; white-space: pre-wrap; }
+    .prompt { padding: 16px; background: rgba(127,29,29,0.1); border-left: 3px solid #7f1d1d; margin-bottom: 16px; }
+    .prompt-label { font-size: 10px; color: #7f1d1d; margin-bottom: 6px; }
+    .prompt-text { font-size: 13px; color: #a3a3a3; font-style: italic; }
+    .info-box { padding: 16px; background: rgba(127,29,29,0.1); border-left: 3px solid #7f1d1d; margin-bottom: 16px; }
+    .toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: #166534; color: #fff; padding: 12px 24px; font-size: 12px; z-index: 200; display: none; }
+    .toast.show { display: block; }
+    .empty { text-align: center; padding: 40px 20px; color: #525252; font-size: 13px; }
+    .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
+    .insight { padding: 16px; margin-bottom: 12px; display: flex; gap: 12px; align-items: flex-start; }
+    .insight-positive { background: rgba(34,197,94,0.1); border-left: 3px solid #22c55e; }
+    .insight-negative { background: rgba(234,179,8,0.1); border-left: 3px solid #eab308; }
+    .insight-icon { font-size: 20px; }
+    .insight-title { font-size: 12px; font-weight: 500; margin-bottom: 4px; }
+    .insight-positive .insight-title { color: #22c55e; }
+    .insight-negative .insight-title { color: #eab308; }
+    .insight-text { font-size: 11px; color: #a3a3a3; }
+    .greeting { font-size: 20px; font-weight: 300; margin-bottom: 4px; }
+    .greeting-sub { font-size: 12px; color: #525252; margin-bottom: 24px; }
+    .streak-big { text-align: center; padding: 32px; }
+    .streak-number { font-size: 72px; font-weight: 200; line-height: 1; }
+    .streak-label { font-size: 11px; color: #525252; text-transform: uppercase; letter-spacing: 0.15em; margin-top: 8px; }
+    .habit-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .habit { padding: 12px 8px; background: transparent; border: 1px solid #1c1c1c; color: #525252; cursor: pointer; font-family: inherit; text-align: center; }
+    .habit.done { background: rgba(34,197,94,0.1); border-color: #22c55e; color: #22c55e; }
+    .habit.done.negative { background: rgba(234,179,8,0.1); border-color: #eab308; color: #eab308; }
+    .habit-icon { font-size: 18px; display: block; margin-bottom: 4px; }
+    .habit-label { font-size: 8px; text-transform: uppercase; }
+    .quote-card { padding: 20px; background: #0a0a0a; border: 1px solid #1c1c1c; margin-bottom: 16px; }
+    .quote-text { font-size: 14px; color: #a3a3a3; font-style: italic; line-height: 1.6; margin-bottom: 12px; }
+    .quote-author { font-size: 11px; color: #525252; }
+    .phase-indicator { padding: 12px; text-align: center; margin-top: 16px; }
+    .phase-name { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; }
+    .progress-bar { height: 4px; background: #1c1c1c; margin-top: 16px; }
+    .progress-fill { height: 100%; transition: width 0.3s; }
+    .emergency-btn { width: 100%; padding: 20px; background: #dc2626; border: none; color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 24px; }
+    .milestone { padding: 16px; background: #0a0a0a; border: 1px solid #1c1c1c; margin-bottom: 12px; display: flex; gap: 16px; align-items: flex-start; }
+    .milestone.achieved { border-color: #22c55e; background: rgba(34,197,94,0.05); }
+    .milestone-day { font-size: 24px; font-weight: 300; color: #525252; min-width: 50px; }
+    .milestone.achieved .milestone-day { color: #22c55e; }
+    .milestone-title { font-size: 12px; font-weight: 500; margin-bottom: 4px; }
+    .milestone-desc { font-size: 11px; color: #525252; }
+    .urge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .urge { padding: 16px 8px; background: #0a0a0a; border: 1px solid #1c1c1c; cursor: pointer; text-align: center; }
+    .urge:hover { border-color: #7f1d1d; }
+    .urge-icon { font-size: 24px; display: block; margin-bottom: 8px; }
+    .urge-label { font-size: 9px; color: #a3a3a3; text-transform: uppercase; }
+    .mission-card { background: #0a0a0a; border: 1px solid #1c1c1c; margin-bottom: 12px; overflow: hidden; }
+    .mission-card.expanded { border-color: #7f1d1d; }
+    .mission-header { padding: 16px; display: flex; gap: 12px; cursor: pointer; }
+    .mission-checkbox { width: 20px; height: 20px; border: 2px solid #525252; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; font-size: 12px; }
+    .mission-checkbox.checked { background: #22c55e; border-color: #22c55e; color: #fff; }
+    .mission-content { flex: 1; }
+    .mission-title { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+    .mission-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+    .mission-badge { font-size: 8px; padding: 3px 8px; text-transform: uppercase; }
+    .badge-physical { background: rgba(34,197,94,0.2); color: #22c55e; }
+    .badge-mental { background: rgba(59,130,246,0.2); color: #3b82f6; }
+    .badge-financial { background: rgba(234,179,8,0.2); color: #eab308; }
+    .badge-social { background: rgba(168,85,247,0.2); color: #a855f7; }
+    .badge-purpose { background: rgba(127,29,29,0.2); color: #7f1d1d; }
+    .badge-high { background: rgba(220,38,38,0.2); color: #dc2626; }
+    .badge-medium { background: rgba(234,179,8,0.2); color: #eab308; }
+    .badge-low { background: rgba(34,197,94,0.2); color: #22c55e; }
+    .mission-progress { padding: 0 16px 16px; }
+    .mission-progress-bar { height: 6px; background: #1c1c1c; }
+    .mission-progress-fill { height: 100%; background: #7f1d1d; transition: width 0.3s; }
+    .mission-progress-fill.complete { background: #22c55e; }
+    .mission-progress-label { display: flex; justify-content: space-between; font-size: 10px; color: #525252; margin-top: 6px; }
+    .mission-details { padding: 16px; border-top: 1px solid #1c1c1c; display: none; }
+    .mission-card.expanded .mission-details { display: block; }
+    .mission-completed { opacity: 0.5; }
+    .mission-completed .mission-title { text-decoration: line-through; }
+    .chart-container { height: 150px; display: flex; align-items: flex-end; gap: 3px; margin-bottom: 8px; }
+    .chart-bar { flex: 1; background: #7f1d1d; min-width: 6px; border-radius: 2px 2px 0 0; cursor: pointer; transition: background 0.2s; }
+    .chart-bar:hover { background: #991b1b; }
+    .measurement-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #1c1c1c; }
+    .measurement-row:last-child { border-bottom: none; }
+    .challenge-card { background: #0a0a0a; border: 1px solid #1c1c1c; margin-bottom: 12px; cursor: pointer; transition: border-color 0.2s; }
+    .challenge-card:hover { border-color: #7f1d1d; }
+    .challenge-card.active { background: linear-gradient(135deg, rgba(127,29,29,0.2) 0%, #0a0a0a 100%); border: 2px solid #7f1d1d; }
+    .challenge-header { padding: 16px; display: flex; gap: 12px; }
+    .challenge-icon { font-size: 28px; }
+    .challenge-info { flex: 1; }
+    .challenge-name { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+    .challenge-desc { font-size: 10px; color: #525252; }
+    .challenge-day { text-align: right; }
+    .challenge-day-number { font-size: 28px; font-weight: 200; color: #7f1d1d; }
+    .challenge-day-label { font-size: 8px; color: #525252; }
+    .challenge-progress { padding: 0 16px 16px; }
+    .challenge-progress-bar { height: 6px; background: #1c1c1c; }
+    .challenge-progress-fill { height: 100%; background: linear-gradient(90deg, #7f1d1d, #dc2626); }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 16px; }
+    .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 10px; background: #0a0a0a; border: 1px solid #1c1c1c; }
+    .calendar-day.completed { background: #166534; border-color: #166534; }
+    .calendar-day.today { border-color: #fafafa; border-width: 2px; }
+    .calendar-day.future { opacity: 0.3; }
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 300; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .modal { background: #0a0a0a; border: 1px solid #1c1c1c; padding: 24px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; }
+    .modal-title { font-size: 18px; font-weight: 500; margin-bottom: 16px; }
+    .form-group { margin-bottom: 12px; }
+    .form-label { font-size: 9px; color: #525252; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; display: block; }
+    .form-input { width: 100%; padding: 12px; background: #050505; border: 1px solid #1c1c1c; color: #fafafa; font-size: 13px; font-family: inherit; }
+    .form-input:focus { outline: none; border-color: #7f1d1d; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .text-success { color: #22c55e; }
+    .text-warning { color: #eab308; }
+    .text-danger { color: #dc2626; }
+    .text-accent { color: #7f1d1d; }
+    .text-muted { color: #737373; }
+    .text-dim { color: #525252; }
+    .divider { height: 1px; background: #1c1c1c; margin: 24px 0; }
+    .filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .filter-btn { padding: 8px 12px; background: transparent; border: 1px solid #1c1c1c; color: #525252; font-size: 9px; text-transform: uppercase; cursor: pointer; font-family: inherit; }
+    .filter-btn.active { background: rgba(127,29,29,0.2); border-color: #7f1d1d; color: #fafafa; }
+    .habit-modal-icon { font-size: 48px; text-align: center; margin-bottom: 16px; }
+    .habit-modal-duration { text-align: center; padding: 12px; background: rgba(127,29,29,0.2); border: 1px solid #7f1d1d; margin-bottom: 16px; font-size: 14px; }
+    .modal-step { padding: 16px; background: #050505; border-left: 3px solid #7f1d1d; margin-bottom: 12px; }
+    .modal-step-title { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+    .modal-step-text { font-size: 11px; color: #a3a3a3; }
+  </style>
+</head>
+<body>
+  <div id="app"><div class="loading"><span class="loading-text">Laden...</span></div></div>
+  <script>
+    // SUPABASE CONFIG
+    const SUPABASE_URL = 'https://dgqfvyjgtkoeiyswgngs.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRncWZ2eWpndGtvZWl5c3dnbmdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU4MzIxMzgsImV4cCI6MjA1MTQwODEzOH0.5y_TE3wv6EcYzhTv_LYvbPmh2OMTOBCugdxkJG_fOus';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // APP STATE
+    let state = {
+      user: null, loading: true, activeSection: 'dashboard',
+      journalTab: 'new', entries: [], content: '', mood: 7, energy: 7, libido: 7, focus: 7, stress: 4, sleep: 7, editingId: null,
+      retentionStreak: null, showEmergencyModal: false, showHabitModal: null,
+      habits: { coldShower: false, sunlight: false, cleanEating: false, workout: false, meditation: false, noAlcohol: false, reading: false, stretching: false, outside: false, badSleep: false, stressed: false, alcohol: false, unhealthy: false },
+      missions: [], missionTab: 'short', missionDomain: 'all', showMissionModal: false, editingMissionId: null, expandedMissionId: null,
+      bodyStats: [], bodyTab: 'overview', showBodyModal: false, userHeight: 180,
+      challenges: [], challengeTab: 'active',
+      journalSaving: false, todaySaved: false
+    };
+
+    // CONSTANTS
+    const habitConfig = {
+      coldShower: { icon: '🧊', label: 'Koud', title: 'Koude Douche', what: 'Douchen met koud water', how: 'Begin lauw, laatste 30-60 sec ijskoud.', why: 'Verhoogt noradrenaline en dopamine.', duration: '2-3 min', positive: true },
+      sunlight: { icon: '☀️', label: 'Zon', title: 'Zonlicht', what: 'Direct zonlicht', how: 'Binnen 30 min na opstaan.', why: 'Reguleert circadiaans ritme.', duration: '10-15 min', positive: true },
+      cleanEating: { icon: '🥗', label: 'Clean', title: 'Clean Eating', what: 'Onbewerkt voedsel', how: 'Geen processed food.', why: 'Stabiele energie.', duration: 'Hele dag', positive: true },
+      workout: { icon: '💪', label: 'Sport', title: 'Training', what: 'Zware training of HIIT', how: 'Compound lifts.', why: 'Verhoogt testosteron.', duration: '45-60 min', positive: true },
+      meditation: { icon: '🧘', label: 'Rust', title: 'Meditatie', what: 'Stille meditatie', how: 'Focus op adem.', why: 'Verlaagt cortisol.', duration: '10-20 min', positive: true },
+      noAlcohol: { icon: '🚫', label: 'Nuchter', title: 'Geen Alcohol', what: 'Geen alcohol', how: 'Vervang met water.', why: 'Alcohol verlaagt T.', duration: '24 uur', positive: true },
+      reading: { icon: '📖', label: 'Lezen', title: 'Lezen', what: 'Non-fictie lezen', how: 'Fysiek boek.', why: 'Bouwt kennis.', duration: '30 min', positive: true },
+      stretching: { icon: '🤸', label: 'Stretch', title: 'Stretchen', what: 'Mobility routine', how: 'Heupen, hamstrings.', why: 'Betere houding.', duration: '10-15 min', positive: true },
+      outside: { icon: '🚶', label: 'Buiten', title: 'Buiten', what: 'Tijd buiten', how: 'Wandelen.', why: 'Vitamine D.', duration: '30+ min', positive: true },
+      badSleep: { icon: '😴', label: 'Slecht', title: 'Slecht Geslapen', what: 'Slechte nacht', how: '<6 uur.', why: 'Track patronen.', duration: 'Nacht', positive: false },
+      stressed: { icon: '😤', label: 'Stress', title: 'Gestrest', what: 'Veel stress', how: 'Werk, zorgen.', why: 'Verlaagt T.', duration: 'Dag', positive: false },
+      alcohol: { icon: '🍺', label: 'Alcohol', title: 'Alcohol', what: 'Gedronken', how: 'Bier, wijn.', why: 'Track impact.', duration: 'Dag', positive: false },
+      unhealthy: { icon: '🍔', label: 'Junk', title: 'Junk Food', what: 'Ongezond gegeten', how: 'Fast food.', why: 'Track impact.', duration: 'Dag', positive: false }
+    };
+    const domainConfig = { physical: { icon: '💪', name: 'Fysiek' }, mental: { icon: '🧠', name: 'Mentaal' }, financial: { icon: '💰', name: 'Financieel' }, social: { icon: '👥', name: 'Sociaal' }, purpose: { icon: '🔱', name: 'Zingeving' } };
+    const challengeTemplates = [
+      { id: 'cold-7', name: '7 Dagen Cold Shower', icon: '🥶', duration: 7, difficulty: 'starter', description: 'Start elke dag met koude douche' },
+      { id: 'cold-30', name: '30 Dagen Cold Shower', icon: '🥶', duration: 30, difficulty: 'hard', description: 'Een maand koude douches' },
+      { id: 'retention-7', name: '7 Dagen Retention', icon: '🔥', duration: 7, difficulty: 'starter', description: 'Een week zonder PMO' },
+      { id: 'retention-30', name: '30 Dagen Retention', icon: '🔥', duration: 30, difficulty: 'hard', description: 'Een maand retention' },
+      { id: 'reading-30', name: '30 Dagen Lezen', icon: '📖', duration: 30, difficulty: 'medium', description: '20 paginas per dag' },
+      { id: 'training-30', name: '30 Dagen Training', icon: '🏋️', duration: 30, difficulty: 'hard', description: 'Elke dag trainen' },
+      { id: 'sober-30', name: '30 Dagen Nuchter', icon: '🚫', duration: 30, difficulty: 'medium', description: 'Geen alcohol' },
+      { id: 'meditation-21', name: '21 Dagen Meditatie', icon: '🧘', duration: 21, difficulty: 'medium', description: 'Dagelijks 5+ min' }
+    ];
+    const retentionPhases = [{ days: 0, name: 'Opstarten', color: '#525252' },{ days: 7, name: 'Dopamine Reset', color: '#eab308' },{ days: 14, name: 'T-Boost', color: '#f97316' },{ days: 30, name: 'Rewiring', color: '#22c55e' },{ days: 60, name: 'Transformatie', color: '#3b82f6' },{ days: 90, name: 'Meesterschap', color: '#7f1d1d' }];
+    const retentionMilestones = [{ days: 7, title: 'Dopamine Reset', desc: 'Hersenen worden gevoeliger.' },{ days: 14, title: 'Testosteron Piek', desc: 'Piek rond dag 7-14.' },{ days: 30, title: 'Prefrontale Verbetering', desc: 'Betere impulse controle.' },{ days: 60, title: 'ΔFosB Normalisatie', desc: 'Proteïnen normaliseren.' },{ days: 90, title: 'Neuroplastische Reset', desc: 'Neurale paden hersteld.' }];
+    const quotes = [{ text: "De man die zijn bergen verzet, begint met kleine stenen.", author: "Confucius" },{ text: "Discipline is de brug tussen doelen en prestaties.", author: "Jim Rohn" },{ text: "Je wordt bepaald door wat je doet, niet wat je wilt.", author: "Marcus Aurelius" },{ text: "Elke actie is een stem voor wie je wilt worden.", author: "James Clear" }];
+    const dailyPrompts = ["Wat was je grootste overwinning vandaag?","Waar ben je dankbaar voor vandaag?","Wat heb je vandaag geleerd?","Wat kon er beter vandaag?","Wat is je intentie voor morgen?","Welke uitdaging heb je overwonnen?","Hoe heb je jezelf vandaag uitgedaagd?"];
+    const urges = [{icon:'🧊',label:'Koud water'},{icon:'🫁',label:'Ademhaling'},{icon:'🏃',label:'Beweeg'},{icon:'🚪',label:'Verlaat'},{icon:'📞',label:'Bel'},{icon:'✍️',label:'Schrijf'},{icon:'🧘',label:'Mediteer'},{icon:'📖',label:'Lees'},{icon:'⏱️',label:'Wacht'}];
+
+    // HELPERS
+    function getColor(v,isStress=false){const val=isStress?(11-v):v;if(val<=2)return'#dc2626';if(val<=4)return'#f97316';if(val<=6)return'#eab308';if(val<=8)return'#84cc16';return'#22c55e';}
+    function formatDate(d){return new Date(d).toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long'});}
+    function formatDateShort(d){return new Date(d).toLocaleDateString('nl-NL',{day:'numeric',month:'short'});}
+    function getGreeting(){const h=new Date().getHours();return h<12?'Goedemorgen':h<18?'Goedemiddag':'Goedenavond';}
+    function getDailyQuote(){const d=Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/86400000);return quotes[d%quotes.length];}
+    function getDailyPrompt(){const d=Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/86400000);return dailyPrompts[d%dailyPrompts.length];}
+    function getRetentionPhase(days){for(let i=retentionPhases.length-1;i>=0;i--)if(days>=retentionPhases[i].days)return retentionPhases[i];return retentionPhases[0];}
+    function getRetentionDays(){if(!state.retentionStreak?.start_date)return 0;return Math.floor((new Date()-new Date(state.retentionStreak.start_date))/(1000*60*60*24));}
+    function showToast(msg){const t=document.getElementById('toast');if(t){t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);}}
+    function calculateBMI(w,h){return w/((h/100)**2);}
+    function calculateFFMI(w,bf,h){return(w*(1-bf/100))/((h/100)**2);}
+    function getPositiveHabitsCount(){return Object.entries(habitConfig).filter(([k,c])=>c.positive).map(([k])=>k).filter(k=>state.habits[k]).length;}
+    function calculateMissionProgress(m){if(m.target_value&&m.start_value!==null){const t=Math.abs(m.target_value-m.start_value);const c=Math.abs((m.current_value||m.start_value)-m.start_value);return t>0?Math.min(100,Math.round((c/t)*100)):0;}return 0;}
+    function getDaysUntilDeadline(dl){if(!dl)return null;return Math.ceil((new Date(dl)-new Date())/(1000*60*60*24));}
+    function calculateChallengeDay(sd){const t=new Date();t.setHours(0,0,0,0);const s=new Date(sd);s.setHours(0,0,0,0);return Math.floor((t-s)/(1000*60*60*24))+1;}
+
+    // AUTH
+    async function signIn(email,password){const{data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;return data;}
+    async function signUp(email,password){const{data,error}=await supabaseClient.auth.signUp({email,password});if(error)throw error;return data;}
+    async function signOut(){await supabaseClient.auth.signOut();state.user=null;state.entries=[];state.missions=[];state.bodyStats=[];state.challenges=[];state.retentionStreak=null;render();}
+    let authMode='login';
+    function toggleAuthMode(){authMode=authMode==='login'?'register':'login';render();}
+    async function handleAuth(){const email=document.getElementById('auth-email').value;const password=document.getElementById('auth-password').value;const err=document.getElementById('auth-error');try{if(authMode==='login')await signIn(email,password);else{await signUp(email,password);err.innerHTML='<div class="auth-success">Check je email!</div>';return;}}catch(e){err.innerHTML=`<div class="auth-error">${e.message}</div>`;}}
+
+    // DATABASE - LOAD
+    async function loadEntries(){if(!state.user)return;const{data}=await supabaseClient.from('journal_entries').select('*').eq('user_id',state.user.id).order('date',{ascending:false});state.entries=data||[];}
+    async function loadRetention(){if(!state.user)return;const{data}=await supabaseClient.from('retention').select('*').eq('user_id',state.user.id).eq('is_active',true).single();if(data)state.retentionStreak=data;}
+    async function loadHabits(){if(!state.user)return;const today=new Date().toISOString().split('T')[0];const{data}=await supabaseClient.from('daily_habits').select('*').eq('user_id',state.user.id).eq('date',today).single();if(data){state.habits={coldShower:data.cold_shower||false,sunlight:data.sunlight||false,cleanEating:data.clean_eating||false,workout:data.workout||false,meditation:data.meditation||false,noAlcohol:data.no_alcohol||false,reading:data.reading||false,stretching:data.stretching||false,outside:false,badSleep:false,stressed:false,alcohol:false,unhealthy:false};const extra=localStorage.getItem(`habits_extra_${today}`);if(extra)state.habits={...state.habits,...JSON.parse(extra)};}}
+    async function loadMissions(){if(!state.user)return;const{data}=await supabaseClient.from('goals').select('*').eq('user_id',state.user.id).order('created_at',{ascending:false});state.missions=data||[];}
+    async function loadBodyStats(){if(!state.user)return;const{data}=await supabaseClient.from('body_stats').select('*').eq('user_id',state.user.id).order('entry_date',{ascending:false});state.bodyStats=data||[];}
+    async function loadChallenges(){if(!state.user)return;const{data}=await supabaseClient.from('challenges').select('*').eq('user_id',state.user.id).order('created_at',{ascending:false});state.challenges=data||[];}
+
+    // DATABASE - SAVE
+    async function toggleHabit(key){state.habits[key]=!state.habits[key];const today=new Date().toISOString().split('T')[0];const mainHabits=['coldShower','sunlight','cleanEating','workout','meditation','noAlcohol','reading','stretching'];if(mainHabits.includes(key)){const d={user_id:state.user.id,date:today,cold_shower:state.habits.coldShower,sunlight:state.habits.sunlight,clean_eating:state.habits.cleanEating,workout:state.habits.workout,meditation:state.habits.meditation,no_alcohol:state.habits.noAlcohol,reading:state.habits.reading,stretching:state.habits.stretching};await supabaseClient.from('daily_habits').upsert(d,{onConflict:'user_id,date'});}const extra={outside:state.habits.outside,badSleep:state.habits.badSleep,stressed:state.habits.stressed,alcohol:state.habits.alcohol,unhealthy:state.habits.unhealthy};localStorage.setItem(`habits_extra_${today}`,JSON.stringify(extra));render();}
+    async function saveMission(){const title=document.getElementById('mission-title')?.value?.trim();if(!title){alert('Vul titel in');return;}const d={user_id:state.user.id,title,domain:document.getElementById('mission-domain')?.value||null,priority:document.getElementById('mission-priority')?.value||null,timeframe:document.getElementById('mission-timeframe')?.value||'short',deadline:document.getElementById('mission-deadline')?.value||null,start_value:parseFloat(document.getElementById('mission-start')?.value)||null,current_value:parseFloat(document.getElementById('mission-current')?.value)||null,target_value:parseFloat(document.getElementById('mission-target')?.value)||null,notes:document.getElementById('mission-notes')?.value||null,is_completed:false};try{if(state.editingMissionId)await supabaseClient.from('goals').update(d).eq('id',state.editingMissionId);else await supabaseClient.from('goals').insert([d]);state.showMissionModal=false;state.editingMissionId=null;await loadMissions();showToast('Missie opgeslagen');render();}catch(e){alert('Fout: '+e.message);}}
+    async function toggleMissionComplete(id){const m=state.missions.find(x=>x.id===id);if(!m)return;await supabaseClient.from('goals').update({is_completed:!m.is_completed}).eq('id',id);await loadMissions();showToast(m.is_completed?'Heropend':'Voltooid!');render();}
+    async function deleteMission(id){if(!confirm('Verwijderen?'))return;await supabaseClient.from('goals').delete().eq('id',id);await loadMissions();showToast('Verwijderd');render();}
+    async function saveBodyEntry(){const w=parseFloat(document.getElementById('body-weight')?.value);if(!w){alert('Vul gewicht in');return;}const d={user_id:state.user.id,entry_date:document.getElementById('body-date')?.value||new Date().toISOString().split('T')[0],weight:w,bodyfat_percentage:parseFloat(document.getElementById('body-fat')?.value)||null,chest:parseFloat(document.getElementById('body-chest')?.value)||null,waist:parseFloat(document.getElementById('body-waist')?.value)||null,hips:parseFloat(document.getElementById('body-hips')?.value)||null,biceps:parseFloat(document.getElementById('body-biceps')?.value)||null,thighs:parseFloat(document.getElementById('body-thighs')?.value)||null};try{await supabaseClient.from('body_stats').insert([d]);state.showBodyModal=false;await loadBodyStats();showToast('Meting opgeslagen');render();}catch(e){alert('Fout: '+e.message);}}
+    async function startChallenge(tid){const t=challengeTemplates.find(x=>x.id===tid);if(!t||!confirm(`Start ${t.name}?`))return;if(state.challenges.find(c=>c.template_id===tid&&c.status==='active')){alert('Al actief!');return;}try{await supabaseClient.from('challenges').insert([{user_id:state.user.id,template_id:tid,name:t.name,description:t.description,duration:t.duration,start_date:new Date().toISOString().split('T')[0],status:'active',days_completed:0,today_completed:false}]);await loadChallenges();state.challengeTab='active';showToast('Challenge gestart!');render();}catch(e){alert('Fout: '+e.message);}}
+    async function toggleChallengeDay(cid,done){const c=state.challenges.find(x=>x.id===cid);if(!c)return;const day=calculateChallengeDay(c.start_date);let upd={today_completed:done,days_completed:done?day:day-1,updated_at:new Date().toISOString()};if(done&&day>=c.duration)upd.status='completed';await supabaseClient.from('challenges').update(upd).eq('id',cid);await loadChallenges();showToast(done?'Afgevinkt!':'Ongedaan');render();}
+    async function quitChallenge(cid){if(!confirm('Stoppen?'))return;await supabaseClient.from('challenges').update({status:'failed',updated_at:new Date().toISOString()}).eq('id',cid);await loadChallenges();showToast('Gestopt');render();}
+    async function startRetention(){const{data}=await supabaseClient.from('retention').insert([{user_id:state.user.id,start_date:new Date().toISOString().split('T')[0],is_active:true,streak_days:0}]).select().single();if(data){state.retentionStreak=data;showToast('Retention gestart!');render();}}
+    async function resetRetention(){if(!state.retentionStreak||!confirm('Resetten?'))return;await supabaseClient.from('retention').update({is_active:false,end_date:new Date().toISOString().split('T')[0]}).eq('id',state.retentionStreak.id);state.retentionStreak=null;showToast('Reset');render();}
+    async function saveEntry(){if(state.journalSaving)return;state.journalSaving=true;render();const today=new Date().toISOString().split('T')[0];const d={user_id:state.user.id,date:today,content:state.content,mood:state.mood,energy:state.energy,libido:state.libido,focus:state.focus,stress:state.stress,sleep_quality:state.sleep,habits:state.habits};try{if(state.editingId)await supabaseClient.from('journal_entries').update(d).eq('id',state.editingId);else await supabaseClient.from('journal_entries').upsert(d,{onConflict:'user_id,date'});await loadEntries();state.editingId=null;state.todaySaved=true;state.journalSaving=false;showToast('✓ Journal opgeslagen');render();}catch(e){state.journalSaving=false;render();alert('Fout: '+e.message);}}
+
+    // RENDER: AUTH
+    function renderAuth(){return`<div class="auth-container"><div class="auth-box"><div class="auth-title">PRIMAL <span class="text-accent">FORGED</span></div><div class="auth-subtitle">Discipline over motivatie</div><div id="auth-error"></div><input type="email" class="auth-input" id="auth-email" placeholder="Email"><input type="password" class="auth-input" id="auth-password" placeholder="Wachtwoord"><button class="auth-btn" onclick="handleAuth()">${authMode==='login'?'Inloggen':'Registreren'}</button><div class="auth-switch">${authMode==='login'?'Geen account?':'Al account?'} <a onclick="toggleAuthMode()">${authMode==='login'?'Registreer':'Login'}</a></div></div></div>`;}
+
+    // RENDER: DASHBOARD
+    function renderDashboard(){const q=getDailyQuote();const days=getRetentionDays();const phase=getRetentionPhase(days);const pos=getPositiveHabitsCount();const actMis=state.missions.filter(m=>!m.is_completed).length;const actChal=state.challenges.filter(c=>c.status==='active').length;
+      return`<div class="page-header"><div class="greeting">${getGreeting()}</div><div class="greeting-sub">${new Date().toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long'})}</div></div>
+      <div class="quote-card"><div class="quote-text">"${q.text}"</div><div class="quote-author">— ${q.author}</div></div>
+      <div class="stats"><div class="stat"><div class="stat-value" style="color:${phase.color}">${days}</div><div class="stat-label">Retention</div></div><div class="stat"><div class="stat-value">${pos}/9</div><div class="stat-label">Habits</div></div><div class="stat"><div class="stat-value">${actMis}</div><div class="stat-label">Missies</div></div><div class="stat"><div class="stat-value">${actChal}</div><div class="stat-label">Challenges</div></div></div>
+      <div class="card"><label class="label">Habits vandaag</label><div class="habit-grid">${Object.entries(habitConfig).filter(([k,c])=>c.positive).map(([key,cfg])=>`<button class="habit ${state.habits[key]?'done':''}" onmousedown="startHabitPress('${key}')" onmouseup="endHabitPress('${key}')" onmouseleave="cancelHabitPress()" ontouchstart="startHabitPress('${key}')" ontouchend="endHabitPress('${key}')"><span class="habit-icon">${cfg.icon}</span><span class="habit-label">${cfg.label}</span></button>`).join('')}</div></div>
+      <div class="card"><label class="label">Situatie vandaag</label><div class="habit-grid">${Object.entries(habitConfig).filter(([k,c])=>!c.positive).map(([key,cfg])=>`<button class="habit ${state.habits[key]?'done negative':''}" onclick="toggleHabit('${key}')"><span class="habit-icon">${cfg.icon}</span><span class="habit-label">${cfg.label}</span></button>`).join('')}</div></div>
+      ${state.showHabitModal?renderHabitModal():''}`;}
+
+    function renderHabitModal(){const c=habitConfig[state.showHabitModal];return`<div class="modal-overlay" onclick="closeHabitModal()"><div class="modal" onclick="event.stopPropagation()"><div class="habit-modal-icon">${c.icon}</div><div class="modal-title" style="color:#22c55e">${c.title}</div><div class="habit-modal-duration">${c.duration}</div><div class="modal-step"><div class="modal-step-title">Wat:</div><div class="modal-step-text">${c.what}</div></div><div class="modal-step"><div class="modal-step-title">Hoe:</div><div class="modal-step-text">${c.how}</div></div><div class="modal-step"><div class="modal-step-title">Waarom:</div><div class="modal-step-text">${c.why}</div></div><button class="btn btn-secondary" onclick="closeHabitModal()" style="width:100%;margin-top:16px">Sluiten</button></div></div>`;}
+    function closeHabitModal(){state.showHabitModal=null;render();}
+
+    // RENDER: JOURNAL
+    function renderJournal(){return`<div class="page-header"><div class="page-sub">Reflectie</div><div class="page-title">Journal</div></div><div class="tabs"><button class="tab ${state.journalTab==='new'?'active':''}" onclick="setJournalTab('new')">Nieuw</button><button class="tab ${state.journalTab==='history'?'active':''}" onclick="setJournalTab('history')">Geschiedenis</button><button class="tab ${state.journalTab==='patterns'?'active':''}" onclick="setJournalTab('patterns')">Patronen</button></div>${state.journalTab==='new'?renderJournalNew():''}${state.journalTab==='history'?renderJournalHistory():''}${state.journalTab==='patterns'?renderJournalPatterns():''}`;}
+    function renderJournalNew(){const p=getDailyPrompt();const today=new Date().toISOString().split('T')[0];const todayEntry=state.entries.find(e=>e.date===today);const alreadySaved=todayEntry||state.todaySaved;return`<div class="info-box" style="background:rgba(127,29,29,0.1);border-left-color:#7f1d1d;margin-bottom:16px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🌙</span><div><div style="font-size:11px;color:#7f1d1d;font-weight:500">AVOND REFLECTIE</div><div style="font-size:10px;color:#a3a3a3">Neem een moment om je dag te evalueren</div></div></div></div>${alreadySaved?`<div class="card" style="background:rgba(34,197,94,0.1);border-color:#22c55e;text-align:center;padding:16px"><span style="font-size:24px">✓</span><div style="color:#22c55e;font-size:13px;font-weight:500;margin-top:8px">Vandaag al ingevuld</div><div style="color:#525252;font-size:11px;margin-top:4px">Je kunt je entry nog aanpassen</div></div>`:''}<div class="prompt"><div class="prompt-label">Reflectie vraag</div><div class="prompt-text">${p}</div></div><div class="card"><label class="label">Hoe was je dag?</label>${['mood','energy','focus','sleep'].map(k=>`<div class="slider-group"><div class="slider-header"><span class="slider-label">${k==='mood'?'Mood':k==='energy'?'Energie':k==='focus'?'Focus':'Slaap'}</span><span class="slider-value" id="${k}-value" style="color:${getColor(state[k])}">${state[k]}</span></div><input type="range" class="slider" min="1" max="10" value="${state[k]}" oninput="updateSlider('${k}',this.value)"></div>`).join('')}<div class="slider-group"><div class="slider-header"><span class="slider-label">Stress</span><span class="slider-value" id="stress-value" style="color:${getColor(state.stress,true)}">${state.stress}</span></div><input type="range" class="slider slider-stress" min="1" max="10" value="${state.stress}" oninput="updateSlider('stress',this.value)"></div></div><div class="card"><label class="label">Reflectie</label><textarea class="textarea" placeholder="Hoe was je dag? Wat heb je bereikt?" oninput="state.content=this.value">${state.content}</textarea></div><button class="btn ${alreadySaved?'btn-secondary':'btn-primary'}" style="width:100%" onclick="saveEntry()" ${state.journalSaving?'disabled':''}>${state.journalSaving?'Opslaan...':alreadySaved?'✓ Bijwerken':'Opslaan'}</button>`;}
+    function renderJournalHistory(){if(state.entries.length===0)return'<div class="empty"><div class="empty-icon">📝</div>Nog geen entries</div>';return state.entries.slice(0,10).map(e=>`<div class="entry"><div class="entry-date">${formatDate(e.date)}</div><div class="entry-scores"><span class="entry-score">Mood: ${e.mood||'-'}</span><span class="entry-score">Energie: ${e.energy||'-'}</span><span class="entry-score">Focus: ${e.focus||'-'}</span></div>${e.content?`<div class="entry-content">${e.content}</div>`:''}</div>`).join('');}
+    function renderJournalPatterns(){const ins=getInsights();if(ins.length===0)return'<div class="empty"><div class="empty-icon">📊</div>Verzamel meer data (min 3 entries)</div>';return`<div class="card"><label class="label">Jouw patronen</label>${ins.map(i=>`<div class="insight ${i.positive?'insight-positive':'insight-negative'}"><div class="insight-icon">${i.icon}</div><div><div class="insight-title">${i.title}</div><div class="insight-text">${i.text}</div></div></div>`).join('')}</div>`;}
+    function getInsights(){const e=state.entries.filter(x=>x.habits&&Object.keys(x.habits).length>0);if(e.length<3)return[];const ins=[];Object.entries(habitConfig).forEach(([k,cfg])=>{const w=e.filter(x=>x.habits&&x.habits[k]);const wo=e.filter(x=>x.habits&&!x.habits[k]);if(w.length>=2&&wo.length>=2){const avgW=w.reduce((a,x)=>a+(x.mood||5),0)/w.length;const avgWo=wo.reduce((a,x)=>a+(x.mood||5),0)/wo.length;const diff=cfg.positive?avgW-avgWo:avgWo-avgW;if(diff>=0.5)ins.push({icon:cfg.icon,title:cfg.positive?`${cfg.title} verbetert mood`:`${cfg.title} verlaagt mood`,text:`Verschil: ${diff.toFixed(1)} punten`,positive:cfg.positive,impact:diff});}});return ins.sort((a,b)=>b.impact-a.impact).slice(0,6);}
+
+    // RENDER: MISSIONS
+    function renderMissions(){const filtered=state.missions.filter(m=>{if(state.missionTab==='completed')return m.is_completed;if(m.is_completed)return false;if(state.missionTab!=='all'&&m.timeframe!==state.missionTab)return false;if(state.missionDomain!=='all'&&m.domain!==state.missionDomain)return false;return true;});const act=state.missions.filter(m=>!m.is_completed);const comp=state.missions.filter(m=>m.is_completed);return`<div class="page-header"><div class="page-sub">Discipline boven Motivatie</div><div class="page-title">Missies</div></div><div class="stats"><div class="stat"><div class="stat-value">${act.length}</div><div class="stat-label">Actief</div></div><div class="stat"><div class="stat-value text-success">${comp.length}</div><div class="stat-label">Voltooid</div></div><div class="stat"><div class="stat-value text-warning">${act.filter(m=>m.priority==='high').length}</div><div class="stat-label">Hoog prio</div></div><div class="stat"><div class="stat-value">${act.filter(m=>getDaysUntilDeadline(m.deadline)!==null&&getDaysUntilDeadline(m.deadline)<=7).length}</div><div class="stat-label">Deze week</div></div></div><div class="tabs"><button class="tab ${state.missionTab==='short'?'active':''}" onclick="setMissionTab('short')">Kort</button><button class="tab ${state.missionTab==='medium'?'active':''}" onclick="setMissionTab('medium')">Middel</button><button class="tab ${state.missionTab==='long'?'active':''}" onclick="setMissionTab('long')">Lang</button><button class="tab ${state.missionTab==='completed'?'active':''}" onclick="setMissionTab('completed')">Voltooid</button></div><div class="filters"><button class="filter-btn ${state.missionDomain==='all'?'active':''}" onclick="setMissionDomain('all')">Alle</button>${Object.entries(domainConfig).map(([k,c])=>`<button class="filter-btn ${state.missionDomain===k?'active':''}" onclick="setMissionDomain('${k}')">${c.icon}</button>`).join('')}</div><button class="btn btn-primary" style="width:100%;margin-bottom:16px" onclick="openMissionModal()">+ Nieuwe Missie</button>${filtered.length===0?'<div class="empty"><div class="empty-icon">🎯</div>Geen missies</div>':filtered.map(m=>renderMissionCard(m)).join('')}${state.showMissionModal?renderMissionModal():''}`;}
+
+    function renderMissionCard(m){const prog=calculateMissionProgress(m);const days=getDaysUntilDeadline(m.deadline);const dom=domainConfig[m.domain];const exp=state.expandedMissionId===m.id;return`<div class="mission-card ${m.is_completed?'mission-completed':''} ${exp?'expanded':''}"><div class="mission-header" onclick="toggleMissionExpand('${m.id}')"><div class="mission-checkbox ${m.is_completed?'checked':''}" onclick="event.stopPropagation();toggleMissionComplete('${m.id}')">${m.is_completed?'✓':''}</div><div class="mission-content"><div class="mission-title">${m.title}</div><div class="mission-meta">${dom?`<span class="mission-badge badge-${m.domain}">${dom.icon} ${dom.name}</span>`:''}${m.priority?`<span class="mission-badge badge-${m.priority}">${m.priority==='high'?'🔴':m.priority==='medium'?'🟡':'🟢'}</span>`:''}${days!==null?`<span class="text-dim" style="font-size:10px">📅 ${days<=0?'Verlopen':days+'d'}</span>`:''}</div></div></div>${m.target_value?`<div class="mission-progress"><div class="mission-progress-bar"><div class="mission-progress-fill ${prog>=100?'complete':''}" style="width:${prog}%"></div></div><div class="mission-progress-label"><span>${m.start_value||0} → ${m.current_value||m.start_value||0} → ${m.target_value}</span><span>${prog}%</span></div></div>`:''}<div class="mission-details">${m.notes?`<div class="text-dim" style="font-size:11px;margin-bottom:12px">${m.notes}</div>`:''}<div style="display:flex;gap:8px"><button class="btn btn-secondary btn-small" onclick="editMission('${m.id}')">Bewerk</button><button class="btn btn-small" style="background:#dc2626;color:#fff" onclick="deleteMission('${m.id}')">Verwijder</button></div></div></div>`;}
+
+    function renderMissionModal(){const m=state.editingMissionId?state.missions.find(x=>x.id===state.editingMissionId):null;return`<div class="modal-overlay" onclick="closeMissionModal()"><div class="modal" onclick="event.stopPropagation()"><div class="modal-title">${m?'Bewerk':'Nieuwe'} Missie</div><div class="form-group"><label class="form-label">Titel</label><input type="text" class="form-input" id="mission-title" placeholder="Wat wil je bereiken?" value="${m?.title||''}"></div><div class="form-row"><div class="form-group"><label class="form-label">Domein</label><select class="form-input" id="mission-domain"><option value="">Kies...</option>${Object.entries(domainConfig).map(([k,c])=>`<option value="${k}" ${m?.domain===k?'selected':''}>${c.icon} ${c.name}</option>`).join('')}</select></div><div class="form-group"><label class="form-label">Prioriteit</label><select class="form-input" id="mission-priority"><option value="">Kies...</option><option value="high" ${m?.priority==='high'?'selected':''}>🔴 Hoog</option><option value="medium" ${m?.priority==='medium'?'selected':''}>🟡 Medium</option><option value="low" ${m?.priority==='low'?'selected':''}>🟢 Laag</option></select></div></div><div class="form-row"><div class="form-group"><label class="form-label">Termijn</label><select class="form-input" id="mission-timeframe"><option value="short" ${m?.timeframe==='short'?'selected':''}>Kort</option><option value="medium" ${m?.timeframe==='medium'?'selected':''}>Middel</option><option value="long" ${m?.timeframe==='long'?'selected':''}>Lang</option></select></div><div class="form-group"><label class="form-label">Deadline</label><input type="date" class="form-input" id="mission-deadline" value="${m?.deadline||''}"></div></div><div class="form-row"><div class="form-group"><label class="form-label">Start</label><input type="number" class="form-input" id="mission-start" placeholder="85" value="${m?.start_value||''}"></div><div class="form-group"><label class="form-label">Huidig</label><input type="number" class="form-input" id="mission-current" placeholder="82" value="${m?.current_value||''}"></div><div class="form-group"><label class="form-label">Doel</label><input type="number" class="form-input" id="mission-target" placeholder="78" value="${m?.target_value||''}"></div></div><div class="form-group"><label class="form-label">Notities</label><textarea class="form-input" id="mission-notes" style="min-height:60px">${m?.notes||''}</textarea></div><div style="display:flex;gap:12px;margin-top:20px"><button class="btn btn-primary" style="flex:1" onclick="saveMission()">Opslaan</button><button class="btn btn-secondary" onclick="closeMissionModal()">Annuleer</button></div></div></div>`;}
+
+    function setMissionTab(t){state.missionTab=t;render();}
+    function setMissionDomain(d){state.missionDomain=d;render();}
+    function openMissionModal(){state.showMissionModal=true;state.editingMissionId=null;render();}
+    function closeMissionModal(){state.showMissionModal=false;state.editingMissionId=null;render();}
+    function editMission(id){state.editingMissionId=id;state.showMissionModal=true;render();}
+    function toggleMissionExpand(id){state.expandedMissionId=state.expandedMissionId===id?null:id;render();}
+
+    // RENDER: BODY
+    function renderBody(){const lat=state.bodyStats[0];const prev=state.bodyStats[1];
+      return`<div class="page-header"><div class="page-sub">Lichaam</div><div class="page-title">Body Stats</div></div>
+      <div class="stats"><div class="stat"><div class="stat-value">${lat?.weight||'--'}</div><div class="stat-label">Gewicht</div>${prev?.weight?`<div class="stat-change ${lat.weight<prev.weight?'text-success':'text-danger'}">${(lat.weight-prev.weight).toFixed(1)}kg</div>`:''}</div><div class="stat"><div class="stat-value">${lat?.bodyfat_percentage||'--'}${lat?.bodyfat_percentage?'%':''}</div><div class="stat-label">Vet %</div></div><div class="stat"><div class="stat-value">${lat?.weight?calculateBMI(lat.weight,state.userHeight).toFixed(1):'--'}</div><div class="stat-label">BMI</div></div><div class="stat"><div class="stat-value">${lat?.weight&&lat?.bodyfat_percentage?calculateFFMI(lat.weight,lat.bodyfat_percentage,state.userHeight).toFixed(1):'--'}</div><div class="stat-label">FFMI</div></div></div>
+      <div class="tabs"><button class="tab ${state.bodyTab==='overview'?'active':''}" onclick="setBodyTab('overview')">Overzicht</button><button class="tab ${state.bodyTab==='history'?'active':''}" onclick="setBodyTab('history')">Geschiedenis</button><button class="tab ${state.bodyTab==='challenges'?'active':''}" onclick="setBodyTab('challenges')">Challenges</button></div>
+      <button class="btn btn-primary" style="width:100%;margin-bottom:16px" onclick="openBodyModal()">+ Nieuwe Meting</button>
+      ${state.bodyTab==='overview'?renderBodyOverview():''}${state.bodyTab==='history'?renderBodyHistory():''}${state.bodyTab==='challenges'?renderChallenges():''}${state.showBodyModal?renderBodyModal():''}`;}
+
+    function renderBodyOverview(){if(state.bodyStats.length===0)return'<div class="empty"><div class="empty-icon">💪</div>Nog geen metingen</div>';const recent=state.bodyStats.slice(0,14);const weights=recent.map(s=>s.weight).filter(Boolean);const max=Math.max(...weights);const min=Math.min(...weights);const range=max-min||1;return`<div class="card"><label class="label">Gewicht Trend</label><div class="chart-container">${[...recent].reverse().map(s=>{const h=((s.weight-min)/range*80)+20;return`<div class="chart-bar" style="height:${h}%" title="${s.weight}kg"></div>`;}).join('')}</div></div><div class="card"><label class="label">Laatste meting</label><div class="measurement-row"><span class="text-muted">Gewicht</span><span>${state.bodyStats[0]?.weight||'--'} kg</span></div><div class="measurement-row"><span class="text-muted">Vet %</span><span>${state.bodyStats[0]?.bodyfat_percentage||'--'}%</span></div><div class="measurement-row"><span class="text-muted">Borst</span><span>${state.bodyStats[0]?.chest||'--'} cm</span></div><div class="measurement-row"><span class="text-muted">Taille</span><span>${state.bodyStats[0]?.waist||'--'} cm</span></div></div>`;}
+
+    function renderBodyHistory(){if(state.bodyStats.length===0)return'<div class="empty"><div class="empty-icon">📊</div>Geen geschiedenis</div>';return`<div class="card" style="padding:0;overflow-x:auto"><table style="width:100%;font-size:11px;border-collapse:collapse"><thead><tr style="border-bottom:1px solid #1c1c1c"><th style="padding:12px 8px;text-align:left;color:#525252;font-size:9px;text-transform:uppercase">Datum</th><th style="padding:12px 8px;text-align:left;color:#525252;font-size:9px;text-transform:uppercase">Gewicht</th><th style="padding:12px 8px;text-align:left;color:#525252;font-size:9px;text-transform:uppercase">Vet %</th><th style="padding:12px 8px;text-align:left;color:#525252;font-size:9px;text-transform:uppercase">BMI</th></tr></thead><tbody>${state.bodyStats.slice(0,20).map(s=>`<tr style="border-bottom:1px solid #0f0f0f"><td style="padding:10px 8px;color:#a3a3a3">${formatDateShort(s.entry_date)}</td><td style="padding:10px 8px;color:#fafafa">${s.weight} kg</td><td style="padding:10px 8px;color:#a3a3a3">${s.bodyfat_percentage||'--'}%</td><td style="padding:10px 8px;color:#a3a3a3">${s.weight?calculateBMI(s.weight,state.userHeight).toFixed(1):'--'}</td></tr>`).join('')}</tbody></table></div>`;}
+
+    function renderBodyModal(){return`<div class="modal-overlay" onclick="closeBodyModal()"><div class="modal" onclick="event.stopPropagation()"><div class="modal-title">Nieuwe Meting</div><div class="form-row"><div class="form-group"><label class="form-label">Gewicht (kg)</label><input type="number" class="form-input" id="body-weight" placeholder="82.5" step="0.1"></div><div class="form-group"><label class="form-label">Vet %</label><input type="number" class="form-input" id="body-fat" placeholder="16" step="0.1"></div></div><div class="form-group"><label class="form-label">Datum</label><input type="date" class="form-input" id="body-date" value="${new Date().toISOString().split('T')[0]}"></div><div class="divider"></div><label class="label">Omtrek (optioneel)</label><div class="form-row"><div class="form-group"><label class="form-label">Borst</label><input type="number" class="form-input" id="body-chest" placeholder="102"></div><div class="form-group"><label class="form-label">Taille</label><input type="number" class="form-input" id="body-waist" placeholder="84"></div></div><div class="form-row"><div class="form-group"><label class="form-label">Heupen</label><input type="number" class="form-input" id="body-hips" placeholder="96"></div><div class="form-group"><label class="form-label">Biceps</label><input type="number" class="form-input" id="body-biceps" placeholder="36"></div></div><div class="form-group"><label class="form-label">Dijen</label><input type="number" class="form-input" id="body-thighs" placeholder="58"></div><div style="display:flex;gap:12px;margin-top:20px"><button class="btn btn-primary" style="flex:1" onclick="saveBodyEntry()">Opslaan</button><button class="btn btn-secondary" onclick="closeBodyModal()">Annuleer</button></div></div></div>`;}
+
+    function setBodyTab(t){state.bodyTab=t;render();}
+    function openBodyModal(){state.showBodyModal=true;render();}
+    function closeBodyModal(){state.showBodyModal=false;render();}
+
+    // RENDER: CHALLENGES
+    function renderChallenges(){const act=state.challenges.filter(c=>c.status==='active');const comp=state.challenges.filter(c=>c.status==='completed');
+      return`<div class="stats" style="margin-bottom:16px"><div class="stat"><div class="stat-value text-success">${comp.length}</div><div class="stat-label">Voltooid</div></div><div class="stat"><div class="stat-value">${act.length}</div><div class="stat-label">Actief</div></div><div class="stat"><div class="stat-value text-warning">${act[0]?calculateChallengeDay(act[0].start_date):'-'}</div><div class="stat-label">Dag</div></div><div class="stat"><div class="stat-value">${Math.max(...state.challenges.map(c=>c.days_completed||0),0)}</div><div class="stat-label">Beste</div></div></div>
+      <div class="tabs" style="margin-bottom:16px"><button class="tab ${state.challengeTab==='active'?'active':''}" onclick="setChallengeTab('active')">Actief</button><button class="tab ${state.challengeTab==='browse'?'active':''}" onclick="setChallengeTab('browse')">Browse</button><button class="tab ${state.challengeTab==='history'?'active':''}" onclick="setChallengeTab('history')">Historie</button></div>
+      ${state.challengeTab==='active'?renderActiveChallenges(act):''}${state.challengeTab==='browse'?renderBrowseChallenges():''}${state.challengeTab==='history'?renderChallengeHistory():''}`;}
+
+    function renderActiveChallenges(act){if(act.length===0)return`<div class="empty"><div class="empty-icon">🏆</div>Geen actieve challenges<button class="btn btn-primary" style="margin-top:16px" onclick="setChallengeTab('browse')">Start Challenge</button></div>`;return act.map(c=>{const day=calculateChallengeDay(c.start_date);const prog=Math.round((day/c.duration)*100);const t=challengeTemplates.find(x=>x.id===c.template_id);return`<div class="challenge-card active"><div class="challenge-header"><div class="challenge-icon">${t?.icon||'🎯'}</div><div class="challenge-info"><div class="challenge-name">${c.name}</div><div class="challenge-desc">${c.description||''}</div></div><div class="challenge-day"><div class="challenge-day-number">${day}</div><div class="challenge-day-label">van ${c.duration}</div></div></div><div class="challenge-progress"><div class="challenge-progress-bar"><div class="challenge-progress-fill" style="width:${prog}%"></div></div></div><div style="padding:0 16px 16px"><div class="calendar-grid">${Array.from({length:c.duration},(_,i)=>{const d=i+1;return`<div class="calendar-day ${d<=c.days_completed?'completed':''} ${d===day?'today':''} ${d>day?'future':''}">${d}</div>`;}).join('')}</div></div><div style="padding:0 16px 16px;display:flex;gap:8px">${!c.today_completed&&day<=c.duration?`<button class="btn btn-success btn-small" style="flex:1" onclick="toggleChallengeDay('${c.id}',true)">✓ Dag ${day} Voltooid</button>`:c.today_completed?`<button class="btn btn-secondary btn-small" style="flex:1" onclick="toggleChallengeDay('${c.id}',false)">Ongedaan</button>`:''}<button class="btn btn-small" style="background:#dc2626;color:#fff" onclick="quitChallenge('${c.id}')">Stop</button></div></div>`;}).join('');}
+
+    function renderBrowseChallenges(){return`<div class="card" style="padding:12px"><label class="label">Beschikbare Challenges</label></div>${challengeTemplates.map(t=>{const isAct=state.challenges.some(c=>c.template_id===t.id&&c.status==='active');return`<div class="challenge-card" onclick="${isAct?'':`startChallenge('${t.id}')`}" style="${isAct?'opacity:0.5;cursor:not-allowed':''}"><div class="challenge-header"><div class="challenge-icon">${t.icon}</div><div class="challenge-info"><div class="challenge-name">${t.name}</div><div class="challenge-desc">${t.description}</div><div style="margin-top:8px"><span class="mission-badge badge-${t.difficulty==='starter'?'low':t.difficulty==='medium'?'medium':'high'}">${t.difficulty}</span><span class="text-dim" style="font-size:10px;margin-left:8px">${t.duration} dagen</span></div></div></div></div>`;}).join('')}`;}
+
+    function renderChallengeHistory(){const hist=state.challenges.filter(c=>c.status!=='active');if(hist.length===0)return'<div class="empty"><div class="empty-icon">📜</div>Geen historie</div>';return hist.map(c=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:500">${c.name}</div><div class="text-dim" style="font-size:10px">${formatDateShort(c.start_date)}</div></div><div style="text-align:right"><div class="${c.status==='completed'?'text-success':'text-danger'}" style="font-size:12px">${c.status==='completed'?'✓ Voltooid':'✗ Gestopt'}</div><div class="text-dim" style="font-size:10px">${c.days_completed}/${c.duration} dagen</div></div></div>`).join('');}
+
+    function setChallengeTab(t){state.challengeTab=t;render();}
+
+    // RENDER: RETENTION
+    function renderRetention(){const days=getRetentionDays();const phase=getRetentionPhase(days);const next=retentionMilestones.find(m=>m.days>days)||retentionMilestones[retentionMilestones.length-1];const prog=next?Math.min(100,(days/next.days)*100):100;
+      return`<div class="page-header"><div class="page-sub">Semen Retention</div><div class="page-title">Retention</div></div>
+      ${!state.retentionStreak?`<div class="card"><div class="empty"><div class="empty-icon">🔥</div><p style="margin-bottom:20px">Start je retention journey</p><button class="btn btn-primary" onclick="startRetention()">Begin Nu</button></div></div>`:`<div class="card card-accent"><div class="streak-big"><div class="streak-number" style="color:${phase.color}">${days}</div><div class="streak-label">Dagen Retention</div></div><div class="phase-indicator" style="background:${phase.color}22"><div class="phase-name" style="color:${phase.color}">${phase.name}</div></div><div class="progress-bar"><div class="progress-fill" style="width:${prog}%;background:${phase.color}"></div></div></div>
+      <button class="emergency-btn" onclick="state.showEmergencyModal=true;render()">🆘 NOODPROTOCOL</button>
+      <div class="card"><label class="label">Milestones</label>${retentionMilestones.map(m=>`<div class="milestone ${days>=m.days?'achieved':''}"><div class="milestone-day">${m.days}</div><div><div class="milestone-title">${m.title}</div><div class="milestone-desc">${m.desc}</div></div></div>`).join('')}</div>
+      <div class="card"><button class="btn btn-danger" style="width:100%" onclick="resetRetention()">Reset Streak</button></div>`}
+      ${state.showEmergencyModal?renderEmergencyModal():''}`;}
+
+    function renderEmergencyModal(){return`<div class="modal-overlay" onclick="state.showEmergencyModal=false;render()"><div class="modal" onclick="event.stopPropagation()"><div class="modal-title" style="color:#dc2626">🆘 Noodprotocol</div><p style="font-size:12px;color:#a3a3a3;margin-bottom:16px">Kies een actie:</p><div class="urge-grid">${urges.map(u=>`<div class="urge" onclick="state.showEmergencyModal=false;showToast('${u.label} - doe het!');render()"><div class="urge-icon">${u.icon}</div><div class="urge-label">${u.label}</div></div>`).join('')}</div><button class="btn btn-secondary" style="width:100%;margin-top:16px" onclick="state.showEmergencyModal=false;render()">Sluiten</button></div></div>`;}
+
+    // RENDER: MORE
+    function renderMore(){return`<div class="page-header"><div class="page-sub">Instellingen</div><div class="page-title">Meer</div></div><div class="card"><label class="label">Komt binnenkort</label><div style="color:#525252;font-size:12px"><p style="margin-bottom:12px">• Voeding logboek</p><p style="margin-bottom:12px">• Supplementen</p><p style="margin-bottom:12px">• Slaap analyse</p><p style="margin-bottom:12px">• Training programma's</p><p style="margin-bottom:12px">• Bloedwaarden</p><p>• AI Coach</p></div></div><div class="card"><label class="label">Account</label><div style="font-size:12px;color:#525252;margin-bottom:16px">${state.user.email}</div><button class="btn btn-secondary" style="width:100%" onclick="signOut()">Uitloggen</button></div>`;}
+
+    // RENDER: MAIN APP
+    function renderApp(){return`<div class="app-header"><div><span class="logo">PRIMAL</span><span class="logo logo-accent">FORGED</span></div><div class="user-menu"><span class="user-email">${state.user.email}</span><button class="logout-btn" onclick="signOut()">Logout</button></div></div><div id="toast" class="toast"></div><div class="container">${state.activeSection==='dashboard'?renderDashboard():''}${state.activeSection==='journal'?renderJournal():''}${state.activeSection==='missions'?renderMissions():''}${state.activeSection==='body'?renderBody():''}${state.activeSection==='retention'?renderRetention():''}${state.activeSection==='more'?renderMore():''}</div><nav class="nav"><button class="nav-item ${state.activeSection==='dashboard'?'active':''}" onclick="setSection('dashboard')"><span class="nav-icon">📊</span>Home</button><button class="nav-item ${state.activeSection==='journal'?'active':''}" onclick="setSection('journal')"><span class="nav-icon">📝</span>Journal</button><button class="nav-item ${state.activeSection==='missions'?'active':''}" onclick="setSection('missions')"><span class="nav-icon">🎯</span>Missies</button><button class="nav-item ${state.activeSection==='body'?'active':''}" onclick="setSection('body')"><span class="nav-icon">💪</span>Body</button><button class="nav-item ${state.activeSection==='retention'?'active':''}" onclick="setSection('retention')"><span class="nav-icon">🔥</span>Retention</button><button class="nav-item ${state.activeSection==='more'?'active':''}" onclick="setSection('more')"><span class="nav-icon">⚡</span>Meer</button></nav>`;}
+
+    function render(){const app=document.getElementById('app');if(state.loading){app.innerHTML='<div class="loading"><span class="loading-text">Laden...</span></div>';return;}if(!state.user){app.innerHTML=renderAuth();return;}app.innerHTML=renderApp();}
+
+    // EVENT HANDLERS
+    function setSection(s){state.activeSection=s;render();}
+    function setJournalTab(t){state.journalTab=t;render();}
+    function updateSlider(k,v){state[k]=parseInt(v);const el=document.getElementById(`${k}-value`);if(el){el.textContent=v;el.style.color=getColor(parseInt(v),k==='stress');}}
+
+    let habitPressTimer=null;
+    function startHabitPress(k){habitPressTimer=setTimeout(()=>{state.showHabitModal=k;render();habitPressTimer=null;},500);}
+    function endHabitPress(k){if(habitPressTimer){clearTimeout(habitPressTimer);habitPressTimer=null;toggleHabit(k);}}
+    function cancelHabitPress(){if(habitPressTimer){clearTimeout(habitPressTimer);habitPressTimer=null;}}
+
+    // INIT
+    async function init(){const{data:{session}}=await supabaseClient.auth.getSession();if(session){state.user=session.user;await Promise.all([loadEntries(),loadRetention(),loadHabits(),loadMissions(),loadBodyStats(),loadChallenges()]);}state.loading=false;render();supabaseClient.auth.onAuthStateChange(async(event,session)=>{if(session){state.user=session.user;await Promise.all([loadEntries(),loadRetention(),loadHabits(),loadMissions(),loadBodyStats(),loadChallenges()]);}else{state.user=null;state.entries=[];state.missions=[];state.bodyStats=[];state.challenges=[];state.retentionStreak=null;}render();});}
+    init();
+  </script>
+</body>
+</html>
