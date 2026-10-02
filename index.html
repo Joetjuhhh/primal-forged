@@ -7,20 +7,24 @@
   <meta name="theme-color" content="#050505">
   <title>Primal Forged</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
     body { font-family: 'Inter', -apple-system, sans-serif; background: #050505; color: #fafafa; }
+    
     .loading { display: flex; align-items: center; justify-content: center; height: 100vh; }
     .loading-text { font-size: 12px; color: #525252; text-transform: uppercase; letter-spacing: 0.2em; }
+    
     .container { max-width: 600px; margin: 0 auto; padding: 20px; padding-bottom: 100px; }
+    
     .app-header { position: fixed; top: 0; left: 0; right: 0; background: #050505; border-bottom: 1px solid #1c1c1c; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
     .logo { font-size: 10px; font-weight: 600; letter-spacing: 0.35em; }
     .logo-accent { color: #7f1d1d; margin-left: 6px; }
     .user-menu { display: flex; align-items: center; gap: 12px; }
     .user-email { font-size: 10px; color: #525252; max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
     .logout-btn { background: transparent; border: 1px solid #1c1c1c; color: #737373; padding: 6px 12px; font-size: 9px; cursor: pointer; font-family: inherit; }
+    
     .auth-container { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
     .auth-box { width: 100%; max-width: 360px; }
     .auth-title { font-size: 24px; font-weight: 300; text-align: center; margin-bottom: 8px; letter-spacing: 0.1em; }
@@ -28,58 +32,112 @@
     .auth-input { width: 100%; padding: 14px 16px; background: #0a0a0a; border: 1px solid #1c1c1c; color: #fafafa; font-size: 14px; font-family: inherit; margin-bottom: 12px; }
     .auth-input:focus { outline: none; border-color: #7f1d1d; }
     .auth-btn { width: 100%; padding: 14px; background: #7f1d1d; border: none; color: #fff; font-size: 11px; font-weight: 500; cursor: pointer; font-family: inherit; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 8px; }
+    .auth-btn:hover { background: #991b1b; }
+    .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .auth-switch { text-align: center; margin-top: 24px; font-size: 12px; color: #525252; }
     .auth-switch a { color: #7f1d1d; cursor: pointer; text-decoration: none; }
     .auth-error { background: rgba(220,38,38,0.1); border: 1px solid #dc2626; color: #dc2626; padding: 12px; font-size: 12px; margin-bottom: 16px; }
     .auth-success { background: rgba(34,197,94,0.1); border: 1px solid #22c55e; color: #22c55e; padding: 12px; font-size: 12px; margin-bottom: 16px; }
+    
     .nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0a0a0a; border-top: 1px solid #1c1c1c; display: flex; z-index: 100; }
-    .nav-item { flex: 1; padding: 10px 4px; background: transparent; border: none; color: #525252; font-size: 8px; text-transform: uppercase; letter-spacing: 0.02em; cursor: pointer; font-family: inherit; text-align: center; }
+    .nav-item { flex: 1; padding: 12px 4px; background: transparent; border: none; color: #525252; font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; font-family: inherit; text-align: center; }
     .nav-item.active { color: #7f1d1d; }
-    .nav-icon { font-size: 18px; display: block; margin-bottom: 2px; }
+    .nav-icon { font-size: 18px; display: block; margin-bottom: 4px; }
+    
     .card { background: #0a0a0a; border: 1px solid #1c1c1c; padding: 20px; margin-bottom: 16px; }
     .card-accent { border-left: 3px solid #7f1d1d; }
+    
     .label { font-size: 10px; color: #525252; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 12px; font-weight: 500; display: block; }
+    
     .page-header { margin-bottom: 24px; padding-top: 60px; }
     .page-sub { font-size: 10px; color: #7f1d1d; text-transform: uppercase; letter-spacing: 0.25em; margin-bottom: 6px; font-weight: 600; }
     .page-title { font-size: 26px; font-weight: 300; letter-spacing: 0.08em; text-transform: uppercase; }
+    
     .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 24px; }
     .stat { text-align: center; padding: 16px 8px; background: #0a0a0a; border: 1px solid #1c1c1c; }
     .stat-value { font-size: 20px; font-weight: 300; }
     .stat-label { font-size: 8px; color: #525252; text-transform: uppercase; margin-top: 4px; letter-spacing: 0.05em; }
-    .stat-change { font-size: 9px; margin-top: 4px; }
+    
     .tabs { display: flex; border-bottom: 1px solid #1c1c1c; margin-bottom: 24px; overflow-x: auto; }
-    .tabs::-webkit-scrollbar { display: none; }
     .tab { padding: 12px 16px; background: transparent; border: none; border-bottom: 2px solid transparent; color: #525252; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; font-family: inherit; margin-bottom: -1px; white-space: nowrap; }
     .tab.active { color: #fafafa; border-bottom-color: #7f1d1d; }
+    
     .textarea { width: 100%; min-height: 150px; padding: 16px; background: #050505; border: 1px solid #1c1c1c; color: #fafafa; font-family: inherit; font-size: 14px; line-height: 1.7; resize: vertical; }
     .textarea:focus { outline: none; border-color: #7f1d1d; }
+    
     .slider-group { margin-bottom: 16px; }
     .slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
     .slider-label { font-size: 12px; color: #a3a3a3; }
-    .slider-value { font-size: 14px; font-weight: 500; }
-    .slider { -webkit-appearance: none; width: 100%; height: 8px; background: linear-gradient(to right, #dc2626, #eab308, #22c55e); outline: none; border-radius: 4px; opacity: 0.4; }
-    .slider::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #fafafa; cursor: pointer; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
-    .slider-stress { background: linear-gradient(to right, #22c55e, #eab308, #dc2626); }
+    .slider-value { font-size: 14px; font-weight: 500; transition: color 0.2s; }
+    .slider { 
+      -webkit-appearance: none; 
+      width: 100%; 
+      height: 8px; 
+      background: linear-gradient(to right, #dc2626, #eab308, #22c55e); 
+      outline: none; 
+      border-radius: 4px;
+      opacity: 0.4;
+    }
+    .slider::-webkit-slider-thumb { 
+      -webkit-appearance: none; 
+      width: 22px; 
+      height: 22px; 
+      background: #fafafa; 
+      cursor: pointer; 
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    .slider::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      background: #fafafa;
+      cursor: pointer;
+      border-radius: 50%;
+      border: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    .slider-stress {
+      background: linear-gradient(to right, #22c55e, #eab308, #dc2626);
+    }
+    
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag { padding: 10px 14px; background: transparent; border: 1px solid #1c1c1c; color: #737373; font-size: 11px; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+    .tag:hover { border-color: #525252; }
+    .tag.active { background: rgba(127,29,29,0.2); border-color: #7f1d1d; color: #fafafa; }
+    
     .btn { padding: 14px 28px; border: none; font-size: 11px; font-weight: 500; cursor: pointer; font-family: inherit; text-transform: uppercase; letter-spacing: 0.1em; }
     .btn-primary { background: #7f1d1d; color: #fff; }
     .btn-primary:hover { background: #991b1b; }
     .btn-secondary { background: transparent; border: 1px solid #1c1c1c; color: #737373; }
     .btn-danger { background: #dc2626; color: #fff; }
-    .btn-success { background: #166534; color: #fff; }
     .btn-small { padding: 10px 16px; font-size: 10px; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    
     .entry { background: #0a0a0a; border: 1px solid #1c1c1c; padding: 20px; margin-bottom: 12px; }
     .entry-date { font-size: 11px; color: #525252; margin-bottom: 12px; }
     .entry-scores { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
     .entry-score { font-size: 10px; padding: 4px 8px; background: #1c1c1c; }
     .entry-content { font-size: 13px; color: #a3a3a3; line-height: 1.7; white-space: pre-wrap; }
+    .entry-habits { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+    .entry-habit { font-size: 9px; padding: 4px 8px; border-radius: 2px; }
+    .entry-actions { display: flex; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #1c1c1c; }
+    .entry-action { background: transparent; border: 1px solid #1c1c1c; color: #737373; padding: 8px 12px; font-size: 10px; cursor: pointer; font-family: inherit; }
+    .entry-action:hover { border-color: #525252; }
+    .entry-action.delete { color: #dc2626; }
+    
+    .info-box { padding: 16px; background: rgba(127,29,29,0.1); border-left: 3px solid #7f1d1d; margin-bottom: 16px; }
+    .info-title { font-size: 11px; color: #7f1d1d; margin-bottom: 6px; font-weight: 500; }
+    .info-text { font-size: 12px; color: #a3a3a3; line-height: 1.6; }
+    
     .prompt { padding: 16px; background: rgba(127,29,29,0.1); border-left: 3px solid #7f1d1d; margin-bottom: 16px; }
     .prompt-label { font-size: 10px; color: #7f1d1d; margin-bottom: 6px; }
     .prompt-text { font-size: 13px; color: #a3a3a3; font-style: italic; }
-    .info-box { padding: 16px; background: rgba(127,29,29,0.1); border-left: 3px solid #7f1d1d; margin-bottom: 16px; }
-    .toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: #166534; color: #fff; padding: 12px 24px; font-size: 12px; z-index: 200; display: none; }
+    
+    .toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: #166534; color: #fff; padding: 12px 24px; font-size: 12px; z-index: 400; display: none; }
     .toast.show { display: block; }
+    
     .empty { text-align: center; padding: 40px 20px; color: #525252; font-size: 13px; }
-    .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
+    
     .insight { padding: 16px; margin-bottom: 12px; display: flex; gap: 12px; align-items: flex-start; }
     .insight-positive { background: rgba(34,197,94,0.1); border-left: 3px solid #22c55e; }
     .insight-negative { background: rgba(234,179,8,0.1); border-left: 3px solid #eab308; }
@@ -88,309 +146,2115 @@
     .insight-positive .insight-title { color: #22c55e; }
     .insight-negative .insight-title { color: #eab308; }
     .insight-text { font-size: 11px; color: #a3a3a3; }
+
+    /* Dashboard specific */
     .greeting { font-size: 20px; font-weight: 300; margin-bottom: 4px; }
     .greeting-sub { font-size: 12px; color: #525252; margin-bottom: 24px; }
+    
     .streak-big { text-align: center; padding: 32px; }
     .streak-number { font-size: 72px; font-weight: 200; line-height: 1; }
     .streak-label { font-size: 11px; color: #525252; text-transform: uppercase; letter-spacing: 0.15em; margin-top: 8px; }
+    
     .habit-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .habit { padding: 12px 8px; background: transparent; border: 1px solid #1c1c1c; color: #525252; cursor: pointer; font-family: inherit; text-align: center; }
     .habit.done { background: rgba(34,197,94,0.1); border-color: #22c55e; color: #22c55e; }
     .habit.done.negative { background: rgba(234,179,8,0.1); border-color: #eab308; color: #eab308; }
     .habit-icon { font-size: 18px; display: block; margin-bottom: 4px; }
     .habit-label { font-size: 8px; text-transform: uppercase; }
+    
     .quote-card { padding: 20px; background: #0a0a0a; border: 1px solid #1c1c1c; margin-bottom: 16px; }
     .quote-text { font-size: 14px; color: #a3a3a3; font-style: italic; line-height: 1.6; margin-bottom: 12px; }
     .quote-author { font-size: 11px; color: #525252; }
+    
+    /* Retention specific */
     .phase-indicator { padding: 12px; text-align: center; margin-top: 16px; }
     .phase-name { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; }
+    
     .progress-bar { height: 4px; background: #1c1c1c; margin-top: 16px; }
     .progress-fill { height: 100%; transition: width 0.3s; }
+    
     .emergency-btn { width: 100%; padding: 20px; background: #dc2626; border: none; color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 24px; }
+    .emergency-btn:hover { background: #b91c1c; }
+    
     .milestone { padding: 16px; background: #0a0a0a; border: 1px solid #1c1c1c; margin-bottom: 12px; display: flex; gap: 16px; align-items: flex-start; }
     .milestone.achieved { border-color: #22c55e; background: rgba(34,197,94,0.05); }
     .milestone-day { font-size: 24px; font-weight: 300; color: #525252; min-width: 50px; }
     .milestone.achieved .milestone-day { color: #22c55e; }
     .milestone-title { font-size: 12px; font-weight: 500; margin-bottom: 4px; }
     .milestone-desc { font-size: 11px; color: #525252; }
+    
     .urge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .urge { padding: 16px 8px; background: #0a0a0a; border: 1px solid #1c1c1c; cursor: pointer; text-align: center; }
     .urge:hover { border-color: #7f1d1d; }
     .urge-icon { font-size: 24px; display: block; margin-bottom: 8px; }
     .urge-label { font-size: 9px; color: #a3a3a3; text-transform: uppercase; }
-    .mission-card { background: #0a0a0a; border: 1px solid #1c1c1c; margin-bottom: 12px; overflow: hidden; }
-    .mission-card.expanded { border-color: #7f1d1d; }
-    .mission-header { padding: 16px; display: flex; gap: 12px; cursor: pointer; }
-    .mission-checkbox { width: 20px; height: 20px; border: 2px solid #525252; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; font-size: 12px; }
-    .mission-checkbox.checked { background: #22c55e; border-color: #22c55e; color: #fff; }
-    .mission-content { flex: 1; }
-    .mission-title { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
-    .mission-meta { display: flex; gap: 8px; flex-wrap: wrap; }
-    .mission-badge { font-size: 8px; padding: 3px 8px; text-transform: uppercase; }
-    .badge-physical { background: rgba(34,197,94,0.2); color: #22c55e; }
-    .badge-mental { background: rgba(59,130,246,0.2); color: #3b82f6; }
-    .badge-financial { background: rgba(234,179,8,0.2); color: #eab308; }
-    .badge-social { background: rgba(168,85,247,0.2); color: #a855f7; }
-    .badge-purpose { background: rgba(127,29,29,0.2); color: #7f1d1d; }
-    .badge-high { background: rgba(220,38,38,0.2); color: #dc2626; }
-    .badge-medium { background: rgba(234,179,8,0.2); color: #eab308; }
-    .badge-low { background: rgba(34,197,94,0.2); color: #22c55e; }
-    .mission-progress { padding: 0 16px 16px; }
-    .mission-progress-bar { height: 6px; background: #1c1c1c; }
-    .mission-progress-fill { height: 100%; background: #7f1d1d; transition: width 0.3s; }
-    .mission-progress-fill.complete { background: #22c55e; }
-    .mission-progress-label { display: flex; justify-content: space-between; font-size: 10px; color: #525252; margin-top: 6px; }
-    .mission-details { padding: 16px; border-top: 1px solid #1c1c1c; display: none; }
-    .mission-card.expanded .mission-details { display: block; }
-    .mission-completed { opacity: 0.5; }
-    .mission-completed .mission-title { text-decoration: line-through; }
-    .chart-container { height: 150px; display: flex; align-items: flex-end; gap: 3px; margin-bottom: 8px; }
-    .chart-bar { flex: 1; background: #7f1d1d; min-width: 6px; border-radius: 2px 2px 0 0; cursor: pointer; transition: background 0.2s; }
-    .chart-bar:hover { background: #991b1b; }
-    .measurement-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #1c1c1c; }
-    .measurement-row:last-child { border-bottom: none; }
-    .challenge-card { background: #0a0a0a; border: 1px solid #1c1c1c; margin-bottom: 12px; cursor: pointer; transition: border-color 0.2s; }
-    .challenge-card:hover { border-color: #7f1d1d; }
-    .challenge-card.active { background: linear-gradient(135deg, rgba(127,29,29,0.2) 0%, #0a0a0a 100%); border: 2px solid #7f1d1d; }
-    .challenge-header { padding: 16px; display: flex; gap: 12px; }
-    .challenge-icon { font-size: 28px; }
-    .challenge-info { flex: 1; }
-    .challenge-name { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
-    .challenge-desc { font-size: 10px; color: #525252; }
-    .challenge-day { text-align: right; }
-    .challenge-day-number { font-size: 28px; font-weight: 200; color: #7f1d1d; }
-    .challenge-day-label { font-size: 8px; color: #525252; }
-    .challenge-progress { padding: 0 16px 16px; }
-    .challenge-progress-bar { height: 6px; background: #1c1c1c; }
-    .challenge-progress-fill { height: 100%; background: linear-gradient(90deg, #7f1d1d, #dc2626); }
-    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 16px; }
-    .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 10px; background: #0a0a0a; border: 1px solid #1c1c1c; }
-    .calendar-day.completed { background: #166534; border-color: #166534; }
-    .calendar-day.today { border-color: #fafafa; border-width: 2px; }
-    .calendar-day.future { opacity: 0.3; }
+
+    /* Modal */
     .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 300; display: flex; align-items: center; justify-content: center; padding: 20px; }
-    .modal { background: #0a0a0a; border: 1px solid #1c1c1c; padding: 24px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; }
-    .modal-title { font-size: 18px; font-weight: 500; margin-bottom: 16px; }
-    .form-group { margin-bottom: 12px; }
-    .form-label { font-size: 9px; color: #525252; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; display: block; }
-    .form-input { width: 100%; padding: 12px; background: #050505; border: 1px solid #1c1c1c; color: #fafafa; font-size: 13px; font-family: inherit; }
-    .form-input:focus { outline: none; border-color: #7f1d1d; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .text-success { color: #22c55e; }
-    .text-warning { color: #eab308; }
-    .text-danger { color: #dc2626; }
-    .text-accent { color: #7f1d1d; }
-    .text-muted { color: #737373; }
-    .text-dim { color: #525252; }
-    .divider { height: 1px; background: #1c1c1c; margin: 24px 0; }
-    .filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-    .filter-btn { padding: 8px 12px; background: transparent; border: 1px solid #1c1c1c; color: #525252; font-size: 9px; text-transform: uppercase; cursor: pointer; font-family: inherit; }
-    .filter-btn.active { background: rgba(127,29,29,0.2); border-color: #7f1d1d; color: #fafafa; }
-    .habit-modal-icon { font-size: 48px; text-align: center; margin-bottom: 16px; }
-    .habit-modal-duration { text-align: center; padding: 12px; background: rgba(127,29,29,0.2); border: 1px solid #7f1d1d; margin-bottom: 16px; font-size: 14px; }
-    .modal-step { padding: 16px; background: #050505; border-left: 3px solid #7f1d1d; margin-bottom: 12px; }
+    .modal { background: #0a0a0a; border: 1px solid #1c1c1c; padding: 24px; max-width: 400px; width: 100%; max-height: 90vh; overflow-y: auto; }
+    .modal-title { font-size: 18px; font-weight: 500; margin-bottom: 16px; color: #dc2626; }
+    .modal-title.habit { color: #22c55e; }
+    .modal-step { padding: 16px; background: #050505; border-left: 3px solid #dc2626; margin-bottom: 12px; }
+    .modal-step.habit { border-left-color: #7f1d1d; }
     .modal-step-title { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
     .modal-step-text { font-size: 11px; color: #a3a3a3; }
+    
+    .habit-modal-icon { font-size: 48px; text-align: center; margin-bottom: 16px; }
+    .habit-modal-duration { text-align: center; padding: 12px; background: rgba(127,29,29,0.2); border: 1px solid #7f1d1d; margin-bottom: 16px; font-size: 14px; color: #fafafa; }
+
+    /* ===== MISSIES ===== */
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .chip { padding: 8px 12px; background: transparent; border: 1px solid #1c1c1c; color: #737373; font-size: 10px; cursor: pointer; font-family: inherit; text-transform: uppercase; letter-spacing: 0.05em; }
+    .chip.active { background: #7f1d1d; border-color: #7f1d1d; color: #fff; }
+    .goal { background: #0a0a0a; border: 1px solid #1c1c1c; padding: 16px; margin-bottom: 12px; }
+    .goal.done { opacity: 0.6; }
+    .goal-top { display: flex; gap: 12px; align-items: flex-start; }
+    .goal-check { width: 24px; height: 24px; border: 2px solid #525252; background: transparent; color: #fff; cursor: pointer; flex-shrink: 0; font-size: 13px; display: flex; align-items: center; justify-content: center; font-family: inherit; }
+    .goal-check.checked { background: #22c55e; border-color: #22c55e; }
+    .goal-title { font-size: 14px; font-weight: 500; margin-bottom: 6px; word-break: break-word; }
+    .goal.done .goal-title { text-decoration: line-through; color: #737373; }
+    .goal-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .badge { padding: 3px 8px; font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid #1c1c1c; color: #737373; }
+    .goal-notes { font-size: 12px; color: #737373; margin-top: 10px; line-height: 1.5; white-space: pre-wrap; }
+    .goal-progress-row { display: flex; justify-content: space-between; font-size: 10px; color: #737373; margin-top: 6px; }
+    .goal-update { display: flex; gap: 8px; margin-top: 12px; }
+    .input-sm { flex: 1; padding: 10px 12px; background: #050505; border: 1px solid #1c1c1c; color: #fafafa; font-size: 13px; font-family: inherit; min-width: 0; }
+    .input-sm:focus { outline: none; border-color: #7f1d1d; }
+    .subtasks { margin-top: 12px; border-top: 1px solid #1c1c1c; padding-top: 8px; }
+    .subtask { display: flex; align-items: center; gap: 10px; padding: 6px 0; }
+    .subtask-check { width: 18px; height: 18px; border: 1px solid #525252; background: transparent; color: #fff; cursor: pointer; font-size: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: inherit; }
+    .subtask-check.checked { background: #166534; border-color: #166534; }
+    .subtask-text { flex: 1; font-size: 12px; color: #a3a3a3; word-break: break-word; }
+    .subtask-text.done { text-decoration: line-through; color: #525252; }
+    .icon-btn { background: transparent; border: none; color: #525252; cursor: pointer; font-size: 14px; padding: 2px 6px; font-family: inherit; }
+    .icon-btn:hover { color: #dc2626; }
+    .goal-actions { display: flex; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #1c1c1c; }
+    .form-label { font-size: 10px; color: #525252; text-transform: uppercase; letter-spacing: 0.1em; margin: 14px 0 6px; display: block; }
+    .form-input { width: 100%; padding: 12px 14px; background: #050505; border: 1px solid #1c1c1c; color: #fafafa; font-size: 13px; font-family: inherit; color-scheme: dark; }
+    .form-input:focus { outline: none; border-color: #7f1d1d; }
+    textarea.form-input { min-height: 70px; resize: vertical; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .template-list { max-height: 220px; overflow-y: auto; border: 1px solid #1c1c1c; }
+    .template { display: block; width: 100%; text-align: left; padding: 10px 12px; background: transparent; border: none; border-bottom: 1px solid #1c1c1c; color: #d4d4d4; font-size: 12px; cursor: pointer; font-family: inherit; }
+    .template:hover { background: rgba(127,29,29,0.15); color: #fafafa; }
+    .template-sub { font-size: 10px; color: #525252; margin-top: 2px; }
+    .smart-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 16px; }
+    .smart-cell { text-align: center; padding: 8px 2px; background: #050505; border: 1px solid #1c1c1c; }
+    .smart-char { font-size: 15px; font-weight: 600; color: #7f1d1d; }
+    .smart-word { font-size: 7px; color: #525252; text-transform: uppercase; margin-top: 2px; }
   </style>
 </head>
 <body>
-  <div id="app"><div class="loading"><span class="loading-text">Laden...</span></div></div>
+  <div id="app">
+    <div class="loading">
+      <span class="loading-text">Laden...</span>
+    </div>
+  </div>
+
   <script>
+    // ============================================
     // SUPABASE CONFIG
+    // ============================================
     const SUPABASE_URL = 'https://dgqfvyjgtkoeiyswgngs.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRncWZ2eWpndGtvZWl5c3dnbmdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU4MzIxMzgsImV4cCI6MjA1MTQwODEzOH0.5y_TE3wv6EcYzhTv_LYvbPmh2OMTOBCugdxkJG_fOus';
+    const SUPABASE_KEY = 'sb_publishable_rDP5Kvq0wBsObLeiXJ98OA_aa0q-ipz';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    // ============================================
     // APP STATE
+    // ============================================
     let state = {
-      user: null, loading: true, activeSection: 'dashboard',
-      journalTab: 'new', entries: [], content: '', mood: 7, energy: 7, libido: 7, focus: 7, stress: 4, sleep: 7, editingId: null,
-      retentionStreak: null, showEmergencyModal: false, showHabitModal: null,
-      habits: { coldShower: false, sunlight: false, cleanEating: false, workout: false, meditation: false, noAlcohol: false, reading: false, stretching: false, outside: false, badSleep: false, stressed: false, alcohol: false, unhealthy: false },
-      missions: [], missionTab: 'short', missionDomain: 'all', showMissionModal: false, editingMissionId: null, expandedMissionId: null,
-      bodyStats: [], bodyTab: 'overview', showBodyModal: false, userHeight: 180,
-      challenges: [], challengeTab: 'active',
-      journalSaving: false, todaySaved: false
+      user: null,
+      loading: true,
+      activeSection: 'dashboard',
+      
+      // Journal
+      journalTab: 'new',
+      entries: [],
+      content: '',
+      mood: 7,
+      energy: 7,
+      libido: 7,
+      focus: 7,
+      stress: 4,
+      sleep: 7,
+      editingId: null,
+      
+      // Retention
+      retentionStreak: null,
+      showEmergencyModal: false,
+      showHabitModal: null,
+
+      // Missies
+      goals: [],
+      goalsError: null,
+      goalTab: 'short',
+      goalDomain: 'all',
+      showGoalModal: false,
+      editingGoalId: null,
+      goalForm: null,
+      templateDomain: 'physical',
+      
+      // Daily habits (positive + negative situations)
+      habits: {
+        coldShower: false,
+        sunlight: false,
+        cleanEating: false,
+        workout: false,
+        meditation: false,
+        noAlcohol: false,
+        reading: false,
+        stretching: false,
+        outside: false,
+        // Negative/situation
+        badSleep: false,
+        stressed: false,
+        alcohol: false,
+        unhealthy: false
+      }
     };
 
-    // CONSTANTS
+    // Constants - no more tagOptions, habits are the single source
     const habitConfig = {
-      coldShower: { icon: '🧊', label: 'Koud', title: 'Koude Douche', what: 'Douchen met koud water', how: 'Begin lauw, laatste 30-60 sec ijskoud.', why: 'Verhoogt noradrenaline en dopamine.', duration: '2-3 min', positive: true },
-      sunlight: { icon: '☀️', label: 'Zon', title: 'Zonlicht', what: 'Direct zonlicht', how: 'Binnen 30 min na opstaan.', why: 'Reguleert circadiaans ritme.', duration: '10-15 min', positive: true },
-      cleanEating: { icon: '🥗', label: 'Clean', title: 'Clean Eating', what: 'Onbewerkt voedsel', how: 'Geen processed food.', why: 'Stabiele energie.', duration: 'Hele dag', positive: true },
-      workout: { icon: '💪', label: 'Sport', title: 'Training', what: 'Zware training of HIIT', how: 'Compound lifts.', why: 'Verhoogt testosteron.', duration: '45-60 min', positive: true },
-      meditation: { icon: '🧘', label: 'Rust', title: 'Meditatie', what: 'Stille meditatie', how: 'Focus op adem.', why: 'Verlaagt cortisol.', duration: '10-20 min', positive: true },
-      noAlcohol: { icon: '🚫', label: 'Nuchter', title: 'Geen Alcohol', what: 'Geen alcohol', how: 'Vervang met water.', why: 'Alcohol verlaagt T.', duration: '24 uur', positive: true },
-      reading: { icon: '📖', label: 'Lezen', title: 'Lezen', what: 'Non-fictie lezen', how: 'Fysiek boek.', why: 'Bouwt kennis.', duration: '30 min', positive: true },
-      stretching: { icon: '🤸', label: 'Stretch', title: 'Stretchen', what: 'Mobility routine', how: 'Heupen, hamstrings.', why: 'Betere houding.', duration: '10-15 min', positive: true },
-      outside: { icon: '🚶', label: 'Buiten', title: 'Buiten', what: 'Tijd buiten', how: 'Wandelen.', why: 'Vitamine D.', duration: '30+ min', positive: true },
-      badSleep: { icon: '😴', label: 'Slecht', title: 'Slecht Geslapen', what: 'Slechte nacht', how: '<6 uur.', why: 'Track patronen.', duration: 'Nacht', positive: false },
-      stressed: { icon: '😤', label: 'Stress', title: 'Gestrest', what: 'Veel stress', how: 'Werk, zorgen.', why: 'Verlaagt T.', duration: 'Dag', positive: false },
-      alcohol: { icon: '🍺', label: 'Alcohol', title: 'Alcohol', what: 'Gedronken', how: 'Bier, wijn.', why: 'Track impact.', duration: 'Dag', positive: false },
-      unhealthy: { icon: '🍔', label: 'Junk', title: 'Junk Food', what: 'Ongezond gegeten', how: 'Fast food.', why: 'Track impact.', duration: 'Dag', positive: false }
+      // POSITIVE HABITS
+      coldShower: { 
+        icon: '🧊', 
+        label: 'Koud',
+        title: 'Koude Douche',
+        what: 'Douchen met koud water',
+        how: 'Begin lauw, laatste 30-60 seconden ijskoud. Adem rustig door.',
+        why: 'Verhoogt noradrenaline 200-300% en dopamine tot 250%. Verbetert focus en wilskracht.',
+        duration: '2-3 minuten koud',
+        positive: true
+      },
+      sunlight: { 
+        icon: '☀️', 
+        label: 'Zon',
+        title: 'Zonlicht',
+        what: 'Direct zonlicht in je ogen (niet staren!)',
+        how: 'Ga binnen 30 min na opstaan naar buiten. Geen zonnebril, geen raam.',
+        why: 'Reguleert je circadiaans ritme, boost cortisol ochtendpiek en testosteron.',
+        duration: '10-15 minuten',
+        positive: true
+      },
+      cleanEating: { 
+        icon: '🥗', 
+        label: 'Clean',
+        title: 'Clean Eating',
+        what: 'Alleen onbewerkt, natuurlijk voedsel',
+        how: 'Geen processed food, geen toegevoegde suiker, geen seed oils. Vlees, vis, eieren, groenten, fruit, noten.',
+        why: 'Stabiele energie, betere hormoonbalans, minder inflammatie.',
+        duration: 'Hele dag',
+        positive: true
+      },
+      workout: { 
+        icon: '💪', 
+        label: 'Sport',
+        title: 'Training',
+        what: 'Zware compound training of HIIT',
+        how: 'Focus op squats, deadlifts, bench, rows. Progressieve overload. Of 20-30 min HIIT.',
+        why: 'Verhoogt testosteron, HGH, dopamine. Bouwt discipline en zelfvertrouwen.',
+        duration: '45-60 minuten',
+        positive: true
+      },
+      meditation: { 
+        icon: '🧘', 
+        label: 'Rust',
+        title: 'Meditatie',
+        what: 'Stille meditatie of ademhalingsoefeningen',
+        how: 'Zit rechtop, ogen dicht, focus op je adem. Gedachten komen en gaan.',
+        why: 'Verlaagt cortisol, verbetert focus en emotieregulatie, vergroot prefrontale cortex.',
+        duration: '10-20 minuten',
+        positive: true
+      },
+      noAlcohol: { 
+        icon: '🚫', 
+        label: 'Nuchter',
+        title: 'Geen Alcohol',
+        what: 'Geen enkele druppel alcohol',
+        how: 'Vervang met water, thee, of sparkling water met citroen.',
+        why: 'Alcohol verlaagt testosteron met 20-25% voor 24-72 uur. Verstoort slaap en recovery.',
+        duration: '24 uur',
+        positive: true
+      },
+      reading: { 
+        icon: '📖', 
+        label: 'Lezen',
+        title: 'Lezen',
+        what: 'Non-fictie boek lezen (zelfontwikkeling)',
+        how: 'Fysiek boek, geen telefoon erbij. Maak notities.',
+        why: 'Bouwt kennis, verbetert focus, vervangt dopamine-verslaving door waardevol gedrag.',
+        duration: '30 minuten',
+        positive: true
+      },
+      stretching: { 
+        icon: '🤸', 
+        label: 'Stretch',
+        title: 'Stretchen',
+        what: 'Mobility en stretching routine',
+        how: 'Focus op heupen, hamstrings, schouders, thoracic spine. Hold 30-60 sec per stretch.',
+        why: 'Betere houding, minder blessures, ontspanning, betere bloedflow.',
+        duration: '10-15 minuten',
+        positive: true
+      },
+      outside: { 
+        icon: '🚶', 
+        label: 'Buiten',
+        title: 'Buiten Geweest',
+        what: 'Tijd doorgebracht in de buitenlucht',
+        how: 'Wandelen, fietsen, tuinieren, of gewoon buiten zitten.',
+        why: 'Frisse lucht, vitamine D, verlaagt stress, verbetert stemming.',
+        duration: '30+ minuten',
+        positive: true
+      },
+      // NEGATIVE/SITUATION
+      badSleep: { 
+        icon: '😴', 
+        label: 'Slecht',
+        title: 'Slecht Geslapen',
+        what: 'Slechte nachtrust gehad',
+        how: 'Minder dan 6 uur, vaak wakker, niet uitgerust.',
+        why: 'Track dit om patronen te ontdekken tussen slaap en je mood/energie.',
+        duration: 'Vorige nacht',
+        positive: false
+      },
+      stressed: { 
+        icon: '😤', 
+        label: 'Stress',
+        title: 'Gestrest',
+        what: 'Veel stress ervaren vandaag',
+        how: 'Werk, relaties, financiën, of andere zorgen.',
+        why: 'Chronische stress verlaagt testosteron en verhoogt cortisol.',
+        duration: 'Vandaag',
+        positive: false
+      },
+      alcohol: { 
+        icon: '🍺', 
+        label: 'Alcohol',
+        title: 'Alcohol Gedronken',
+        what: 'Alcohol geconsumeerd',
+        how: 'Bier, wijn, sterke drank.',
+        why: 'Track dit om de impact op je mood en energie te zien.',
+        duration: 'Vandaag',
+        positive: false
+      },
+      unhealthy: { 
+        icon: '🍔', 
+        label: 'Junk',
+        title: 'Ongezond Gegeten',
+        what: 'Processed food of junk food gegeten',
+        how: 'Fast food, snoep, chips, frisdrank, etc.',
+        why: 'Track dit om de impact op je energie en focus te zien.',
+        duration: 'Vandaag',
+        positive: false
+      }
     };
-    const domainConfig = { physical: { icon: '💪', name: 'Fysiek' }, mental: { icon: '🧠', name: 'Mentaal' }, financial: { icon: '💰', name: 'Financieel' }, social: { icon: '👥', name: 'Sociaal' }, purpose: { icon: '🔱', name: 'Zingeving' } };
-    const challengeTemplates = [
-      { id: 'cold-7', name: '7 Dagen Cold Shower', icon: '🥶', duration: 7, difficulty: 'starter', description: 'Start elke dag met koude douche' },
-      { id: 'cold-30', name: '30 Dagen Cold Shower', icon: '🥶', duration: 30, difficulty: 'hard', description: 'Een maand koude douches' },
-      { id: 'retention-7', name: '7 Dagen Retention', icon: '🔥', duration: 7, difficulty: 'starter', description: 'Een week zonder PMO' },
-      { id: 'retention-30', name: '30 Dagen Retention', icon: '🔥', duration: 30, difficulty: 'hard', description: 'Een maand retention' },
-      { id: 'reading-30', name: '30 Dagen Lezen', icon: '📖', duration: 30, difficulty: 'medium', description: '20 paginas per dag' },
-      { id: 'training-30', name: '30 Dagen Training', icon: '🏋️', duration: 30, difficulty: 'hard', description: 'Elke dag trainen' },
-      { id: 'sober-30', name: '30 Dagen Nuchter', icon: '🚫', duration: 30, difficulty: 'medium', description: 'Geen alcohol' },
-      { id: 'meditation-21', name: '21 Dagen Meditatie', icon: '🧘', duration: 21, difficulty: 'medium', description: 'Dagelijks 5+ min' }
+
+    const retentionPhases = [
+      { days: 0, name: 'Opstarten', color: '#525252' },
+      { days: 7, name: 'Dopamine Reset', color: '#eab308' },
+      { days: 14, name: 'T-Boost', color: '#f97316' },
+      { days: 30, name: 'Rewiring', color: '#22c55e' },
+      { days: 60, name: 'Transformatie', color: '#3b82f6' },
+      { days: 90, name: 'Meesterschap', color: '#7f1d1d' }
     ];
-    const retentionPhases = [{ days: 0, name: 'Opstarten', color: '#525252' },{ days: 7, name: 'Dopamine Reset', color: '#eab308' },{ days: 14, name: 'T-Boost', color: '#f97316' },{ days: 30, name: 'Rewiring', color: '#22c55e' },{ days: 60, name: 'Transformatie', color: '#3b82f6' },{ days: 90, name: 'Meesterschap', color: '#7f1d1d' }];
-    const retentionMilestones = [{ days: 7, title: 'Dopamine Reset', desc: 'Hersenen worden gevoeliger.' },{ days: 14, title: 'Testosteron Piek', desc: 'Piek rond dag 7-14.' },{ days: 30, title: 'Prefrontale Verbetering', desc: 'Betere impulse controle.' },{ days: 60, title: 'ΔFosB Normalisatie', desc: 'Proteïnen normaliseren.' },{ days: 90, title: 'Neuroplastische Reset', desc: 'Neurale paden hersteld.' }];
-    const quotes = [{ text: "De man die zijn bergen verzet, begint met kleine stenen.", author: "Confucius" },{ text: "Discipline is de brug tussen doelen en prestaties.", author: "Jim Rohn" },{ text: "Je wordt bepaald door wat je doet, niet wat je wilt.", author: "Marcus Aurelius" },{ text: "Elke actie is een stem voor wie je wilt worden.", author: "James Clear" }];
-    const dailyPrompts = ["Wat was je grootste overwinning vandaag?","Waar ben je dankbaar voor vandaag?","Wat heb je vandaag geleerd?","Wat kon er beter vandaag?","Wat is je intentie voor morgen?","Welke uitdaging heb je overwonnen?","Hoe heb je jezelf vandaag uitgedaagd?"];
-    const urges = [{icon:'🧊',label:'Koud water'},{icon:'🫁',label:'Ademhaling'},{icon:'🏃',label:'Beweeg'},{icon:'🚪',label:'Verlaat'},{icon:'📞',label:'Bel'},{icon:'✍️',label:'Schrijf'},{icon:'🧘',label:'Mediteer'},{icon:'📖',label:'Lees'},{icon:'⏱️',label:'Wacht'}];
 
+    const retentionMilestones = [
+      { days: 7, title: 'Dopamine Receptor Upregulatie', desc: 'Je hersenen beginnen gevoeliger te worden voor natuurlijke dopamine.' },
+      { days: 14, title: 'Testosteron Piek', desc: 'Onderzoek toont een piek in testosteron niveaus rond dag 7-14.' },
+      { days: 30, title: 'Prefrontale Cortex Verbetering', desc: 'Betere impulse controle en besluitvorming.' },
+      { days: 60, title: 'ΔFosB Normalisatie', desc: 'De verslavings-gerelateerde proteïnen normaliseren.' },
+      { days: 90, title: 'Neuroplastische Reset', desc: 'Significante herstel van neurale paden.' }
+    ];
+
+    const quotes = [
+      { text: "De man die zijn bergen verzet, begint met het dragen van kleine stenen.", author: "Confucius" },
+      { text: "Discipline is de brug tussen doelen en prestaties.", author: "Jim Rohn" },
+      { text: "Je wordt niet bepaald door wat je wilt. Je wordt bepaald door wat je doet.", author: "Marcus Aurelius" },
+      { text: "Elke actie die je neemt is een stem voor het type persoon dat je wilt worden.", author: "James Clear" },
+      { text: "De pijn van discipline weegt grammen, de pijn van spijt weegt tonnen.", author: "Jim Rohn" }
+    ];
+
+    const dailyPrompts = [
+      "Wat was je grootste overwinning gisteren?",
+      "Waar ben je dankbaar voor vandaag?",
+      "Wat is je belangrijkste doel voor vandaag?",
+      "Welke gewoonte wil je vandaag versterken?",
+      "Hoe ga je vandaag beter zijn dan gisteren?"
+    ];
+
+    const urges = [
+      { icon: '🧊', label: 'Koud water', desc: 'Neem een koude douche' },
+      { icon: '🫁', label: 'Ademhaling', desc: 'Box breathing: 4-4-4-4' },
+      { icon: '🏃', label: 'Beweeg', desc: '20 push-ups of ga wandelen' },
+      { icon: '🚪', label: 'Verlaat', desc: 'Ga naar een andere ruimte' },
+      { icon: '📞', label: 'Bel', desc: 'Bel een vriend of familie' },
+      { icon: '✍️', label: 'Schrijf', desc: 'Journal je gevoel' },
+      { icon: '🧘', label: 'Mediteer', desc: '5 minuten stilte' },
+      { icon: '📖', label: 'Lees', desc: 'Lees je waarom' },
+      { icon: '⏱️', label: 'Wacht', desc: '15 minuten timer' }
+    ];
+
+    // ============================================
+    // MISSIES CONFIG
+    // ============================================
+    const domainConfig = {
+      physical:  { icon: '💪', label: 'Fysiek' },
+      mental:    { icon: '🧠', label: 'Mentaal' },
+      financial: { icon: '💰', label: 'Financieel' },
+      social:    { icon: '👥', label: 'Sociaal' },
+      purpose:   { icon: '🔱', label: 'Zingeving' }
+    };
+
+    const timeframeConfig = {
+      short:  { label: 'Kort',   full: 'Korte termijn (± 4 weken)',  days: 28 },
+      medium: { label: 'Middel', full: 'Middellang (± 3 maanden)',   days: 90 },
+      long:   { label: 'Lang',   full: 'Lange termijn (± 1 jaar)',   days: 365 }
+    };
+
+    const priorityConfig = {
+      high:   { label: 'Hoog',   color: '#dc2626' },
+      medium: { label: 'Medium', color: '#eab308' },
+      low:    { label: 'Laag',   color: '#22c55e' }
+    };
+
+    // [domein, termijn, titel, start, doel, eenheid, tip]
+    const goalTemplates = [
+      // FYSIEK - kort
+      ['physical','short','10 push-ups achter elkaar',0,10,'reps','Elke dag 3 sets, stop net voor falen. Noteer je beste set.'],
+      ['physical','short','12 trainingen in 4 weken (3x/week)',0,12,'trainingen','Plan je trainingsdagen vast in je agenda.'],
+      ['physical','short','14 dagen 2 liter water per dag',0,14,'dagen','Zet een fles van 1 liter op je bureau, 2x vullen.'],
+      ['physical','short','14 nachten minimaal 7 uur slaap',0,14,'nachten','Vaste bedtijd, telefoon buiten de slaapkamer.'],
+      ['physical','short','7 dagen 8.000 stappen per dag',0,7,'dagen','Een wandeling na het eten scheelt al 2.000 stappen.'],
+      ['physical','short','14 dagen 10 minuten stretchen',0,14,'dagen','Koppel het aan iets vasts, bijv. direct na het tandenpoetsen.'],
+      ['physical','short','1 minuut plank volhouden',0,60,'seconden','Elke dag 3 pogingen, bouw 5 seconden per keer op.'],
+      ['physical','short','14 dagen geen frisdrank',0,14,'dagen','Vervang door bruiswater met citroen.'],
+      // FYSIEK - middel
+      ['physical','medium','25 push-ups achter elkaar',10,25,'reps','Bouw op met extra sets en tempo-push-ups.'],
+      ['physical','medium','3 kg afvallen',0,3,'kg eraf','Kleine calorie-deficit (±300 kcal) en veel eiwit.'],
+      ['physical','medium','30 dagen geen alcohol',0,30,'dagen','Vertel vrienden vooraf dat je een challenge doet.'],
+      ['physical','medium','5 km hardlopen zonder stoppen',0,5,'km','Begin met hardlopen/wandelen in intervallen.'],
+      ['physical','medium','5 kg erbij op bankdrukken',0,5,'kg erbij','Elke week 1-2,5 kg erbij als alle reps lukken.'],
+      ['physical','medium','5 pull-ups achter elkaar',0,5,'reps','Start met negatieve pull-ups en hangen.'],
+      // FYSIEK - lang
+      ['physical','long','50 push-ups achter elkaar',25,50,'reps','Volg een vast schema, test elke 2 weken.'],
+      ['physical','long','10 km hardlopen',0,10,'km','Bouw je langste loop max 10% per week op.'],
+      ['physical','long','10 kg afvallen',0,10,'kg eraf','Gemiddeld ±1 kg per maand is duurzaam.'],
+      ['physical','long','100 trainingen in een jaar',0,100,'trainingen','Twee trainingen per week is genoeg.'],
+      // MENTAAL - kort
+      ['mental','short','7 dagen 5 minuten mediteren',0,7,'dagen','Gebruik een timer, focus alleen op je adem.'],
+      ['mental','short','1 boek uitlezen',0,1,'boek','10 pagina\'s per dag is genoeg.'],
+      ['mental','short','7 dagen journalen',0,7,'dagen','Gebruik de Journal-tab, ook 3 zinnen telt.'],
+      ['mental','short','7 dagen geen social media voor 10:00',0,7,'dagen','Telefoon in een andere kamer bij het opstaan.'],
+      ['mental','short','14 dagen 20 pagina\'s lezen',0,14,'dagen','Lees op een vast moment, bijv. voor het slapen.'],
+      // MENTAAL - middel
+      ['mental','medium','30 dagen mediteren',0,30,'dagen','Mis je een dag? Nooit twee dagen achter elkaar.'],
+      ['mental','medium','3 boeken lezen',0,3,'boeken','Houd een lijst bij van boeken die je nog wilt lezen.'],
+      ['mental','medium','Online cursus afronden',0,100,'%','Plan 2 vaste studiemomenten per week.'],
+      ['mental','medium','30 dagen schermvrij laatste uur voor bed',0,30,'dagen','Lezen of stretchen in plaats van scrollen.'],
+      // MENTAAL - lang
+      ['mental','long','12 boeken in een jaar',0,12,'boeken','Eén boek per maand.'],
+      ['mental','long','100 lessen van een nieuwe taal',0,100,'lessen','Elke dag 10 minuten.'],
+      ['mental','long','100 dagen mediteren',0,100,'dagen','Verleng langzaam naar 15-20 minuten.'],
+      // FINANCIEEL - kort
+      ['financial','short','€250 sparen',0,250,'euro','Zet direct na je salaris automatisch geld apart.'],
+      ['financial','short','Maandbudget maken',0,1,'budget','Vaste lasten, boodschappen, vrij besteedbaar.'],
+      ['financial','short','Abonnementen checken en 1 opzeggen',0,1,'opgezegd','Check je bankafschriften van de laatste 3 maanden.'],
+      ['financial','short','14 dagen geen afhaaleten',0,14,'dagen','Kook in batches voor drukke dagen.'],
+      // FINANCIEEL - middel
+      ['financial','medium','€1.000 sparen',0,1000,'euro','±€85 per week.'],
+      ['financial','medium','Eerste €100 bijverdienen',0,100,'euro','Verkoop spullen of bied een vaardigheid aan.'],
+      ['financial','medium','3 maanden binnen budget blijven',0,3,'maanden','Check je budget elke zondag.'],
+      // FINANCIEEL - lang
+      ['financial','long','Noodbuffer van €3.000',0,3000,'euro','Aparte spaarrekening, niet aankomen.'],
+      ['financial','long','€5.000 sparen of beleggen',0,5000,'euro','Automatiseer een vast bedrag per maand.'],
+      ['financial','long','Schuld volledig afbetalen',null,null,'','Vul zelf start (schuld) en doel (0) in.'],
+      // SOCIAAL - kort
+      ['social','short','1 oude vriend opnieuw spreken',0,1,'contact','Een berichtje is genoeg om te beginnen.'],
+      ['social','short','4 weken 1x per week quality time',0,4,'keer','Telefoon weg, volle aandacht.'],
+      ['social','short','7 dagen elke dag een oprecht compliment',0,7,'dagen','Wees specifiek: benoem wat je echt waardeert.'],
+      ['social','short','4 weken familie 1x per week bellen',0,4,'keer','Vast moment, bijv. zondagavond.'],
+      // SOCIAAL - middel
+      ['social','medium','3 nieuwe mensen leren kennen',0,3,'mensen','Sportclub, cursus of meetup.'],
+      ['social','medium','Lid worden van een club of vereniging',0,1,'club','Kies iets wat je toch al leuk vindt.'],
+      ['social','medium','12 sociale afspraken in 3 maanden',0,12,'afspraken','Eén per week, jij neemt het initiatief.'],
+      // SOCIAAL - lang
+      ['social','long','Een mentor vinden',0,1,'mentor','Vraag iemand die al bereikt heeft wat jij wilt.'],
+      ['social','long','50 sociale afspraken in een jaar',0,50,'afspraken','Gemiddeld één per week.'],
+      // ZINGEVING - kort
+      ['purpose','short','Je top 5 waarden opschrijven',0,5,'waarden','Wat vind je echt belangrijk? Wees eerlijk.'],
+      ['purpose','short','7 dagen 3 dingen waar je dankbaar voor bent',0,7,'dagen','Elke avond, kort opschrijven.'],
+      ['purpose','short','1 keer vrijwilligerswerk doen',0,1,'keer','Zoek iets lokaals dat bij je past.'],
+      // ZINGEVING - middel
+      ['purpose','medium','Persoonlijke missie in 1 zin schrijven',0,1,'missie','Schrijf, laat liggen, herschrijf.'],
+      ['purpose','medium','30 dagen dankbaarheidsdagboek',0,30,'dagen','Mis geen twee dagen achter elkaar.'],
+      ['purpose','medium','5 mensen concreet helpen',0,5,'mensen','Klein mag: verhuizen, advies, een klus.'],
+      // ZINGEVING - lang
+      ['purpose','long','12 keer vrijwilligerswerk in een jaar',0,12,'keer','Eén keer per maand.'],
+      ['purpose','long','Persoonlijk project afronden',0,100,'%','Breek het op in stappen (subtaken).']
+    ];
+
+    // ============================================
     // HELPERS
-    function getColor(v,isStress=false){const val=isStress?(11-v):v;if(val<=2)return'#dc2626';if(val<=4)return'#f97316';if(val<=6)return'#eab308';if(val<=8)return'#84cc16';return'#22c55e';}
-    function formatDate(d){return new Date(d).toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long'});}
-    function formatDateShort(d){return new Date(d).toLocaleDateString('nl-NL',{day:'numeric',month:'short'});}
-    function getGreeting(){const h=new Date().getHours();return h<12?'Goedemorgen':h<18?'Goedemiddag':'Goedenavond';}
-    function getDailyQuote(){const d=Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/86400000);return quotes[d%quotes.length];}
-    function getDailyPrompt(){const d=Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/86400000);return dailyPrompts[d%dailyPrompts.length];}
-    function getRetentionPhase(days){for(let i=retentionPhases.length-1;i>=0;i--)if(days>=retentionPhases[i].days)return retentionPhases[i];return retentionPhases[0];}
-    function getRetentionDays(){if(!state.retentionStreak?.start_date)return 0;return Math.floor((new Date()-new Date(state.retentionStreak.start_date))/(1000*60*60*24));}
-    function showToast(msg){const t=document.getElementById('toast');if(t){t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);}}
-    function calculateBMI(w,h){return w/((h/100)**2);}
-    function calculateFFMI(w,bf,h){return(w*(1-bf/100))/((h/100)**2);}
-    function getPositiveHabitsCount(){return Object.entries(habitConfig).filter(([k,c])=>c.positive).map(([k])=>k).filter(k=>state.habits[k]).length;}
-    function calculateMissionProgress(m){if(m.target_value&&m.start_value!==null){const t=Math.abs(m.target_value-m.start_value);const c=Math.abs((m.current_value||m.start_value)-m.start_value);return t>0?Math.min(100,Math.round((c/t)*100)):0;}return 0;}
-    function getDaysUntilDeadline(dl){if(!dl)return null;return Math.ceil((new Date(dl)-new Date())/(1000*60*60*24));}
-    function calculateChallengeDay(sd){const t=new Date();t.setHours(0,0,0,0);const s=new Date(sd);s.setHours(0,0,0,0);return Math.floor((t-s)/(1000*60*60*24))+1;}
+    // ============================================
+    function getColor(value, isStress = false) {
+      // For stress: low is good (green), high is bad (red)
+      // For others: low is bad (red), high is good (green)
+      const v = isStress ? (11 - value) : value;
+      
+      if (v <= 2) return '#dc2626';      // Red
+      if (v <= 3) return '#ea580c';      // Orange-red
+      if (v <= 4) return '#f97316';      // Orange
+      if (v <= 5) return '#eab308';      // Yellow
+      if (v <= 6) return '#a3e635';      // Yellow-green
+      if (v <= 7) return '#84cc16';      // Lime
+      if (v <= 8) return '#22c55e';      // Green
+      return '#16a34a';                   // Dark green
+    }
 
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' });
+    }
+
+    function getGreeting() {
+      const hour = new Date().getHours();
+      if (hour < 12) return 'Goedemorgen';
+      if (hour < 18) return 'Goedemiddag';
+      return 'Goedenavond';
+    }
+
+    function getDailyQuote() {
+      const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+      return quotes[dayOfYear % quotes.length];
+    }
+
+    function getDailyPrompt() {
+      const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+      return dailyPrompts[dayOfYear % dailyPrompts.length];
+    }
+
+    function getRetentionPhase(days) {
+      for (let i = retentionPhases.length - 1; i >= 0; i--) {
+        if (days >= retentionPhases[i].days) return retentionPhases[i];
+      }
+      return retentionPhases[0];
+    }
+
+    function getNextMilestone(days) {
+      return retentionMilestones.find(m => m.days > days) || retentionMilestones[retentionMilestones.length - 1];
+    }
+
+    function getAverageMood() {
+      if (state.entries.length === 0) return '—';
+      const sum = state.entries.reduce((a, e) => a + (e.mood || 5), 0);
+      return (sum / state.entries.length).toFixed(1);
+    }
+
+    function getAverageEnergy() {
+      if (state.entries.length === 0) return '—';
+      const sum = state.entries.reduce((a, e) => a + (e.energy || 5), 0);
+      return (sum / state.entries.length).toFixed(1);
+    }
+
+    function getJournalStreak() {
+      if (state.entries.length === 0) return 0;
+      let streak = 1;
+      const dates = state.entries.map(e => e.date).sort().reverse();
+      for (let i = 1; i < dates.length; i++) {
+        const d1 = new Date(dates[i-1]);
+        const d2 = new Date(dates[i]);
+        const diff = (d1 - d2) / (1000 * 60 * 60 * 24);
+        if (diff <= 1) streak++;
+        else break;
+      }
+      return streak;
+    }
+
+    function getHabitsCompleted() {
+      return Object.values(state.habits).filter(Boolean).length;
+    }
+
+    function getPositiveHabitsCount() {
+      const positiveKeys = Object.entries(habitConfig).filter(([k, c]) => c.positive).map(([k]) => k);
+      return positiveKeys.filter(k => state.habits[k]).length;
+    }
+
+    function getRetentionDays() {
+      if (!state.retentionStreak || !state.retentionStreak.start_date) return 0;
+      const start = new Date(state.retentionStreak.start_date);
+      const now = new Date();
+      return Math.floor((now - start) / (1000 * 60 * 60 * 24));
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      if (toast) {
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+      }
+    }
+
+    // Missies helpers
+    function esc(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function todayStr() {
+      return new Date().toISOString().split('T')[0];
+    }
+
+    function addDays(n) {
+      const d = new Date();
+      d.setDate(d.getDate() + n);
+      return d.toISOString().split('T')[0];
+    }
+
+    function fmtNum(v) {
+      if (v === null || v === undefined || v === '') return '0';
+      return String(Number(v));
+    }
+
+    function hasValue(v) {
+      return v !== null && v !== undefined && v !== '';
+    }
+
+    function emptyGoalForm(timeframe) {
+      return {
+        title: '', domain: '', priority: 'medium',
+        timeframe: timeframe || 'short', deadline: '',
+        start: '', current: '', target: '', notes: ''
+      };
+    }
+
+    function calcGoalProgress(goal) {
+      const subtasks = goal.goal_subtasks || [];
+      if (hasValue(goal.target_value)) {
+        const start = hasValue(goal.start_value) ? Number(goal.start_value) : 0;
+        const current = hasValue(goal.current_value) ? Number(goal.current_value) : start;
+        const target = Number(goal.target_value);
+        if (target === start) return current === target ? 100 : 0;
+        const pct = ((current - start) / (target - start)) * 100;
+        return Math.max(0, Math.min(100, Math.round(pct)));
+      }
+      if (subtasks.length > 0) {
+        const done = subtasks.filter(s => s.is_completed).length;
+        return Math.round((done / subtasks.length) * 100);
+      }
+      return goal.is_completed ? 100 : 0;
+    }
+
+    function deadlineText(deadline) {
+      if (!deadline) return '';
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const d = new Date(deadline + 'T00:00:00');
+      const diff = Math.round((d - today) / 86400000);
+      if (diff > 1) return diff + ' dagen';
+      if (diff === 1) return 'Morgen';
+      if (diff === 0) return 'Vandaag';
+      return 'Verlopen';
+    }
+
+    function getInsights() {
+      // Filter entries that have habits data
+      const entriesWithHabits = state.entries.filter(e => e.habits && Object.keys(e.habits).length > 0);
+      
+      if (entriesWithHabits.length < 3) return [];
+      
+      const insights = [];
+      
+      // Analyze each habit's correlation with mood and energy
+      Object.entries(habitConfig).forEach(([habitKey, habitCfg]) => {
+        const withHabit = entriesWithHabits.filter(e => e.habits && e.habits[habitKey]);
+        const withoutHabit = entriesWithHabits.filter(e => e.habits && !e.habits[habitKey]);
+        
+        if (withHabit.length >= 2 && withoutHabit.length >= 2) {
+          const avgMoodWith = withHabit.reduce((a, e) => a + (e.mood || 5), 0) / withHabit.length;
+          const avgMoodWithout = withoutHabit.reduce((a, e) => a + (e.mood || 5), 0) / withoutHabit.length;
+          const avgEnergyWith = withHabit.reduce((a, e) => a + (e.energy || 5), 0) / withHabit.length;
+          const avgEnergyWithout = withoutHabit.reduce((a, e) => a + (e.energy || 5), 0) / withoutHabit.length;
+          
+          if (habitCfg.positive) {
+            // Positive habit: show if it improves mood/energy
+            const moodDiff = avgMoodWith - avgMoodWithout;
+            const energyDiff = avgEnergyWith - avgEnergyWithout;
+            
+            if (moodDiff >= 0.5) {
+              insights.push({
+                icon: habitCfg.icon,
+                title: `${habitCfg.title} verbetert je mood`,
+                text: `Met: ${avgMoodWith.toFixed(1)} | Zonder: ${avgMoodWithout.toFixed(1)} (+${moodDiff.toFixed(1)})`,
+                positive: true,
+                impact: moodDiff
+              });
+            }
+            if (energyDiff >= 0.5) {
+              insights.push({
+                icon: habitCfg.icon,
+                title: `${habitCfg.title} boost je energie`,
+                text: `Met: ${avgEnergyWith.toFixed(1)} | Zonder: ${avgEnergyWithout.toFixed(1)} (+${energyDiff.toFixed(1)})`,
+                positive: true,
+                impact: energyDiff
+              });
+            }
+          } else {
+            // Negative habit: show if it lowers mood/energy
+            const moodDiff = avgMoodWithout - avgMoodWith;
+            const energyDiff = avgEnergyWithout - avgEnergyWith;
+            
+            if (moodDiff >= 0.5) {
+              insights.push({
+                icon: habitCfg.icon,
+                title: `${habitCfg.title} verlaagt je mood`,
+                text: `Met: ${avgMoodWith.toFixed(1)} | Zonder: ${avgMoodWithout.toFixed(1)} (-${moodDiff.toFixed(1)})`,
+                positive: false,
+                impact: moodDiff
+              });
+            }
+            if (energyDiff >= 0.5) {
+              insights.push({
+                icon: habitCfg.icon,
+                title: `${habitCfg.title} verlaagt je energie`,
+                text: `Met: ${avgEnergyWith.toFixed(1)} | Zonder: ${avgEnergyWithout.toFixed(1)} (-${energyDiff.toFixed(1)})`,
+                positive: false,
+                impact: energyDiff
+              });
+            }
+          }
+        }
+      });
+      
+      // Sort by impact and return top 6
+      insights.sort((a, b) => (b.impact || 0) - (a.impact || 0));
+      return insights.slice(0, 6);
+    }
+
+    // ============================================
     // AUTH
-    async function signIn(email,password){const{data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;return data;}
-    async function signUp(email,password){const{data,error}=await supabaseClient.auth.signUp({email,password});if(error)throw error;return data;}
-    async function signOut(){await supabaseClient.auth.signOut();state.user=null;state.entries=[];state.missions=[];state.bodyStats=[];state.challenges=[];state.retentionStreak=null;render();}
-    let authMode='login';
-    function toggleAuthMode(){authMode=authMode==='login'?'register':'login';render();}
-    async function handleAuth(){const email=document.getElementById('auth-email').value;const password=document.getElementById('auth-password').value;const err=document.getElementById('auth-error');try{if(authMode==='login')await signIn(email,password);else{await signUp(email,password);err.innerHTML='<div class="auth-success">Check je email!</div>';return;}}catch(e){err.innerHTML=`<div class="auth-error">${e.message}</div>`;}}
+    // ============================================
+    async function signUp(email, password) {
+      const { data, error } = await supabaseClient.auth.signUp({ email, password });
+      if (error) throw error;
+      return data;
+    }
 
-    // DATABASE - LOAD
-    async function loadEntries(){if(!state.user)return;const{data}=await supabaseClient.from('journal_entries').select('*').eq('user_id',state.user.id).order('date',{ascending:false});state.entries=data||[];}
-    async function loadRetention(){if(!state.user)return;const{data}=await supabaseClient.from('retention').select('*').eq('user_id',state.user.id).eq('is_active',true).single();if(data)state.retentionStreak=data;}
-    async function loadHabits(){if(!state.user)return;const today=new Date().toISOString().split('T')[0];const{data}=await supabaseClient.from('daily_habits').select('*').eq('user_id',state.user.id).eq('date',today).single();if(data){state.habits={coldShower:data.cold_shower||false,sunlight:data.sunlight||false,cleanEating:data.clean_eating||false,workout:data.workout||false,meditation:data.meditation||false,noAlcohol:data.no_alcohol||false,reading:data.reading||false,stretching:data.stretching||false,outside:false,badSleep:false,stressed:false,alcohol:false,unhealthy:false};const extra=localStorage.getItem(`habits_extra_${today}`);if(extra)state.habits={...state.habits,...JSON.parse(extra)};}}
-    async function loadMissions(){if(!state.user)return;const{data}=await supabaseClient.from('goals').select('*').eq('user_id',state.user.id).order('created_at',{ascending:false});state.missions=data||[];}
-    async function loadBodyStats(){if(!state.user)return;const{data}=await supabaseClient.from('body_stats').select('*').eq('user_id',state.user.id).order('entry_date',{ascending:false});state.bodyStats=data||[];}
-    async function loadChallenges(){if(!state.user)return;const{data}=await supabaseClient.from('challenges').select('*').eq('user_id',state.user.id).order('created_at',{ascending:false});state.challenges=data||[];}
+    async function signIn(email, password) {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      return data;
+    }
 
-    // DATABASE - SAVE
-    async function toggleHabit(key){state.habits[key]=!state.habits[key];const today=new Date().toISOString().split('T')[0];const mainHabits=['coldShower','sunlight','cleanEating','workout','meditation','noAlcohol','reading','stretching'];if(mainHabits.includes(key)){const d={user_id:state.user.id,date:today,cold_shower:state.habits.coldShower,sunlight:state.habits.sunlight,clean_eating:state.habits.cleanEating,workout:state.habits.workout,meditation:state.habits.meditation,no_alcohol:state.habits.noAlcohol,reading:state.habits.reading,stretching:state.habits.stretching};await supabaseClient.from('daily_habits').upsert(d,{onConflict:'user_id,date'});}const extra={outside:state.habits.outside,badSleep:state.habits.badSleep,stressed:state.habits.stressed,alcohol:state.habits.alcohol,unhealthy:state.habits.unhealthy};localStorage.setItem(`habits_extra_${today}`,JSON.stringify(extra));render();}
-    async function saveMission(){const title=document.getElementById('mission-title')?.value?.trim();if(!title){alert('Vul titel in');return;}const d={user_id:state.user.id,title,domain:document.getElementById('mission-domain')?.value||null,priority:document.getElementById('mission-priority')?.value||null,timeframe:document.getElementById('mission-timeframe')?.value||'short',deadline:document.getElementById('mission-deadline')?.value||null,start_value:parseFloat(document.getElementById('mission-start')?.value)||null,current_value:parseFloat(document.getElementById('mission-current')?.value)||null,target_value:parseFloat(document.getElementById('mission-target')?.value)||null,notes:document.getElementById('mission-notes')?.value||null,is_completed:false};try{if(state.editingMissionId)await supabaseClient.from('goals').update(d).eq('id',state.editingMissionId);else await supabaseClient.from('goals').insert([d]);state.showMissionModal=false;state.editingMissionId=null;await loadMissions();showToast('Missie opgeslagen');render();}catch(e){alert('Fout: '+e.message);}}
-    async function toggleMissionComplete(id){const m=state.missions.find(x=>x.id===id);if(!m)return;await supabaseClient.from('goals').update({is_completed:!m.is_completed}).eq('id',id);await loadMissions();showToast(m.is_completed?'Heropend':'Voltooid!');render();}
-    async function deleteMission(id){if(!confirm('Verwijderen?'))return;await supabaseClient.from('goals').delete().eq('id',id);await loadMissions();showToast('Verwijderd');render();}
-    async function saveBodyEntry(){const w=parseFloat(document.getElementById('body-weight')?.value);if(!w){alert('Vul gewicht in');return;}const d={user_id:state.user.id,entry_date:document.getElementById('body-date')?.value||new Date().toISOString().split('T')[0],weight:w,bodyfat_percentage:parseFloat(document.getElementById('body-fat')?.value)||null,chest:parseFloat(document.getElementById('body-chest')?.value)||null,waist:parseFloat(document.getElementById('body-waist')?.value)||null,hips:parseFloat(document.getElementById('body-hips')?.value)||null,biceps:parseFloat(document.getElementById('body-biceps')?.value)||null,thighs:parseFloat(document.getElementById('body-thighs')?.value)||null};try{await supabaseClient.from('body_stats').insert([d]);state.showBodyModal=false;await loadBodyStats();showToast('Meting opgeslagen');render();}catch(e){alert('Fout: '+e.message);}}
-    async function startChallenge(tid){const t=challengeTemplates.find(x=>x.id===tid);if(!t||!confirm(`Start ${t.name}?`))return;if(state.challenges.find(c=>c.template_id===tid&&c.status==='active')){alert('Al actief!');return;}try{await supabaseClient.from('challenges').insert([{user_id:state.user.id,template_id:tid,name:t.name,description:t.description,duration:t.duration,start_date:new Date().toISOString().split('T')[0],status:'active',days_completed:0,today_completed:false}]);await loadChallenges();state.challengeTab='active';showToast('Challenge gestart!');render();}catch(e){alert('Fout: '+e.message);}}
-    async function toggleChallengeDay(cid,done){const c=state.challenges.find(x=>x.id===cid);if(!c)return;const day=calculateChallengeDay(c.start_date);let upd={today_completed:done,days_completed:done?day:day-1,updated_at:new Date().toISOString()};if(done&&day>=c.duration)upd.status='completed';await supabaseClient.from('challenges').update(upd).eq('id',cid);await loadChallenges();showToast(done?'Afgevinkt!':'Ongedaan');render();}
-    async function quitChallenge(cid){if(!confirm('Stoppen?'))return;await supabaseClient.from('challenges').update({status:'failed',updated_at:new Date().toISOString()}).eq('id',cid);await loadChallenges();showToast('Gestopt');render();}
-    async function startRetention(){const{data}=await supabaseClient.from('retention').insert([{user_id:state.user.id,start_date:new Date().toISOString().split('T')[0],is_active:true,streak_days:0}]).select().single();if(data){state.retentionStreak=data;showToast('Retention gestart!');render();}}
-    async function resetRetention(){if(!state.retentionStreak||!confirm('Resetten?'))return;await supabaseClient.from('retention').update({is_active:false,end_date:new Date().toISOString().split('T')[0]}).eq('id',state.retentionStreak.id);state.retentionStreak=null;showToast('Reset');render();}
-    async function saveEntry(){if(state.journalSaving)return;state.journalSaving=true;render();const today=new Date().toISOString().split('T')[0];const d={user_id:state.user.id,date:today,content:state.content,mood:state.mood,energy:state.energy,libido:state.libido,focus:state.focus,stress:state.stress,sleep_quality:state.sleep,habits:state.habits};try{if(state.editingId)await supabaseClient.from('journal_entries').update(d).eq('id',state.editingId);else await supabaseClient.from('journal_entries').upsert(d,{onConflict:'user_id,date'});await loadEntries();state.editingId=null;state.todaySaved=true;state.journalSaving=false;showToast('✓ Journal opgeslagen');render();}catch(e){state.journalSaving=false;render();alert('Fout: '+e.message);}}
+    async function signOut() {
+      await supabaseClient.auth.signOut();
+      state.user = null;
+      state.entries = [];
+      state.retentionStreak = null;
+      state.goals = [];
+      render();
+    }
 
+    // ============================================
+    // DATABASE
+    // ============================================
+    async function loadEntries() {
+      if (!state.user) return;
+      const { data, error } = await supabaseClient
+        .from('journal_entries')
+        .select('*')
+        .eq('user_id', state.user.id)
+        .order('date', { ascending: false });
+      if (!error) state.entries = data || [];
+    }
+
+    async function loadRetention() {
+      if (!state.user) return;
+      const { data, error } = await supabaseClient
+        .from('retention')
+        .select('*')
+        .eq('user_id', state.user.id)
+        .eq('is_active', true)
+        .single();
+      if (!error && data) state.retentionStreak = data;
+    }
+
+    async function loadHabits() {
+      if (!state.user) return;
+      const today = new Date().toISOString().split('T')[0];
+      const { data, error } = await supabaseClient
+        .from('daily_habits')
+        .select('*')
+        .eq('user_id', state.user.id)
+        .eq('date', today)
+        .single();
+      if (!error && data) {
+        state.habits = {
+          coldShower: data.cold_shower || false,
+          sunlight: data.sunlight || false,
+          cleanEating: data.clean_eating || false,
+          workout: data.workout || false,
+          meditation: data.meditation || false,
+          noAlcohol: data.no_alcohol || false,
+          reading: data.reading || false,
+          stretching: data.stretching || false,
+          // Extra fields stored in localStorage for now
+          outside: false,
+          badSleep: false,
+          stressed: false,
+          alcohol: false,
+          unhealthy: false
+        };
+        // Load extra habits from localStorage
+        const extraHabits = localStorage.getItem(`habits_extra_${today}`);
+        if (extraHabits) {
+          const extra = JSON.parse(extraHabits);
+          state.habits = { ...state.habits, ...extra };
+        }
+      }
+    }
+
+    async function saveEntry() {
+      if (!state.user) return;
+      const textarea = document.getElementById('entry-content');
+      if (textarea) state.content = textarea.value;
+      
+      const entry = {
+        user_id: state.user.id,
+        date: new Date().toISOString().split('T')[0],
+        content: state.content,
+        mood: state.mood,
+        energy: state.energy,
+        libido: state.libido,
+        focus: state.focus,
+        stress: state.stress,
+        sleep_quality: state.sleep,
+        habits: { ...state.habits }
+      };
+
+      let error;
+      if (state.editingId) {
+        const result = await supabaseClient.from('journal_entries').update(entry).eq('id', state.editingId);
+        error = result.error;
+      } else {
+        const result = await supabaseClient.from('journal_entries').insert([entry]);
+        error = result.error;
+      }
+
+      if (error) {
+        alert('Fout bij opslaan: ' + error.message);
+        return;
+      }
+
+      state.content = '';
+      state.editingId = null;
+      await loadEntries();
+      render();
+      showToast('✓ Entry opgeslagen!');
+    }
+
+    async function deleteEntry(id) {
+      if (!confirm('Weet je zeker dat je deze entry wilt verwijderen?')) return;
+      await supabaseClient.from('journal_entries').delete().eq('id', id);
+      await loadEntries();
+      render();
+    }
+
+    function editEntry(entry) {
+      state.editingId = entry.id;
+      state.content = entry.content || '';
+      state.mood = entry.mood || 7;
+      state.energy = entry.energy || 7;
+      state.libido = entry.libido || 7;
+      state.focus = entry.focus || 7;
+      state.stress = entry.stress || 4;
+      state.sleep = entry.sleep_quality || 7;
+      state.journalTab = 'new';
+      render();
+    }
+
+    async function startRetention() {
+      if (!state.user) return;
+      const { data, error } = await supabaseClient.from('retention').insert([{
+        user_id: state.user.id,
+        start_date: new Date().toISOString().split('T')[0],
+        is_active: true
+      }]).select().single();
+      if (!error) {
+        state.retentionStreak = data;
+        render();
+        showToast('🔥 Streak gestart!');
+      }
+    }
+
+    async function resetRetention() {
+      if (!state.user || !state.retentionStreak) return;
+      if (!confirm('Weet je zeker dat je je streak wilt resetten?')) return;
+      
+      await supabaseClient.from('retention').update({ 
+        is_active: false, 
+        end_date: new Date().toISOString().split('T')[0],
+        streak_days: getRetentionDays()
+      }).eq('id', state.retentionStreak.id);
+      
+      state.retentionStreak = null;
+      render();
+    }
+
+    async function toggleHabit(habit) {
+      state.habits[habit] = !state.habits[habit];
+      render();
+      
+      if (!state.user) return;
+      const today = new Date().toISOString().split('T')[0];
+      
+      // Core habits for database
+      const coreHabits = ['coldShower', 'sunlight', 'cleanEating', 'workout', 'meditation', 'noAlcohol', 'reading', 'stretching'];
+      const extraHabits = ['outside', 'badSleep', 'stressed', 'alcohol', 'unhealthy'];
+      
+      // Save core habits to database
+      const habitData = {
+        user_id: state.user.id,
+        date: today,
+        cold_shower: state.habits.coldShower,
+        sunlight: state.habits.sunlight,
+        clean_eating: state.habits.cleanEating,
+        workout: state.habits.workout,
+        meditation: state.habits.meditation,
+        no_alcohol: state.habits.noAlcohol,
+        reading: state.habits.reading,
+        stretching: state.habits.stretching
+      };
+      
+      await supabaseClient.from('daily_habits').upsert(habitData, { onConflict: 'user_id,date' });
+      
+      // Save extra habits to localStorage
+      const extraData = {};
+      extraHabits.forEach(h => extraData[h] = state.habits[h]);
+      localStorage.setItem(`habits_extra_${today}`, JSON.stringify(extraData));
+    }
+
+    // ============================================
+    // DATABASE: MISSIES
+    // ============================================
+    async function loadGoals() {
+      if (!state.user) return;
+      let { data, error } = await supabaseClient
+        .from('goals')
+        .select('*, goal_subtasks(*)')
+        .eq('user_id', state.user.id)
+        .order('created_at', { ascending: false });
+
+      // Fallback: als subtaken-koppeling faalt, laad alleen doelen
+      if (error) {
+        console.warn('Subtaken laden mislukt, probeer zonder:', error);
+        const retry = await supabaseClient
+          .from('goals')
+          .select('*')
+          .eq('user_id', state.user.id)
+          .order('created_at', { ascending: false });
+        data = retry.data;
+        error = retry.error;
+      }
+
+      if (error) {
+        console.error('Fout bij laden missies:', error);
+        state.goalsError = error.message;
+        return;
+      }
+
+      state.goalsError = null;
+      state.goals = (data || []).map(g => ({
+        ...g,
+        goal_subtasks: (g.goal_subtasks || []).sort((a, b) => (a.position || 0) - (b.position || 0))
+      }));
+    }
+
+    async function refreshGoals() {
+      await loadGoals();
+      render();
+    }
+
+    async function ensureProfile() {
+      const { error } = await supabaseClient.from('profiles').upsert({ id: state.user.id });
+      if (error) console.error('Profiel aanmaken mislukt:', error);
+      return error;
+    }
+
+    async function writeGoal(data) {
+      if (state.editingGoalId) {
+        const { error } = await supabaseClient
+          .from('goals')
+          .update({ ...data, updated_at: new Date().toISOString() })
+          .eq('id', state.editingGoalId);
+        return error;
+      }
+      const { error } = await supabaseClient.from('goals').insert([{ ...data, is_completed: false }]);
+      return error;
+    }
+
+    async function saveGoal() {
+      readGoalForm();
+      const f = state.goalForm;
+      if (!f.title.trim()) {
+        alert('Vul een titel in voor je missie');
+        return;
+      }
+
+      const num = v => {
+        if (!hasValue(v)) return null;
+        const n = parseFloat(String(v).replace(',', '.'));
+        return isNaN(n) ? null : n;
+      };
+
+      const startVal = num(f.start);
+      const currentVal = num(f.current);
+      const data = {
+        user_id: state.user.id,
+        title: f.title.trim(),
+        domain: f.domain || null,
+        priority: f.priority || 'medium',
+        timeframe: f.timeframe || 'short',
+        deadline: f.deadline || null,
+        start_value: startVal,
+        current_value: currentVal !== null ? currentVal : startVal,
+        target_value: num(f.target),
+        notes: f.notes.trim() || null
+      };
+
+      const btn = document.getElementById('goal-save-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Opslaan...'; }
+
+      let error = await writeGoal(data);
+
+      // Foreign key fout: profiel bestaat nog niet -> aanmaken en opnieuw proberen
+      if (error && error.code === '23503') {
+        const profileError = await ensureProfile();
+        if (!profileError) error = await writeGoal(data);
+      }
+
+      if (error) {
+        console.error('Fout bij opslaan missie:', error);
+        alert('Fout bij opslaan: ' + error.message);
+        if (btn) { btn.disabled = false; btn.textContent = 'Opslaan'; }
+        return;
+      }
+
+      const wasEditing = !!state.editingGoalId;
+      state.showGoalModal = false;
+      state.editingGoalId = null;
+      state.goalTab = data.timeframe;
+      await refreshGoals();
+      showToast(wasEditing ? '✓ Missie bijgewerkt' : '🎯 Missie gestart!');
+    }
+
+    async function toggleGoalComplete(goalId) {
+      const goal = state.goals.find(g => g.id === goalId);
+      if (!goal) return;
+      const completing = !goal.is_completed;
+      const { error } = await supabaseClient.from('goals').update({
+        is_completed: completing,
+        last_completed_date: completing ? todayStr() : goal.last_completed_date,
+        updated_at: new Date().toISOString()
+      }).eq('id', goalId);
+      if (error) { alert('Fout bij bijwerken: ' + error.message); return; }
+      await refreshGoals();
+      if (completing) showToast('🏆 Missie voltooid!');
+    }
+
+    async function updateGoalValue(goalId) {
+      const input = document.getElementById(`gv-${goalId}`);
+      if (!input || !hasValue(input.value)) return;
+      const value = parseFloat(String(input.value).replace(',', '.'));
+      if (isNaN(value)) { alert('Vul een getal in'); return; }
+
+      const goal = state.goals.find(g => g.id === goalId);
+      const update = { current_value: value, updated_at: new Date().toISOString() };
+
+      if (goal && hasValue(goal.target_value)) {
+        const start = hasValue(goal.start_value) ? Number(goal.start_value) : 0;
+        const target = Number(goal.target_value);
+        const reached = target >= start ? value >= target : value <= target;
+        if (reached && confirm('🎯 Doel bereikt! Markeren als voltooid?')) {
+          update.is_completed = true;
+          update.last_completed_date = todayStr();
+        }
+      }
+
+      const { error } = await supabaseClient.from('goals').update(update).eq('id', goalId);
+      if (error) { alert('Fout bij bijwerken: ' + error.message); return; }
+      await refreshGoals();
+      showToast('✓ Voortgang bijgewerkt');
+    }
+
+    async function deleteGoal(goalId) {
+      if (!confirm('Missie permanent verwijderen?')) return;
+      // Eerst subtaken verwijderen (voor het geval er geen cascade is)
+      await supabaseClient.from('goal_subtasks').delete().eq('goal_id', goalId);
+      const { error } = await supabaseClient.from('goals').delete().eq('id', goalId);
+      if (error) { alert('Fout bij verwijderen: ' + error.message); return; }
+      await refreshGoals();
+    }
+
+    async function addSubtask(goalId) {
+      const input = document.getElementById(`st-${goalId}`);
+      if (!input || !input.value.trim()) return;
+      const goal = state.goals.find(g => g.id === goalId);
+      const position = goal ? (goal.goal_subtasks || []).length : 0;
+      const { error } = await supabaseClient.from('goal_subtasks').insert([{
+        goal_id: goalId,
+        user_id: state.user.id,
+        title: input.value.trim(),
+        is_completed: false,
+        position
+      }]);
+      if (error) { alert('Fout bij toevoegen stap: ' + error.message); return; }
+      await refreshGoals();
+      const again = document.getElementById(`st-${goalId}`);
+      if (again) again.focus();
+    }
+
+    async function toggleSubtask(goalId, subtaskId) {
+      const goal = state.goals.find(g => g.id === goalId);
+      const st = goal ? (goal.goal_subtasks || []).find(s => s.id === subtaskId) : null;
+      if (!st) return;
+      const { error } = await supabaseClient.from('goal_subtasks')
+        .update({ is_completed: !st.is_completed })
+        .eq('id', subtaskId);
+      if (error) { alert('Fout bij bijwerken stap: ' + error.message); return; }
+      await refreshGoals();
+    }
+
+    async function deleteSubtask(subtaskId) {
+      const { error } = await supabaseClient.from('goal_subtasks').delete().eq('id', subtaskId);
+      if (error) { alert('Fout bij verwijderen stap: ' + error.message); return; }
+      await refreshGoals();
+    }
+
+    // ============================================
+    // MISSIES: MODAL / FORM
+    // ============================================
+    function readGoalForm() {
+      const get = id => { const el = document.getElementById(id); return el ? el.value : null; };
+      if (!document.getElementById('gf-title')) return;
+      state.goalForm = {
+        title: get('gf-title') || '',
+        domain: get('gf-domain') || '',
+        priority: get('gf-priority') || 'medium',
+        timeframe: get('gf-timeframe') || 'short',
+        deadline: get('gf-deadline') || '',
+        start: get('gf-start') || '',
+        current: get('gf-current') || '',
+        target: get('gf-target') || '',
+        notes: get('gf-notes') || ''
+      };
+    }
+
+    function openGoalModal(goalId) {
+      if (goalId) {
+        const g = state.goals.find(x => x.id === goalId);
+        if (!g) return;
+        state.editingGoalId = goalId;
+        state.goalForm = {
+          title: g.title || '',
+          domain: g.domain || '',
+          priority: g.priority || 'medium',
+          timeframe: g.timeframe || 'short',
+          deadline: g.deadline || '',
+          start: hasValue(g.start_value) ? String(Number(g.start_value)) : '',
+          current: hasValue(g.current_value) ? String(Number(g.current_value)) : '',
+          target: hasValue(g.target_value) ? String(Number(g.target_value)) : '',
+          notes: g.notes || ''
+        };
+      } else {
+        state.editingGoalId = null;
+        const tf = state.goalTab === 'completed' ? 'short' : state.goalTab;
+        state.goalForm = emptyGoalForm(tf);
+        if (state.goalDomain !== 'all') {
+          state.goalForm.domain = state.goalDomain;
+          state.templateDomain = state.goalDomain;
+        }
+      }
+      state.showGoalModal = true;
+      render();
+    }
+
+    function closeGoalModal() {
+      state.showGoalModal = false;
+      state.editingGoalId = null;
+      render();
+    }
+
+    function setTemplateDomain(domain) {
+      readGoalForm();
+      state.templateDomain = domain;
+      render();
+    }
+
+    function onGoalTimeframeChange() {
+      readGoalForm();
+      render();
+    }
+
+    function applyTemplate(index) {
+      const t = goalTemplates[index];
+      if (!t) return;
+      readGoalForm();
+      state.goalForm = {
+        ...state.goalForm,
+        title: t[2],
+        domain: t[0],
+        timeframe: t[1],
+        start: t[3] === null ? '' : String(t[3]),
+        current: t[3] === null ? '' : String(t[3]),
+        target: t[4] === null ? '' : String(t[4]),
+        notes: t[6] || '',
+        deadline: addDays(timeframeConfig[t[1]].days)
+      };
+      render();
+    }
+
+    function setGoalTab(tab) {
+      state.goalTab = tab;
+      render();
+    }
+
+    function setGoalDomain(domain) {
+      state.goalDomain = domain;
+      render();
+    }
+
+    // ============================================
     // RENDER: AUTH
-    function renderAuth(){return`<div class="auth-container"><div class="auth-box"><div class="auth-title">PRIMAL <span class="text-accent">FORGED</span></div><div class="auth-subtitle">Discipline over motivatie</div><div id="auth-error"></div><input type="email" class="auth-input" id="auth-email" placeholder="Email"><input type="password" class="auth-input" id="auth-password" placeholder="Wachtwoord"><button class="auth-btn" onclick="handleAuth()">${authMode==='login'?'Inloggen':'Registreren'}</button><div class="auth-switch">${authMode==='login'?'Geen account?':'Al account?'} <a onclick="toggleAuthMode()">${authMode==='login'?'Registreer':'Login'}</a></div></div></div>`;}
+    // ============================================
+    let authMode = 'login';
 
+    function renderAuth() {
+      return `
+        <div class="auth-container">
+          <div class="auth-box">
+            <div style="text-align: center; margin-bottom: 32px;">
+              <span class="logo">PRIMAL</span><span class="logo logo-accent">FORGED</span>
+            </div>
+            <div class="auth-title">Welkom</div>
+            <div class="auth-subtitle">Login of maak een account aan</div>
+            <div id="auth-error" class="auth-error" style="display: none;"></div>
+            <div id="auth-success" class="auth-success" style="display: none;"></div>
+            <form id="auth-form" onsubmit="handleAuth(event)">
+              <input type="email" id="auth-email" class="auth-input" placeholder="Email" required>
+              <input type="password" id="auth-password" class="auth-input" placeholder="Wachtwoord" required minlength="6">
+              <button type="submit" class="auth-btn" id="auth-submit">Inloggen</button>
+            </form>
+            <div class="auth-switch">
+              <span id="auth-switch-text">Nog geen account?</span>
+              <a id="auth-switch-link" onclick="toggleAuthMode()">Registreren</a>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function toggleAuthMode() {
+      authMode = authMode === 'login' ? 'signup' : 'login';
+      document.getElementById('auth-submit').textContent = authMode === 'login' ? 'Inloggen' : 'Registreren';
+      document.getElementById('auth-switch-text').textContent = authMode === 'login' ? 'Nog geen account?' : 'Al een account?';
+      document.getElementById('auth-switch-link').textContent = authMode === 'login' ? 'Registreren' : 'Inloggen';
+    }
+
+    async function handleAuth(e) {
+      e.preventDefault();
+      const email = document.getElementById('auth-email').value;
+      const password = document.getElementById('auth-password').value;
+      const errorEl = document.getElementById('auth-error');
+      const successEl = document.getElementById('auth-success');
+      const submitBtn = document.getElementById('auth-submit');
+      
+      errorEl.style.display = 'none';
+      successEl.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Even geduld...';
+      
+      try {
+        if (authMode === 'signup') {
+          await signUp(email, password);
+          successEl.textContent = 'Check je email om je account te bevestigen!';
+          successEl.style.display = 'block';
+        } else {
+          await signIn(email, password);
+        }
+      } catch (error) {
+        errorEl.textContent = error.message;
+        errorEl.style.display = 'block';
+      }
+      
+      submitBtn.disabled = false;
+      submitBtn.textContent = authMode === 'login' ? 'Inloggen' : 'Registreren';
+    }
+
+    // ============================================
     // RENDER: DASHBOARD
-    function renderDashboard(){const q=getDailyQuote();const days=getRetentionDays();const phase=getRetentionPhase(days);const pos=getPositiveHabitsCount();const actMis=state.missions.filter(m=>!m.is_completed).length;const actChal=state.challenges.filter(c=>c.status==='active').length;
-      return`<div class="page-header"><div class="greeting">${getGreeting()}</div><div class="greeting-sub">${new Date().toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long'})}</div></div>
-      <div class="quote-card"><div class="quote-text">"${q.text}"</div><div class="quote-author">— ${q.author}</div></div>
-      <div class="stats"><div class="stat"><div class="stat-value" style="color:${phase.color}">${days}</div><div class="stat-label">Retention</div></div><div class="stat"><div class="stat-value">${pos}/9</div><div class="stat-label">Habits</div></div><div class="stat"><div class="stat-value">${actMis}</div><div class="stat-label">Missies</div></div><div class="stat"><div class="stat-value">${actChal}</div><div class="stat-label">Challenges</div></div></div>
-      <div class="card"><label class="label">Habits vandaag</label><div class="habit-grid">${Object.entries(habitConfig).filter(([k,c])=>c.positive).map(([key,cfg])=>`<button class="habit ${state.habits[key]?'done':''}" onmousedown="startHabitPress('${key}')" onmouseup="endHabitPress('${key}')" onmouseleave="cancelHabitPress()" ontouchstart="startHabitPress('${key}')" ontouchend="endHabitPress('${key}')"><span class="habit-icon">${cfg.icon}</span><span class="habit-label">${cfg.label}</span></button>`).join('')}</div></div>
-      <div class="card"><label class="label">Situatie vandaag</label><div class="habit-grid">${Object.entries(habitConfig).filter(([k,c])=>!c.positive).map(([key,cfg])=>`<button class="habit ${state.habits[key]?'done negative':''}" onclick="toggleHabit('${key}')"><span class="habit-icon">${cfg.icon}</span><span class="habit-label">${cfg.label}</span></button>`).join('')}</div></div>
-      ${state.showHabitModal?renderHabitModal():''}`;}
+    // ============================================
+    function renderDashboard() {
+      const quote = getDailyQuote();
+      const retDays = getRetentionDays();
+      const phase = getRetentionPhase(retDays);
+      const habitsCount = getHabitsCompleted();
+      
+      return `
+        <div class="page-header">
+          <div class="greeting">${getGreeting()}, Strijder</div>
+          <div class="greeting-sub">Dag ${state.entries.length > 0 ? getJournalStreak() : 1} van je transformatie</div>
+        </div>
+        
+        <div class="quote-card">
+          <div class="quote-text">"${quote.text}"</div>
+          <div class="quote-author">— ${quote.author}</div>
+        </div>
+        
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-value" style="color: ${phase.color}">${retDays}</div>
+            <div class="stat-label">Retention</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">${state.goals.filter(g => !g.is_completed).length}</div>
+            <div class="stat-label">Missies</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">${getPositiveHabitsCount()}/9</div>
+            <div class="stat-label">Habits</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value" style="color: ${getColor(parseFloat(getAverageMood()) || 5)}">${getAverageMood()}</div>
+            <div class="stat-label">Mood</div>
+          </div>
+        </div>
 
-    function renderHabitModal(){const c=habitConfig[state.showHabitModal];return`<div class="modal-overlay" onclick="closeHabitModal()"><div class="modal" onclick="event.stopPropagation()"><div class="habit-modal-icon">${c.icon}</div><div class="modal-title" style="color:#22c55e">${c.title}</div><div class="habit-modal-duration">${c.duration}</div><div class="modal-step"><div class="modal-step-title">Wat:</div><div class="modal-step-text">${c.what}</div></div><div class="modal-step"><div class="modal-step-title">Hoe:</div><div class="modal-step-text">${c.how}</div></div><div class="modal-step"><div class="modal-step-title">Waarom:</div><div class="modal-step-text">${c.why}</div></div><button class="btn btn-secondary" onclick="closeHabitModal()" style="width:100%;margin-top:16px">Sluiten</button></div></div>`;}
-    function closeHabitModal(){state.showHabitModal=null;render();}
+        ${renderDashboardMissions()}
+        
+        <div class="card">
+          <label class="label">✅ Positieve Gewoontes <span style="color: #525252; font-weight: 400;">(lang drukken = info)</span></label>
+          <div class="habit-grid">
+            ${Object.entries(habitConfig).filter(([k, c]) => c.positive).map(([key, cfg]) => `
+              <button class="habit ${state.habits[key] ? 'done' : ''}" 
+                onmousedown="startHabitPress('${key}')" 
+                onmouseup="endHabitPress('${key}')" 
+                onmouseleave="cancelHabitPress()"
+                ontouchstart="startHabitPress('${key}')" 
+                ontouchend="endHabitPress('${key}')"
+                ontouchcancel="cancelHabitPress()">
+                <span class="habit-icon">${cfg.icon}</span>
+                <span class="habit-label">${cfg.label}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+        
+        <div class="card">
+          <label class="label">⚠️ Vandaag Gebeurd</label>
+          <div class="habit-grid">
+            ${Object.entries(habitConfig).filter(([k, c]) => !c.positive).map(([key, cfg]) => `
+              <button class="habit ${state.habits[key] ? 'done negative' : ''}" 
+                onmousedown="startHabitPress('${key}')" 
+                onmouseup="endHabitPress('${key}')" 
+                onmouseleave="cancelHabitPress()"
+                ontouchstart="startHabitPress('${key}')" 
+                ontouchend="endHabitPress('${key}')"
+                ontouchcancel="cancelHabitPress()">
+                <span class="habit-icon">${cfg.icon}</span>
+                <span class="habit-label">${cfg.label}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <button class="btn btn-secondary btn-small" onclick="setSection('journal')">+ Journal</button>
+          <button class="btn btn-secondary btn-small" onclick="setSection('retention')">Retention →</button>
+        </div>
+        
+        ${state.showHabitModal ? renderHabitModal() : ''}
+      `;
+    }
 
-    // RENDER: JOURNAL
-    function renderJournal(){return`<div class="page-header"><div class="page-sub">Reflectie</div><div class="page-title">Journal</div></div><div class="tabs"><button class="tab ${state.journalTab==='new'?'active':''}" onclick="setJournalTab('new')">Nieuw</button><button class="tab ${state.journalTab==='history'?'active':''}" onclick="setJournalTab('history')">Geschiedenis</button><button class="tab ${state.journalTab==='patterns'?'active':''}" onclick="setJournalTab('patterns')">Patronen</button></div>${state.journalTab==='new'?renderJournalNew():''}${state.journalTab==='history'?renderJournalHistory():''}${state.journalTab==='patterns'?renderJournalPatterns():''}`;}
-    function renderJournalNew(){const p=getDailyPrompt();const today=new Date().toISOString().split('T')[0];const todayEntry=state.entries.find(e=>e.date===today);const alreadySaved=todayEntry||state.todaySaved;return`<div class="info-box" style="background:rgba(127,29,29,0.1);border-left-color:#7f1d1d;margin-bottom:16px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🌙</span><div><div style="font-size:11px;color:#7f1d1d;font-weight:500">AVOND REFLECTIE</div><div style="font-size:10px;color:#a3a3a3">Neem een moment om je dag te evalueren</div></div></div></div>${alreadySaved?`<div class="card" style="background:rgba(34,197,94,0.1);border-color:#22c55e;text-align:center;padding:16px"><span style="font-size:24px">✓</span><div style="color:#22c55e;font-size:13px;font-weight:500;margin-top:8px">Vandaag al ingevuld</div><div style="color:#525252;font-size:11px;margin-top:4px">Je kunt je entry nog aanpassen</div></div>`:''}<div class="prompt"><div class="prompt-label">Reflectie vraag</div><div class="prompt-text">${p}</div></div><div class="card"><label class="label">Hoe was je dag?</label>${['mood','energy','focus','sleep'].map(k=>`<div class="slider-group"><div class="slider-header"><span class="slider-label">${k==='mood'?'Mood':k==='energy'?'Energie':k==='focus'?'Focus':'Slaap'}</span><span class="slider-value" id="${k}-value" style="color:${getColor(state[k])}">${state[k]}</span></div><input type="range" class="slider" min="1" max="10" value="${state[k]}" oninput="updateSlider('${k}',this.value)"></div>`).join('')}<div class="slider-group"><div class="slider-header"><span class="slider-label">Stress</span><span class="slider-value" id="stress-value" style="color:${getColor(state.stress,true)}">${state.stress}</span></div><input type="range" class="slider slider-stress" min="1" max="10" value="${state.stress}" oninput="updateSlider('stress',this.value)"></div></div><div class="card"><label class="label">Reflectie</label><textarea class="textarea" placeholder="Hoe was je dag? Wat heb je bereikt?" oninput="state.content=this.value">${state.content}</textarea></div><button class="btn ${alreadySaved?'btn-secondary':'btn-primary'}" style="width:100%" onclick="saveEntry()" ${state.journalSaving?'disabled':''}>${state.journalSaving?'Opslaan...':alreadySaved?'✓ Bijwerken':'Opslaan'}</button>`;}
-    function renderJournalHistory(){if(state.entries.length===0)return'<div class="empty"><div class="empty-icon">📝</div>Nog geen entries</div>';return state.entries.slice(0,10).map(e=>`<div class="entry"><div class="entry-date">${formatDate(e.date)}</div><div class="entry-scores"><span class="entry-score">Mood: ${e.mood||'-'}</span><span class="entry-score">Energie: ${e.energy||'-'}</span><span class="entry-score">Focus: ${e.focus||'-'}</span></div>${e.content?`<div class="entry-content">${e.content}</div>`:''}</div>`).join('');}
-    function renderJournalPatterns(){const ins=getInsights();if(ins.length===0)return'<div class="empty"><div class="empty-icon">📊</div>Verzamel meer data (min 3 entries)</div>';return`<div class="card"><label class="label">Jouw patronen</label>${ins.map(i=>`<div class="insight ${i.positive?'insight-positive':'insight-negative'}"><div class="insight-icon">${i.icon}</div><div><div class="insight-title">${i.title}</div><div class="insight-text">${i.text}</div></div></div>`).join('')}</div>`;}
-    function getInsights(){const e=state.entries.filter(x=>x.habits&&Object.keys(x.habits).length>0);if(e.length<3)return[];const ins=[];Object.entries(habitConfig).forEach(([k,cfg])=>{const w=e.filter(x=>x.habits&&x.habits[k]);const wo=e.filter(x=>x.habits&&!x.habits[k]);if(w.length>=2&&wo.length>=2){const avgW=w.reduce((a,x)=>a+(x.mood||5),0)/w.length;const avgWo=wo.reduce((a,x)=>a+(x.mood||5),0)/wo.length;const diff=cfg.positive?avgW-avgWo:avgWo-avgW;if(diff>=0.5)ins.push({icon:cfg.icon,title:cfg.positive?`${cfg.title} verbetert mood`:`${cfg.title} verlaagt mood`,text:`Verschil: ${diff.toFixed(1)} punten`,positive:cfg.positive,impact:diff});}});return ins.sort((a,b)=>b.impact-a.impact).slice(0,6);}
+    function renderDashboardMissions() {
+      const prio = { high: 0, medium: 1, low: 2 };
+      const active = state.goals
+        .filter(g => !g.is_completed)
+        .sort((a, b) =>
+          ((prio[a.priority] ?? 1) - (prio[b.priority] ?? 1)) ||
+          (a.deadline || '9999-12-31').localeCompare(b.deadline || '9999-12-31'))
+        .slice(0, 3);
 
-    // RENDER: MISSIONS
-    function renderMissions(){const filtered=state.missions.filter(m=>{if(state.missionTab==='completed')return m.is_completed;if(m.is_completed)return false;if(state.missionTab!=='all'&&m.timeframe!==state.missionTab)return false;if(state.missionDomain!=='all'&&m.domain!==state.missionDomain)return false;return true;});const act=state.missions.filter(m=>!m.is_completed);const comp=state.missions.filter(m=>m.is_completed);return`<div class="page-header"><div class="page-sub">Discipline boven Motivatie</div><div class="page-title">Missies</div></div><div class="stats"><div class="stat"><div class="stat-value">${act.length}</div><div class="stat-label">Actief</div></div><div class="stat"><div class="stat-value text-success">${comp.length}</div><div class="stat-label">Voltooid</div></div><div class="stat"><div class="stat-value text-warning">${act.filter(m=>m.priority==='high').length}</div><div class="stat-label">Hoog prio</div></div><div class="stat"><div class="stat-value">${act.filter(m=>getDaysUntilDeadline(m.deadline)!==null&&getDaysUntilDeadline(m.deadline)<=7).length}</div><div class="stat-label">Deze week</div></div></div><div class="tabs"><button class="tab ${state.missionTab==='short'?'active':''}" onclick="setMissionTab('short')">Kort</button><button class="tab ${state.missionTab==='medium'?'active':''}" onclick="setMissionTab('medium')">Middel</button><button class="tab ${state.missionTab==='long'?'active':''}" onclick="setMissionTab('long')">Lang</button><button class="tab ${state.missionTab==='completed'?'active':''}" onclick="setMissionTab('completed')">Voltooid</button></div><div class="filters"><button class="filter-btn ${state.missionDomain==='all'?'active':''}" onclick="setMissionDomain('all')">Alle</button>${Object.entries(domainConfig).map(([k,c])=>`<button class="filter-btn ${state.missionDomain===k?'active':''}" onclick="setMissionDomain('${k}')">${c.icon}</button>`).join('')}</div><button class="btn btn-primary" style="width:100%;margin-bottom:16px" onclick="openMissionModal()">+ Nieuwe Missie</button>${filtered.length===0?'<div class="empty"><div class="empty-icon">🎯</div>Geen missies</div>':filtered.map(m=>renderMissionCard(m)).join('')}${state.showMissionModal?renderMissionModal():''}`;}
+      return `
+        <div class="card">
+          <label class="label">🎯 Actieve Missies</label>
+          ${active.length ? active.map(g => {
+            const p = calcGoalProgress(g);
+            const d = domainConfig[g.domain];
+            return `
+              <div style="margin-bottom: 14px; cursor: pointer;" onclick="setSection('missions')">
+                <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 12px;">
+                  <span>${d ? d.icon + ' ' : ''}${esc(g.title)}</span>
+                  <span style="color: #737373;">${p}%</span>
+                </div>
+                <div class="progress-bar" style="margin-top: 6px;">
+                  <div class="progress-fill" style="width: ${p}%; background: #7f1d1d;"></div>
+                </div>
+              </div>
+            `;
+          }).join('') : `
+            <div style="font-size: 12px; color: #525252; margin-bottom: 12px;">Nog geen actieve missies. Begin klein.</div>
+          `}
+          <button class="btn btn-secondary btn-small" style="width: 100%;" onclick="setSection('missions')">
+            ${active.length ? 'Alle missies →' : '+ Eerste missie kiezen'}
+          </button>
+        </div>
+      `;
+    }
+    
+    function renderHabitModal() {
+      const habit = habitConfig[state.showHabitModal];
+      if (!habit) return '';
+      
+      return `
+        <div class="modal-overlay" onclick="if(event.target === this) { state.showHabitModal = null; render(); }">
+          <div class="modal">
+            <div class="habit-modal-icon">${habit.icon}</div>
+            <div class="modal-title habit" style="text-align: center;">${habit.title}</div>
+            
+            <div class="habit-modal-duration">⏱️ ${habit.duration}</div>
+            
+            <div class="modal-step habit">
+              <div class="modal-step-title">WAT</div>
+              <div class="modal-step-text">${habit.what}</div>
+            </div>
+            
+            <div class="modal-step habit">
+              <div class="modal-step-title">HOE</div>
+              <div class="modal-step-text">${habit.how}</div>
+            </div>
+            
+            <div class="modal-step habit">
+              <div class="modal-step-title">WAAROM</div>
+              <div class="modal-step-text">${habit.why}</div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px;">
+              <button class="btn btn-secondary" onclick="state.showHabitModal = null; render();">Sluiten</button>
+              <button class="btn btn-primary" onclick="toggleHabit('${state.showHabitModal}'); state.showHabitModal = null; render();">
+                ${state.habits[state.showHabitModal] ? '✓ Gedaan' : 'Afvinken'}
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
 
-    function renderMissionCard(m){const prog=calculateMissionProgress(m);const days=getDaysUntilDeadline(m.deadline);const dom=domainConfig[m.domain];const exp=state.expandedMissionId===m.id;return`<div class="mission-card ${m.is_completed?'mission-completed':''} ${exp?'expanded':''}"><div class="mission-header" onclick="toggleMissionExpand('${m.id}')"><div class="mission-checkbox ${m.is_completed?'checked':''}" onclick="event.stopPropagation();toggleMissionComplete('${m.id}')">${m.is_completed?'✓':''}</div><div class="mission-content"><div class="mission-title">${m.title}</div><div class="mission-meta">${dom?`<span class="mission-badge badge-${m.domain}">${dom.icon} ${dom.name}</span>`:''}${m.priority?`<span class="mission-badge badge-${m.priority}">${m.priority==='high'?'🔴':m.priority==='medium'?'🟡':'🟢'}</span>`:''}${days!==null?`<span class="text-dim" style="font-size:10px">📅 ${days<=0?'Verlopen':days+'d'}</span>`:''}</div></div></div>${m.target_value?`<div class="mission-progress"><div class="mission-progress-bar"><div class="mission-progress-fill ${prog>=100?'complete':''}" style="width:${prog}%"></div></div><div class="mission-progress-label"><span>${m.start_value||0} → ${m.current_value||m.start_value||0} → ${m.target_value}</span><span>${prog}%</span></div></div>`:''}<div class="mission-details">${m.notes?`<div class="text-dim" style="font-size:11px;margin-bottom:12px">${m.notes}</div>`:''}<div style="display:flex;gap:8px"><button class="btn btn-secondary btn-small" onclick="editMission('${m.id}')">Bewerk</button><button class="btn btn-small" style="background:#dc2626;color:#fff" onclick="deleteMission('${m.id}')">Verwijder</button></div></div></div>`;}
+    // ============================================
+    // RENDER: MISSIES
+    // ============================================
+    function renderMissions() {
+      const active = state.goals.filter(g => !g.is_completed);
+      const done = state.goals.filter(g => g.is_completed);
+      const avg = active.length
+        ? Math.round(active.reduce((a, g) => a + calcGoalProgress(g), 0) / active.length)
+        : 0;
+      const high = active.filter(g => g.priority === 'high').length;
 
-    function renderMissionModal(){const m=state.editingMissionId?state.missions.find(x=>x.id===state.editingMissionId):null;return`<div class="modal-overlay" onclick="closeMissionModal()"><div class="modal" onclick="event.stopPropagation()"><div class="modal-title">${m?'Bewerk':'Nieuwe'} Missie</div><div class="form-group"><label class="form-label">Titel</label><input type="text" class="form-input" id="mission-title" placeholder="Wat wil je bereiken?" value="${m?.title||''}"></div><div class="form-row"><div class="form-group"><label class="form-label">Domein</label><select class="form-input" id="mission-domain"><option value="">Kies...</option>${Object.entries(domainConfig).map(([k,c])=>`<option value="${k}" ${m?.domain===k?'selected':''}>${c.icon} ${c.name}</option>`).join('')}</select></div><div class="form-group"><label class="form-label">Prioriteit</label><select class="form-input" id="mission-priority"><option value="">Kies...</option><option value="high" ${m?.priority==='high'?'selected':''}>🔴 Hoog</option><option value="medium" ${m?.priority==='medium'?'selected':''}>🟡 Medium</option><option value="low" ${m?.priority==='low'?'selected':''}>🟢 Laag</option></select></div></div><div class="form-row"><div class="form-group"><label class="form-label">Termijn</label><select class="form-input" id="mission-timeframe"><option value="short" ${m?.timeframe==='short'?'selected':''}>Kort</option><option value="medium" ${m?.timeframe==='medium'?'selected':''}>Middel</option><option value="long" ${m?.timeframe==='long'?'selected':''}>Lang</option></select></div><div class="form-group"><label class="form-label">Deadline</label><input type="date" class="form-input" id="mission-deadline" value="${m?.deadline||''}"></div></div><div class="form-row"><div class="form-group"><label class="form-label">Start</label><input type="number" class="form-input" id="mission-start" placeholder="85" value="${m?.start_value||''}"></div><div class="form-group"><label class="form-label">Huidig</label><input type="number" class="form-input" id="mission-current" placeholder="82" value="${m?.current_value||''}"></div><div class="form-group"><label class="form-label">Doel</label><input type="number" class="form-input" id="mission-target" placeholder="78" value="${m?.target_value||''}"></div></div><div class="form-group"><label class="form-label">Notities</label><textarea class="form-input" id="mission-notes" style="min-height:60px">${m?.notes||''}</textarea></div><div style="display:flex;gap:12px;margin-top:20px"><button class="btn btn-primary" style="flex:1" onclick="saveMission()">Opslaan</button><button class="btn btn-secondary" onclick="closeMissionModal()">Annuleer</button></div></div></div>`;}
+      let list = state.goalTab === 'completed'
+        ? done
+        : active.filter(g => g.timeframe === state.goalTab);
+      if (state.goalDomain !== 'all') list = list.filter(g => g.domain === state.goalDomain);
 
-    function setMissionTab(t){state.missionTab=t;render();}
-    function setMissionDomain(d){state.missionDomain=d;render();}
-    function openMissionModal(){state.showMissionModal=true;state.editingMissionId=null;render();}
-    function closeMissionModal(){state.showMissionModal=false;state.editingMissionId=null;render();}
-    function editMission(id){state.editingMissionId=id;state.showMissionModal=true;render();}
-    function toggleMissionExpand(id){state.expandedMissionId=state.expandedMissionId===id?null:id;render();}
+      const countFor = tf => active.filter(g => g.timeframe === tf).length;
 
-    // RENDER: BODY
-    function renderBody(){const lat=state.bodyStats[0];const prev=state.bodyStats[1];
-      return`<div class="page-header"><div class="page-sub">Lichaam</div><div class="page-title">Body Stats</div></div>
-      <div class="stats"><div class="stat"><div class="stat-value">${lat?.weight||'--'}</div><div class="stat-label">Gewicht</div>${prev?.weight?`<div class="stat-change ${lat.weight<prev.weight?'text-success':'text-danger'}">${(lat.weight-prev.weight).toFixed(1)}kg</div>`:''}</div><div class="stat"><div class="stat-value">${lat?.bodyfat_percentage||'--'}${lat?.bodyfat_percentage?'%':''}</div><div class="stat-label">Vet %</div></div><div class="stat"><div class="stat-value">${lat?.weight?calculateBMI(lat.weight,state.userHeight).toFixed(1):'--'}</div><div class="stat-label">BMI</div></div><div class="stat"><div class="stat-value">${lat?.weight&&lat?.bodyfat_percentage?calculateFFMI(lat.weight,lat.bodyfat_percentage,state.userHeight).toFixed(1):'--'}</div><div class="stat-label">FFMI</div></div></div>
-      <div class="tabs"><button class="tab ${state.bodyTab==='overview'?'active':''}" onclick="setBodyTab('overview')">Overzicht</button><button class="tab ${state.bodyTab==='history'?'active':''}" onclick="setBodyTab('history')">Geschiedenis</button><button class="tab ${state.bodyTab==='challenges'?'active':''}" onclick="setBodyTab('challenges')">Challenges</button></div>
-      <button class="btn btn-primary" style="width:100%;margin-bottom:16px" onclick="openBodyModal()">+ Nieuwe Meting</button>
-      ${state.bodyTab==='overview'?renderBodyOverview():''}${state.bodyTab==='history'?renderBodyHistory():''}${state.bodyTab==='challenges'?renderChallenges():''}${state.showBodyModal?renderBodyModal():''}`;}
+      return `
+        <div class="page-header">
+          <div class="page-sub">Discipline boven motivatie</div>
+          <div class="page-title">Missies</div>
+        </div>
 
-    function renderBodyOverview(){if(state.bodyStats.length===0)return'<div class="empty"><div class="empty-icon">💪</div>Nog geen metingen</div>';const recent=state.bodyStats.slice(0,14);const weights=recent.map(s=>s.weight).filter(Boolean);const max=Math.max(...weights);const min=Math.min(...weights);const range=max-min||1;return`<div class="card"><label class="label">Gewicht Trend</label><div class="chart-container">${[...recent].reverse().map(s=>{const h=((s.weight-min)/range*80)+20;return`<div class="chart-bar" style="height:${h}%" title="${s.weight}kg"></div>`;}).join('')}</div></div><div class="card"><label class="label">Laatste meting</label><div class="measurement-row"><span class="text-muted">Gewicht</span><span>${state.bodyStats[0]?.weight||'--'} kg</span></div><div class="measurement-row"><span class="text-muted">Vet %</span><span>${state.bodyStats[0]?.bodyfat_percentage||'--'}%</span></div><div class="measurement-row"><span class="text-muted">Borst</span><span>${state.bodyStats[0]?.chest||'--'} cm</span></div><div class="measurement-row"><span class="text-muted">Taille</span><span>${state.bodyStats[0]?.waist||'--'} cm</span></div></div>`;}
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-value">${active.length}</div>
+            <div class="stat-label">Actief</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value" style="color: #22c55e;">${done.length}</div>
+            <div class="stat-label">Voltooid</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value" style="color: #eab308;">${avg}%</div>
+            <div class="stat-label">Gem. voortgang</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value" style="color: #dc2626;">${high}</div>
+            <div class="stat-label">Hoge prio</div>
+          </div>
+        </div>
 
-    function renderBodyHistory(){if(state.bodyStats.length===0)return'<div class="empty"><div class="empty-icon">📊</div>Geen geschiedenis</div>';return`<div class="card" style="padding:0;overflow-x:auto"><table style="width:100%;font-size:11px;border-collapse:collapse"><thead><tr style="border-bottom:1px solid #1c1c1c"><th style="padding:12px 8px;text-align:left;color:#525252;font-size:9px;text-transform:uppercase">Datum</th><th style="padding:12px 8px;text-align:left;color:#525252;font-size:9px;text-transform:uppercase">Gewicht</th><th style="padding:12px 8px;text-align:left;color:#525252;font-size:9px;text-transform:uppercase">Vet %</th><th style="padding:12px 8px;text-align:left;color:#525252;font-size:9px;text-transform:uppercase">BMI</th></tr></thead><tbody>${state.bodyStats.slice(0,20).map(s=>`<tr style="border-bottom:1px solid #0f0f0f"><td style="padding:10px 8px;color:#a3a3a3">${formatDateShort(s.entry_date)}</td><td style="padding:10px 8px;color:#fafafa">${s.weight} kg</td><td style="padding:10px 8px;color:#a3a3a3">${s.bodyfat_percentage||'--'}%</td><td style="padding:10px 8px;color:#a3a3a3">${s.weight?calculateBMI(s.weight,state.userHeight).toFixed(1):'--'}</td></tr>`).join('')}</tbody></table></div>`;}
+        <div class="tabs">
+          <button class="tab ${state.goalTab === 'short' ? 'active' : ''}" onclick="setGoalTab('short')">Kort (${countFor('short')})</button>
+          <button class="tab ${state.goalTab === 'medium' ? 'active' : ''}" onclick="setGoalTab('medium')">Middel (${countFor('medium')})</button>
+          <button class="tab ${state.goalTab === 'long' ? 'active' : ''}" onclick="setGoalTab('long')">Lang (${countFor('long')})</button>
+          <button class="tab ${state.goalTab === 'completed' ? 'active' : ''}" onclick="setGoalTab('completed')">Voltooid (${done.length})</button>
+        </div>
 
-    function renderBodyModal(){return`<div class="modal-overlay" onclick="closeBodyModal()"><div class="modal" onclick="event.stopPropagation()"><div class="modal-title">Nieuwe Meting</div><div class="form-row"><div class="form-group"><label class="form-label">Gewicht (kg)</label><input type="number" class="form-input" id="body-weight" placeholder="82.5" step="0.1"></div><div class="form-group"><label class="form-label">Vet %</label><input type="number" class="form-input" id="body-fat" placeholder="16" step="0.1"></div></div><div class="form-group"><label class="form-label">Datum</label><input type="date" class="form-input" id="body-date" value="${new Date().toISOString().split('T')[0]}"></div><div class="divider"></div><label class="label">Omtrek (optioneel)</label><div class="form-row"><div class="form-group"><label class="form-label">Borst</label><input type="number" class="form-input" id="body-chest" placeholder="102"></div><div class="form-group"><label class="form-label">Taille</label><input type="number" class="form-input" id="body-waist" placeholder="84"></div></div><div class="form-row"><div class="form-group"><label class="form-label">Heupen</label><input type="number" class="form-input" id="body-hips" placeholder="96"></div><div class="form-group"><label class="form-label">Biceps</label><input type="number" class="form-input" id="body-biceps" placeholder="36"></div></div><div class="form-group"><label class="form-label">Dijen</label><input type="number" class="form-input" id="body-thighs" placeholder="58"></div><div style="display:flex;gap:12px;margin-top:20px"><button class="btn btn-primary" style="flex:1" onclick="saveBodyEntry()">Opslaan</button><button class="btn btn-secondary" onclick="closeBodyModal()">Annuleer</button></div></div></div>`;}
+        <div class="chips">
+          <button class="chip ${state.goalDomain === 'all' ? 'active' : ''}" onclick="setGoalDomain('all')">Alle</button>
+          ${Object.entries(domainConfig).map(([key, d]) => `
+            <button class="chip ${state.goalDomain === key ? 'active' : ''}" onclick="setGoalDomain('${key}')">${d.icon} ${d.label}</button>
+          `).join('')}
+        </div>
 
-    function setBodyTab(t){state.bodyTab=t;render();}
-    function openBodyModal(){state.showBodyModal=true;render();}
-    function closeBodyModal(){state.showBodyModal=false;render();}
+        <button class="btn btn-primary" style="width: 100%; margin-bottom: 16px;" onclick="openGoalModal()">+ Nieuwe Missie</button>
 
-    // RENDER: CHALLENGES
-    function renderChallenges(){const act=state.challenges.filter(c=>c.status==='active');const comp=state.challenges.filter(c=>c.status==='completed');
-      return`<div class="stats" style="margin-bottom:16px"><div class="stat"><div class="stat-value text-success">${comp.length}</div><div class="stat-label">Voltooid</div></div><div class="stat"><div class="stat-value">${act.length}</div><div class="stat-label">Actief</div></div><div class="stat"><div class="stat-value text-warning">${act[0]?calculateChallengeDay(act[0].start_date):'-'}</div><div class="stat-label">Dag</div></div><div class="stat"><div class="stat-value">${Math.max(...state.challenges.map(c=>c.days_completed||0),0)}</div><div class="stat-label">Beste</div></div></div>
-      <div class="tabs" style="margin-bottom:16px"><button class="tab ${state.challengeTab==='active'?'active':''}" onclick="setChallengeTab('active')">Actief</button><button class="tab ${state.challengeTab==='browse'?'active':''}" onclick="setChallengeTab('browse')">Browse</button><button class="tab ${state.challengeTab==='history'?'active':''}" onclick="setChallengeTab('history')">Historie</button></div>
-      ${state.challengeTab==='active'?renderActiveChallenges(act):''}${state.challengeTab==='browse'?renderBrowseChallenges():''}${state.challengeTab==='history'?renderChallengeHistory():''}`;}
+        ${state.goalsError ? `
+          <div class="info-box">
+            <div class="info-title">⚠️ Missies konden niet laden</div>
+            <div class="info-text">${esc(state.goalsError)}</div>
+          </div>
+        ` : ''}
 
-    function renderActiveChallenges(act){if(act.length===0)return`<div class="empty"><div class="empty-icon">🏆</div>Geen actieve challenges<button class="btn btn-primary" style="margin-top:16px" onclick="setChallengeTab('browse')">Start Challenge</button></div>`;return act.map(c=>{const day=calculateChallengeDay(c.start_date);const prog=Math.round((day/c.duration)*100);const t=challengeTemplates.find(x=>x.id===c.template_id);return`<div class="challenge-card active"><div class="challenge-header"><div class="challenge-icon">${t?.icon||'🎯'}</div><div class="challenge-info"><div class="challenge-name">${c.name}</div><div class="challenge-desc">${c.description||''}</div></div><div class="challenge-day"><div class="challenge-day-number">${day}</div><div class="challenge-day-label">van ${c.duration}</div></div></div><div class="challenge-progress"><div class="challenge-progress-bar"><div class="challenge-progress-fill" style="width:${prog}%"></div></div></div><div style="padding:0 16px 16px"><div class="calendar-grid">${Array.from({length:c.duration},(_,i)=>{const d=i+1;return`<div class="calendar-day ${d<=c.days_completed?'completed':''} ${d===day?'today':''} ${d>day?'future':''}">${d}</div>`;}).join('')}</div></div><div style="padding:0 16px 16px;display:flex;gap:8px">${!c.today_completed&&day<=c.duration?`<button class="btn btn-success btn-small" style="flex:1" onclick="toggleChallengeDay('${c.id}',true)">✓ Dag ${day} Voltooid</button>`:c.today_completed?`<button class="btn btn-secondary btn-small" style="flex:1" onclick="toggleChallengeDay('${c.id}',false)">Ongedaan</button>`:''}<button class="btn btn-small" style="background:#dc2626;color:#fff" onclick="quitChallenge('${c.id}')">Stop</button></div></div>`;}).join('');}
+        ${list.length ? list.map(renderGoalCard).join('') : `
+          <div class="empty">
+            ${state.goalTab === 'completed'
+              ? 'Nog geen voltooide missies. Je eerste overwinning komt eraan.'
+              : 'Nog geen missies hier.<br><br>Kies een template: kleine stappen, echte resultaten.'}
+          </div>
+        `}
 
-    function renderBrowseChallenges(){return`<div class="card" style="padding:12px"><label class="label">Beschikbare Challenges</label></div>${challengeTemplates.map(t=>{const isAct=state.challenges.some(c=>c.template_id===t.id&&c.status==='active');return`<div class="challenge-card" onclick="${isAct?'':`startChallenge('${t.id}')`}" style="${isAct?'opacity:0.5;cursor:not-allowed':''}"><div class="challenge-header"><div class="challenge-icon">${t.icon}</div><div class="challenge-info"><div class="challenge-name">${t.name}</div><div class="challenge-desc">${t.description}</div><div style="margin-top:8px"><span class="mission-badge badge-${t.difficulty==='starter'?'low':t.difficulty==='medium'?'medium':'high'}">${t.difficulty}</span><span class="text-dim" style="font-size:10px;margin-left:8px">${t.duration} dagen</span></div></div></div></div>`;}).join('')}`;}
+        ${state.showGoalModal ? renderGoalModal() : ''}
+      `;
+    }
 
-    function renderChallengeHistory(){const hist=state.challenges.filter(c=>c.status!=='active');if(hist.length===0)return'<div class="empty"><div class="empty-icon">📜</div>Geen historie</div>';return hist.map(c=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:500">${c.name}</div><div class="text-dim" style="font-size:10px">${formatDateShort(c.start_date)}</div></div><div style="text-align:right"><div class="${c.status==='completed'?'text-success':'text-danger'}" style="font-size:12px">${c.status==='completed'?'✓ Voltooid':'✗ Gestopt'}</div><div class="text-dim" style="font-size:10px">${c.days_completed}/${c.duration} dagen</div></div></div>`).join('');}
+    function renderGoalCard(g) {
+      const p = calcGoalProgress(g);
+      const d = domainConfig[g.domain];
+      const pr = priorityConfig[g.priority];
+      const st = g.goal_subtasks || [];
+      const stDone = st.filter(s => s.is_completed).length;
+      const hasTarget = hasValue(g.target_value);
+      const dl = deadlineText(g.deadline);
+      const barColor = p >= 75 ? '#22c55e' : p >= 40 ? '#eab308' : '#7f1d1d';
 
-    function setChallengeTab(t){state.challengeTab=t;render();}
+      return `
+        <div class="goal ${g.is_completed ? 'done' : ''}">
+          <div class="goal-top">
+            <button class="goal-check ${g.is_completed ? 'checked' : ''}" onclick="toggleGoalComplete('${g.id}')" title="${g.is_completed ? 'Terugzetten naar actief' : 'Markeer als voltooid'}">${g.is_completed ? '✓' : ''}</button>
+            <div style="flex: 1; min-width: 0;">
+              <div class="goal-title">${esc(g.title)}</div>
+              <div class="goal-meta">
+                ${d ? `<span class="badge" style="color: #a3a3a3;">${d.icon} ${d.label}</span>` : ''}
+                ${pr ? `<span class="badge" style="color: ${pr.color}; border-color: ${pr.color}55;">${pr.label}</span>` : ''}
+                ${dl ? `<span class="badge" style="${dl === 'Verlopen' && !g.is_completed ? 'color: #dc2626; border-color: #dc262655;' : ''}">📅 ${dl}</span>` : ''}
+              </div>
+            </div>
+          </div>
 
+          ${g.notes ? `<div class="goal-notes">${esc(g.notes)}</div>` : ''}
+
+          ${(hasTarget || st.length) ? `
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${p}%; background: ${barColor};"></div>
+            </div>
+            <div class="goal-progress-row">
+              <span>${hasTarget
+                ? `${fmtNum(g.start_value)} → <strong style="color: #fafafa;">${fmtNum(hasValue(g.current_value) ? g.current_value : g.start_value)}</strong> → ${fmtNum(g.target_value)}`
+                : `${stDone}/${st.length} stappen`}</span>
+              <span>${p}%</span>
+            </div>
+          ` : ''}
+
+          ${hasTarget && !g.is_completed ? `
+            <div class="goal-update">
+              <input type="number" step="any" inputmode="decimal" class="input-sm" id="gv-${g.id}" placeholder="Nieuwe waarde" onkeydown="if(event.key === 'Enter') updateGoalValue('${g.id}')">
+              <button class="btn btn-primary btn-small" onclick="updateGoalValue('${g.id}')">Bijwerken</button>
+            </div>
+          ` : ''}
+
+          ${(st.length || !g.is_completed) ? `
+            <div class="subtasks">
+              ${st.map(s => `
+                <div class="subtask">
+                  <button class="subtask-check ${s.is_completed ? 'checked' : ''}" onclick="toggleSubtask('${g.id}', '${s.id}')">${s.is_completed ? '✓' : ''}</button>
+                  <div class="subtask-text ${s.is_completed ? 'done' : ''}">${esc(s.title)}</div>
+                  <button class="icon-btn" onclick="deleteSubtask('${s.id}')" title="Stap verwijderen">×</button>
+                </div>
+              `).join('')}
+              ${!g.is_completed ? `
+                <div class="goal-update" style="margin-top: 8px;">
+                  <input type="text" class="input-sm" id="st-${g.id}" placeholder="+ Stap toevoegen" onkeydown="if(event.key === 'Enter') addSubtask('${g.id}')">
+                  <button class="btn btn-secondary btn-small" onclick="addSubtask('${g.id}')">+</button>
+                </div>
+              ` : ''}
+            </div>
+          ` : ''}
+
+          <div class="goal-actions">
+            <button class="entry-action" onclick="openGoalModal('${g.id}')">✏️ Bewerken</button>
+            <button class="entry-action delete" onclick="deleteGoal('${g.id}')">🗑️ Verwijderen</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderGoalModal() {
+      const f = state.goalForm || emptyGoalForm();
+      const isEdit = !!state.editingGoalId;
+      const td = state.templateDomain;
+      const templates = goalTemplates
+        .map((t, i) => ({ t, i }))
+        .filter(x => x.t[0] === td && x.t[1] === f.timeframe);
+
+      const opt = (value, label, current) =>
+        `<option value="${value}" ${current === value ? 'selected' : ''}>${label}</option>`;
+
+      return `
+        <div class="modal-overlay" onclick="if(event.target === this) closeGoalModal();">
+          <div class="modal" style="max-width: 520px;">
+            <div class="modal-title" style="color: #fafafa;">${isEdit ? 'Missie Bewerken' : 'Nieuwe Missie'}</div>
+
+            <div class="smart-row">
+              ${[['S','Specifiek'],['M','Meetbaar'],['A','Acceptabel'],['R','Realistisch'],['T','Tijdgebonden']].map(([c, w]) => `
+                <div class="smart-cell"><div class="smart-char">${c}</div><div class="smart-word">${w}</div></div>
+              `).join('')}
+            </div>
+
+            ${!isEdit ? `
+              <label class="form-label" style="margin-top: 0;">⚡ Kies een template (of vul zelf in)</label>
+              <div class="chips" style="margin-bottom: 8px;">
+                ${Object.entries(domainConfig).map(([key, d]) => `
+                  <button class="chip ${td === key ? 'active' : ''}" onclick="setTemplateDomain('${key}')">${d.icon} ${d.label}</button>
+                `).join('')}
+              </div>
+              <div class="template-list">
+                ${templates.length ? templates.map(({ t, i }) => `
+                  <button class="template" onclick="applyTemplate(${i})">
+                    ${esc(t[2])}
+                    <div class="template-sub">${t[4] !== null ? `Doel: ${t[4]} ${esc(t[5])}` : 'Zelf waarden invullen'}${t[6] ? ' · ' + esc(t[6]) : ''}</div>
+                  </button>
+                `).join('') : `<div class="empty" style="padding: 20px;">Geen templates voor deze termijn.</div>`}
+              </div>
+              <div style="font-size: 10px; color: #525252; margin-top: 6px;">Templates passen bij de gekozen termijn hieronder.</div>
+            ` : ''}
+
+            <label class="form-label">Missie</label>
+            <input type="text" class="form-input" id="gf-title" placeholder="Wat wil je bereiken? (wees specifiek)" value="${esc(f.title)}">
+
+            <div class="form-row">
+              <div>
+                <label class="form-label">Domein</label>
+                <select class="form-input" id="gf-domain">
+                  ${opt('', 'Kies...', f.domain)}
+                  ${Object.entries(domainConfig).map(([key, d]) => opt(key, d.icon + ' ' + d.label, f.domain)).join('')}
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Prioriteit</label>
+                <select class="form-input" id="gf-priority">
+                  ${Object.entries(priorityConfig).map(([key, p]) => opt(key, p.label, f.priority)).join('')}
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div>
+                <label class="form-label">Termijn</label>
+                <select class="form-input" id="gf-timeframe" onchange="onGoalTimeframeChange()">
+                  ${Object.entries(timeframeConfig).map(([key, t]) => opt(key, t.full, f.timeframe)).join('')}
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Deadline</label>
+                <input type="date" class="form-input" id="gf-deadline" value="${esc(f.deadline)}">
+              </div>
+            </div>
+
+            <label class="form-label">Meetbaar maken (optioneel)</label>
+            <div class="form-row-3">
+              <input type="number" step="any" inputmode="decimal" class="form-input" id="gf-start" placeholder="Start" value="${esc(f.start)}">
+              <input type="number" step="any" inputmode="decimal" class="form-input" id="gf-current" placeholder="Nu" value="${esc(f.current)}">
+              <input type="number" step="any" inputmode="decimal" class="form-input" id="gf-target" placeholder="Doel" value="${esc(f.target)}">
+            </div>
+
+            <label class="form-label">Notities / aanpak</label>
+            <textarea class="form-input" id="gf-notes" placeholder="Hoe ga je dit aanpakken?">${esc(f.notes)}</textarea>
+
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 8px; margin-top: 20px;">
+              <button class="btn btn-secondary" onclick="closeGoalModal()">Annuleren</button>
+              <button class="btn btn-primary" id="goal-save-btn" onclick="saveGoal()">Opslaan</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ============================================
     // RENDER: RETENTION
-    function renderRetention(){const days=getRetentionDays();const phase=getRetentionPhase(days);const next=retentionMilestones.find(m=>m.days>days)||retentionMilestones[retentionMilestones.length-1];const prog=next?Math.min(100,(days/next.days)*100):100;
-      return`<div class="page-header"><div class="page-sub">Semen Retention</div><div class="page-title">Retention</div></div>
-      ${!state.retentionStreak?`<div class="card"><div class="empty"><div class="empty-icon">🔥</div><p style="margin-bottom:20px">Start je retention journey</p><button class="btn btn-primary" onclick="startRetention()">Begin Nu</button></div></div>`:`<div class="card card-accent"><div class="streak-big"><div class="streak-number" style="color:${phase.color}">${days}</div><div class="streak-label">Dagen Retention</div></div><div class="phase-indicator" style="background:${phase.color}22"><div class="phase-name" style="color:${phase.color}">${phase.name}</div></div><div class="progress-bar"><div class="progress-fill" style="width:${prog}%;background:${phase.color}"></div></div></div>
-      <button class="emergency-btn" onclick="state.showEmergencyModal=true;render()">🆘 NOODPROTOCOL</button>
-      <div class="card"><label class="label">Milestones</label>${retentionMilestones.map(m=>`<div class="milestone ${days>=m.days?'achieved':''}"><div class="milestone-day">${m.days}</div><div><div class="milestone-title">${m.title}</div><div class="milestone-desc">${m.desc}</div></div></div>`).join('')}</div>
-      <div class="card"><button class="btn btn-danger" style="width:100%" onclick="resetRetention()">Reset Streak</button></div>`}
-      ${state.showEmergencyModal?renderEmergencyModal():''}`;}
+    // ============================================
+    function renderRetention() {
+      const days = getRetentionDays();
+      const phase = getRetentionPhase(days);
+      const nextMilestone = getNextMilestone(days);
+      const progress = nextMilestone ? (days / nextMilestone.days) * 100 : 100;
+      
+      return `
+        <div class="page-header">
+          <div class="page-sub">Discipline</div>
+          <div class="page-title">Retention</div>
+        </div>
+        
+        ${state.retentionStreak ? `
+          <div class="card" style="text-align: center;">
+            <div class="streak-big">
+              <div class="streak-number" style="color: ${phase.color}">${days}</div>
+              <div class="streak-label">Dagen Streak</div>
+            </div>
+            <div class="phase-indicator" style="background: ${phase.color}20; border: 1px solid ${phase.color}50;">
+              <div class="phase-name" style="color: ${phase.color}">Fase: ${phase.name}</div>
+            </div>
+            ${nextMilestone && days < nextMilestone.days ? `
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: ${progress}%; background: ${phase.color};"></div>
+              </div>
+              <div style="font-size: 10px; color: #525252; margin-top: 8px;">
+                Nog ${nextMilestone.days - days} dagen tot ${nextMilestone.title}
+              </div>
+            ` : ''}
+          </div>
+          
+          <button class="emergency-btn" onclick="state.showEmergencyModal = true; render();">
+            🚨 NOODPROTOCOL
+          </button>
+          
+          <div class="card">
+            <label class="label">Milestones</label>
+            ${retentionMilestones.map(m => `
+              <div class="milestone ${days >= m.days ? 'achieved' : ''}">
+                <div class="milestone-day">${m.days}</div>
+                <div>
+                  <div class="milestone-title">${days >= m.days ? '✓ ' : ''}${m.title}</div>
+                  <div class="milestone-desc">${m.desc}</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          
+          <div class="card">
+            <label class="label">Urge Technieken</label>
+            <div class="urge-grid">
+              ${urges.map(u => `
+                <div class="urge" title="${u.desc}">
+                  <span class="urge-icon">${u.icon}</span>
+                  <span class="urge-label">${u.label}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          
+          <button class="btn btn-secondary" style="width: 100%;" onclick="resetRetention()">Reset Streak</button>
+        ` : `
+          <div class="card" style="text-align: center; padding: 40px;">
+            <div style="font-size: 48px; margin-bottom: 16px;">🔥</div>
+            <div style="font-size: 14px; color: #a3a3a3; margin-bottom: 24px;">
+              Begin je retention journey en track je voortgang.
+            </div>
+            <button class="btn btn-primary" onclick="startRetention()">Start Streak</button>
+          </div>
+        `}
+        
+        ${state.showEmergencyModal ? renderEmergencyModal() : ''}
+      `;
+    }
 
-    function renderEmergencyModal(){return`<div class="modal-overlay" onclick="state.showEmergencyModal=false;render()"><div class="modal" onclick="event.stopPropagation()"><div class="modal-title" style="color:#dc2626">🆘 Noodprotocol</div><p style="font-size:12px;color:#a3a3a3;margin-bottom:16px">Kies een actie:</p><div class="urge-grid">${urges.map(u=>`<div class="urge" onclick="state.showEmergencyModal=false;showToast('${u.label} - doe het!');render()"><div class="urge-icon">${u.icon}</div><div class="urge-label">${u.label}</div></div>`).join('')}</div><button class="btn btn-secondary" style="width:100%;margin-top:16px" onclick="state.showEmergencyModal=false;render()">Sluiten</button></div></div>`;}
+    function renderEmergencyModal() {
+      return `
+        <div class="modal-overlay" onclick="if(event.target === this) { state.showEmergencyModal = false; render(); }">
+          <div class="modal">
+            <div class="modal-title">🚨 NOODPROTOCOL</div>
+            <p style="font-size: 12px; color: #a3a3a3; margin-bottom: 16px;">
+              Je hebt een urge. Dat is normaal. Volg deze stappen:
+            </p>
+            <div class="modal-step">
+              <div class="modal-step-title">1. ADEM</div>
+              <div class="modal-step-text">4 tellen in, 4 tellen vast, 4 tellen uit. Herhaal 5x.</div>
+            </div>
+            <div class="modal-step">
+              <div class="modal-step-title">2. VERLAAT</div>
+              <div class="modal-step-text">Ga nu naar een andere kamer. Nu.</div>
+            </div>
+            <div class="modal-step">
+              <div class="modal-step-title">3. KOUD WATER</div>
+              <div class="modal-step-text">Spoel je gezicht met ijskoud water of neem een koude douche.</div>
+            </div>
+            <div class="modal-step">
+              <div class="modal-step-title">4. BEWEEG</div>
+              <div class="modal-step-text">20 push-ups. 20 squats. Nu. Geen excuses.</div>
+            </div>
+            <div class="modal-step">
+              <div class="modal-step-title">5. HERINNER</div>
+              <div class="modal-step-text">Je bent ${getRetentionDays()} dagen sterk. Gooi dat niet weg voor 5 seconden.</div>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 16px;" onclick="state.showEmergencyModal = false; render();">
+              Ik heb dit 💪
+            </button>
+          </div>
+        </div>
+      `;
+    }
 
+    // ============================================
+    // RENDER: JOURNAL
+    // ============================================
+    function renderJournal() {
+      return `
+        <div class="page-header">
+          <div class="page-sub">Reflectie</div>
+          <div class="page-title">Journal</div>
+        </div>
+        
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-value">${state.entries.length}</div>
+            <div class="stat-label">Entries</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value" style="color: ${getColor(parseFloat(getAverageMood()) || 5)}">${getAverageMood()}</div>
+            <div class="stat-label">Mood</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">${getJournalStreak()}</div>
+            <div class="stat-label">Streak</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">${getAverageEnergy()}</div>
+            <div class="stat-label">Energie</div>
+          </div>
+        </div>
+        
+        <div class="tabs">
+          <button class="tab ${state.journalTab === 'new' ? 'active' : ''}" onclick="setJournalTab('new')">Nieuwe Entry</button>
+          <button class="tab ${state.journalTab === 'history' ? 'active' : ''}" onclick="setJournalTab('history')">Geschiedenis</button>
+          <button class="tab ${state.journalTab === 'patterns' ? 'active' : ''}" onclick="setJournalTab('patterns')">Patronen</button>
+        </div>
+        
+        ${state.journalTab === 'new' ? renderNewEntry() : ''}
+        ${state.journalTab === 'history' ? renderHistory() : ''}
+        ${state.journalTab === 'patterns' ? renderPatterns() : ''}
+      `;
+    }
+
+    function renderNewEntry() {
+      const prompt = getDailyPrompt();
+      return `
+        ${state.editingId ? `
+          <div class="card card-accent">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 12px; color: #7f1d1d;">✏️ Je bewerkt een entry</span>
+              <button onclick="state.editingId = null; state.content = ''; render();" style="background: transparent; border: none; color: #525252; font-size: 11px; cursor: pointer;">Annuleer</button>
+            </div>
+          </div>
+        ` : `
+          <div class="prompt">
+            <div class="prompt-label">📝 Vraag van vandaag</div>
+            <div class="prompt-text">"${prompt}"</div>
+          </div>
+        `}
+        
+        <div class="card">
+          <label class="label">Schrijf je gedachten</label>
+          <textarea class="textarea" id="entry-content" placeholder="Wat houdt je bezig?">${state.content}</textarea>
+        </div>
+        
+        <div class="card">
+          <label class="label">Hoe voel je je?</label>
+          ${['mood', 'energy', 'libido', 'focus', 'stress', 'sleep'].map(key => {
+            const icons = { mood: '😊', energy: '⚡', libido: '🔥', focus: '🧠', stress: '😰', sleep: '😴' };
+            const labels = { mood: 'Stemming', energy: 'Energie', libido: 'Libido', focus: 'Focus', stress: 'Stress', sleep: 'Slaap' };
+            const value = state[key];
+            const isStress = key === 'stress';
+            return `
+              <div class="slider-group">
+                <div class="slider-header">
+                  <span class="slider-label">${icons[key]} ${labels[key]}</span>
+                  <span class="slider-value" id="${key}-value" style="color: ${getColor(value, isStress)}">${value}</span>
+                </div>
+                <input type="range" class="slider ${isStress ? 'slider-stress' : ''}" min="1" max="10" value="${value}" oninput="updateSlider('${key}', this.value)">
+              </div>
+            `;
+          }).join('')}
+        </div>
+        
+        <div class="card">
+          <label class="label">Vandaag's Habits</label>
+          <div class="info-box" style="margin-bottom: 12px;">
+            <div class="info-text">💡 Habits worden automatisch gekoppeld aan je journal entry</div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            ${Object.entries(habitConfig).map(([key, cfg]) => `
+              <span style="padding: 6px 10px; font-size: 11px; background: ${state.habits[key] ? (cfg.positive ? 'rgba(34,197,94,0.1)' : 'rgba(234,179,8,0.1)') : '#0a0a0a'}; border: 1px solid ${state.habits[key] ? (cfg.positive ? '#22c55e' : '#eab308') : '#1c1c1c'}; color: ${state.habits[key] ? (cfg.positive ? '#22c55e' : '#eab308') : '#525252'};">
+                ${cfg.icon} ${cfg.label}
+              </span>
+            `).join('')}
+          </div>
+          <div style="margin-top: 12px; font-size: 11px; color: #525252;">
+            <a href="#" onclick="setSection('dashboard'); return false;" style="color: #7f1d1d;">→ Habits aanpassen op Dashboard</a>
+          </div>
+        </div>
+        
+        <div style="display: flex; justify-content: space-between;">
+          <button class="btn btn-secondary" onclick="state.content = ''; render();">Reset</button>
+          <button class="btn btn-primary" onclick="saveEntry()">${state.editingId ? 'Bijwerken' : 'Opslaan'}</button>
+        </div>
+      `;
+    }
+
+    function renderHistory() {
+      if (state.entries.length === 0) {
+        return `<div class="empty">Nog geen entries. Begin met schrijven!</div>`;
+      }
+      return state.entries.map(entry => `
+        <div class="entry">
+          <div class="entry-date">${formatDate(entry.date)}</div>
+          <div class="entry-scores">
+            <span class="entry-score" style="color: ${getColor(entry.mood)}">😊 ${entry.mood}</span>
+            <span class="entry-score" style="color: ${getColor(entry.energy)}">⚡ ${entry.energy}</span>
+            <span class="entry-score" style="color: ${getColor(entry.libido)}">🔥 ${entry.libido}</span>
+            <span class="entry-score" style="color: ${getColor(entry.focus)}">🧠 ${entry.focus}</span>
+          </div>
+          ${entry.content ? `<div class="entry-content">${esc(entry.content.substring(0, 200))}${entry.content.length > 200 ? '...' : ''}</div>` : ''}
+          ${entry.habits ? `
+            <div class="entry-habits">
+              ${Object.entries(entry.habits).filter(([k, v]) => v && habitConfig[k]).map(([k, v]) => {
+                const cfg = habitConfig[k];
+                return `<span class="entry-habit" style="background: ${cfg.positive ? 'rgba(34,197,94,0.1)' : 'rgba(234,179,8,0.1)'}; color: ${cfg.positive ? '#22c55e' : '#eab308'};">${cfg.icon} ${cfg.label}</span>`;
+              }).join('')}
+            </div>
+          ` : ''}
+          <div class="entry-actions">
+            <button class="entry-action" onclick="editEntryById('${entry.id}')">✏️ Bewerken</button>
+            <button class="entry-action delete" onclick="deleteEntry('${entry.id}')">🗑️ Verwijderen</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function editEntryById(id) {
+      const entry = state.entries.find(e => e.id === id);
+      if (entry) editEntry(entry);
+    }
+
+    function renderPatterns() {
+      const insights = getInsights();
+      const entriesWithHabits = state.entries.filter(e => e.habits && Object.keys(e.habits).length > 0);
+      
+      let html = `
+        <div class="info-box">
+          <div class="info-title">📊 Hoe werkt dit?</div>
+          <div class="info-text">De app analyseert welke habits correleren met hogere of lagere mood/energie scores. Hoe meer data, hoe accurater de patronen.</div>
+        </div>
+      `;
+      
+      if (entriesWithHabits.length < 3) {
+        html += `<div class="empty">Log minimaal 3 entries MET habits om patronen te zien.<br><br>💡 Tip: Vink habits af op Dashboard vóórdat je een journal entry maakt!</div>`;
+      } else if (insights.length === 0) {
+        html += `<div class="empty">Nog geen duidelijke patronen gevonden.<br><br>Je hebt ${entriesWithHabits.length} entries met habits. Blijf consistent loggen voor betere inzichten!</div>`;
+      } else {
+        html += insights.map(insight => `
+          <div class="insight ${insight.positive ? 'insight-positive' : 'insight-negative'}">
+            <div class="insight-icon">${insight.icon}</div>
+            <div>
+              <div class="insight-title">${insight.title}</div>
+              <div class="insight-text">${insight.text}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+      return html;
+    }
+
+    // ============================================
     // RENDER: MORE
-    function renderMore(){return`<div class="page-header"><div class="page-sub">Instellingen</div><div class="page-title">Meer</div></div><div class="card"><label class="label">Komt binnenkort</label><div style="color:#525252;font-size:12px"><p style="margin-bottom:12px">• Voeding logboek</p><p style="margin-bottom:12px">• Supplementen</p><p style="margin-bottom:12px">• Slaap analyse</p><p style="margin-bottom:12px">• Training programma's</p><p style="margin-bottom:12px">• Bloedwaarden</p><p>• AI Coach</p></div></div><div class="card"><label class="label">Account</label><div style="font-size:12px;color:#525252;margin-bottom:16px">${state.user.email}</div><button class="btn btn-secondary" style="width:100%" onclick="signOut()">Uitloggen</button></div>`;}
+    // ============================================
+    function renderMore() {
+      return `
+        <div class="page-header">
+          <div class="page-sub">Extra</div>
+          <div class="page-title">Meer</div>
+        </div>
+        
+        <div class="card">
+          <label class="label">Komt binnenkort</label>
+          <div style="color: #525252; font-size: 12px;">
+            <p style="margin-bottom: 12px;">• Lichaamsmetingen</p>
+            <p style="margin-bottom: 12px;">• Challenges</p>
+            <p style="margin-bottom: 12px;">• Voeding logboek</p>
+            <p style="margin-bottom: 12px;">• Supplementen</p>
+            <p style="margin-bottom: 12px;">• Slaap analyse</p>
+            <p style="margin-bottom: 12px;">• Training programma's</p>
+            <p>• Bloedwaarden</p>
+          </div>
+        </div>
+        
+        <div class="card">
+          <label class="label">Account</label>
+          <div style="font-size: 12px; color: #525252; margin-bottom: 16px;">${esc(state.user.email)}</div>
+          <button class="btn btn-secondary" style="width: 100%;" onclick="signOut()">Uitloggen</button>
+        </div>
+      `;
+    }
 
-    // RENDER: MAIN APP
-    function renderApp(){return`<div class="app-header"><div><span class="logo">PRIMAL</span><span class="logo logo-accent">FORGED</span></div><div class="user-menu"><span class="user-email">${state.user.email}</span><button class="logout-btn" onclick="signOut()">Logout</button></div></div><div id="toast" class="toast"></div><div class="container">${state.activeSection==='dashboard'?renderDashboard():''}${state.activeSection==='journal'?renderJournal():''}${state.activeSection==='missions'?renderMissions():''}${state.activeSection==='body'?renderBody():''}${state.activeSection==='retention'?renderRetention():''}${state.activeSection==='more'?renderMore():''}</div><nav class="nav"><button class="nav-item ${state.activeSection==='dashboard'?'active':''}" onclick="setSection('dashboard')"><span class="nav-icon">📊</span>Home</button><button class="nav-item ${state.activeSection==='journal'?'active':''}" onclick="setSection('journal')"><span class="nav-icon">📝</span>Journal</button><button class="nav-item ${state.activeSection==='missions'?'active':''}" onclick="setSection('missions')"><span class="nav-icon">🎯</span>Missies</button><button class="nav-item ${state.activeSection==='body'?'active':''}" onclick="setSection('body')"><span class="nav-icon">💪</span>Body</button><button class="nav-item ${state.activeSection==='retention'?'active':''}" onclick="setSection('retention')"><span class="nav-icon">🔥</span>Retention</button><button class="nav-item ${state.activeSection==='more'?'active':''}" onclick="setSection('more')"><span class="nav-icon">⚡</span>Meer</button></nav>`;}
+    // ============================================
+    // RENDER: APP
+    // ============================================
+    function renderApp() {
+      return `
+        <div class="app-header">
+          <div>
+            <span class="logo">PRIMAL</span><span class="logo logo-accent">FORGED</span>
+          </div>
+          <div class="user-menu">
+            <span class="user-email">${esc(state.user.email)}</span>
+            <button class="logout-btn" onclick="signOut()">Logout</button>
+          </div>
+        </div>
+        
+        <div id="toast" class="toast"></div>
+        
+        <div class="container">
+          ${state.activeSection === 'dashboard' ? renderDashboard() : ''}
+          ${state.activeSection === 'journal' ? renderJournal() : ''}
+          ${state.activeSection === 'missions' ? renderMissions() : ''}
+          ${state.activeSection === 'retention' ? renderRetention() : ''}
+          ${state.activeSection === 'more' ? renderMore() : ''}
+        </div>
+        
+        <nav class="nav">
+          <button class="nav-item ${state.activeSection === 'dashboard' ? 'active' : ''}" onclick="setSection('dashboard')">
+            <span class="nav-icon">📊</span>Dashboard
+          </button>
+          <button class="nav-item ${state.activeSection === 'journal' ? 'active' : ''}" onclick="setSection('journal')">
+            <span class="nav-icon">📝</span>Journal
+          </button>
+          <button class="nav-item ${state.activeSection === 'missions' ? 'active' : ''}" onclick="setSection('missions')">
+            <span class="nav-icon">🎯</span>Missies
+          </button>
+          <button class="nav-item ${state.activeSection === 'retention' ? 'active' : ''}" onclick="setSection('retention')">
+            <span class="nav-icon">🔥</span>Retention
+          </button>
+          <button class="nav-item ${state.activeSection === 'more' ? 'active' : ''}" onclick="setSection('more')">
+            <span class="nav-icon">⚡</span>Meer
+          </button>
+        </nav>
+      `;
+    }
 
-    function render(){const app=document.getElementById('app');if(state.loading){app.innerHTML='<div class="loading"><span class="loading-text">Laden...</span></div>';return;}if(!state.user){app.innerHTML=renderAuth();return;}app.innerHTML=renderApp();}
+    function render() {
+      const app = document.getElementById('app');
+      if (state.loading) {
+        app.innerHTML = '<div class="loading"><span class="loading-text">Laden...</span></div>';
+        return;
+      }
+      if (!state.user) {
+        app.innerHTML = renderAuth();
+        return;
+      }
+      app.innerHTML = renderApp();
+    }
 
+    // ============================================
     // EVENT HANDLERS
-    function setSection(s){state.activeSection=s;render();}
-    function setJournalTab(t){state.journalTab=t;render();}
-    function updateSlider(k,v){state[k]=parseInt(v);const el=document.getElementById(`${k}-value`);if(el){el.textContent=v;el.style.color=getColor(parseInt(v),k==='stress');}}
+    // ============================================
+    function setSection(section) {
+      state.activeSection = section;
+      render();
+      window.scrollTo(0, 0);
+    }
 
-    let habitPressTimer=null;
-    function startHabitPress(k){habitPressTimer=setTimeout(()=>{state.showHabitModal=k;render();habitPressTimer=null;},500);}
-    function endHabitPress(k){if(habitPressTimer){clearTimeout(habitPressTimer);habitPressTimer=null;toggleHabit(k);}}
-    function cancelHabitPress(){if(habitPressTimer){clearTimeout(habitPressTimer);habitPressTimer=null;}}
+    function setJournalTab(tab) {
+      state.journalTab = tab;
+      render();
+    }
 
+    function updateSlider(key, value) {
+      state[key] = parseInt(value);
+      const el = document.getElementById(`${key}-value`);
+      if (el) {
+        el.textContent = value;
+        el.style.color = getColor(parseInt(value), key === 'stress');
+      }
+    }
+
+    // Long-press for habits
+    let habitPressTimer = null;
+    let habitPressStart = null;
+    const LONG_PRESS_DURATION = 500; // ms
+
+    function startHabitPress(habitKey) {
+      habitPressStart = Date.now();
+      habitPressTimer = setTimeout(() => {
+        // Long press - show modal
+        state.showHabitModal = habitKey;
+        render();
+        habitPressTimer = null;
+      }, LONG_PRESS_DURATION);
+    }
+
+    function endHabitPress(habitKey) {
+      if (habitPressTimer) {
+        // Short press - toggle habit
+        clearTimeout(habitPressTimer);
+        habitPressTimer = null;
+        toggleHabit(habitKey);
+      }
+    }
+
+    function cancelHabitPress() {
+      if (habitPressTimer) {
+        clearTimeout(habitPressTimer);
+        habitPressTimer = null;
+      }
+    }
+
+    // ============================================
     // INIT
-    async function init(){const{data:{session}}=await supabaseClient.auth.getSession();if(session){state.user=session.user;await Promise.all([loadEntries(),loadRetention(),loadHabits(),loadMissions(),loadBodyStats(),loadChallenges()]);}state.loading=false;render();supabaseClient.auth.onAuthStateChange(async(event,session)=>{if(session){state.user=session.user;await Promise.all([loadEntries(),loadRetention(),loadHabits(),loadMissions(),loadBodyStats(),loadChallenges()]);}else{state.user=null;state.entries=[];state.missions=[];state.bodyStats=[];state.challenges=[];state.retentionStreak=null;}render();});}
+    // ============================================
+    async function loadAll() {
+      await Promise.all([loadEntries(), loadRetention(), loadHabits(), loadGoals()]);
+    }
+
+    async function init() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      
+      if (session) {
+        state.user = session.user;
+        await loadAll();
+      }
+      
+      state.loading = false;
+      render();
+      
+      supabaseClient.auth.onAuthStateChange(async (event, session) => {
+        if (event === 'TOKEN_REFRESHED') return;
+        if (session) {
+          state.user = session.user;
+          await loadAll();
+        } else {
+          state.user = null;
+          state.entries = [];
+          state.retentionStreak = null;
+          state.goals = [];
+        }
+        render();
+      });
+    }
+
     init();
   </script>
 </body>
