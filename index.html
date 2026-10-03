@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#050505">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Primal Forged">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <title>Primal Forged</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -883,39 +889,57 @@
       if (!error && data) state.retentionStreak = data;
     }
 
+    // Koppeling app-naam <-> database-kolom (alle habits in de database)
+    const habitColumns = {
+      coldShower: 'cold_shower',
+      sunlight: 'sunlight',
+      cleanEating: 'clean_eating',
+      workout: 'workout',
+      meditation: 'meditation',
+      noAlcohol: 'no_alcohol',
+      reading: 'reading',
+      stretching: 'stretching',
+      outside: 'outside',
+      badSleep: 'bad_sleep',
+      stressed: 'stressed',
+      alcohol: 'alcohol',
+      unhealthy: 'unhealthy'
+    };
+    const coreHabitKeys = ['coldShower', 'sunlight', 'cleanEating', 'workout', 'meditation', 'noAlcohol', 'reading', 'stretching'];
+    let habitsDbHasExtraColumns = true; // wordt false als de SQL-update nog niet is uitgevoerd
+
+    function readLocalExtraHabits(day) {
+      try {
+        const raw = localStorage.getItem(`habits_extra_${day}`);
+        return raw ? JSON.parse(raw) : {};
+      } catch (e) {
+        return {};
+      }
+    }
+
     async function loadHabits() {
       if (!state.user) return;
-      const today = new Date().toISOString().split('T')[0];
+      const today = todayStr();
       const { data, error } = await supabaseClient
         .from('daily_habits')
         .select('*')
         .eq('user_id', state.user.id)
         .eq('date', today)
-        .single();
-      if (!error && data) {
-        state.habits = {
-          coldShower: data.cold_shower || false,
-          sunlight: data.sunlight || false,
-          cleanEating: data.clean_eating || false,
-          workout: data.workout || false,
-          meditation: data.meditation || false,
-          noAlcohol: data.no_alcohol || false,
-          reading: data.reading || false,
-          stretching: data.stretching || false,
-          // Extra fields stored in localStorage for now
-          outside: false,
-          badSleep: false,
-          stressed: false,
-          alcohol: false,
-          unhealthy: false
-        };
-        // Load extra habits from localStorage
-        const extraHabits = localStorage.getItem(`habits_extra_${today}`);
-        if (extraHabits) {
-          const extra = JSON.parse(extraHabits);
-          state.habits = { ...state.habits, ...extra };
+        .maybeSingle();
+      if (error || !data) return;
+
+      const local = readLocalExtraHabits(today);
+      const habits = {};
+      Object.entries(habitColumns).forEach(([key, col]) => {
+        if (col in data) {
+          // Oude waarde uit de browser telt ook mee (eenmalige overzetting)
+          habits[key] = !!data[col] || !!local[key];
+        } else {
+          habitsDbHasExtraColumns = false;
+          habits[key] = !!local[key];
         }
-      }
+      });
+      state.habits = habits;
     }
 
     async function saveEntry() {
@@ -1010,32 +1034,129 @@
       render();
       
       if (!state.user) return;
-      const today = new Date().toISOString().split('T')[0];
-      
-      // Core habits for database
-      const coreHabits = ['coldShower', 'sunlight', 'cleanEating', 'workout', 'meditation', 'noAlcohol', 'reading', 'stretching'];
-      const extraHabits = ['outside', 'badSleep', 'stressed', 'alcohol', 'unhealthy'];
-      
-      // Save core habits to database
-      const habitData = {
-        user_id: state.user.id,
-        date: today,
-        cold_shower: state.habits.coldShower,
-        sunlight: state.habits.sunlight,
-        clean_eating: state.habits.cleanEating,
-        workout: state.habits.workout,
-        meditation: state.habits.meditation,
-        no_alcohol: state.habits.noAlcohol,
-        reading: state.habits.reading,
-        stretching: state.habits.stretching
+      const today = todayStr();
+
+      const buildRow = (keys) => {
+        const row = { user_id: state.user.id, date: today };
+        keys.forEach(k => row[habitColumns[k]] = !!state.habits[k]);
+        return row;
       };
-      
-      await supabaseClient.from('daily_habits').upsert(habitData, { onConflict: 'user_id,date' });
-      
-      // Save extra habits to localStorage
-      const extraData = {};
-      extraHabits.forEach(h => extraData[h] = state.habits[h]);
-      localStorage.setItem(`habits_extra_${today}`, JSON.stringify(extraData));
+
+      let error = null;
+      if (habitsDbHasExtraColumns) {
+        ({ error } = await supabaseClient
+          .from('daily_habits')
+          .upsert(buildRow(Object.keys(habitColumns)), { onConflict: 'user_id,date' }));
+        // Kolommen bestaan nog niet -> terugvallen op de oude manier
+        if (error && /column|schema cache/i.test(error.message || '')) {
+          console.warn('Extra habit-kolommen ontbreken nog, voer de SQL-update uit.', error);
+          habitsDbHasExtraColumns = false;
+          error = null;
+        }
+      }
+      if (!habitsDbHasExtraColumns) {
+        ({ error } = await supabaseClient
+          .from('daily_habits')
+          .upsert(buildRow(coreHabitKeys), { onConflict: 'user_id,date' }));
+        const extra = {};
+        Object.keys(habitColumns).filter(k => !coreHabitKeys.includes(k)).forEach(k => extra[k] = !!state.habits[k]);
+        try { localStorage.setItem(`habits_extra_${today}`, JSON.stringify(extra)); } catch (e) {}
+      }
+      if (error) {
+        console.error('Fout bij opslaan habits:', error);
+        showToast('⚠️ Habit niet opgeslagen');
+      }
+    }
+
+    // ============================================
+    // BACK-UP
+    // ============================================
+    const backupTables = ['journal_entries', 'retention', 'daily_habits', 'goals', 'goal_subtasks', 'body_stats', 'challenges'];
+
+    function getLastBackup() {
+      try { return localStorage.getItem('pf_last_backup'); } catch (e) { return null; }
+    }
+
+    function daysSinceBackup() {
+      const last = getLastBackup();
+      if (!last) return null;
+      return Math.floor((Date.now() - new Date(last).getTime()) / 86400000);
+    }
+
+    async function exportBackup() {
+      if (!state.user) return;
+      const btn = document.getElementById('backup-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Back-up maken...'; }
+
+      const backup = {
+        app: 'Primal Forged',
+        version: 1,
+        exported_at: new Date().toISOString(),
+        user_email: state.user.email,
+        tables: {}
+      };
+      let total = 0;
+      for (const table of backupTables) {
+        const { data, error } = await supabaseClient.from(table).select('*').eq('user_id', state.user.id);
+        if (error) {
+          backup.tables[table] = { error: error.message };
+        } else {
+          backup.tables[table] = data || [];
+          total += (data || []).length;
+        }
+      }
+
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `primal-forged-backup-${todayStr()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+      try { localStorage.setItem('pf_last_backup', new Date().toISOString()); } catch (e) {}
+      render();
+      showToast(`✓ Back-up gedownload (${total} items)`);
+    }
+
+    // ============================================
+    // INSTALLEREN ALS APP
+    // ============================================
+    let deferredInstallPrompt = null;
+
+    function isInstalled() {
+      return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    }
+
+    function isIOS() {
+      return /iphone|ipad|ipod/i.test(navigator.userAgent);
+    }
+
+    async function installApp() {
+      if (!deferredInstallPrompt) return;
+      deferredInstallPrompt.prompt();
+      await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+      render();
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      if (state.user && state.activeSection === 'more') render();
+    });
+
+    window.addEventListener('appinstalled', () => {
+      deferredInstallPrompt = null;
+      showToast('✓ App geïnstalleerd');
+    });
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.warn('Service worker niet geregistreerd:', err));
+      });
     }
 
     // ============================================
@@ -1434,6 +1555,8 @@
           </div>
         </div>
 
+        ${renderBackupReminder()}
+
         ${renderDashboardMissions()}
         
         <div class="card">
@@ -1478,6 +1601,21 @@
         </div>
         
         ${state.showHabitModal ? renderHabitModal() : ''}
+      `;
+    }
+
+    function renderBackupReminder() {
+      const hasData = state.entries.length > 0 || state.goals.length > 0;
+      const since = daysSinceBackup();
+      if (!hasData || (since !== null && since <= 30)) return '';
+      return `
+        <div class="info-box" style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+          <div>
+            <div class="info-title">💾 Tijd voor een back-up</div>
+            <div class="info-text">${since === null ? 'Je hebt nog geen back-up gemaakt.' : `Laatste back-up ${since} dagen geleden.`}</div>
+          </div>
+          <button class="btn btn-secondary btn-small" onclick="setSection('more')">Nu →</button>
+        </div>
       `;
     }
 
@@ -2083,12 +2221,46 @@
     // RENDER: MORE
     // ============================================
     function renderMore() {
+      const since = daysSinceBackup();
+      const last = getLastBackup();
+      const backupText = last
+        ? `Laatste back-up: ${new Date(last).toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' })}${since > 0 ? ` (${since} dagen geleden)` : ' (vandaag)'}`
+        : 'Nog geen back-up gemaakt op dit apparaat.';
+      const backupColor = (since === null || since > 30) ? '#eab308' : '#22c55e';
       return `
         <div class="page-header">
           <div class="page-sub">Extra</div>
           <div class="page-title">Meer</div>
         </div>
         
+        <div class="card card-accent">
+          <label class="label">💾 Back-up</label>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-bottom: 12px;">
+            Download al je data (journal, missies, habits, retention) als bestand. Bewaar het op je computer of in de cloud.
+          </div>
+          <div style="font-size: 11px; color: ${backupColor}; margin-bottom: 16px;">${backupText}</div>
+          <button class="btn btn-primary" id="backup-btn" style="width: 100%;" onclick="exportBackup()">Back-up downloaden</button>
+        </div>
+
+        <div class="card">
+          <label class="label">📱 App op je beginscherm</label>
+          ${isInstalled() ? `
+            <div style="font-size: 12px; color: #22c55e;">✓ Je gebruikt Primal Forged als app.</div>
+          ` : deferredInstallPrompt ? `
+            <div style="font-size: 12px; color: #a3a3a3; margin-bottom: 16px;">Installeer Primal Forged als app: eigen icoon, opent schermvullend.</div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="installApp()">Installeren</button>
+          ` : isIOS() ? `
+            <div style="font-size: 12px; color: #a3a3a3; line-height: 1.7;">
+              Open deze site in <strong>Safari</strong>, tik op het <strong>deel-icoon</strong> (vierkant met pijl omhoog) en kies <strong>"Zet op beginscherm"</strong>.
+            </div>
+          ` : `
+            <div style="font-size: 12px; color: #a3a3a3; line-height: 1.7;">
+              <strong>Android (Chrome):</strong> menu ⋮ → "App installeren" of "Toevoegen aan startscherm".<br>
+              <strong>Computer (Edge/Chrome):</strong> klik op het installeer-icoon rechts in de adresbalk.
+            </div>
+          `}
+        </div>
+
         <div class="card">
           <label class="label">Komt binnenkort</label>
           <div style="color: #525252; font-size: 12px;">
