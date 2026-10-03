@@ -249,6 +249,73 @@
     .smart-cell { text-align: center; padding: 8px 2px; background: #050505; border: 1px solid #1c1c1c; }
     .smart-char { font-size: 15px; font-weight: 600; color: #7f1d1d; }
     .smart-word { font-size: 7px; color: #525252; text-transform: uppercase; margin-top: 2px; }
+
+    /* Training */
+    .tweek { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; margin-bottom: 4px; }
+    .tday { font-family: inherit; padding: 10px 0; text-align: center; background: transparent; border: 1px solid #262626; color: #d4d4d4; cursor: pointer; position: relative; min-width: 0; }
+    .tday-d { display: block; font-size: 12px; font-weight: 500; }
+    .tday-s { display: block; font-size: 9px; margin-top: 3px; color: #8a8a8a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 2px; }
+    .tday.rest { border-color: #1c1c1c; color: #525252; }
+    .tday.rest .tday-s { color: #3a3a3a; }
+    .tday.set { background: #1a0606; border-color: #7f1d1d; color: #fafafa; }
+    .tday.set .tday-s { color: #e5484d; }
+    .tday.today::after { content: ''; position: absolute; left: 50%; bottom: 3px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: #e5484d; }
+    .tday.sel { background: #7f1d1d; border-color: #7f1d1d; color: #fff; }
+    .tday.sel .tday-s { color: #fecaca; }
+    .tday.sel.today::after { background: #fff; }
+    .tsel { background: #0a0a0a; border: 1px solid #262626; color: #a3a3a3; font-family: inherit; font-size: 11px; padding: 8px; flex-shrink: 0; }
+    .tgrid-head { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; font-size: 8px; color: #8a8a8a; letter-spacing: 0.06em; text-align: center; padding: 0 13px; margin-bottom: 4px; }
+    .tgroup { font-size: 10px; color: #8a8a8a; letter-spacing: 0.2em; margin: 14px 0 8px; }
+    .tex { background: #0a0a0a; border: 1px solid #1c1c1c; padding: 12px; margin-bottom: 8px; }
+    .tex-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .tex-name { font-size: 14px; font-weight: 500; }
+    .tex-range { font-size: 10px; color: #8a8a8a; margin-top: 2px; }
+    .tex-btn { font-family: inherit; font-size: 10px; color: #a3a3a3; background: transparent; border: 1px solid #262626; padding: 8px 10px; white-space: nowrap; cursor: pointer; flex-shrink: 0; }
+    .tex-note { font-size: 11px; color: #d9a441; }
+    .tex-note:not(:empty) { margin-top: 8px; }
+    .tgrid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+    .tcell { display: flex; flex-direction: column; border: 1px solid #262626; background: #050505; min-width: 0; }
+    .tcell.warm { background: #070707; border-color: #1c1c1c; }
+    .tcell input { width: 100%; min-width: 0; box-sizing: border-box; background: transparent; border: none; color: #fafafa; font-family: inherit; font-size: 13px; font-weight: 500; text-align: center; padding: 7px 0; outline: none; }
+    .tcell input.reps { font-size: 11px; font-weight: 400; color: #a3a3a3; border-top: 1px solid #1c1c1c; }
+    .tcell.warm input { color: #a3a3a3; }
+    .tcell input::placeholder { color: #3a3a3a; }
+    .tcell:focus-within { border-color: #7f1d1d; }
+    .tcell-rec { border-color: #d9a441; background: #120d04; }
+    .tcell-rec input { color: #f2cf7a; font-weight: 600; }
+    .tcell-rec input.reps { color: #d9a441; border-top-color: #3a2c0c; }
+    .tcell-rec input::placeholder { color: #5a4718; }
+    .tcell-rec.hit { background: #2a1f08; box-shadow: 0 0 12px rgba(217,164,65,0.35); }
+    .tcell-rec:focus-within { border-color: #f2cf7a; }
+    .tq { font-size: 10px; color: #8a8a8a; letter-spacing: 0.15em; margin-bottom: 12px; }
+    .tcount { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+    .tcount button { font-family: inherit; font-size: 15px; padding: 12px 0; background: transparent; border: 1px solid #262626; color: #a3a3a3; cursor: pointer; }
+    .tcount button.warn { border-style: dashed; border-color: #4a3a10; }
+    .tcount button.on { background: #7f1d1d; border: 1px solid #7f1d1d; color: #fff; }
+    .topt { display: block; width: 100%; text-align: left; background: transparent; border: 1px solid #262626; color: #fafafa; font-family: inherit; padding: 14px; margin-bottom: 8px; cursor: pointer; }
+    .topt.on { background: #1a0606; border-color: #e5484d; }
+    .topt.soon { border-style: dashed; color: #8a8a8a; cursor: default; margin-bottom: 0; }
+    .topt-t { display: block; font-size: 14px; }
+    .topt-s { display: block; font-size: 11px; color: #a3a3a3; margin-top: 2px; }
+    .ttoggle { width: 48px; height: 28px; border-radius: 14px; background: #262626; border: none; position: relative; flex-shrink: 0; padding: 0; cursor: pointer; }
+    .ttoggle span { position: absolute; left: 3px; top: 3px; width: 22px; height: 22px; border-radius: 50%; background: #8a8a8a; transition: left .15s; }
+    .ttoggle.on { background: #7f1d1d; }
+    .ttoggle.on span { left: 23px; background: #fafafa; }
+    .tsheet-wrap { align-items: flex-end; padding: 0; }
+    .tsheet { width: 100%; max-width: 600px; max-height: 85vh; overflow-y: auto; background: #0a0a0a; border-top: 1px solid #262626; padding: 16px 16px 28px; }
+    .tsheet-handle { width: 40px; height: 4px; background: #262626; border-radius: 2px; margin: 0 auto 14px; }
+    .tswap-opt { display: flex; align-items: center; gap: 12px; width: 100%; font-family: inherit; color: #fafafa; padding: 12px 14px; background: #050505; border: 1px solid #1c1c1c; margin-bottom: 6px; cursor: pointer; }
+    .tswap-opt.cur { background: #1a0606; border-color: #e5484d; }
+    .tswap-opt:disabled { opacity: 0.4; cursor: default; }
+    .tkinds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+    .tkinds button { font-family: inherit; font-size: 11px; padding: 12px 0; background: transparent; border: 1px solid #262626; color: #a3a3a3; cursor: pointer; }
+    .tkinds button.on { background: #7f1d1d; border-color: #7f1d1d; color: #fff; }
+    .tc-live { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .tc-metric { border: 1px solid #1c1c1c; padding: 12px; text-align: center; }
+    .tc-metric-v { font-size: 18px; font-weight: 300; }
+    .tc-metric-l { font-size: 9px; color: #8a8a8a; letter-spacing: 0.1em; margin-top: 4px; }
+    .trec-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; color: #a3a3a3; }
+    .trec-row span:last-child { color: #f2cf7a; }
   </style>
 </head>
 <body>
@@ -325,6 +392,7 @@
       trainingError: null,
       trainView: 'list',
       trainForm: null,
+      trainTab: 'list', tday: null, ts: null, tpick: {}, tswap: null, tsetup: null, tc: null,
       trainShowAll: false,
 
       // Weekrapport en back-up
@@ -784,6 +852,7 @@
       state.workouts = [];
       state.workoutSets = [];
       state.trainForm = null;
+      Object.assign(state, { ts: null, tpick: {}, tswap: null, tsetup: null, tc: null, tday: null, trainView: 'list' });
       render();
     }
 
@@ -3635,7 +3704,7 @@
       state.workouts.forEach(w => {
         if (w.id === excludeId) return;
         workoutSetsOf(w.id).forEach(s => {
-          if (s.exercise.trim().toLowerCase() !== key) return;
+          if (s.set_no === 0 || s.exercise.trim().toLowerCase() !== key) return;
           const wt = Number(s.weight) || 0, r = Number(s.reps) || 0;
           if (wt > best.weight || (wt === best.weight && r > best.reps)) { best.weight = wt; best.reps = r; best.wDate = w.date; }
           const e = e1rm(wt, r);
@@ -3843,18 +3912,612 @@
     }
 
     // ============================================
+    // TRAINING: SCHEMA, OEFENINGEN EN SPLITS
+    // ============================================
+    // kit: wat je minimaal nodig hebt (één van de lijst is genoeg)
+    // bb = barbell, db = dumbbells, cable = kabels, machine, bar = optrekstang, band = elastieken, dip = dipstation, bw = lichaamsgewicht
+    const kitNames = { bb: 'Barbell', db: 'Dumbbells', cable: 'Kabel', machine: 'Machine', bar: 'Optrekstang', band: 'Elastiek', dip: 'Dipstation', bw: 'Lichaamsgewicht' };
+    const homeKitOptions = [['db', 'Dumbbells'], ['band', 'Elastieken'], ['bar', 'Optrekstang'], ['bb', 'Barbell + rek']];
+    const muscleGroups = {
+      borst: 'Borst', rug: 'Rug', schouders: 'Schouders', achterschouder: 'Achterkant schouders', biceps: 'Biceps', triceps: 'Triceps',
+      quads: 'Quadriceps', hamstrings: 'Hamstrings', billen: 'Billen', kuiten: 'Kuiten', buik: 'Buik'
+    };
+    const exerciseLib = [
+      // Borst
+      ['Bankdrukken', 'borst', ['bb'], '6-8'],
+      ['Incline dumbbell press', 'borst', ['db'], '8-10'],
+      ['Dumbbell press', 'borst', ['db'], '8-10'],
+      ['Incline barbell press', 'borst', ['bb'], '6-8'],
+      ['Chest press machine', 'borst', ['machine'], '8-12'],
+      ['Cable fly', 'borst', ['cable'], '10-15'],
+      ['Pec deck', 'borst', ['machine'], '10-15'],
+      ['Dumbbell fly', 'borst', ['db'], '10-15'],
+      ['Dips (borst)', 'borst', ['dip'], '6-10'],
+      ['Band chest press', 'borst', ['band'], '12-15'],
+      ['Push-ups', 'borst', ['bw'], 'zoveel mogelijk'],
+      ['Deficit push-ups', 'borst', ['bw'], 'zoveel mogelijk'],
+      ['Incline push-ups', 'borst', ['bw'], '12-20'],
+      // Rug
+      ['Pull-ups', 'rug', ['bar'], '6-10'],
+      ['Lat pulldown', 'rug', ['cable', 'machine'], '8-12'],
+      ['Barbell row', 'rug', ['bb'], '6-10'],
+      ['Dumbbell row', 'rug', ['db'], '8-12'],
+      ['Cable row', 'rug', ['cable'], '10-12'],
+      ['Chest-supported row', 'rug', ['machine'], '8-12'],
+      ['Chin-ups', 'rug', ['bar'], '6-10'],
+      ['Band lat pulldown', 'rug', ['band'], '12-15'],
+      ['Band row', 'rug', ['band'], '12-15'],
+      ['Inverted row', 'rug', ['bar'], '8-12'],
+      ['Deurpost row', 'rug', ['bw'], '10-15'],
+      ['Superman', 'rug', ['bw'], '12-15'],
+      // Schouders
+      ['Overhead press', 'schouders', ['bb'], '6-8'],
+      ['Dumbbell schouderpress', 'schouders', ['db'], '8-10'],
+      ['Shoulder press machine', 'schouders', ['machine'], '8-12'],
+      ['Lateral raises', 'schouders', ['db'], '12-15'],
+      ['Cable lateral raise', 'schouders', ['cable'], '12-15'],
+      ['Band lateral raise', 'schouders', ['band'], '15-20'],
+      ['Pike push-ups', 'schouders', ['bw'], '8-12'],
+      // Achterkant schouders
+      ['Face pulls', 'achterschouder', ['cable'], '12-15'],
+      ['Reverse fly', 'achterschouder', ['db'], '12-15'],
+      ['Reverse pec deck', 'achterschouder', ['machine'], '12-15'],
+      ['Band pull-aparts', 'achterschouder', ['band'], '15-20'],
+      ['Prone Y-raise', 'achterschouder', ['bw'], '12-15'],
+      // Biceps
+      ['Barbell curl', 'biceps', ['bb'], '8-12'],
+      ['Dumbbell curl', 'biceps', ['db'], '10-12'],
+      ['Hammer curl', 'biceps', ['db'], '10-12'],
+      ['Cable curl', 'biceps', ['cable'], '10-15'],
+      ['Preacher curl', 'biceps', ['machine'], '10-12'],
+      ['Band curl', 'biceps', ['band'], '12-15'],
+      ['Handdoek curl', 'biceps', ['bw'], '10-15'],
+      // Triceps
+      ['Triceps pushdown', 'triceps', ['cable'], '12-15'],
+      ['Overhead triceps extension', 'triceps', ['cable'], '10-12'],
+      ['Dumbbell overhead extension', 'triceps', ['db'], '10-12'],
+      ['Skull crushers', 'triceps', ['bb'], '8-12'],
+      ['Close-grip bankdrukken', 'triceps', ['bb'], '6-10'],
+      ['Dips', 'triceps', ['dip'], '6-10'],
+      ['Band pushdown', 'triceps', ['band'], '15-20'],
+      ['Diamond push-ups', 'triceps', ['bw'], 'zoveel mogelijk'],
+      ['Bench dips', 'triceps', ['bw'], '10-15'],
+      // Quadriceps
+      ['Squat', 'quads', ['bb'], '6-8'],
+      ['Leg press', 'quads', ['machine'], '8-12'],
+      ['Hack squat', 'quads', ['machine'], '8-12'],
+      ['Leg extension', 'quads', ['machine'], '12-15'],
+      ['Goblet squat', 'quads', ['db'], '10-12'],
+      ['Bulgarian split squat', 'quads', ['db', 'bw'], '8-10'],
+      ['Lunges', 'quads', ['db', 'bw'], '10-12'],
+      ['Bodyweight squats', 'quads', ['bw'], '15-25'],
+      // Hamstrings
+      ['Romanian deadlift', 'hamstrings', ['bb'], '6-10'],
+      ['Deadlift', 'hamstrings', ['bb'], '4-6'],
+      ['Dumbbell RDL', 'hamstrings', ['db'], '8-12'],
+      ['Leg curl', 'hamstrings', ['machine'], '10-15'],
+      ['Nordic curl', 'hamstrings', ['bw'], 'zoveel mogelijk'],
+      ['Single-leg RDL', 'hamstrings', ['bw', 'db'], '10-12'],
+      // Billen
+      ['Hip thrust', 'billen', ['bb'], '8-12'],
+      ['Dumbbell hip thrust', 'billen', ['db'], '10-15'],
+      ['Cable kickback', 'billen', ['cable'], '12-15'],
+      ['Glute bridge', 'billen', ['bw'], '15-20'],
+      // Kuiten
+      ['Calf raises', 'kuiten', ['machine'], '12-15'],
+      ['Dumbbell calf raises', 'kuiten', ['db'], '12-15'],
+      ['Calf raises (lichaamsgewicht)', 'kuiten', ['bw'], '15-25'],
+      // Buik
+      ['Hanging leg raises', 'buik', ['bar'], '10-15'],
+      ['Cable crunch', 'buik', ['cable'], '12-15'],
+      ['Leg raises', 'buik', ['bw'], '12-15'],
+      ['Crunches', 'buik', ['bw'], '15-20'],
+      ['Plank (seconden)', 'buik', ['bw'], '30-60 sec']
+    ].map(([name, group, kit, range]) => ({ name, group, kit, range }));
+
+    const splitDefs = {
+      ppl: { name: 'Push / Pull / Legs', short: 'PPL', sessions: ['push', 'pull', 'legs'] },
+      ul: { name: 'Bovenlichaam / Onderlichaam', short: 'Boven / Onder', sessions: ['upper', 'lower'] },
+      fb: { name: 'Full body', short: 'Full body', sessions: ['fa', 'fb'] }
+    };
+    // Per sessie: [spiergroep, voorkeursoefeningen in volgorde]
+    const sessionDefs = {
+      push: { label: 'Push', sub: 'Borst, schouders, triceps', slots: [
+        ['borst', 'Bankdrukken', 'Dumbbell press', 'Chest press machine', 'Push-ups'],
+        ['borst', 'Incline dumbbell press', 'Incline barbell press', 'Incline push-ups'],
+        ['borst', 'Cable fly', 'Pec deck', 'Dumbbell fly', 'Band chest press', 'Deficit push-ups'],
+        ['schouders', 'Overhead press', 'Dumbbell schouderpress', 'Shoulder press machine', 'Pike push-ups'],
+        ['schouders', 'Lateral raises', 'Cable lateral raise', 'Band lateral raise'],
+        ['triceps', 'Overhead triceps extension', 'Dumbbell overhead extension', 'Skull crushers', 'Bench dips'],
+        ['triceps', 'Triceps pushdown', 'Band pushdown', 'Diamond push-ups']
+      ]},
+      pull: { label: 'Pull', sub: 'Rug, achterkant schouders, biceps', slots: [
+        ['rug', 'Pull-ups', 'Lat pulldown', 'Band lat pulldown', 'Deurpost row'],
+        ['rug', 'Barbell row', 'Dumbbell row', 'Inverted row', 'Band row', 'Superman'],
+        ['rug', 'Cable row', 'Chest-supported row', 'Dumbbell row', 'Band row', 'Superman'],
+        ['achterschouder', 'Face pulls', 'Reverse fly', 'Band pull-aparts', 'Prone Y-raise'],
+        ['biceps', 'Barbell curl', 'Dumbbell curl', 'Band curl', 'Handdoek curl'],
+        ['biceps', 'Hammer curl', 'Cable curl', 'Dumbbell curl']
+      ]},
+      legs: { label: 'Legs', sub: 'Quadriceps, hamstrings, kuiten', slots: [
+        ['quads', 'Squat', 'Goblet squat', 'Bodyweight squats'],
+        ['quads', 'Leg press', 'Bulgarian split squat', 'Hack squat'],
+        ['quads', 'Leg extension', 'Lunges'],
+        ['hamstrings', 'Romanian deadlift', 'Dumbbell RDL', 'Single-leg RDL'],
+        ['hamstrings', 'Leg curl', 'Nordic curl', 'Single-leg RDL'],
+        ['kuiten', 'Calf raises', 'Dumbbell calf raises', 'Calf raises (lichaamsgewicht)']
+      ]},
+      upper: { label: 'Boven', sub: 'Borst, rug, schouders, armen', slots: [
+        ['borst', 'Bankdrukken', 'Dumbbell press', 'Push-ups'],
+        ['borst', 'Incline dumbbell press', 'Incline barbell press', 'Incline push-ups'],
+        ['rug', 'Pull-ups', 'Lat pulldown', 'Band lat pulldown', 'Deurpost row'],
+        ['rug', 'Barbell row', 'Dumbbell row', 'Cable row', 'Band row', 'Superman'],
+        ['schouders', 'Dumbbell schouderpress', 'Overhead press', 'Pike push-ups'],
+        ['schouders', 'Lateral raises', 'Cable lateral raise', 'Band lateral raise'],
+        ['biceps', 'Dumbbell curl', 'Barbell curl', 'Band curl', 'Handdoek curl'],
+        ['triceps', 'Triceps pushdown', 'Dumbbell overhead extension', 'Band pushdown', 'Diamond push-ups']
+      ]},
+      lower: { label: 'Onder', sub: 'Quadriceps, hamstrings, billen, kuiten', slots: [
+        ['quads', 'Squat', 'Goblet squat', 'Bodyweight squats'],
+        ['quads', 'Leg press', 'Bulgarian split squat', 'Lunges'],
+        ['hamstrings', 'Romanian deadlift', 'Dumbbell RDL', 'Single-leg RDL'],
+        ['hamstrings', 'Leg curl', 'Nordic curl'],
+        ['billen', 'Hip thrust', 'Dumbbell hip thrust', 'Glute bridge'],
+        ['kuiten', 'Calf raises', 'Dumbbell calf raises', 'Calf raises (lichaamsgewicht)']
+      ]},
+      fa: { label: 'Full A', sub: 'Hele lichaam, 1 oefening per spiergroep', slots: [
+        ['quads', 'Squat', 'Goblet squat', 'Bodyweight squats'],
+        ['borst', 'Bankdrukken', 'Dumbbell press', 'Push-ups'],
+        ['rug', 'Pull-ups', 'Lat pulldown', 'Band lat pulldown', 'Deurpost row'],
+        ['hamstrings', 'Romanian deadlift', 'Dumbbell RDL', 'Single-leg RDL'],
+        ['schouders', 'Overhead press', 'Dumbbell schouderpress', 'Pike push-ups'],
+        ['biceps', 'Dumbbell curl', 'Barbell curl', 'Band curl', 'Handdoek curl'],
+        ['triceps', 'Triceps pushdown', 'Dumbbell overhead extension', 'Diamond push-ups']
+      ]},
+      fb: { label: 'Full B', sub: 'Hele lichaam, andere oefeningen', slots: [
+        ['hamstrings', 'Deadlift', 'Dumbbell RDL', 'Single-leg RDL'],
+        ['borst', 'Incline dumbbell press', 'Incline barbell press', 'Incline push-ups'],
+        ['rug', 'Barbell row', 'Dumbbell row', 'Cable row', 'Band row', 'Superman'],
+        ['quads', 'Bulgarian split squat', 'Leg press', 'Lunges'],
+        ['schouders', 'Lateral raises', 'Cable lateral raise', 'Band lateral raise'],
+        ['biceps', 'Hammer curl', 'Cable curl', 'Dumbbell curl', 'Handdoek curl'],
+        ['triceps', 'Overhead triceps extension', 'Skull crushers', 'Bench dips']
+      ]}
+    };
+    const absSlot = ['buik', 'Hanging leg raises', 'Cable crunch', 'Leg raises', 'Crunches'];
+    const weekdayShort = ['ma', 'di', 'wo', 'do', 'vr', 'za', 'zo'];
+    const weekdayLong = ['Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag', 'Zondag'];
+    const defaultDayPattern = { 1: [0], 2: [0, 3], 3: [0, 2, 4], 4: [0, 1, 3, 4], 5: [0, 1, 3, 4, 5], 6: [0, 1, 2, 3, 4, 5] };
+    const cardioKinds = ['Hardlopen', 'Fietsen', 'Roeien', 'Wandelen', 'Zwemmen', 'HIIT'];
+    const cardioNoDistance = ['HIIT'];
+
+    function libFind(name) { return exerciseLib.find(e => e.name.toLowerCase() === String(name).trim().toLowerCase()) || null; }
+    function adviceSplit(n) { return n <= 3 ? 'fb' : n === 4 ? 'ul' : 'ppl'; }
+    function makeDays(split, n) {
+      const days = [null, null, null, null, null, null, null];
+      const ses = splitDefs[split].sessions;
+      (defaultDayPattern[n] || defaultDayPattern[3]).forEach((d, i) => days[d] = ses[i % ses.length]);
+      return days;
+    }
+
+    function trainingPlan() {
+      const s = state.bodySettings || {};
+      if (s.training && s.training.split) return s.training;
+      try { const v = JSON.parse(localStorage.getItem('pf_training') || 'null'); if (v && v.split) return v; } catch (e) {}
+      return null;
+    }
+
+    async function saveTrainingPlan(plan) {
+      state.bodySettings = { ...(state.bodySettings || {}), training: plan };
+      try { localStorage.setItem('pf_training', JSON.stringify(plan)); } catch (e) {}
+      if (!state.user) return;
+      const { error } = await supabaseClient.from('user_settings').upsert({ user_id: state.user.id, training: plan }, { onConflict: 'user_id' });
+      state.trainingPlanLocal = !!error;
+      if (error) console.warn('Trainingsschema alleen lokaal opgeslagen (voer training2-update.sql uit):', error.message);
+    }
+
+    function kitAvailable(plan, ex) {
+      if (!plan || plan.loc === 'gym') return true;
+      const have = ['bw', ...(plan.kit || [])];
+      return ex.kit.some(k => have.includes(k));
+    }
+
+    // Oefeningen voor een sessie, rekening houdend met materiaal en eigen vervangingen
+    function sessionExercises(plan, key, withAbs) {
+      const def = sessionDefs[key];
+      if (!def) return [];
+      const slots = withAbs ? [...def.slots, absSlot] : def.slots;
+      const used = new Set();
+      const out = [];
+      slots.forEach((slot, idx) => {
+        const slotId = idx === def.slots.length ? 'abs' : String(idx);
+        const [group, ...prefs] = slot;
+        const swap = (plan.swaps || {})[key + '|' + slotId];
+        const candidates = [swap, ...prefs].filter(Boolean).map(libFind).filter(Boolean);
+        let pick = candidates.find(e => e.group === group && kitAvailable(plan, e) && !used.has(e.name));
+        if (!pick) pick = exerciseLib.find(e => e.group === group && kitAvailable(plan, e) && !used.has(e.name));
+        if (!pick) return;
+        used.add(pick.name);
+        out.push({ slot: slotId, group, name: pick.name, range: pick.range });
+      });
+      return out;
+    }
+
+    function absDays(plan) {
+      if (!plan.abs) return [];
+      const t = plan.days.map((d, i) => d ? i : -1).filter(i => i >= 0);
+      if (!t.length) return [];
+      return t.length >= 3 ? [t[0], t[2]] : t.slice(0, 2);
+    }
+
+    // Beste combinatie gewicht × reps (hoogste geschatte 1RM). Een handmatig aangepast record telt vanaf de datum van aanpassen.
+    function recordFor(name, excludeId) {
+      const key = name.trim().toLowerCase();
+      const plan = trainingPlan();
+      const ov = plan && plan.records ? plan.records[key] : null;
+      let best = ov ? { w: Number(ov.w) || 0, r: Number(ov.r) || 0, e: e1rm(ov.w, ov.r) || (Number(ov.r) || 0) / 1000 } : { w: 0, r: 0, e: 0 };
+      state.workouts.forEach(w => {
+        if (w.id === excludeId) return;
+        if (ov && ov.date && w.date < ov.date) return;
+        workoutSetsOf(w.id).forEach(s => {
+          if (s.set_no === 0 || s.exercise.trim().toLowerCase() !== key) return;
+          const wt = Number(s.weight) || 0, r = Number(s.reps) || 0;
+          const e = wt ? e1rm(wt, r) : r / 1000; // zonder gewicht: meeste reps telt
+          if (r && e > best.e) best = { w: wt, r, e };
+        });
+      });
+      return best;
+    }
+    function setScore(w, r) { w = Number(w) || 0; r = Number(r) || 0; if (!r) return 0; return w ? e1rm(w, r) : r / 1000; }
+    function pnum(v) { const n = parseFloat(String(v ?? '').replace(',', '.')); return isNaN(n) ? null : n; }
+    function fmtKg(n) { if (n === null || n === undefined || n === '') return ''; return String(Math.round(Number(n) * 100) / 100).replace('.', ','); }
+
+    function trainWeekDates() {
+      const start = weekKey(todayStr());
+      return weekdayShort.map((_, i) => dateAdd(start, i));
+    }
+    function trainSelectedIdx() {
+      if (state.tday === undefined || state.tday === null) state.tday = (new Date().getDay() + 6) % 7;
+      return state.tday;
+    }
+
+    // Welke sessie hoort bij deze dag: eerder opgeslagen training > zelf gekozen > schema
+    function sessionKeyFor(plan, idx) {
+      const date = trainWeekDates()[idx];
+      if (state.tpick && state.tpick[date] !== undefined) return state.tpick[date];
+      const saved = state.workouts.find(w => w.date === date && (w.kind || 'strength') !== 'cardio' && Object.keys(sessionDefs).some(k => sessionDefs[k].label === w.name));
+      if (saved) return Object.keys(sessionDefs).find(k => sessionDefs[k].label === saved.name);
+      return plan.days[idx];
+    }
+
+    function buildSession(plan, idx, key) {
+      const date = trainWeekDates()[idx];
+      const def = sessionDefs[key];
+      const saved = state.workouts.find(w => w.date === date && w.name === def.label && (w.kind || 'strength') !== 'cardio');
+      const list = sessionExercises(plan, key, absDays(plan).includes(idx));
+      const savedGroups = saved ? groupSets(workoutSetsOf(saved.id)) : [];
+      savedGroups.forEach(g => {
+        if (!list.some(x => x.name.toLowerCase() === g.name.trim().toLowerCase())) {
+          const lib = libFind(g.name);
+          list.push({ slot: 'extra', group: lib ? lib.group : 'extra', name: g.name.trim(), range: lib ? lib.range : '' });
+        }
+      });
+      const exercises = list.map(x => {
+        const sets = [0, 1, 2, 3].map(() => ({ w: '', r: '' }));
+        const g = savedGroups.find(g => g.name.trim().toLowerCase() === x.name.toLowerCase());
+        if (g) g.sets.forEach((s, j) => {
+          const i = s.set_no === 0 ? 0 : Math.min(3, s.set_no || j + 1);
+          sets[i] = { w: hasValue(s.weight) ? fmtKg(s.weight) : '', r: s.reps !== null && s.reps !== undefined ? String(s.reps) : '' };
+        });
+        const base = recordFor(x.name, saved ? saved.id : null);
+        const ex = { ...x, sets, base, rec: { w: base.r ? fmtKg(base.w) : '', r: base.r ? String(base.r) : '' }, recManual: false, hit: false };
+        refreshRecordState(ex);
+        return ex;
+      });
+      return {
+        key: date + '|' + key, date, idx, session: key, workoutId: saved ? saved.id : null, exercises,
+        duration: saved && saved.duration_min ? String(saved.duration_min) : '', outdoor: saved ? !!saved.outdoor : false,
+        startedAt: null, dirty: false
+      };
+    }
+
+    function refreshRecordState(ex) {
+      let top = null;
+      ex.sets.forEach((s, i) => {
+        if (i === 0) return; // warming-up telt niet mee
+        const sc = setScore(pnum(s.w), pnum(s.r));
+        if (sc && (!top || sc > top.e)) top = { w: pnum(s.w) || 0, r: Math.round(pnum(s.r)), e: sc };
+      });
+      const manual = ex.recManual ? setScore(pnum(ex.rec.w), pnum(ex.rec.r)) : 0;
+      const ref = Math.max(ex.base.e, manual);
+      if (top && top.e > ref + 1e-9) {
+        ex.rec = { w: top.w ? fmtKg(top.w) : '', r: String(top.r) };
+        ex.hit = true;
+      } else {
+        ex.hit = false;
+        if (!ex.recManual) ex.rec = { w: ex.base.r ? fmtKg(ex.base.w) : '', r: ex.base.r ? String(ex.base.r) : '' };
+      }
+    }
+
+    function recordBoxStyle(hit) {
+      return hit ? 'border-color: #d9a441; background: #2a1f08; box-shadow: 0 0 12px rgba(217,164,65,0.35);' : '';
+    }
+
+    function tcSet(ei, si, field, value) {
+      const ts = state.ts; if (!ts) return;
+      const ex = ts.exercises[ei]; if (!ex) return;
+      ex.sets[si][field] = value;
+      ts.dirty = true;
+      if (!ts.startedAt) ts.startedAt = Date.now();
+      refreshRecordState(ex);
+      paintRecord(ei);
+    }
+    function tcRec(ei, field, value) {
+      const ts = state.ts; if (!ts) return;
+      const ex = ts.exercises[ei]; if (!ex) return;
+      ex.rec[field] = value; ex.recManual = true; ts.dirty = true;
+      ex.hit = false;
+      paintRecord(ei, true);
+    }
+    function paintRecord(ei, keepInputs) {
+      const ex = state.ts.exercises[ei];
+      const box = document.getElementById('trb-' + ei);
+      if (!box) return;
+      box.className = 'tcell tcell-rec' + (ex.hit ? ' hit' : '');
+      if (!keepInputs) {
+        const w = document.getElementById('trw-' + ei), r = document.getElementById('trr-' + ei);
+        if (w && document.activeElement !== w) w.value = ex.rec.w;
+        if (r && document.activeElement !== r) r.value = ex.rec.r;
+      }
+      const note = document.getElementById('trn-' + ei);
+      if (note) note.innerHTML = ex.hit ? recordNote(ex) : '';
+    }
+    function recordNote(ex) {
+      const was = ex.base.r ? (ex.base.w ? fmtKg(ex.base.w) + ' kg × ' + ex.base.r : ex.base.r + ' reps') : null;
+      const now = ex.rec.w ? ex.rec.w + ' kg × ' + ex.rec.r : ex.rec.r + ' reps';
+      return `Nieuw record: ${now}${was ? ' (was ' + was + ')' : ''}`;
+    }
+
+    function selectTrainDay(i) {
+      if (state.ts && state.ts.dirty && state.ts.idx !== i && !confirm('Je training is nog niet opgeslagen. Toch naar een andere dag?')) return;
+      state.tday = i;
+      state.ts = null;
+      render();
+    }
+    function pickSession(key) {
+      const date = trainWeekDates()[trainSelectedIdx()];
+      if (state.ts && state.ts.dirty && !confirm('Je training is nog niet opgeslagen. Toch wisselen?')) return;
+      state.tpick = { ...(state.tpick || {}), [date]: key };
+      state.ts = null;
+      render();
+    }
+
+    // Opslaan van de krachttraining
+    async function saveSession() {
+      const ts = state.ts; if (!ts) return;
+      if (ts.date > todayStr()) { alert('Deze dag is nog niet geweest. Je kunt de training op ' + weekdayLong[ts.idx].toLowerCase() + ' invullen.'); return; }
+      const def = sessionDefs[ts.session];
+      const sets = [];
+      ts.exercises.forEach((ex, pos) => ex.sets.forEach((s, i) => {
+        const w = pnum(s.w), r = pnum(s.r);
+        if (w === null && r === null) return;
+        sets.push({ exercise: ex.name, position: pos, set_no: i, reps: r === null ? null : Math.round(r), weight: w });
+      }));
+      const manualRecs = ts.exercises.filter(ex => ex.recManual && (pnum(ex.rec.r) || 0) > 0);
+      if (!sets.length && !manualRecs.length) { alert('Vul minstens één set in.'); return; }
+
+      const btn = document.getElementById('ts-save');
+      if (btn) { btn.disabled = true; btn.textContent = 'Opslaan...'; }
+
+      const prs = ts.exercises.filter(ex => ex.hit && ex.base.e > 0).map(ex => ex.name + ' ' + (ex.rec.w ? ex.rec.w + ' kg × ' + ex.rec.r : ex.rec.r + ' reps'));
+      let duration = pnum(document.getElementById('ts-dur') ? document.getElementById('ts-dur').value : ts.duration);
+      if (duration === null && ts.startedAt && ts.date === todayStr()) duration = Math.max(1, Math.round((Date.now() - ts.startedAt) / 60000));
+      const outdoorEl = document.getElementById('ts-out');
+      const outdoor = outdoorEl ? outdoorEl.checked : ts.outdoor;
+
+      const row = { user_id: state.user.id, date: ts.date, name: def.label, kind: 'strength', duration_min: duration ? Math.round(duration) : null, outdoor: !!outdoor };
+      const res = await writeWorkout(row, ts.workoutId);
+      let error = res.error; const id = res.id;
+      if (!error && id && ts.workoutId) ({ error } = await supabaseClient.from('workout_sets').delete().eq('workout_id', id));
+      if (!error && id && sets.length) ({ error } = await supabaseClient.from('workout_sets').insert(sets.map(s => ({ ...s, workout_id: id, user_id: state.user.id }))));
+      if (error) {
+        alert('Fout bij opslaan: ' + error.message);
+        if (btn) { btn.disabled = false; btn.textContent = 'Training afronden'; }
+        return;
+      }
+
+      if (manualRecs.length) {
+        const plan = { ...trainingPlan() };
+        plan.records = { ...(plan.records || {}) };
+        manualRecs.forEach(ex => { plan.records[ex.name.toLowerCase()] = { w: pnum(ex.rec.w) || 0, r: Math.round(pnum(ex.rec.r)), date: ts.date }; });
+        await saveTrainingPlan(plan);
+      }
+
+      const messages = await afterWorkoutSaved(row, !ts.workoutId);
+      state.ts = null;
+      await loadTraining();
+      render();
+      if (prs.length) showToast('🏆 Nieuw record: ' + prs[0]);
+      else showToast(messages[0] || '💪 Training opgeslagen');
+    }
+
+    // Nieuw: kolommen kind/distance_km bestaan pas na training2-update.sql. Ontbreken ze, dan slaan we zonder op.
+    async function writeWorkout(row, existingId) {
+      let r = { ...row };
+      for (let attempt = 0; attempt < 3; attempt++) {
+        let res;
+        if (existingId) res = await supabaseClient.from('workouts').update(r).eq('id', existingId);
+        else res = await supabaseClient.from('workouts').insert([r]).select().single();
+        if (!res.error) return { error: null, id: existingId || (res.data && res.data.id) };
+        const m = /'(kind|distance_km)' column|column "?(kind|distance_km)"?|(kind|distance_km)/.exec(res.error.message || '');
+        const col = m && (m[1] || m[2] || m[3]);
+        if (!col || !(col in r)) return { error: res.error };
+        if (col === 'distance_km' && r.distance_km) r.notes = [r.notes, String(r.distance_km).replace('.', ',') + ' km'].filter(Boolean).join(' · ');
+        delete r[col];
+        state.trainingColsMissing = true;
+      }
+      return { error: { message: 'Opslaan lukte niet' } };
+    }
+
+    // Koppelingen: habit Sport en 75 Hard
+    async function afterWorkoutSaved(row, isNew) {
+      const messages = [];
+      if (row.date !== todayStr()) return messages;
+      if (!state.habits.workout) await toggleHabit('workout');
+      const h = hard75Active();
+      if (h && (row.duration_min || 0) >= 45 && isNew) {
+        const tasks = { ...hard75TasksFor(h, todayStr()) };
+        let key = null;
+        if (!tasks.w1) key = 'w1';
+        else if (!tasks.w2 && row.outdoor) key = 'w2';
+        if (key) { await hard75Toggle(h.id, key); messages.push(key === 'w1' ? '75 Hard: training 1 afgevinkt' : '75 Hard: buitentraining afgevinkt'); }
+      }
+      return messages;
+    }
+
+    // Vervangen / toevoegen
+    function openSwap(ei) { state.tswap = { ei }; render(); }
+    function openAddExercise() { state.tswap = { add: true, group: null }; render(); }
+    function closeSwap() { state.tswap = null; render(); }
+    async function chooseSwap(name) {
+      const sw = state.tswap; const ts = state.ts;
+      if (!sw || !ts) return;
+      const lib = libFind(name);
+      const fresh = x => {
+        const base = recordFor(x.name, ts.workoutId);
+        const ex = { ...x, sets: [0, 1, 2, 3].map(() => ({ w: '', r: '' })), base, rec: { w: '', r: '' }, recManual: false, hit: false };
+        refreshRecordState(ex);
+        return ex;
+      };
+      if (sw.add) {
+        ts.exercises.push(fresh({ slot: 'extra', group: lib.group, name: lib.name, range: lib.range }));
+      } else {
+        const old = ts.exercises[sw.ei];
+        ts.exercises[sw.ei] = fresh({ slot: old.slot, group: old.group, name: lib.name, range: lib.range });
+        if (old.slot !== 'extra') {
+          const plan = { ...trainingPlan() };
+          plan.swaps = { ...(plan.swaps || {}), [ts.session + '|' + old.slot]: lib.name };
+          saveTrainingPlan(plan);
+        }
+      }
+      ts.dirty = true;
+      state.tswap = null;
+      render();
+    }
+    function removeExtra(ei) {
+      if (!state.ts) return;
+      state.ts.exercises.splice(ei, 1);
+      render();
+    }
+
+    // Setup
+    function openTrainSetup() {
+      const plan = trainingPlan();
+      state.tsetup = plan ? JSON.parse(JSON.stringify(plan)) : { split: 'ppl', loc: 'gym', kit: [], days: makeDays('ppl', 5), abs: true, swaps: {}, records: {} };
+      state.trainView = 'setup';
+      render();
+      window.scrollTo(0, 0);
+    }
+    function tsuCount(n) { const s = state.tsetup; s.split = adviceSplit(n); s.days = makeDays(s.split, n); render(); }
+    function tsuSplit(k) { const s = state.tsetup; const n = s.days.filter(Boolean).length || 3; s.split = k; s.days = makeDays(k, n); render(); }
+    function tsuDay(i) {
+      const s = state.tsetup; const cycle = [...splitDefs[s.split].sessions, null];
+      s.days[i] = cycle[(cycle.indexOf(s.days[i]) + 1) % cycle.length];
+      render();
+    }
+    function tsuLoc(l) { state.tsetup.loc = l; render(); }
+    function tsuKit(k) { const s = state.tsetup; s.kit = s.kit.includes(k) ? s.kit.filter(x => x !== k) : [...s.kit, k]; render(); }
+    async function tsuSave() {
+      const s = state.tsetup;
+      if (!s.days.some(Boolean)) { alert('Kies minstens één trainingsdag.'); return; }
+      await saveTrainingPlan(s);
+      state.tsetup = null; state.ts = null; state.tpick = {};
+      state.trainView = 'list';
+      render();
+      window.scrollTo(0, 0);
+      showToast('Schema opgeslagen');
+    }
+
+    // Cardio
+    function openCardio() {
+      const idx = trainSelectedIdx();
+      const date = trainWeekDates()[idx];
+      state.tc = { kind: 'Hardlopen', min: '', km: '', outdoor: true, date: date > todayStr() ? todayStr() : date };
+      state.trainView = 'cardio';
+      render();
+      window.scrollTo(0, 0);
+    }
+    function tcKind(k) { state.tc.kind = k; state.tc.outdoor = ['Hardlopen', 'Fietsen', 'Wandelen'].includes(k) ? true : (k === 'Zwemmen' || k === 'Roeien' || k === 'HIIT') ? false : state.tc.outdoor; render(); }
+    function tcField(f, v) { state.tc[f] = v; const el = document.getElementById('tc-live'); if (el) el.innerHTML = cardioLive(); }
+    function fmtPace(minPerKm) { if (!minPerKm || !isFinite(minPerKm)) return '—'; let m = Math.floor(minPerKm), s = Math.round((minPerKm - m) * 60); if (s === 60) { m++; s = 0; } return m + ':' + String(s).padStart(2, '0'); }
+    function cardioLive() {
+      const t = pnum(state.tc.min), d = pnum(state.tc.km);
+      const pace = t && d ? fmtPace(t / d) + ' /km' : '—';
+      const speed = t && d ? String(Math.round(d / (t / 60) * 10) / 10).replace('.', ',') + ' km/u' : '—';
+      const h = hard75Active();
+      const hint = h && state.tc.outdoor ? `<div style="font-size: 11px; color: ${t >= 45 ? '#22c55e' : '#a3a3a3'}; margin-top: 10px; grid-column: 1 / -1;">${t >= 45 ? 'Telt als buitentraining voor 75 Hard' : 'Voor 75 Hard telt buiten vanaf 45 minuten'}</div>` : '';
+      return `
+        <div class="tc-metric"><div class="tc-metric-v">${pace}</div><div class="tc-metric-l">TEMPO</div></div>
+        <div class="tc-metric"><div class="tc-metric-v">${speed}</div><div class="tc-metric-l">SNELHEID</div></div>
+        ${hint}
+      `;
+    }
+    function cardioDistance(w) {
+      if (hasValue(w.distance_km)) return Number(w.distance_km);
+      const m = /([\d]+(?:[.,]\d+)?) km/.exec(w.notes || '');
+      return m ? Number(m[1].replace(',', '.')) : 0;
+    }
+    function cardioRecords(kind) {
+      const list = state.workouts.filter(w => w.name === kind && ((w.kind || '') === 'cardio' || cardioKinds.includes(w.name)));
+      let longest = 0, longestTime = 0, bestPace = 0;
+      list.forEach(w => {
+        const d = cardioDistance(w), t = Number(w.duration_min) || 0;
+        if (d > longest) longest = d;
+        if (t > longestTime) longestTime = t;
+        if (d >= 1 && t) { const p = t / d; if (!bestPace || p < bestPace) bestPace = p; }
+      });
+      return { count: list.length, longest, longestTime, bestPace };
+    }
+    async function saveCardio() {
+      const c = state.tc;
+      const t = pnum(c.min), d = cardioNoDistance.includes(c.kind) ? null : pnum(c.km);
+      if (!t) { alert('Vul de tijd in minuten in.'); return; }
+      const btn = document.getElementById('tc-save');
+      if (btn) { btn.disabled = true; btn.textContent = 'Opslaan...'; }
+      const before = cardioRecords(c.kind);
+      const row = { user_id: state.user.id, date: c.date || todayStr(), name: c.kind, kind: 'cardio', duration_min: Math.round(t), distance_km: d, outdoor: !!c.outdoor };
+      const res = await writeWorkout(row, null);
+      if (res.error) { alert('Fout bij opslaan: ' + res.error.message); if (btn) { btn.disabled = false; btn.textContent = 'Cardio opslaan'; } return; }
+      const messages = await afterWorkoutSaved(row, true);
+      let pr = null;
+      if (before.count && d && d > before.longest) pr = 'langste afstand ' + String(d).replace('.', ',') + ' km';
+      else if (before.count && d >= 1 && before.bestPace && t / d < before.bestPace) pr = 'snelste tempo ' + fmtPace(t / d) + ' /km';
+      state.tc = null;
+      state.trainView = 'list';
+      await loadTraining();
+      render();
+      window.scrollTo(0, 0);
+      showToast(pr ? '🏆 Nieuw record: ' + pr : (messages[0] || '🏃 Cardio opgeslagen'));
+    }
+
+    // ============================================
     // RENDER: TRAINING
     // ============================================
     function renderTraining() {
       if (state.trainView === 'edit' && state.trainForm) return renderWorkoutEditor();
+      if (state.trainView === 'setup' && state.tsetup) return renderTrainSetup();
+      if (state.trainView === 'cardio' && state.tc) return renderCardio();
+      const plan = trainingPlan();
+      if (!plan) { openTrainSetupSilently(); return renderTrainSetup(); }
+
+      const dates = trainWeekDates();
       const today = todayStr();
-      const weekStart = weekKey(today);
-      const monthStart = today.slice(0, 8) + '01';
-      const thisWeek = state.workouts.filter(w => w.date >= weekStart && w.date <= today).length;
-      const thisMonth = state.workouts.filter(w => w.date >= monthStart && w.date <= today).length;
+      const idx = trainSelectedIdx();
+      const key = sessionKeyFor(plan, idx);
+      const date = dates[idx];
 
       return `
-        <div class="page-header">
+        <div class="page-header" style="margin-bottom: 16px;">
           <div class="page-sub">Fysiek</div>
           <div class="page-title">Training</div>
         </div>
@@ -3862,33 +4525,324 @@
         ${state.trainingError ? `
           <div class="info-box"><div class="info-title">⚠️ Training nog niet klaar</div><div class="info-text">${esc(state.trainingError)} Voer training-update.sql uit in Supabase.</div></div>
         ` : ''}
+        ${state.trainingPlanLocal || state.trainingColsMissing ? `
+          <div class="info-box"><div class="info-title">Nog één update</div><div class="info-text">Voer training2-update.sql uit in Supabase, dan wordt je schema ook online bewaard${state.trainingColsMissing ? ' en krijgt cardio een eigen afstandsveld' : ''}.</div></div>
+        ` : ''}
 
-        <div class="stats" style="grid-template-columns: repeat(3, 1fr);">
-          <div class="stat"><div class="stat-value">${thisWeek}</div><div class="stat-label">Deze week</div></div>
-          <div class="stat"><div class="stat-value">${thisMonth}</div><div class="stat-label">Deze maand</div></div>
-          <div class="stat"><div class="stat-value">${state.workouts.length}</div><div class="stat-label">Totaal</div></div>
+        <div class="tweek">
+          ${dates.map((d, i) => {
+            const k = sessionKeyFor(plan, i);
+            const cls = ['tday', i === idx ? 'sel' : '', !k ? 'rest' : '', d === today ? 'today' : ''].filter(Boolean).join(' ');
+            return `<button class="${cls}" onclick="selectTrainDay(${i})" aria-label="${weekdayLong[i]}: ${k ? sessionDefs[k].label : 'rust'}">
+              <span class="tday-d">${weekdayShort[i]}</span><span class="tday-s">${k ? esc(sessionDefs[k].label) : 'Rust'}</span>
+            </button>`;
+          }).join('')}
         </div>
 
-        <button class="btn btn-primary" style="width: 100%; margin-bottom: 16px;" onclick="newWorkout()">+ Training loggen</button>
+        ${key ? renderSession(plan, idx, key) : renderRestDay(plan, idx)}
 
-        <div class="tabs">
-          <button class="tab ${state.trainView !== 'prs' ? 'active' : ''}" onclick="setTrainView('list')">Trainingen</button>
-          <button class="tab ${state.trainView === 'prs' ? 'active' : ''}" onclick="setTrainView('prs')">Records</button>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 24px 0 8px;">
+          <button class="btn btn-secondary btn-small" onclick="openCardio()">+ Cardio</button>
+          <button class="btn btn-secondary btn-small" onclick="openTrainSetup()">Schema aanpassen</button>
         </div>
 
-        ${state.trainView === 'prs' ? renderRecords() : renderWorkoutList()}
+        <div class="tabs" style="margin-top: 24px;">
+          <button class="tab ${state.trainTab !== 'prs' ? 'active' : ''}" onclick="state.trainTab = 'list'; render();">Logboek</button>
+          <button class="tab ${state.trainTab === 'prs' ? 'active' : ''}" onclick="state.trainTab = 'prs'; render();">Records</button>
+        </div>
+        ${state.trainTab === 'prs' ? renderRecords() : renderWorkoutList()}
+        ${state.tswap ? renderSwapSheet(plan) : ''}
       `;
     }
 
+    function openTrainSetupSilently() {
+      if (!state.tsetup) state.tsetup = { split: 'ppl', loc: 'gym', kit: [], days: makeDays('ppl', 5), abs: true, swaps: {}, records: {} };
+      state.trainView = 'setup';
+    }
+
+    function renderRestDay(plan, idx) {
+      const ses = splitDefs[plan.split].sessions;
+      return `
+        <div class="card" style="margin-top: 16px;">
+          <div style="font-size: 10px; color: #8a8a8a; letter-spacing: 0.2em; font-weight: 600;">${weekdayLong[idx].toUpperCase()}</div>
+          <div style="font-size: 26px; font-weight: 300; letter-spacing: 0.08em; margin-top: 4px;">RUSTDAG</div>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-top: 8px;">Spieren groeien in rust. Wandelen of rustige cardio mag altijd.</div>
+          <div style="font-size: 10px; color: #8a8a8a; letter-spacing: 0.15em; margin-top: 16px; margin-bottom: 8px;">TOCH TRAINEN?</div>
+          <div class="chips" style="margin: 0;">
+            ${ses.map(k => `<button class="chip" onclick="pickSession('${k}')">${esc(sessionDefs[k].label)}</button>`).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSession(plan, idx, key) {
+      const dates = trainWeekDates();
+      const date = dates[idx];
+      if (!state.ts || state.ts.key !== date + '|' + key) state.ts = buildSession(plan, idx, key);
+      const ts = state.ts;
+      const def = sessionDefs[key];
+      const today = todayStr();
+      const when = date === today ? ' · VANDAAG' : date > today ? '' : (ts.workoutId ? ' · OPGESLAGEN' : '');
+      let lastGroup = null;
+      const ses = splitDefs[plan.split].sessions;
+
+      return `
+        <div style="border-top: 1px solid #1c1c1c; padding-top: 14px; margin-top: 16px; margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
+            <div>
+              <div style="font-size: 10px; color: #e5484d; letter-spacing: 0.2em; font-weight: 600;">${weekdayLong[idx].toUpperCase()}${when}</div>
+              <div style="font-size: 26px; font-weight: 300; letter-spacing: 0.08em; margin-top: 2px;">${esc(def.label.toUpperCase())}</div>
+              <div style="font-size: 11px; color: #8a8a8a; margin-top: 2px;">${esc(def.sub)}</div>
+            </div>
+            <select class="tsel" aria-label="Andere training kiezen" onchange="pickSession(this.value || null)">
+              ${ses.map(k => `<option value="${k}" ${k === key ? 'selected' : ''}>${esc(sessionDefs[k].label)}</option>`).join('')}
+              <option value="">Rust</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="tgrid-head">
+          <span>WARM-UP</span><span>SET 1</span><span>SET 2</span><span>SET 3</span><span style="color: #d9a441;">RECORD</span>
+        </div>
+
+        ${ts.exercises.map((ex, ei) => {
+          const head = ex.group !== lastGroup ? `<div class="tgroup">${esc((muscleGroups[ex.group] || 'Extra').toUpperCase())}</div>` : '';
+          lastGroup = ex.group;
+          return `
+            ${head}
+            <div class="tex">
+              <div class="tex-top">
+                <div style="min-width: 0;">
+                  <div class="tex-name">${esc(ex.name)}</div>
+                  <div class="tex-range">${ex.range ? 'werksets ' + esc(ex.range) + (/sec|mogelijk/.test(ex.range) ? '' : ' reps') : ''}</div>
+                </div>
+                ${ex.slot === 'extra'
+                  ? `<button class="tex-btn" onclick="removeExtra(${ei})" aria-label="Oefening weghalen">✕</button>`
+                  : `<button class="tex-btn" onclick="openSwap(${ei})">⇄ Vervangen</button>`}
+              </div>
+              <div class="tgrid">
+                ${ex.sets.map((s, si) => `
+                  <div class="tcell${si === 0 ? ' warm' : ''}">
+                    <input type="text" inputmode="decimal" value="${esc(s.w)}" placeholder="kg" aria-label="${esc(ex.name)} ${si === 0 ? 'warm-up' : 'set ' + si} gewicht" oninput="tcSet(${ei}, ${si}, 'w', this.value)">
+                    <input type="text" inputmode="numeric" class="reps" value="${esc(s.r)}" placeholder="reps" aria-label="${esc(ex.name)} ${si === 0 ? 'warm-up' : 'set ' + si} reps" oninput="tcSet(${ei}, ${si}, 'r', this.value)">
+                  </div>
+                `).join('')}
+                <div class="tcell tcell-rec${ex.hit ? ' hit' : ''}" id="trb-${ei}">
+                  <input type="text" inputmode="decimal" id="trw-${ei}" value="${esc(ex.rec.w)}" placeholder="kg" aria-label="${esc(ex.name)} record gewicht" oninput="tcRec(${ei}, 'w', this.value)">
+                  <input type="text" inputmode="numeric" id="trr-${ei}" class="reps" value="${esc(ex.rec.r)}" placeholder="reps" aria-label="${esc(ex.name)} record reps" oninput="tcRec(${ei}, 'r', this.value)">
+                </div>
+              </div>
+              <div class="tex-note" id="trn-${ei}">${ex.hit ? recordNote(ex) : ''}</div>
+            </div>
+          `;
+        }).join('')}
+
+        <button class="btn btn-secondary btn-small" style="width: 100%; margin-top: 4px;" onclick="openAddExercise()">+ Oefening</button>
+
+        <div class="card" style="margin-top: 16px; padding: 16px;">
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <label class="form-label" style="margin: 0; flex-shrink: 0;" for="ts-dur">Duur (min)</label>
+            <input type="text" inputmode="numeric" class="input-sm" id="ts-dur" value="${esc(ts.duration)}" placeholder="${ts.startedAt ? 'automatisch' : '60'}" oninput="state.ts.duration = this.value">
+          </div>
+          <label style="display: flex; gap: 10px; align-items: center; margin-top: 12px; font-size: 13px; color: #a3a3a3; cursor: pointer;">
+            <input type="checkbox" id="ts-out" ${ts.outdoor ? 'checked' : ''} onchange="state.ts.outdoor = this.checked" style="width: 18px; height: 18px; accent-color: #7f1d1d;"> Buiten getraind
+          </label>
+        </div>
+
+        <button class="btn btn-primary" id="ts-save" style="width: 100%; padding: 18px;" onclick="saveSession()" ${date > today ? 'disabled' : ''}>${date > today ? 'Kan vanaf ' + weekdayLong[idx].toLowerCase() : (ts.workoutId ? 'Training bijwerken' : 'Training afronden')}</button>
+      `;
+    }
+
+    function renderSwapSheet(plan) {
+      const sw = state.tswap; const ts = state.ts;
+      if (!ts) return '';
+      let title, intro, groups;
+      if (sw.add) {
+        title = 'OEFENING TOEVOEGEN';
+        intro = 'Alleen voor deze training. Kies een spiergroep en daarna de oefening.';
+        groups = sw.group ? [sw.group] : [];
+      } else {
+        const ex = ts.exercises[sw.ei];
+        title = (muscleGroups[ex.group] || '').toUpperCase() + ' · VERVANG ' + ex.name.toUpperCase();
+        intro = `Alleen ${(muscleGroups[ex.group] || '').toLowerCase()}-oefeningen${plan.loc === 'home' ? ' die je thuis kunt doen' : ''}. Je record blijft per oefening bewaard, dus wisselen kost je niets.`;
+        groups = [ex.group];
+      }
+      const current = sw.add ? null : ts.exercises[sw.ei].name;
+      const inSession = ts.exercises.map(e => e.name);
+      return `
+        <div class="modal-overlay tsheet-wrap" onclick="if(event.target === this) closeSwap();">
+          <div class="tsheet" role="dialog" aria-label="Oefening kiezen">
+            <div class="tsheet-handle"></div>
+            <div style="font-size: 10px; color: #e5484d; letter-spacing: 0.2em; font-weight: 600;">${esc(title)}</div>
+            <div style="font-size: 12px; color: #a3a3a3; line-height: 1.5; margin: 6px 0 12px;">${esc(intro)}</div>
+            ${sw.add ? `
+              <div class="chips" style="margin: 0 0 12px;">
+                ${Object.keys(muscleGroups).map(g => `<button class="chip ${sw.group === g ? 'active' : ''}" onclick="state.tswap.group = '${g}'; render();">${esc(muscleGroups[g])}</button>`).join('')}
+              </div>
+            ` : ''}
+            ${groups.map(g => exerciseLib.filter(e => e.group === g && kitAvailable(plan, e)).map(e => {
+              const rec = recordFor(e.name, ts.workoutId);
+              const isCur = e.name === current;
+              const taken = !isCur && inSession.includes(e.name);
+              return `<button class="tswap-opt ${isCur ? 'cur' : ''}" ${taken ? 'disabled' : ''} onclick="${isCur ? 'closeSwap()' : `chooseSwap(${esc(JSON.stringify(e.name))})`}">
+                <span style="flex: 1; text-align: left; min-width: 0;">
+                  <span style="display: block; font-size: 14px;">${esc(e.name)}</span>
+                  <span style="display: block; font-size: 11px; color: #8a8a8a; margin-top: 2px;">${e.kit.map(k => kitNames[k]).join(' / ')}${isCur ? ' · huidige' : taken ? ' · staat al in deze training' : ''}</span>
+                </span>
+                <span style="font-size: 12px; color: #d9a441; white-space: nowrap;">${rec.r ? (rec.w ? fmtKg(rec.w) + ' × ' + rec.r : rec.r + ' reps') : '—'}</span>
+              </button>`;
+            }).join('')).join('')}
+            <button class="btn btn-secondary btn-small" style="width: 100%; margin-top: 8px;" onclick="closeSwap()">Annuleren</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderTrainSetup() {
+      const s = state.tsetup;
+      const count = s.days.filter(Boolean).length;
+      const rest = 7 - count;
+      const advice = adviceSplit(count || 3);
+      const hasPlan = !!trainingPlan();
+      const adviceText = {
+        fb: 'Bij 2 of 3 dagen train je elke keer je hele lichaam, met 1 oefening per spiergroep. Zo raak je elke spier 2 tot 3 keer per week. Wissel Full A en Full B af.',
+        ul: 'Bij 4 dagen wissel je bovenlichaam en onderlichaam af, met 2 oefeningen per spiergroep. Elke spiergroep komt 2 keer per week aan bod.',
+        ppl: 'Bij 5 dagen train je Push, Pull en Legs. Spieren groeien in rust, daarom minimaal 2 rustdagen per week.'
+      }[advice];
+      const restMsg = rest >= 2 ? `<span style="color: #22c55e;">${rest} rustdagen ✓</span>`
+        : rest === 1 ? `<span style="color: #eab308;">Maar 1 rustdag</span>` : `<span style="color: #e5484d;">Geen rustdag</span>`;
+      return `
+        <div class="page-header" style="margin-bottom: 16px;">
+          <div class="page-sub">Training</div>
+          <div class="page-title">Instellen</div>
+          <div style="font-size: 12px; color: #a3a3a3; margin-top: 8px; line-height: 1.6;">Vier vragen, daarna staat je schema klaar. Je kunt dit later altijd aanpassen.</div>
+        </div>
+        ${hasPlan ? `<button class="entry-action" style="margin-bottom: 16px;" onclick="state.tsetup = null; setTrainView('list');">← Terug</button>` : ''}
+
+        <div class="card">
+          <div class="tq">1 · HOEVEEL DAGEN PER WEEK?</div>
+          <div class="tcount">
+            ${[2, 3, 4, 5, 6].map(n => `<button class="${count === n ? 'on' : ''} ${n === 6 ? 'warn' : ''}" onclick="tsuCount(${n})">${n}</button>`).join('')}
+          </div>
+          ${count >= 6 ? `<div style="font-size: 11px; color: #eab308; line-height: 1.5; margin-top: 10px;">Bij 6 dagen blijft er maar 1 rustdag over. Spieren groeien in rust: 5 dagen is voor de meeste mensen beter.</div>` : ''}
+        </div>
+
+        <div class="card">
+          <div class="tq">2 · WAAR TRAIN JE?</div>
+          <button class="topt ${s.loc === 'gym' ? 'on' : ''}" onclick="tsuLoc('gym')"><span class="topt-t">Gym</span><span class="topt-s">Barbells, dumbbells, kabels en machines</span></button>
+          <button class="topt ${s.loc === 'home' ? 'on' : ''}" onclick="tsuLoc('home')"><span class="topt-t">Thuis</span><span class="topt-s">Kies hieronder wat je hebt</span></button>
+          ${s.loc === 'home' ? `
+            <div class="chips" style="margin: 4px 0 8px;">
+              ${homeKitOptions.map(([k, l]) => `<button class="chip ${s.kit.includes(k) ? 'active' : ''}" onclick="tsuKit('${k}')">${l}</button>`).join('')}
+            </div>
+            <div style="font-size: 10px; color: #8a8a8a; margin-bottom: 8px;">Niks aangevinkt? Dan krijg je oefeningen met je eigen lichaamsgewicht.</div>
+          ` : ''}
+          <button class="topt soon" disabled><span class="topt-t">Calisthenics</span><span class="topt-s">Binnenkort</span></button>
+        </div>
+
+        <div class="card">
+          <div class="tq" style="margin-bottom: 4px;">3 · WELKE TRAINING OP WELKE DAG?</div>
+          <div style="font-size: 11px; color: #a3a3a3; line-height: 1.5; margin-bottom: 12px;">Tik op een dag om te wisselen: ${splitDefs[s.split].sessions.map(k => sessionDefs[k].label).join(', ')} of Rust. Deze rij zie je elke week bovenaan je training.</div>
+          <div class="tweek" style="margin: 0;">
+            ${s.days.map((k, i) => `<button class="tday ${k ? 'set' : 'rest'}" onclick="tsuDay(${i})" aria-label="${weekdayLong[i]}: ${k ? sessionDefs[k].label : 'rust'}">
+              <span class="tday-d">${weekdayShort[i]}</span><span class="tday-s">${k ? esc(sessionDefs[k].label) : 'Rust'}</span>
+            </button>`).join('')}
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; font-size: 12px; gap: 8px;">
+            <span style="color: #a3a3a3;">Rustdagen: ${s.days.map((k, i) => k ? null : weekdayShort[i]).filter(Boolean).join(' · ') || 'geen'}</span>
+            ${restMsg}
+          </div>
+        </div>
+
+        <div class="card" style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+          <div>
+            <div class="tq" style="margin-bottom: 0;">4 · BUIKSPIEREN ERBIJ?</div>
+            <div style="font-size: 11px; color: #a3a3a3; margin-top: 6px; line-height: 1.5;">Eén oefening aan het eind van 2 trainingen per week</div>
+          </div>
+          <button class="ttoggle ${s.abs ? 'on' : ''}" role="switch" aria-checked="${s.abs ? 'true' : 'false'}" aria-label="Buikspieren" onclick="state.tsetup.abs = !state.tsetup.abs; render();"><span></span></button>
+        </div>
+
+        <div class="card" style="background: #120d04; border-color: #d9a441;">
+          <div style="font-size: 10px; color: #d9a441; letter-spacing: 0.15em; font-weight: 600;">ONS ADVIES</div>
+          <div style="font-size: 20px; font-weight: 300; letter-spacing: 0.04em; margin-top: 6px;">${splitDefs[advice].name} · ${count || '?'} ${count === 1 ? 'dag' : 'dagen'}</div>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-top: 6px;">${adviceText}</div>
+          <div style="font-size: 10px; color: #8a8a8a; letter-spacing: 0.15em; margin-top: 14px; margin-bottom: 8px;">SPLIT</div>
+          <div class="chips" style="margin: 0;">
+            ${Object.keys(splitDefs).map(k => `<button class="chip ${s.split === k ? 'active' : ''}" onclick="tsuSplit('${k}')">${esc(splitDefs[k].short)}${k === advice ? ' · advies' : ''}</button>`).join('')}
+          </div>
+        </div>
+
+        <button class="btn btn-primary" style="width: 100%; padding: 18px;" onclick="tsuSave()">${hasPlan ? 'Schema opslaan' : 'Schema maken'}</button>
+      `;
+    }
+
+    function renderCardio() {
+      const c = state.tc;
+      const rec = cardioRecords(c.kind);
+      const noDist = cardioNoDistance.includes(c.kind);
+      return `
+        <div class="page-header" style="margin-bottom: 16px;">
+          <div class="page-sub">Training</div>
+          <div class="page-title">Cardio</div>
+        </div>
+        <button class="entry-action" style="margin-bottom: 16px;" onclick="state.tc = null; setTrainView('list');">← Terug</button>
+
+        <div class="card">
+          <div class="tq">SOORT</div>
+          <div class="tkinds">
+            ${cardioKinds.map(k => `<button class="${c.kind === k ? 'on' : ''}" onclick="tcKind('${k}')">${k}</button>`).join('')}
+          </div>
+          <div class="form-row" style="margin-top: 8px;">
+            <div><label class="form-label">Tijd (min)</label><input type="text" inputmode="decimal" class="form-input" id="tc-min" value="${esc(c.min)}" placeholder="30" oninput="tcField('min', this.value)"></div>
+            ${noDist ? '<div></div>' : `<div><label class="form-label">Afstand (km)</label><input type="text" inputmode="decimal" class="form-input" id="tc-km" value="${esc(c.km)}" placeholder="5,0" oninput="tcField('km', this.value)"></div>`}
+          </div>
+          ${noDist ? '' : `<div class="tc-live" id="tc-live">${cardioLive()}</div>`}
+          <div class="form-row">
+            <div><label class="form-label">Datum</label><input type="date" class="form-input" value="${esc(c.date)}" max="${todayStr()}" onchange="state.tc.date = this.value"></div>
+            <div></div>
+          </div>
+          <label style="display: flex; gap: 10px; align-items: center; margin-top: 14px; font-size: 13px; color: #a3a3a3; cursor: pointer;">
+            <input type="checkbox" ${c.outdoor ? 'checked' : ''} onchange="state.tc.outdoor = this.checked; const l = document.getElementById('tc-live'); if (l) l.innerHTML = cardioLive();" style="width: 18px; height: 18px; accent-color: #7f1d1d;"> Buiten
+          </label>
+        </div>
+
+        ${rec.count ? `
+          <div class="card" style="background: #120d04; border-color: #d9a441;">
+            <div style="font-size: 10px; color: #d9a441; letter-spacing: 0.15em; font-weight: 600; margin-bottom: 10px;">JE RECORDS · ${esc(c.kind.toUpperCase())}</div>
+            ${!noDist && rec.bestPace ? `<div class="trec-row"><span>Snelste tempo</span><span>${fmtPace(rec.bestPace)} /km</span></div>` : ''}
+            ${!noDist && rec.longest ? `<div class="trec-row"><span>Langste afstand</span><span>${String(Math.round(rec.longest * 10) / 10).replace('.', ',')} km</span></div>` : ''}
+            ${rec.longestTime ? `<div class="trec-row"><span>Langste duur</span><span>${rec.longestTime} min</span></div>` : ''}
+          </div>
+        ` : ''}
+
+        <button class="btn btn-primary" id="tc-save" style="width: 100%; padding: 18px;" onclick="saveCardio()">Cardio opslaan</button>
+      `;
+    }
+
+    function openLogItem(id) {
+      const w = workoutById(id);
+      if (!w) return;
+      const i = trainWeekDates().indexOf(w.date);
+      const isSession = Object.keys(sessionDefs).some(k => sessionDefs[k].label === w.name) && (w.kind || 'strength') !== 'cardio';
+      if (i >= 0 && isSession && trainingPlan()) {
+        if (state.ts && state.ts.dirty && !confirm('Je training is nog niet opgeslagen. Toch wisselen?')) return;
+        state.tday = i; state.ts = null;
+        if (state.tpick) delete state.tpick[w.date];
+        render(); window.scrollTo(0, 0);
+        return;
+      }
+      editWorkout(id);
+    }
+
     function renderWorkoutList() {
-      if (!state.workouts.length) return `<div class="empty">Nog geen trainingen gelogd.<br><br>Log je eerste training: de app onthoudt je gewichten, zodat je de volgende keer ziet wat je moet verslaan.</div>`;
+      if (!state.workouts.length) return `<div class="empty">Nog geen trainingen gelogd.<br><br>Vul hierboven je eerste training in: je records komen vanzelf in het gouden vakje te staan.</div>`;
       const list = state.trainShowAll ? state.workouts : state.workouts.slice(0, 15);
       return `
         ${list.map(w => {
           const groups = groupSets(workoutSetsOf(w.id));
           const vol = workoutVolume(w.id);
           return `
-            <div class="goal" style="cursor: pointer;" onclick="editWorkout('${w.id}')">
+            <div class="goal" style="cursor: pointer;" onclick="openLogItem('${w.id}')">
               <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;">
                 <div class="goal-title" style="margin-bottom: 0;">${esc(w.name)}</div>
                 <div style="font-size: 11px; color: #a3a3a3; white-space: nowrap;">${fmtDateShort(w.date)}</div>
@@ -3896,6 +4850,7 @@
               <div class="goal-meta" style="margin-top: 6px;">
                 ${w.duration_min ? `<span class="badge">${w.duration_min} min</span>` : ''}
                 ${w.outdoor ? '<span class="badge">🌳 buiten</span>' : ''}
+                ${cardioDistance(w) ? `<span class="badge">${String(cardioDistance(w)).replace('.', ',')} km</span>` : ''}
                 ${vol ? `<span class="badge">${fmtInt(Math.round(vol))} kg volume</span>` : ''}
               </div>
               ${groups.length ? `<div style="font-size: 12px; color: #a3a3a3; line-height: 1.7; margin-top: 8px;">${groups.map(g => `${esc(g.name)} <span style="color: #8a8a8a;">${setsSummary(g.sets)}</span>`).join('<br>')}</div>` : ''}
@@ -4738,6 +5693,7 @@
       state.workouts = [];
       state.workoutSets = [];
       state.trainForm = null;
+      Object.assign(state, { ts: null, tpick: {}, tswap: null, tsetup: null, tc: null, tday: null, trainView: 'list' });
         }
         render();
       });
