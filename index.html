@@ -318,6 +318,18 @@
       // Motivatie
       retentionAll: [],
       showRankUp: null,
+
+      // Training
+      workouts: [],
+      workoutSets: [],
+      trainingError: null,
+      trainView: 'list',
+      trainForm: null,
+      trainShowAll: false,
+
+      // Weekrapport en back-up
+      weekOffset: 0,
+      showRestore: false,
       
       // Daily habits (positive + negative situations)
       habits: {
@@ -769,6 +781,9 @@
       state.chLogIndex = {};
       state.retentionAll = [];
       state.showRankUp = null;
+      state.workouts = [];
+      state.workoutSets = [];
+      state.trainForm = null;
       render();
     }
 
@@ -987,7 +1002,7 @@
     // ============================================
     // BACK-UP
     // ============================================
-    const backupTables = ['journal_entries', 'retention', 'daily_habits', 'goals', 'goal_subtasks', 'body_stats', 'challenges', 'challenge_logs', 'user_settings'];
+    const backupTables = ['journal_entries', 'retention', 'daily_habits', 'goals', 'goal_subtasks', 'body_stats', 'challenges', 'challenge_logs', 'user_settings', 'workouts', 'workout_sets'];
 
     function getLastBackup() {
       try { return localStorage.getItem('pf_last_backup'); } catch (e) { return null; }
@@ -1158,6 +1173,8 @@
         </div>
 
         ${renderRankCard()}
+
+        ${renderWeekTeaser()}
 
         ${hard75Active() ? renderHard75Hero(hard75Active()) : ''}
         
@@ -3441,6 +3458,757 @@
     }
 
     // ============================================
+    // BACK-UP TERUGZETTEN
+    // ============================================
+    // Volgorde: eerst "ouders", dan wat ernaar verwijst. Niets wordt gewist: alleen aangevuld of bijgewerkt.
+    const restoreOrder = [
+      { table: 'journal_entries', key: 'id' },
+      { table: 'retention', key: 'id' },
+      { table: 'daily_habits', key: 'user_id,date', dropId: true },
+      { table: 'goals', key: 'id' },
+      { table: 'goal_subtasks', key: 'id' },
+      { table: 'body_stats', key: 'id' },
+      { table: 'challenges', key: 'id' },
+      { table: 'challenge_logs', key: 'challenge_id,date', dropId: true },
+      { table: 'user_settings', key: 'user_id' },
+      { table: 'workouts', key: 'id' },
+      { table: 'workout_sets', key: 'id' }
+    ];
+
+    let pendingRestore = null;
+
+    function pickRestoreFile() {
+      const input = document.getElementById('restore-file');
+      if (input) input.click();
+    }
+
+    function onRestoreFile(input) {
+      const file = input.files && input.files[0];
+      input.value = '';
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          if (!data || data.app !== 'Primal Forged' || !data.tables) throw new Error('Dit is geen Primal Forged back-up.');
+          pendingRestore = data;
+          state.showRestore = true;
+          render();
+        } catch (e) {
+          alert('Kan dit bestand niet lezen: ' + e.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function renderRestoreModal() {
+      const d = pendingRestore;
+      if (!d) return '';
+      const rows = restoreOrder
+        .map(o => ({ t: o.table, n: Array.isArray(d.tables[o.table]) ? d.tables[o.table].length : 0 }))
+        .filter(x => x.n > 0);
+      const labels = {
+        journal_entries: 'Journal-entries', retention: 'Retention-streaks', daily_habits: 'Habit-dagen', goals: 'Missies (oud)',
+        goal_subtasks: 'Missie-stappen (oud)', body_stats: 'Metingen', challenges: 'Challenges', challenge_logs: 'Challenge-dagen',
+        user_settings: 'Instellingen', workouts: 'Trainingen', workout_sets: 'Training-sets'
+      };
+      return `
+        <div class="modal-overlay" onclick="if(event.target === this) closeRestore();">
+          <div class="modal">
+            <div class="modal-title" style="color: #fafafa;">Back-up terugzetten</div>
+            <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-bottom: 12px;">
+              Back-up van ${d.exported_at ? new Date(d.exported_at).toLocaleString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'onbekende datum'}${d.user_email ? ' · ' + esc(d.user_email) : ''}
+            </div>
+            ${rows.length ? rows.map(r => `
+              <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1c1c1c; font-size: 13px;">
+                <span style="color: #a3a3a3;">${labels[r.t] || r.t}</span><span>${r.n}</span>
+              </div>
+            `).join('') : '<div class="empty">Deze back-up is leeg.</div>'}
+            <div class="info-box" style="margin-top: 16px;">
+              <div class="info-text">Er wordt niets gewist. Wat in de back-up staat, wordt aangevuld of teruggezet naar de versie uit de back-up. Alles komt op je huidige account te staan.</div>
+            </div>
+            <div id="restore-progress" style="font-size: 12px; color: #a3a3a3; min-height: 18px;"></div>
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 8px; margin-top: 12px;">
+              <button class="btn btn-secondary" onclick="closeRestore()">Annuleren</button>
+              <button class="btn btn-primary" id="restore-btn" onclick="runRestore()" ${rows.length ? '' : 'disabled'}>Terugzetten</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function closeRestore() {
+      pendingRestore = null;
+      state.showRestore = false;
+      render();
+    }
+
+    async function runRestore() {
+      const d = pendingRestore;
+      if (!d || !state.user) return;
+      const btn = document.getElementById('restore-btn');
+      const prog = document.getElementById('restore-progress');
+      if (btn) { btn.disabled = true; btn.textContent = 'Bezig...'; }
+      const done = [], failed = [];
+
+      for (const o of restoreOrder) {
+        const list = Array.isArray(d.tables[o.table]) ? d.tables[o.table] : [];
+        if (!list.length) continue;
+        if (prog) prog.textContent = 'Terugzetten: ' + o.table + '...';
+        const rows = list.map(r => {
+          const copy = { ...r, user_id: state.user.id };
+          if (o.table === 'user_settings') delete copy.id;
+          if (o.dropId) delete copy.id;
+          return copy;
+        });
+        let ok = true, msg = '';
+        for (let i = 0; i < rows.length; i += 500) {
+          const { error } = await supabaseClient.from(o.table).upsert(rows.slice(i, i + 500), { onConflict: o.key });
+          if (error) { ok = false; msg = error.message; break; }
+        }
+        (ok ? done : failed).push(ok ? o.table : `${o.table}: ${msg}`);
+      }
+
+      pendingRestore = null;
+      state.showRestore = false;
+      await loadAll();
+      render();
+      if (failed.length) alert('Terugzetten klaar, maar niet alles lukte:\n\n' + failed.join('\n') + '\n\nDe rest is wel teruggezet.');
+      else showToast('✓ Back-up teruggezet');
+    }
+
+    // ============================================
+    // TRAINING: CONFIG
+    // ============================================
+    const exerciseSuggestions = [
+      'Bankdrukken', 'Squat', 'Deadlift', 'Overhead press', 'Barbell row', 'Pull-ups', 'Chin-ups', 'Dips', 'Push-ups',
+      'Incline dumbbell press', 'Dumbbell schouderpress', 'Lat pulldown', 'Cable row', 'Romanian deadlift', 'Lunges',
+      'Bulgarian split squat', 'Hip thrust', 'Leg press', 'Leg curl', 'Leg extension', 'Calf raises', 'Biceps curl',
+      'Hammer curl', 'Triceps pushdown', 'Skull crushers', 'Face pulls', 'Lateral raises', 'Plank', 'Hanging leg raises',
+      'Kettlebell swing', 'Farmer’s walk'
+    ];
+    const workoutPresets = ['Push', 'Pull', 'Benen', 'Full body', 'Bovenlichaam', 'Hardlopen', 'Wandelen', 'Fietsen', 'HIIT', 'Mobility'];
+
+    // Geschatte 1-rep-max (Epley)
+    function e1rm(weight, reps) {
+      const w = Number(weight) || 0, r = Number(reps) || 0;
+      if (!w || !r) return 0;
+      return r === 1 ? w : w * (1 + r / 30);
+    }
+
+    function workoutSetsOf(id) {
+      return state.workoutSets.filter(s => s.workout_id === id).sort((a, b) => (a.position - b.position) || (a.set_no - b.set_no));
+    }
+
+    function groupSets(sets) {
+      const out = [];
+      sets.forEach(s => {
+        let g = out.find(x => x.name === s.exercise);
+        if (!g) { g = { name: s.exercise, sets: [] }; out.push(g); }
+        g.sets.push(s);
+      });
+      return out;
+    }
+
+    function workoutVolume(id) {
+      return workoutSetsOf(id).reduce((a, s) => a + (Number(s.reps) || 0) * (Number(s.weight) || 0), 0);
+    }
+
+    function workoutById(id) {
+      return state.workouts.find(w => w.id === id) || null;
+    }
+
+    // Laatste keer dat je deze oefening deed (buiten de training die je nu bewerkt)
+    function lastSessionFor(name, excludeId) {
+      const key = name.trim().toLowerCase();
+      const ws = state.workouts
+        .filter(w => w.id !== excludeId && workoutSetsOf(w.id).some(s => s.exercise.trim().toLowerCase() === key))
+        .sort((a, b) => b.date.localeCompare(a.date) || String(b.created_at).localeCompare(String(a.created_at)));
+      if (!ws.length) return null;
+      const sets = workoutSetsOf(ws[0].id).filter(s => s.exercise.trim().toLowerCase() === key);
+      return { date: ws[0].date, sets };
+    }
+
+    function bestFor(name, excludeId) {
+      const key = name.trim().toLowerCase();
+      let best = { weight: 0, reps: 0, e1rm: 0, date: null, wDate: null };
+      state.workouts.forEach(w => {
+        if (w.id === excludeId) return;
+        workoutSetsOf(w.id).forEach(s => {
+          if (s.exercise.trim().toLowerCase() !== key) return;
+          const wt = Number(s.weight) || 0, r = Number(s.reps) || 0;
+          if (wt > best.weight || (wt === best.weight && r > best.reps)) { best.weight = wt; best.reps = r; best.wDate = w.date; }
+          const e = e1rm(wt, r);
+          if (e > best.e1rm) { best.e1rm = e; best.date = w.date; }
+        });
+      });
+      return best;
+    }
+
+    function setsSummary(sets) {
+      // "3×8 @ 80 kg" of "8, 8, 6 @ 80 kg" als reps verschillen
+      if (!sets.length) return '';
+      const weights = [...new Set(sets.map(s => Number(s.weight) || 0))];
+      const reps = sets.map(s => Number(s.reps) || 0);
+      const sameReps = reps.every(r => r === reps[0]);
+      const repTxt = sameReps ? `${sets.length}×${reps[0]}` : reps.join(', ');
+      if (weights.length === 1) return weights[0] ? `${repTxt} @ ${fmtInt(weights[0])} kg` : `${repTxt} reps`;
+      return sets.map(s => `${s.reps || 0}×${fmtInt(s.weight || 0)}`).join(', ');
+    }
+
+    // ============================================
+    // TRAINING: DATABASE
+    // ============================================
+    async function loadTraining() {
+      if (!state.user) return;
+      const w = await supabaseClient.from('workouts').select('*').eq('user_id', state.user.id).order('date', { ascending: false });
+      if (w.error) {
+        state.trainingError = 'De training-update in Supabase is nog niet uitgevoerd.';
+        state.workouts = []; state.workoutSets = [];
+        return;
+      }
+      const s = await supabaseClient.from('workout_sets').select('*').eq('user_id', state.user.id);
+      state.trainingError = null;
+      state.workouts = (w.data || []).sort((a, b) => b.date.localeCompare(a.date) || String(b.created_at).localeCompare(String(a.created_at)));
+      state.workoutSets = s.error ? [] : (s.data || []);
+    }
+
+    function newWorkout() {
+      state.trainForm = { id: null, date: todayStr(), name: '', outdoor: false, duration: '', notes: '', exercises: [] };
+      state.trainView = 'edit';
+      render();
+      window.scrollTo(0, 0);
+    }
+
+    function editWorkout(id) {
+      const w = workoutById(id);
+      if (!w) return;
+      state.trainForm = {
+        id: w.id, date: w.date, name: w.name || '', outdoor: !!w.outdoor,
+        duration: w.duration_min ? String(w.duration_min) : '', notes: w.notes || '',
+        exercises: groupSets(workoutSetsOf(id)).map(g => ({
+          name: g.name,
+          sets: g.sets.map(s => ({ reps: s.reps !== null && s.reps !== undefined ? String(s.reps) : '', weight: hasValue(s.weight) ? String(Number(s.weight)) : '' }))
+        }))
+      };
+      state.trainView = 'edit';
+      render();
+      window.scrollTo(0, 0);
+    }
+
+    // Velden bijwerken zonder het scherm opnieuw op te bouwen (anders verlies je je cursor)
+    function tf(key, value) { if (state.trainForm) state.trainForm[key] = value; }
+    function tfSet(i, j, key, value) {
+      const ex = state.trainForm && state.trainForm.exercises[i];
+      if (ex && ex.sets[j]) ex.sets[j][key] = value;
+    }
+
+    function tfPreset(name) {
+      state.trainForm.name = name;
+      if (['Hardlopen', 'Wandelen', 'Fietsen'].includes(name)) state.trainForm.outdoor = true;
+      render();
+    }
+
+    function tfAddExercise(nameArg) {
+      const input = document.getElementById('tf-newex');
+      const name = (nameArg || (input ? input.value : '')).trim();
+      if (!name) { if (input) input.focus(); return; }
+      const last = lastSessionFor(name, state.trainForm.id);
+      const sets = last && last.sets.length
+        ? last.sets.map(s => ({ reps: s.reps !== null && s.reps !== undefined ? String(s.reps) : '', weight: hasValue(s.weight) ? String(Number(s.weight)) : '' }))
+        : [{ reps: '', weight: '' }];
+      state.trainForm.exercises.push({ name, sets });
+      render();
+    }
+
+    function tfAddSet(i) {
+      const ex = state.trainForm.exercises[i];
+      const prev = ex.sets[ex.sets.length - 1] || { reps: '', weight: '' };
+      ex.sets.push({ reps: prev.reps, weight: prev.weight });
+      render();
+    }
+
+    function tfRemoveSet(i, j) {
+      state.trainForm.exercises[i].sets.splice(j, 1);
+      if (!state.trainForm.exercises[i].sets.length) state.trainForm.exercises.splice(i, 1);
+      render();
+    }
+
+    function tfRemoveExercise(i) {
+      if (!confirm('Oefening verwijderen uit deze training?')) return;
+      state.trainForm.exercises.splice(i, 1);
+      render();
+    }
+
+    function tfMoveExercise(i, dir) {
+      const list = state.trainForm.exercises;
+      const j = i + dir;
+      if (j < 0 || j >= list.length) return;
+      [list[i], list[j]] = [list[j], list[i]];
+      render();
+    }
+
+    async function saveWorkout() {
+      const f = state.trainForm;
+      const num = v => { const n = parseFloat(String(v || '').replace(',', '.')); return isNaN(n) ? null : n; };
+      const name = (f.name || '').trim() || (f.exercises[0] ? f.exercises[0].name : '');
+      if (!name) { alert('Geef je training een naam of voeg een oefening toe'); return; }
+
+      const btn = document.getElementById('tf-save');
+      if (btn) { btn.disabled = true; btn.textContent = 'Opslaan...'; }
+
+      // PR's bepalen vóór het opslaan (vergelijken met alle andere trainingen)
+      const prs = [];
+      f.exercises.forEach(ex => {
+        const best = bestFor(ex.name, f.id);
+        if (!best.e1rm && !best.weight) return; // eerste keer: geen PR-melding
+        let top = null;
+        ex.sets.forEach(s => {
+          const w = num(s.weight) || 0, r = Math.round(num(s.reps) || 0);
+          if (!w || !r) return;
+          if (!top || e1rm(w, r) > e1rm(top.w, top.r)) top = { w, r };
+        });
+        if (top && (top.w > best.weight || e1rm(top.w, top.r) > best.e1rm + 0.01)) prs.push(`${ex.name} ${fmtInt(top.w)} kg × ${top.r}`);
+      });
+
+      const row = {
+        user_id: state.user.id, date: f.date || todayStr(), name,
+        duration_min: num(f.duration) ? Math.round(num(f.duration)) : null,
+        outdoor: !!f.outdoor, notes: (f.notes || '').trim() || null
+      };
+      let id = f.id, error;
+      if (id) {
+        ({ error } = await supabaseClient.from('workouts').update(row).eq('id', id));
+        if (!error) ({ error } = await supabaseClient.from('workout_sets').delete().eq('workout_id', id));
+      } else {
+        const res = await supabaseClient.from('workouts').insert([row]).select().single();
+        error = res.error;
+        if (res.data) id = res.data.id;
+      }
+      if (!error && id) {
+        const sets = [];
+        f.exercises.forEach((ex, pos) => ex.sets.forEach((s, j) => {
+          const reps = num(s.reps), weight = num(s.weight);
+          if (reps === null && weight === null) return;
+          sets.push({ workout_id: id, user_id: state.user.id, exercise: ex.name.trim(), position: pos, set_no: j + 1, reps: reps === null ? null : Math.round(reps), weight });
+        }));
+        if (sets.length) ({ error } = await supabaseClient.from('workout_sets').insert(sets));
+      }
+      if (error) {
+        alert('Fout bij opslaan: ' + error.message + (/workout/.test(error.message) ? '\n\nVoer eerst training-update.sql uit in Supabase.' : ''));
+        if (btn) { btn.disabled = false; btn.textContent = 'Training opslaan'; }
+        return;
+      }
+
+      // Koppelingen: habit Sport en 75 Hard
+      const messages = [];
+      if (row.date === todayStr()) {
+        if (!state.habits.workout) await toggleHabit('workout');
+        const h = hard75Active();
+        if (h && (row.duration_min || 0) >= 45 && !f.id) {
+          const tasks = { ...hard75TasksFor(h, todayStr()) };
+          let key = null;
+          if (!tasks.w1) key = 'w1';
+          else if (!tasks.w2 && row.outdoor) key = 'w2';
+          if (key) { await hard75Toggle(h.id, key); messages.push(key === 'w1' ? '75 Hard: training 1 afgevinkt' : '75 Hard: buitentraining afgevinkt'); }
+        }
+      }
+
+      state.trainForm = null;
+      state.trainView = 'list';
+      await loadTraining();
+      render();
+      window.scrollTo(0, 0);
+      if (prs.length) showToast('🏆 Nieuw PR: ' + prs[0]);
+      else showToast(messages[0] || '💪 Training opgeslagen');
+    }
+
+    async function deleteWorkout(id) {
+      if (!confirm('Training verwijderen?')) return;
+      await supabaseClient.from('workout_sets').delete().eq('workout_id', id);
+      const { error } = await supabaseClient.from('workouts').delete().eq('id', id);
+      if (error) { alert('Fout bij verwijderen: ' + error.message); return; }
+      state.trainForm = null;
+      state.trainView = 'list';
+      await loadTraining();
+      render();
+    }
+
+    function setTrainView(v) {
+      if (state.trainView === 'edit' && v !== 'edit' && state.trainForm && state.trainForm.exercises.length && !confirm('Training niet opgeslagen. Toch verlaten?')) return;
+      if (v !== 'edit') state.trainForm = null;
+      state.trainView = v;
+      render();
+      window.scrollTo(0, 0);
+    }
+
+    // ============================================
+    // RENDER: TRAINING
+    // ============================================
+    function renderTraining() {
+      if (state.trainView === 'edit' && state.trainForm) return renderWorkoutEditor();
+      const today = todayStr();
+      const weekStart = weekKey(today);
+      const monthStart = today.slice(0, 8) + '01';
+      const thisWeek = state.workouts.filter(w => w.date >= weekStart && w.date <= today).length;
+      const thisMonth = state.workouts.filter(w => w.date >= monthStart && w.date <= today).length;
+
+      return `
+        <div class="page-header">
+          <div class="page-sub">Fysiek</div>
+          <div class="page-title">Training</div>
+        </div>
+
+        ${state.trainingError ? `
+          <div class="info-box"><div class="info-title">⚠️ Training nog niet klaar</div><div class="info-text">${esc(state.trainingError)} Voer training-update.sql uit in Supabase.</div></div>
+        ` : ''}
+
+        <div class="stats" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="stat"><div class="stat-value">${thisWeek}</div><div class="stat-label">Deze week</div></div>
+          <div class="stat"><div class="stat-value">${thisMonth}</div><div class="stat-label">Deze maand</div></div>
+          <div class="stat"><div class="stat-value">${state.workouts.length}</div><div class="stat-label">Totaal</div></div>
+        </div>
+
+        <button class="btn btn-primary" style="width: 100%; margin-bottom: 16px;" onclick="newWorkout()">+ Training loggen</button>
+
+        <div class="tabs">
+          <button class="tab ${state.trainView !== 'prs' ? 'active' : ''}" onclick="setTrainView('list')">Trainingen</button>
+          <button class="tab ${state.trainView === 'prs' ? 'active' : ''}" onclick="setTrainView('prs')">Records</button>
+        </div>
+
+        ${state.trainView === 'prs' ? renderRecords() : renderWorkoutList()}
+      `;
+    }
+
+    function renderWorkoutList() {
+      if (!state.workouts.length) return `<div class="empty">Nog geen trainingen gelogd.<br><br>Log je eerste training: de app onthoudt je gewichten, zodat je de volgende keer ziet wat je moet verslaan.</div>`;
+      const list = state.trainShowAll ? state.workouts : state.workouts.slice(0, 15);
+      return `
+        ${list.map(w => {
+          const groups = groupSets(workoutSetsOf(w.id));
+          const vol = workoutVolume(w.id);
+          return `
+            <div class="goal" style="cursor: pointer;" onclick="editWorkout('${w.id}')">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;">
+                <div class="goal-title" style="margin-bottom: 0;">${esc(w.name)}</div>
+                <div style="font-size: 11px; color: #a3a3a3; white-space: nowrap;">${fmtDateShort(w.date)}</div>
+              </div>
+              <div class="goal-meta" style="margin-top: 6px;">
+                ${w.duration_min ? `<span class="badge">${w.duration_min} min</span>` : ''}
+                ${w.outdoor ? '<span class="badge">🌳 buiten</span>' : ''}
+                ${vol ? `<span class="badge">${fmtInt(Math.round(vol))} kg volume</span>` : ''}
+              </div>
+              ${groups.length ? `<div style="font-size: 12px; color: #a3a3a3; line-height: 1.7; margin-top: 8px;">${groups.map(g => `${esc(g.name)} <span style="color: #8a8a8a;">${setsSummary(g.sets)}</span>`).join('<br>')}</div>` : ''}
+              ${w.notes ? `<div class="goal-notes">${esc(w.notes)}</div>` : ''}
+            </div>
+          `;
+        }).join('')}
+        ${state.workouts.length > 15 ? `<button class="btn btn-secondary btn-small" style="width: 100%;" onclick="state.trainShowAll = !state.trainShowAll; render();">${state.trainShowAll ? 'Minder tonen' : 'Alle ' + state.workouts.length + ' trainingen tonen'}</button>` : ''}
+      `;
+    }
+
+    function renderRecords() {
+      const names = {};
+      state.workoutSets.forEach(s => {
+        const key = s.exercise.trim().toLowerCase();
+        if (!names[key]) names[key] = s.exercise.trim();
+      });
+      const rows = Object.values(names).map(n => ({ n, b: bestFor(n, null), count: new Set(state.workoutSets.filter(s => s.exercise.trim().toLowerCase() === n.toLowerCase()).map(s => s.workout_id)).size }))
+        .filter(x => x.b.weight || x.b.reps)
+        .sort((a, b) => b.count - a.count || a.n.localeCompare(b.n));
+      if (!rows.length) return `<div class="empty">Nog geen records. Log trainingen met gewichten om je records te zien.</div>`;
+      return `
+        <div class="card">
+          <div style="display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 8px; font-size: 9px; color: #8a8a8a; letter-spacing: 0.1em; padding-bottom: 8px; border-bottom: 1px solid #1c1c1c;">
+            <span>OEFENING</span><span style="text-align: right;">ZWAARSTE</span><span style="text-align: right;">GESCHAT 1RM</span>
+          </div>
+          ${rows.map(r => `
+            <div style="display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 8px; padding: 10px 0; border-bottom: 1px solid #1c1c1c; font-size: 12px; align-items: baseline;">
+              <span>${esc(r.n)}<span style="display: block; font-size: 10px; color: #8a8a8a; margin-top: 2px;">${r.count}× getraind</span></span>
+              <span style="text-align: right;">${r.b.weight ? fmtInt(r.b.weight) + ' kg × ' + r.b.reps : r.b.reps + ' reps'}<span style="display: block; font-size: 10px; color: #8a8a8a; margin-top: 2px;">${r.b.wDate ? fmtDateShort(r.b.wDate) : ''}</span></span>
+              <span style="text-align: right;">${r.b.e1rm ? fmtInt(Math.round(r.b.e1rm)) + ' kg' : '—'}</span>
+            </div>
+          `).join('')}
+          <div style="font-size: 10px; color: #8a8a8a; line-height: 1.6; margin-top: 12px;">Geschat 1RM = wat je ongeveer 1 keer zou kunnen tillen, berekend uit je beste set (formule van Epley).</div>
+        </div>
+      `;
+    }
+
+    function renderWorkoutEditor() {
+      const f = state.trainForm;
+      const used = [...new Set(state.workoutSets.map(s => s.exercise.trim()))];
+      const suggestions = [...new Set([...used, ...exerciseSuggestions])];
+      return `
+        <div class="page-header">
+          <div class="page-sub">Training</div>
+          <div class="page-title">${f.id ? 'Bewerken' : 'Nieuwe training'}</div>
+        </div>
+        <button class="entry-action" style="margin-bottom: 16px;" onclick="setTrainView('list')">← Terug</button>
+
+        <div class="card">
+          <label class="form-label" style="margin-top: 0;">Naam</label>
+          <input type="text" class="form-input" id="tf-name" value="${esc(f.name)}" placeholder="Bijv. Push, Benen, Hardlopen" oninput="tf('name', this.value)">
+          <div class="chips" style="margin: 8px 0 0;">
+            ${workoutPresets.map(p => `<button class="chip ${f.name === p ? 'active' : ''}" onclick="tfPreset('${p}')">${p}</button>`).join('')}
+          </div>
+          <div class="form-row">
+            <div><label class="form-label">Datum</label><input type="date" class="form-input" value="${esc(f.date)}" max="${todayStr()}" onchange="tf('date', this.value)"></div>
+            <div><label class="form-label">Duur (min)</label><input type="text" inputmode="numeric" class="form-input" value="${esc(f.duration)}" placeholder="60" oninput="tf('duration', this.value)"></div>
+          </div>
+          <label style="display: flex; gap: 10px; align-items: center; margin-top: 14px; font-size: 13px; color: #a3a3a3; cursor: pointer;">
+            <input type="checkbox" ${f.outdoor ? 'checked' : ''} onchange="tf('outdoor', this.checked)" style="width: 18px; height: 18px; accent-color: #7f1d1d;"> Buiten getraind
+          </label>
+        </div>
+
+        ${f.exercises.map((ex, i) => {
+          const last = lastSessionFor(ex.name, f.id);
+          const best = bestFor(ex.name, f.id);
+          return `
+            <div class="card" style="padding: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+                <div style="font-size: 15px; font-weight: 500;">${esc(ex.name)}</div>
+                <div style="display: flex; gap: 2px; flex-shrink: 0;">
+                  <button class="icon-btn" style="color: #8a8a8a;" onclick="tfMoveExercise(${i}, -1)" aria-label="Omhoog">↑</button>
+                  <button class="icon-btn" style="color: #8a8a8a;" onclick="tfMoveExercise(${i}, 1)" aria-label="Omlaag">↓</button>
+                  <button class="icon-btn" onclick="tfRemoveExercise(${i})" aria-label="Oefening verwijderen">✕</button>
+                </div>
+              </div>
+              ${last ? `<div style="font-size: 11px; color: #8a8a8a; margin-top: 4px;">Vorige keer (${fmtDateShort(last.date)}): ${setsSummary(last.sets)}${best.weight ? ' · record ' + fmtInt(best.weight) + ' kg' : ''}</div>` : `<div style="font-size: 11px; color: #8a8a8a; margin-top: 4px;">Eerste keer: deze sets worden je startpunt.</div>`}
+              <div style="display: grid; grid-template-columns: 28px 1fr 1fr 28px; gap: 8px; align-items: center; margin-top: 12px; font-size: 9px; color: #8a8a8a; letter-spacing: 0.1em;">
+                <span>SET</span><span>REPS</span><span>KG</span><span></span>
+              </div>
+              ${ex.sets.map((s, j) => `
+                <div style="display: grid; grid-template-columns: 28px 1fr 1fr 28px; gap: 8px; align-items: center; margin-top: 6px;">
+                  <span style="font-size: 13px; color: #a3a3a3; text-align: center;">${j + 1}</span>
+                  <input type="text" inputmode="numeric" class="input-sm" value="${esc(s.reps)}" placeholder="reps" oninput="tfSet(${i}, ${j}, 'reps', this.value)" aria-label="Reps set ${j + 1}">
+                  <input type="text" inputmode="decimal" class="input-sm" value="${esc(s.weight)}" placeholder="kg" oninput="tfSet(${i}, ${j}, 'weight', this.value)" aria-label="Gewicht set ${j + 1}">
+                  <button class="icon-btn" onclick="tfRemoveSet(${i}, ${j})" aria-label="Set verwijderen">×</button>
+                </div>
+              `).join('')}
+              <button class="btn btn-secondary btn-small" style="width: 100%; margin-top: 10px;" onclick="tfAddSet(${i})">+ Set</button>
+            </div>
+          `;
+        }).join('')}
+
+        <div class="card">
+          <label class="form-label" style="margin-top: 0;">Oefening toevoegen</label>
+          <div class="goal-update" style="margin-top: 0;">
+            <input type="text" class="input-sm" id="tf-newex" list="tf-exlist" placeholder="Bijv. Bankdrukken" onkeydown="if(event.key === 'Enter') tfAddExercise()">
+            <button class="btn btn-secondary btn-small" onclick="tfAddExercise()">+ Toevoegen</button>
+          </div>
+          <datalist id="tf-exlist">${suggestions.map(n => `<option value="${esc(n)}"></option>`).join('')}</datalist>
+          ${used.length ? `
+            <div class="chips" style="margin: 10px 0 0;">
+              ${used.slice(0, 8).map(n => `<button class="chip" onclick="tfAddExercise(${esc(JSON.stringify(n))})">${esc(n)}</button>`).join('')}
+            </div>
+          ` : ''}
+          <div style="font-size: 10px; color: #8a8a8a; margin-top: 8px;">Cardio zonder sets? Vul alleen naam en duur in.</div>
+
+          <label class="form-label">Notities</label>
+          <textarea class="form-input" placeholder="Hoe ging het?" oninput="tf('notes', this.value)">${esc(f.notes)}</textarea>
+        </div>
+
+        <button class="btn btn-primary" id="tf-save" style="width: 100%; padding: 18px;" onclick="saveWorkout()">Training opslaan</button>
+        ${f.id ? `<button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" onclick="deleteWorkout('${f.id}')">Training verwijderen</button>` : ''}
+      `;
+    }
+
+    // ============================================
+    // WEEKRAPPORT
+    // ============================================
+    const weekQuestions = [
+      'Wat was je grootste overwinning deze week, en hoe herhaal je die?',
+      'Welke habit liet je het vaakst liggen, en wat hield je tegen?',
+      'Op welk moment was je deze week het sterkst? Wat deed je toen anders?',
+      'Wat ga je volgende week bewust anders doen? Eén ding.',
+      'Waar ben je deze week trots op dat niemand anders heeft gezien?',
+      'Welke situatie kostte je deze week de meeste energie, en hoe bereid je je erop voor?',
+      'Als je deze week een cijfer geeft voor discipline: welk cijfer, en wat maakt het één punt hoger?',
+      'Wie of wat heeft je deze week geholpen, en hoe kun je daar meer van krijgen?'
+    ];
+
+    function isoWeekNumber(dateStr) {
+      const d = new Date(dateStr + 'T00:00:00');
+      d.setDate(d.getDate() + 3 - ((d.getDay() + 6) % 7));
+      const jan4 = new Date(d.getFullYear(), 0, 4);
+      return 1 + Math.round(((d - jan4) / 86400000 - 3 + ((jan4.getDay() + 6) % 7)) / 7);
+    }
+
+    function computeWeek(offset) {
+      const p = getProgress();
+      const today = todayStr();
+      const start = dateAdd(weekKey(today), -7 * offset);
+      const end = dateAdd(start, 6);
+      const last = end < today ? end : today;
+      const inWeek = d => d >= start && d <= last;
+      const dayMap = {};
+      p.days.forEach(d => { dayMap[d.date] = d; });
+
+      const days = [];
+      for (let d = start; d <= end; d = dateAdd(d, 1)) {
+        days.push({ date: d, future: d > today, ...(dayMap[d] || { xp: 0, score: 0 }) });
+      }
+      // Dagen vóór je eerste gegevens tellen niet mee
+      const firstDate = p.days.length ? p.days[0].date : today;
+      days.forEach(d => { d.before = d.date < firstDate; });
+      const past = days.filter(d => !d.future && !d.before);
+      const avg = past.length ? Math.round(past.reduce((a, d) => a + (d.score || 0), 0) / past.length) : 0;
+      const xp = past.reduce((a, d) => a + (d.xp || 0), 0);
+      const best = past.reduce((b, d) => (!b || d.score > b.score ? d : b), null);
+
+      // Habits: hoe vaak per habit
+      const hist = { ...state.habitHistory, [today]: { ...state.habits } };
+      const habitCounts = positiveHabitKeys.map(k => ({ k, n: past.filter(d => hist[d.date] && hist[d.date][k]).length }))
+        .sort((a, b) => b.n - a.n);
+      const negCount = negativeHabitKeys.reduce((a, k) => a + past.filter(d => hist[d.date] && hist[d.date][k]).length, 0);
+
+      // Challenges
+      let chDone = 0, chTotal = 0;
+      const completed = [], failed = [];
+      state.challenges.forEach(c => {
+        const ev = evalChallenge(c);
+        ev.days.forEach(d => {
+          if (!inWeek(d.date) || d.st === 'future' || d.st === 'pending') return;
+          if (c.ended_on && d.date > c.ended_on) return;
+          chTotal++;
+          if (d.st === 'done') chDone++;
+        });
+        if (c.ended_on && inWeek(c.ended_on)) (c.status === 'completed' ? completed : failed).push(c.name);
+      });
+
+      const workouts = (state.workouts || []).filter(w => inWeek(w.date));
+      const minutes = workouts.reduce((a, w) => a + (Number(w.duration_min) || 0), 0);
+      const journals = state.entries.filter(e => inWeek(e.date)).length;
+
+      // Gewicht: laatste meting tot en met deze week vs. laatste meting daarvoor
+      const wl = bodyEntriesFor('weight');
+      const wNow = wl.filter(x => x.date <= last).pop() || null;
+      const wPrev = wl.filter(x => x.date < start).pop() || null;
+      const weightDelta = (wNow && wPrev && wNow.date >= start) ? Math.round((wNow.value - wPrev.value) * 10) / 10 : null;
+
+      return { offset, start, end, days, past, avg, xp, best, habitCounts, negCount, chDone, chTotal, completed, failed, workouts, minutes, journals, wNow, weightDelta, week: isoWeekNumber(start) };
+    }
+
+    function deltaBadge(now, prev, unit) {
+      if (prev === null || prev === undefined) return '';
+      const d = now - prev;
+      if (!d) return `<span style="color: #8a8a8a; font-size: 11px;">= vorige week</span>`;
+      return `<span style="color: ${d > 0 ? '#22c55e' : '#eab308'}; font-size: 11px;">${d > 0 ? '+' : ''}${fmtInt(d)}${unit || ''} t.o.v. vorige week</span>`;
+    }
+
+    function writeWeekReflection(q, week) {
+      state.content = `Weekreflectie week ${week}\n${q}\n\n`;
+      state.editingId = null;
+      state.journalTab = 'new';
+      setSection('journal');
+    }
+
+    function setWeekOffset(o) {
+      state.weekOffset = Math.max(0, o);
+      render();
+    }
+
+    function renderWeek() {
+      const w = computeWeek(state.weekOffset || 0);
+      const prev = computeWeek((state.weekOffset || 0) + 1);
+      const isCurrent = w.offset === 0;
+      const q = weekQuestions[w.week % weekQuestions.length];
+      const dayNames = ['ma', 'di', 'wo', 'do', 'vr', 'za', 'zo'];
+      const hasPrevData = prev.past.some(d => d.xp > 0 || d.score > 0);
+
+      return `
+        <div class="page-header">
+          <div class="page-sub">Weekrapport</div>
+          <div class="page-title">Week ${w.week}</div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <button class="entry-action" onclick="setWeekOffset(${w.offset + 1})">← Vorige</button>
+          <div style="font-size: 12px; color: #a3a3a3;">${fmtDateShort(w.start)} – ${fmtDateShort(w.end)}${isCurrent ? ' · lopend' : ''}</div>
+          <button class="entry-action" ${isCurrent ? 'disabled style="opacity: 0.3;"' : ''} onclick="setWeekOffset(${w.offset - 1})">Volgende →</button>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 10px; color: #8a8a8a; letter-spacing: 0.15em;">GEMIDDELDE DAGSCORE</div>
+          <div style="font-size: 56px; font-weight: 200; line-height: 1.1; color: ${scoreColor(w.avg)};">${w.avg}</div>
+          <div>${hasPrevData ? deltaBadge(w.avg, prev.avg) : ''}</div>
+          <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; margin-top: 20px; align-items: end;">
+            ${w.days.map((d, i) => `
+              <div title="${fmtDateLong(d.date)}: ${d.future ? 'nog niet' : 'dagscore ' + d.score + ', +' + d.xp + ' XP'}">
+                <div style="font-size: 10px; color: #a3a3a3; margin-bottom: 4px;">${d.future || d.before ? '' : d.score}</div>
+                <div style="height: 48px; display: flex; align-items: flex-end;"><div style="width: 100%; height: ${d.future || d.before ? 2 : Math.max(3, Math.round(d.score * 0.48))}px; background: ${d.future || d.before ? '#141414' : (w.best && d.date === w.best.date ? '#e5484d' : (d.score >= 50 ? '#525252' : '#262626'))};"></div></div>
+                <div style="font-size: 9px; color: #8a8a8a; margin-top: 4px;">${dayNames[i]}</div>
+              </div>
+            `).join('')}
+          </div>
+          ${w.best && w.best.score ? `<div style="font-size: 11px; color: #a3a3a3; margin-top: 12px;">Beste dag: ${fmtDateLong(w.best.date)} (${w.best.score})</div>` : ''}
+        </div>
+
+        <div class="stats" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="stat"><div class="stat-value">+${fmtInt(w.xp)}</div><div class="stat-label">XP</div></div>
+          <div class="stat"><div class="stat-value">${w.workouts.length}</div><div class="stat-label">Trainingen</div></div>
+          <div class="stat"><div class="stat-value">${w.journals}</div><div class="stat-label">Journal</div></div>
+        </div>
+        ${hasPrevData ? `<div style="font-size: 11px; text-align: center; margin: -12px 0 16px;">${deltaBadge(w.xp, prev.xp, ' XP')}</div>` : ''}
+
+        <div class="card">
+          <label class="label">Habits deze week</label>
+          ${w.habitCounts.map(h => `
+            <div style="display: flex; align-items: center; gap: 10px; padding: 6px 0;">
+              <span style="width: 24px; text-align: center;">${habitConfig[h.k].icon}</span>
+              <span style="flex: 1; font-size: 12px; color: #a3a3a3;">${habitConfig[h.k].title}</span>
+              <div style="display: flex; gap: 3px;">
+                ${w.days.map(d => {
+                  const hist = d.date === todayStr() ? state.habits : (state.habitHistory[d.date] || {});
+                  return `<span style="width: 10px; height: 10px; background: ${d.future || d.before ? '#141414' : (hist[h.k] ? '#22c55e' : '#262626')};"></span>`;
+                }).join('')}
+              </div>
+              <span style="width: 28px; text-align: right; font-size: 12px;">${h.n}/${w.past.length}</span>
+            </div>
+          `).join('')}
+          ${w.negCount ? `<div style="font-size: 11px; color: #eab308; margin-top: 10px;">⚠️ ${w.negCount}× een negatieve dag (slecht geslapen, stress, alcohol of junk)</div>` : ''}
+        </div>
+
+        <div class="card">
+          <label class="label">Challenges & lichaam</label>
+          <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px;"><span style="color: #a3a3a3;">Challenge-dagen gehaald</span><span>${w.chTotal ? w.chDone + ' van ' + w.chTotal : '—'}</span></div>
+          ${w.completed.length ? `<div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px;"><span style="color: #a3a3a3;">Voltooid</span><span style="color: #22c55e;">🏆 ${w.completed.map(esc).join(', ')}</span></div>` : ''}
+          ${w.failed.length ? `<div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px;"><span style="color: #a3a3a3;">Gestopt of gemist</span><span>${w.failed.map(esc).join(', ')}</span></div>` : ''}
+          <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px;"><span style="color: #a3a3a3;">Trainingstijd</span><span>${w.minutes ? w.minutes + ' min' : (w.workouts.length ? w.workouts.length + ' trainingen' : '—')}</span></div>
+          <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px;"><span style="color: #a3a3a3;">Gewicht</span><span>${w.wNow ? fmtVal(w.wNow.value) + ' kg' + (w.weightDelta !== null ? ` (${w.weightDelta > 0 ? '+' : ''}${fmtVal(w.weightDelta)})` : '') : '—'}</span></div>
+        </div>
+
+        <div class="prompt">
+          <div class="prompt-label">📝 Vraag voor deze week</div>
+          <div class="prompt-text">"${q}"</div>
+          <button class="btn btn-secondary btn-small" style="margin-top: 12px;" onclick="writeWeekReflection(${esc(JSON.stringify(q))}, ${w.week})">Beantwoord in Journal</button>
+        </div>
+
+        <button class="btn btn-secondary" style="width: 100%;" onclick="setSection('dashboard')">← Terug naar dashboard</button>
+      `;
+    }
+
+    // Dashboardkaart: zondag de lopende week, maandag de afgelopen week
+    function renderWeekTeaser() {
+      const dow = new Date().getDay(); // 0 = zondag, 1 = maandag
+      if (dow !== 0 && dow !== 1) return '';
+      const offset = dow === 1 ? 1 : 0;
+      const w = computeWeek(offset);
+      if (!w.past.some(d => d.xp > 0)) return '';
+      return `
+        <div class="card card-accent" style="cursor: pointer;" onclick="state.weekOffset = ${offset}; setSection('week');">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+            <div>
+              <div style="font-size: 10px; color: #e5484d; letter-spacing: 0.2em; font-weight: 600;">📊 WEEKRAPPORT · WEEK ${w.week}</div>
+              <div style="font-size: 13px; margin-top: 6px;">Gem. dagscore ${w.avg} · +${fmtInt(w.xp)} XP · ${w.workouts.length} ${w.workouts.length === 1 ? 'training' : 'trainingen'}</div>
+            </div>
+            <div style="font-size: 18px; color: #8a8a8a;">→</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ============================================
     // RENDER: RETENTION
     // ============================================
     function renderRetention() {
@@ -3743,10 +4511,23 @@
         <div class="card card-accent">
           <label class="label">💾 Back-up</label>
           <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-bottom: 12px;">
-            Download al je data (journal, habits, challenges, metingen, retention) als bestand. Bewaar het op je computer of in de cloud.
+            Download al je data (journal, habits, challenges, metingen, trainingen, retention) als bestand. Bewaar het op je computer of in de cloud.
           </div>
           <div style="font-size: 11px; color: ${backupColor}; margin-bottom: 16px;">${backupText}</div>
           <button class="btn btn-primary" id="backup-btn" style="width: 100%;" onclick="exportBackup()">Back-up downloaden</button>
+          <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" onclick="pickRestoreFile()">Back-up terugzetten</button>
+          <input type="file" id="restore-file" accept=".json,application/json" style="display: none;" onchange="onRestoreFile(this)">
+        </div>
+
+        <div class="card" style="cursor: pointer;" onclick="state.weekOffset = 0; setSection('week');">
+          <label class="label">📊 Weekrapport</label>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">Je week in één overzicht: dagscore, XP, habits, challenges en trainingen. Blader terug naar eerdere weken.</div>
+          <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Bekijk deze week →</div>
+        </div>
+
+        <div class="card" style="cursor: pointer;" onclick="setSection('ranks')">
+          <label class="label">🏅 Rangen</label>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">Alle rangen, wat je nog nodig hebt en hoe je XP verdient.</div>
         </div>
 
         <div class="card">
@@ -3774,7 +4555,7 @@
             <p style="margin-bottom: 12px;">• Voeding logboek</p>
             <p style="margin-bottom: 12px;">• Supplementen</p>
             <p style="margin-bottom: 12px;">• Slaap analyse</p>
-            <p style="margin-bottom: 12px;">• Training programma's</p>
+            <p style="margin-bottom: 12px;">• Trainingsschema's</p>
             <p>• Bloedwaarden</p>
           </div>
         </div>
@@ -3809,11 +4590,14 @@
           ${state.activeSection === 'journal' ? renderJournal() : ''}
           ${state.activeSection === 'body' ? renderBody() : ''}
           ${state.activeSection === 'ranks' ? renderRanks() : ''}
+          ${state.activeSection === 'training' ? renderTraining() : ''}
+          ${state.activeSection === 'week' ? renderWeek() : ''}
           ${state.activeSection === 'retention' ? renderRetention() : ''}
           ${state.activeSection === 'more' ? renderMore() : ''}
         </div>
         
         ${state.showRankUp ? renderRankUp() : ''}
+        ${state.showRestore ? renderRestoreModal() : ''}
 
         <nav class="nav">
           <button class="nav-item ${state.activeSection === 'dashboard' ? 'active' : ''}" onclick="setSection('dashboard')">
@@ -3824,6 +4608,9 @@
           </button>
           <button class="nav-item ${state.activeSection === 'body' ? 'active' : ''}" onclick="setSection('body')">
             <span class="nav-icon">💪</span>Lichaam
+          </button>
+          <button class="nav-item ${state.activeSection === 'training' ? 'active' : ''}" onclick="setSection('training')">
+            <span class="nav-icon">🏋️</span>Training
           </button>
           <button class="nav-item ${state.activeSection === 'retention' ? 'active' : ''}" onclick="setSection('retention')">
             <span class="nav-icon">🔥</span>Retention
@@ -3909,7 +4696,7 @@
     // INIT
     // ============================================
     async function loadAll() {
-      await Promise.all([loadEntries(), loadRetention(), loadHabits(), loadBody()]);
+      await Promise.all([loadEntries(), loadRetention(), loadHabits(), loadBody(), loadTraining()]);
       // Eén onderdeel dat faalt mag de rest van de app niet blokkeren
       try {
         await loadChallenges();
@@ -3948,6 +4735,9 @@
       state.chLogIndex = {};
       state.retentionAll = [];
       state.showRankUp = null;
+      state.workouts = [];
+      state.workoutSets = [];
+      state.trainForm = null;
         }
         render();
       });
