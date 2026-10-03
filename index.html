@@ -46,7 +46,7 @@
     .auth-success { background: rgba(34,197,94,0.1); border: 1px solid #22c55e; color: #22c55e; padding: 12px; font-size: 12px; margin-bottom: 16px; }
     
     .nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0a0a0a; border-top: 1px solid #1c1c1c; display: flex; z-index: 100; }
-    .nav-item { flex: 1; padding: 12px 4px; background: transparent; border: none; color: #525252; font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; font-family: inherit; text-align: center; }
+    .nav-item { flex: 1; padding: 12px 2px; background: transparent; border: none; color: #525252; font-size: 9px; text-transform: uppercase; letter-spacing: 0.02em; cursor: pointer; font-family: inherit; text-align: center; }
     .nav-item.active { color: #7f1d1d; }
     .nav-icon { font-size: 18px; display: block; margin-bottom: 4px; }
     
@@ -300,6 +300,17 @@
       editingGoalId: null,
       goalForm: null,
       templateDomain: 'physical',
+
+      // Lichaam
+      bodyStats: [],
+      bodySettings: {},
+      bodySettingsMissing: false,
+      showBodyModal: false,
+      editingBodyId: null,
+      bodyForm: null,
+      bodyMetric: 'weight',
+      bodyRange: 90,
+      bodyShowAll: false,
       
       // Daily habits (positive + negative situations)
       habits: {
@@ -537,7 +548,9 @@
       ['physical','short','14 dagen geen frisdrank',0,14,'dagen','Vervang door bruiswater met citroen.'],
       // FYSIEK - middel
       ['physical','medium','25 push-ups achter elkaar',10,25,'reps','Bouw op met extra sets en tempo-push-ups.'],
-      ['physical','medium','3 kg afvallen',0,3,'kg eraf','Kleine calorie-deficit (±300 kcal) en veel eiwit.'],
+      ['physical','short','1 kg afvallen',null,null,'kg','Elke ochtend wegen, zelfde tijd, na het toilet.',{metric:'weight',delta:-1}],
+      ['physical','medium','3 kg afvallen',null,null,'kg','Kleine calorie-deficit (±300 kcal) en veel eiwit.',{metric:'weight',delta:-3}],
+      ['physical','medium','3 cm van je taille',null,null,'cm','Meet op navelhoogte, ontspannen uitademen.',{metric:'waist',delta:-3}],
       ['physical','medium','30 dagen geen alcohol',0,30,'dagen','Vertel vrienden vooraf dat je een challenge doet.'],
       ['physical','medium','5 km hardlopen zonder stoppen',0,5,'km','Begin met hardlopen/wandelen in intervallen.'],
       ['physical','medium','5 kg erbij op bankdrukken',0,5,'kg erbij','Elke week 1-2,5 kg erbij als alle reps lukken.'],
@@ -545,7 +558,8 @@
       // FYSIEK - lang
       ['physical','long','50 push-ups achter elkaar',25,50,'reps','Volg een vast schema, test elke 2 weken.'],
       ['physical','long','10 km hardlopen',0,10,'km','Bouw je langste loop max 10% per week op.'],
-      ['physical','long','10 kg afvallen',0,10,'kg eraf','Gemiddeld ±1 kg per maand is duurzaam.'],
+      ['physical','long','10 kg afvallen',null,null,'kg','Gemiddeld ±1 kg per maand is duurzaam.',{metric:'weight',delta:-10}],
+      ['physical','long','3% lager vetpercentage',null,null,'%','Krachttraining + eiwit, geduld.',{metric:'bodyfat_percentage',delta:-3}],
       ['physical','long','100 trainingen in een jaar',0,100,'trainingen','Twee trainingen per week is genoeg.'],
       // MENTAAL - kort
       ['mental','short','7 dagen 5 minuten mediteren',0,7,'dagen','Gebruik een timer, focus alleen op je adem.'],
@@ -733,7 +747,7 @@
 
     function emptyGoalForm(timeframe) {
       return {
-        title: '', domain: '', priority: 'medium',
+        title: '', domain: '', priority: 'medium', linked: '',
         timeframe: timeframe || 'short', deadline: '',
         start: '', current: '', target: '', notes: ''
       };
@@ -862,6 +876,8 @@
       state.entries = [];
       state.retentionStreak = null;
       state.goals = [];
+      state.bodyStats = [];
+      state.bodySettings = {};
       render();
     }
 
@@ -1071,7 +1087,7 @@
     // ============================================
     // BACK-UP
     // ============================================
-    const backupTables = ['journal_entries', 'retention', 'daily_habits', 'goals', 'goal_subtasks', 'body_stats', 'challenges'];
+    const backupTables = ['journal_entries', 'retention', 'daily_habits', 'goals', 'goal_subtasks', 'body_stats', 'challenges', 'user_settings'];
 
     function getLastBackup() {
       try { return localStorage.getItem('pf_last_backup'); } catch (e) { return null; }
@@ -1244,7 +1260,8 @@
         start_value: startVal,
         current_value: currentVal !== null ? currentVal : startVal,
         target_value: num(f.target),
-        notes: f.notes.trim() || null
+        notes: f.notes.trim() || null,
+        linked_metric: f.linked || null
       };
 
       const btn = document.getElementById('goal-save-btn');
@@ -1253,6 +1270,13 @@
       let error = await writeGoal(data);
 
       // Foreign key fout: profiel bestaat nog niet -> aanmaken en opnieuw proberen
+      // Kolom linked_metric bestaat nog niet -> opslaan zonder koppeling
+      if (error && /linked_metric/.test(error.message || '')) {
+        delete data.linked_metric;
+        error = await writeGoal(data);
+        if (!error && f.linked) showToast('⚠️ Koppeling niet opgeslagen: voer body-update.sql uit');
+      }
+
       if (error && error.code === '23503') {
         const profileError = await ensureProfile();
         if (!profileError) error = await writeGoal(data);
@@ -1371,7 +1395,8 @@
         start: get('gf-start') || '',
         current: get('gf-current') || '',
         target: get('gf-target') || '',
-        notes: get('gf-notes') || ''
+        notes: get('gf-notes') || '',
+        linked: get('gf-linked') || ''
       };
     }
 
@@ -1389,7 +1414,8 @@
           start: hasValue(g.start_value) ? String(Number(g.start_value)) : '',
           current: hasValue(g.current_value) ? String(Number(g.current_value)) : '',
           target: hasValue(g.target_value) ? String(Number(g.target_value)) : '',
-          notes: g.notes || ''
+          notes: g.notes || '',
+          linked: g.linked_metric || ''
         };
       } else {
         state.editingGoalId = null;
@@ -1434,8 +1460,19 @@
         current: t[3] === null ? '' : String(t[3]),
         target: t[4] === null ? '' : String(t[4]),
         notes: t[6] || '',
+        linked: t[7] ? t[7].metric : '',
         deadline: addDays(timeframeConfig[t[1]].days)
       };
+      if (t[7]) {
+        const latest = latestBodyValue(t[7].metric);
+        if (latest !== null) {
+          state.goalForm.start = String(latest);
+          state.goalForm.current = String(latest);
+          state.goalForm.target = String(Math.round((latest + t[7].delta) * 10) / 10);
+        } else {
+          state.goalForm.notes += ' Voeg eerst een meting toe bij Lichaam, dan vult de app start en doel zelf in.';
+        }
+      }
       render();
     }
 
@@ -1790,6 +1827,7 @@
               <div class="goal-meta">
                 ${d ? `<span class="badge" style="color: #a3a3a3;">${d.icon} ${d.label}</span>` : ''}
                 ${pr ? `<span class="badge" style="color: ${pr.color}; border-color: ${pr.color}55;">${pr.label}</span>` : ''}
+                ${g.linked_metric && bodyMetrics[g.linked_metric] ? `<span class="badge">🔗 ${bodyMetrics[g.linked_metric].label}</span>` : ''}
                 ${dl ? `<span class="badge" style="${dl === 'Verlopen' && !g.is_completed ? 'color: #dc2626; border-color: #dc262655;' : ''}">📅 ${dl}</span>` : ''}
               </div>
             </div>
@@ -1875,7 +1913,7 @@
                 ${templates.length ? templates.map(({ t, i }) => `
                   <button class="template" onclick="applyTemplate(${i})">
                     ${esc(t[2])}
-                    <div class="template-sub">${t[4] !== null ? `Doel: ${t[4]} ${esc(t[5])}` : 'Zelf waarden invullen'}${t[6] ? ' · ' + esc(t[6]) : ''}</div>
+                    <div class="template-sub">${t[7] ? `Gekoppeld aan ${bodyMetrics[t[7].metric].label.toLowerCase()}: ${t[7].delta} ${esc(t[5])}` : t[4] !== null ? `Doel: ${t[4]} ${esc(t[5])}` : 'Zelf waarden invullen'}${t[6] ? ' · ' + esc(t[6]) : ''}</div>
                   </button>
                 `).join('') : `<div class="empty" style="padding: 20px;">Geen templates voor deze termijn.</div>`}
               </div>
@@ -1914,6 +1952,13 @@
               </div>
             </div>
 
+            <label class="form-label">🔗 Koppelen aan meting (optioneel)</label>
+            <select class="form-input" id="gf-linked" onchange="onGoalLinkChange()">
+              ${opt('', 'Niet koppelen', f.linked)}
+              ${Object.entries(bodyMetrics).map(([key, m]) => opt(key, m.label + ' (' + m.unit + ')', f.linked)).join('')}
+            </select>
+            <div style="font-size: 10px; color: #525252; margin-top: 4px;">Gekoppeld? Dan werkt elke nieuwe meting bij Lichaam de voortgang automatisch bij.</div>
+
             <label class="form-label">Meetbaar maken (optioneel)</label>
             <div class="form-row-3">
               <input type="number" step="any" inputmode="decimal" class="form-input" id="gf-start" placeholder="Start" value="${esc(f.start)}">
@@ -1927,6 +1972,516 @@
             <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 8px; margin-top: 20px;">
               <button class="btn btn-secondary" onclick="closeGoalModal()">Annuleren</button>
               <button class="btn btn-primary" id="goal-save-btn" onclick="saveGoal()">Opslaan</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ============================================
+    // LICHAAM: CONFIG + HELPERS
+    // ============================================
+    const bodyMetrics = {
+      weight:             { label: 'Gewicht',       short: 'Gewicht', unit: 'kg' },
+      bodyfat_percentage: { label: 'Vetpercentage', short: 'Vet%',    unit: '%' },
+      waist:              { label: 'Taille',        short: 'Taille',  unit: 'cm' },
+      chest:              { label: 'Borst',         short: 'Borst',   unit: 'cm' },
+      hips:               { label: 'Heup',          short: 'Heup',    unit: 'cm' },
+      biceps:             { label: 'Biceps',        short: 'Biceps',  unit: 'cm' },
+      thighs:             { label: 'Dij',           short: 'Dij',     unit: 'cm' }
+    };
+
+    function fmtVal(v) {
+      if (v === null || v === undefined) return '—';
+      return String(Math.round(Number(v) * 10) / 10).replace('.', ',');
+    }
+
+    function fmtDateShort(d) {
+      return new Date(d + 'T00:00:00').toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' });
+    }
+
+    function fmtDateLong(d) {
+      return new Date(d + 'T00:00:00').toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    // Metingen oplopend op datum
+    function bodyEntriesFor(metric) {
+      return state.bodyStats.filter(e => hasValue(e[metric])).map(e => ({ date: e.entry_date, value: Number(e[metric]), id: e.id }));
+    }
+
+    function latestBodyValue(metric) {
+      const list = bodyEntriesFor(metric);
+      return list.length ? list[list.length - 1].value : null;
+    }
+
+    function getBodyStartDate() {
+      if (state.bodySettings && state.bodySettings.body_start_date) return state.bodySettings.body_start_date;
+      return state.bodyStats.length ? state.bodyStats[0].entry_date : null;
+    }
+
+    // Eerste waarde op of na de startdatum
+    function startBodyValue(metric) {
+      const start = getBodyStartDate();
+      if (!start) return null;
+      const first = bodyEntriesFor(metric).find(e => e.date >= start);
+      return first ? first.value : null;
+    }
+
+    function daysSince(dateStr) {
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      return Math.round((today - new Date(dateStr + 'T00:00:00')) / 86400000);
+    }
+
+    function onGoalLinkChange() {
+      readGoalForm();
+      const f = state.goalForm;
+      if (f.linked && !hasValue(f.start)) {
+        const latest = latestBodyValue(f.linked);
+        if (latest !== null) {
+          f.start = String(latest);
+          f.current = String(latest);
+        }
+      }
+      render();
+    }
+
+    // ============================================
+    // LICHAAM: DATABASE
+    // ============================================
+    async function loadBody() {
+      if (!state.user) return;
+      const { data, error } = await supabaseClient
+        .from('body_stats')
+        .select('*')
+        .eq('user_id', state.user.id)
+        .order('entry_date', { ascending: true });
+      if (error) console.error('Fout bij laden metingen:', error);
+      else state.bodyStats = data || [];
+
+      const res = await supabaseClient
+        .from('user_settings')
+        .select('*')
+        .eq('user_id', state.user.id)
+        .maybeSingle();
+      if (res.error) {
+        // Tabel bestaat nog niet -> lokaal bewaren tot body-update.sql is uitgevoerd
+        state.bodySettingsMissing = true;
+        try { state.bodySettings = JSON.parse(localStorage.getItem('pf_body_settings') || '{}'); } catch (e) { state.bodySettings = {}; }
+      } else {
+        state.bodySettingsMissing = false;
+        state.bodySettings = res.data || {};
+      }
+    }
+
+    async function saveBodySettings(patch) {
+      state.bodySettings = { ...state.bodySettings, ...patch };
+      if (!state.bodySettingsMissing) {
+        const { error } = await supabaseClient.from('user_settings').upsert({
+          user_id: state.user.id,
+          body_start_date: state.bodySettings.body_start_date || null,
+          height_cm: state.bodySettings.height_cm || null,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'user_id' });
+        if (!error) return;
+        console.warn('user_settings niet beschikbaar, lokaal opgeslagen:', error);
+        state.bodySettingsMissing = true;
+      }
+      try { localStorage.setItem('pf_body_settings', JSON.stringify(state.bodySettings)); } catch (e) {}
+    }
+
+    function emptyBodyForm() {
+      const latest = {};
+      Object.keys(bodyMetrics).forEach(k => latest[k] = '');
+      return { entry_date: todayStr(), ...latest };
+    }
+
+    function openBodyModal(id) {
+      if (id) {
+        const e = state.bodyStats.find(x => x.id === id);
+        if (!e) return;
+        state.editingBodyId = id;
+        state.bodyForm = { entry_date: e.entry_date };
+        Object.keys(bodyMetrics).forEach(k => state.bodyForm[k] = hasValue(e[k]) ? String(Number(e[k])) : '');
+      } else {
+        state.editingBodyId = null;
+        state.bodyForm = emptyBodyForm();
+      }
+      state.showBodyModal = true;
+      render();
+    }
+
+    function closeBodyModal() {
+      state.showBodyModal = false;
+      state.editingBodyId = null;
+      render();
+    }
+
+    async function saveMeasurement() {
+      const get = id => { const el = document.getElementById(id); return el ? el.value : ''; };
+      const date = get('bf-date') || todayStr();
+      const row = { user_id: state.user.id, entry_date: date };
+      let count = 0;
+      Object.keys(bodyMetrics).forEach(k => {
+        const raw = get('bf-' + k);
+        if (hasValue(raw)) {
+          const n = parseFloat(String(raw).replace(',', '.'));
+          row[k] = isNaN(n) ? null : n;
+          if (!isNaN(n)) count++;
+        } else {
+          row[k] = null;
+        }
+      });
+      if (count === 0) { alert('Vul minimaal één waarde in'); return; }
+
+      const btn = document.getElementById('body-save-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Opslaan...'; }
+
+      // Bestaat er al een meting op deze datum? Dan bijwerken.
+      const existing = state.editingBodyId
+        ? state.bodyStats.find(e => e.id === state.editingBodyId)
+        : state.bodyStats.find(e => e.entry_date === date);
+
+      let error;
+      if (existing) {
+        ({ error } = await supabaseClient.from('body_stats').update(row).eq('id', existing.id));
+      } else {
+        ({ error } = await supabaseClient.from('body_stats').insert([row]));
+      }
+      if (error) {
+        console.error('Fout bij opslaan meting:', error);
+        alert('Fout bij opslaan: ' + error.message);
+        if (btn) { btn.disabled = false; btn.textContent = 'Opslaan'; }
+        return;
+      }
+
+      // Startdatum één keer vastleggen
+      const isFirst = !state.bodySettings || !state.bodySettings.body_start_date;
+      await loadBody();
+      if (isFirst) {
+        const earliest = state.bodyStats.length ? state.bodyStats[0].entry_date : date;
+        await saveBodySettings({ body_start_date: earliest });
+      }
+
+      const reached = await syncLinkedGoals();
+      state.showBodyModal = false;
+      state.editingBodyId = null;
+      await loadGoals();
+      render();
+      if (isFirst) showToast('📍 Startdatum vastgelegd: ' + fmtDateShort(getBodyStartDate()) + (reached.length ? ' · 🏆 Missie behaald' : ''));
+      else if (reached.length) showToast('🏆 Missie behaald: ' + reached[0]);
+      else showToast('✓ Meting opgeslagen');
+    }
+
+    async function deleteMeasurement(id) {
+      if (!confirm('Meting verwijderen?')) return;
+      const { error } = await supabaseClient.from('body_stats').delete().eq('id', id);
+      if (error) { alert('Fout bij verwijderen: ' + error.message); return; }
+      await loadBody();
+      await syncLinkedGoals();
+      await loadGoals();
+      render();
+    }
+
+    // Gekoppelde missies bijwerken met de laatste meting
+    async function syncLinkedGoals() {
+      const reached = [];
+      const linked = state.goals.filter(g => !g.is_completed && g.linked_metric && bodyMetrics[g.linked_metric]);
+      for (const g of linked) {
+        const latest = latestBodyValue(g.linked_metric);
+        if (latest === null) continue;
+        const update = { current_value: latest, updated_at: new Date().toISOString() };
+        if (!hasValue(g.start_value)) update.start_value = latest;
+        if (hasValue(g.target_value)) {
+          const start = hasValue(g.start_value) ? Number(g.start_value) : latest;
+          const target = Number(g.target_value);
+          const done = target >= start ? latest >= target : latest <= target;
+          if (done) {
+            update.is_completed = true;
+            update.last_completed_date = todayStr();
+            reached.push(g.title);
+          }
+        }
+        if (Number(g.current_value) === latest && !update.is_completed && hasValue(g.start_value)) continue;
+        const { error } = await supabaseClient.from('goals').update(update).eq('id', g.id);
+        if (error) console.error('Fout bij bijwerken gekoppelde missie:', error);
+      }
+      return reached;
+    }
+
+    async function saveHeight() {
+      const el = document.getElementById('body-height');
+      const n = el ? parseFloat(String(el.value).replace(',', '.')) : NaN;
+      if (isNaN(n) || n < 100 || n > 250) { alert('Vul je lengte in centimeters in (bijv. 182)'); return; }
+      await saveBodySettings({ height_cm: n });
+      render();
+      showToast('✓ Lengte opgeslagen');
+    }
+
+    function setBodyMetric(m) { state.bodyMetric = m; render(); }
+    function setBodyRange(r) { state.bodyRange = r; render(); }
+
+    // ============================================
+    // RENDER: LICHAAM
+    // ============================================
+    function renderBody() {
+      const start = getBodyStartDate();
+      const w = latestBodyValue('weight');
+      const wList = bodyEntriesFor('weight');
+      const wPrev = wList.length > 1 ? wList[wList.length - 2].value : null;
+      const height = state.bodySettings && state.bodySettings.height_cm ? Number(state.bodySettings.height_cm) : null;
+      const bmi = (w !== null && height) ? w / Math.pow(height / 100, 2) : null;
+      const fat = latestBodyValue('bodyfat_percentage');
+      const ffmi = (bmi !== null && fat !== null) ? (w * (1 - fat / 100)) / Math.pow(height / 100, 2) : null;
+
+      const deltaHtml = (cur, prev) => {
+        if (cur === null || prev === null) return '';
+        const d = Math.round((cur - prev) * 10) / 10;
+        if (d === 0) return '<div style="font-size: 9px; color: #525252; margin-top: 2px;">±0</div>';
+        return `<div style="font-size: 9px; color: #737373; margin-top: 2px;">${d > 0 ? '+' : ''}${fmtVal(d)}</div>`;
+      };
+
+      const available = Object.keys(bodyMetrics).filter(k => bodyEntriesFor(k).length > 0);
+      if (available.length && !available.includes(state.bodyMetric)) state.bodyMetric = available[0];
+
+      const sinceRows = Object.entries(bodyMetrics).map(([k, m]) => {
+        const s = startBodyValue(k), n = latestBodyValue(k);
+        if (s === null || n === null) return '';
+        const d = Math.round((n - s) * 10) / 10;
+        return `
+          <div style="display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 8px; padding: 10px 0; border-bottom: 1px solid #1c1c1c; font-size: 12px;">
+            <span style="color: #a3a3a3;">${m.label}</span>
+            <span style="color: #737373; text-align: right;">${fmtVal(s)}</span>
+            <span style="text-align: right;">${fmtVal(n)}</span>
+            <span style="text-align: right; color: #fafafa;">${d > 0 ? '+' : ''}${fmtVal(d)} ${m.unit}</span>
+          </div>`;
+      }).join('');
+
+      const history = [...state.bodyStats].reverse();
+      const shown = state.bodyShowAll ? history : history.slice(0, 8);
+
+      return `
+        <div class="page-header">
+          <div class="page-sub">Fysiek</div>
+          <div class="page-title">Lichaam</div>
+        </div>
+
+        ${start ? `
+          <div class="card card-accent" style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+            <div>
+              <div style="font-size: 10px; color: #525252; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 4px;">📍 Startdatum</div>
+              <div style="font-size: 15px;">${fmtDateLong(start)}</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 26px; font-weight: 300;">${daysSince(start)}</div>
+              <div style="font-size: 9px; color: #525252; text-transform: uppercase;">dagen bezig</div>
+            </div>
+          </div>
+        ` : `
+          <div class="info-box">
+            <div class="info-title">📍 Je startpunt</div>
+            <div class="info-text">Bij je eerste meting legt de app automatisch je startdatum vast. Daarna zie je altijd hoe ver je sindsdien bent gekomen.</div>
+          </div>
+        `}
+
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-value">${fmtVal(w)}</div>
+            <div class="stat-label">Gewicht kg</div>
+            ${deltaHtml(w, wPrev)}
+          </div>
+          <div class="stat">
+            <div class="stat-value">${fmtVal(fat)}</div>
+            <div class="stat-label">Vet %</div>
+          </div>
+          <div class="stat" ${!height ? `style="cursor: pointer;" onclick="document.getElementById('body-height').focus()"` : ''}>
+            <div class="stat-value">${fmtVal(bmi)}</div>
+            <div class="stat-label">BMI</div>
+            ${!height ? '<div style="font-size: 9px; color: #7f1d1d; margin-top: 2px;">lengte?</div>' : ''}
+          </div>
+          <div class="stat">
+            <div class="stat-value">${fmtVal(ffmi)}</div>
+            <div class="stat-label">FFMI</div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" style="width: 100%; margin-bottom: 16px;" onclick="openBodyModal()">+ Meting toevoegen</button>
+
+        ${available.length ? `
+          <div class="card">
+            <div class="chips" style="margin-bottom: 8px;">
+              ${available.map(k => `<button class="chip ${state.bodyMetric === k ? 'active' : ''}" onclick="setBodyMetric('${k}')">${bodyMetrics[k].short}</button>`).join('')}
+            </div>
+            <div class="chips" style="margin-bottom: 12px;">
+              ${[[30, '30 d'], [90, '3 mnd'], [365, '1 jaar'], [0, 'Alles']].map(([r, l]) => `<button class="chip ${state.bodyRange === r ? 'active' : ''}" onclick="setBodyRange(${r})">${l}</button>`).join('')}
+            </div>
+            ${renderBodyChart()}
+          </div>
+        ` : ''}
+
+        ${sinceRows ? `
+          <div class="card">
+            <label class="label">Sinds start</label>
+            <div style="display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 8px; font-size: 9px; color: #525252; text-transform: uppercase; letter-spacing: 0.1em; padding-bottom: 6px; border-bottom: 1px solid #1c1c1c;">
+              <span></span><span style="text-align: right;">Start</span><span style="text-align: right;">Nu</span><span style="text-align: right;">Verschil</span>
+            </div>
+            ${sinceRows}
+          </div>
+        ` : ''}
+
+        ${history.length ? `
+          <div class="card">
+            <label class="label">Metingen (${history.length})</label>
+            ${shown.map(e => `
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px solid #1c1c1c;">
+                <div style="min-width: 0;">
+                  <div style="font-size: 12px;">${fmtDateLong(e.entry_date)}${e.entry_date === start ? ' <span style="color: #7f1d1d; font-size: 10px;">· START</span>' : ''}</div>
+                  <div style="font-size: 11px; color: #737373; margin-top: 2px;">
+                    ${Object.entries(bodyMetrics).filter(([k]) => hasValue(e[k])).map(([k, m]) => `${m.short} ${fmtVal(e[k])}${m.unit === '%' ? '%' : ''}`).join(' · ')}
+                  </div>
+                </div>
+                <div style="display: flex; gap: 4px; flex-shrink: 0;">
+                  <button class="icon-btn" style="color: #737373;" onclick="openBodyModal('${e.id}')" title="Bewerken">✏️</button>
+                  <button class="icon-btn" onclick="deleteMeasurement('${e.id}')" title="Verwijderen">🗑️</button>
+                </div>
+              </div>
+            `).join('')}
+            ${history.length > 8 ? `
+              <button class="btn btn-secondary btn-small" style="width: 100%; margin-top: 12px;" onclick="state.bodyShowAll = !state.bodyShowAll; render();">
+                ${state.bodyShowAll ? 'Minder tonen' : `Alle ${history.length} metingen tonen`}
+              </button>
+            ` : ''}
+          </div>
+        ` : ''}
+
+        <div class="card">
+          <label class="label">Lengte (voor BMI en FFMI)</label>
+          <div class="goal-update" style="margin-top: 0;">
+            <input type="text" inputmode="decimal" autocomplete="off" class="input-sm" id="body-height" placeholder="Lengte in cm" value="${height ? fmtNum(height) : ''}" onkeydown="if(event.key === 'Enter') saveHeight()">
+            <button class="btn btn-secondary btn-small" onclick="saveHeight()">Opslaan</button>
+          </div>
+        </div>
+
+        ${state.showBodyModal ? renderBodyModal() : ''}
+      `;
+    }
+
+    function renderBodyChart() {
+      const metric = state.bodyMetric;
+      const m = bodyMetrics[metric];
+      let pts = bodyEntriesFor(metric);
+      if (state.bodyRange > 0) {
+        const from = addDays(-state.bodyRange);
+        pts = pts.filter(p => p.date >= from);
+      }
+      if (pts.length < 2) {
+        return `<div class="empty" style="padding: 24px 12px;">${pts.length === 1
+          ? `Eén meting in deze periode (${fmtVal(pts[0].value)} ${m.unit}). Vanaf twee metingen zie je hier je verloop.`
+          : 'Geen metingen in deze periode.'}</div>`;
+      }
+
+      const W = 360, H = 200, L = 36, R = 6, T = 14, B = 24;
+      const t0 = new Date(pts[0].date + 'T00:00:00').getTime();
+      const t1 = new Date(pts[pts.length - 1].date + 'T00:00:00').getTime();
+      let lo = Math.min(...pts.map(p => p.value)), hi = Math.max(...pts.map(p => p.value));
+      const startVal = startBodyValue(metric);
+      if (startVal !== null) { lo = Math.min(lo, startVal); hi = Math.max(hi, startVal); }
+      const pad = Math.max((hi - lo) * 0.15, 0.5);
+      lo -= pad; hi += pad;
+      const x = t => L + ((t - t0) / Math.max(t1 - t0, 1)) * (W - L - R);
+      const y = v => T + (1 - (v - lo) / (hi - lo)) * (H - T - B);
+
+      const coords = pts.map(p => ({ ...p, cx: x(new Date(p.date + 'T00:00:00').getTime()), cy: y(p.value) }));
+      const path = coords.map((c, i) => `${i ? 'L' : 'M'}${c.cx.toFixed(1)},${c.cy.toFixed(1)}`).join(' ');
+      const ticks = [0, 1, 2, 3].map(i => lo + (hi - lo) * (i / 3));
+      const midIdx = Math.floor(coords.length / 2);
+
+      window.__bodyChart = { coords, unit: m.unit, W };
+
+      return `
+        <div id="body-chart" style="position: relative; touch-action: pan-y;">
+          <svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${m.label} verloop" style="display: block; overflow: visible;">
+            ${ticks.map(v => `
+              <line x1="${L}" x2="${W - R}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="#1c1c1c" stroke-width="1"/>
+              <text x="${L - 8}" y="${(y(v) + 4).toFixed(1)}" fill="#525252" font-size="11" text-anchor="end">${fmtVal(v)}</text>
+            `).join('')}
+            ${startVal !== null ? `
+              <line x1="${L}" x2="${W - R}" y1="${y(startVal).toFixed(1)}" y2="${y(startVal).toFixed(1)}" stroke="#525252" stroke-width="1" stroke-dasharray="4 4"/>
+              <text x="${W - R}" y="${(y(startVal) - 6).toFixed(1)}" fill="#737373" font-size="10" text-anchor="end">start ${fmtVal(startVal)}</text>
+            ` : ''}
+            <path d="${path}" fill="none" stroke="#e5484d" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+            ${coords.length <= 45 ? coords.map(c => `<circle cx="${c.cx.toFixed(1)}" cy="${c.cy.toFixed(1)}" r="4" fill="#e5484d" stroke="#0a0a0a" stroke-width="2"/>`).join('') : ''}
+            <text x="${L}" y="${H - 6}" fill="#525252" font-size="11">${fmtDateShort(coords[0].date)}</text>
+            ${coords.length > 2 ? `<text x="${coords[midIdx].cx.toFixed(1)}" y="${H - 6}" fill="#525252" font-size="11" text-anchor="middle">${fmtDateShort(coords[midIdx].date)}</text>` : ''}
+            <text x="${W - R}" y="${H - 6}" fill="#525252" font-size="11" text-anchor="end">${fmtDateShort(coords[coords.length - 1].date)}</text>
+            <line id="body-cross" x1="0" x2="0" y1="${T}" y2="${H - B}" stroke="#737373" stroke-width="1" style="display: none;"/>
+            <circle id="body-dot" r="6" fill="#e5484d" stroke="#fafafa" stroke-width="2" style="display: none;"/>
+          </svg>
+          <div id="body-tip" style="position: absolute; top: 0; display: none; background: #050505; border: 1px solid #262626; padding: 6px 10px; font-size: 11px; pointer-events: none; white-space: nowrap;"></div>
+        </div>
+      `;
+    }
+
+    function setupBodyChart() {
+      const box = document.getElementById('body-chart');
+      const info = window.__bodyChart;
+      if (!box || !info) return;
+      const svg = box.querySelector('svg');
+      const cross = document.getElementById('body-cross');
+      const dot = document.getElementById('body-dot');
+      const tip = document.getElementById('body-tip');
+
+      const show = (clientX) => {
+        const rect = svg.getBoundingClientRect();
+        const scale = info.W / rect.width;
+        const sx = (clientX - rect.left) * scale;
+        let best = info.coords[0];
+        info.coords.forEach(c => { if (Math.abs(c.cx - sx) < Math.abs(best.cx - sx)) best = c; });
+        cross.setAttribute('x1', best.cx); cross.setAttribute('x2', best.cx);
+        dot.setAttribute('cx', best.cx); dot.setAttribute('cy', best.cy);
+        cross.style.display = ''; dot.style.display = '';
+        tip.textContent = `${fmtDateLong(best.date)} · ${fmtVal(best.value)} ${info.unit}`;
+        tip.style.display = 'block';
+        const px = best.cx / scale;
+        const tw = tip.offsetWidth;
+        tip.style.left = Math.max(0, Math.min(rect.width - tw, px - tw / 2)) + 'px';
+      };
+      const hide = () => { cross.style.display = 'none'; dot.style.display = 'none'; tip.style.display = 'none'; };
+
+      box.addEventListener('pointermove', e => show(e.clientX));
+      box.addEventListener('pointerdown', e => show(e.clientX));
+      box.addEventListener('pointerleave', hide);
+    }
+
+    function renderBodyModal() {
+      const f = state.bodyForm || emptyBodyForm();
+      const field = (k) => {
+        const m = bodyMetrics[k];
+        const last = latestBodyValue(k);
+        return `
+          <div>
+            <label class="form-label">${m.label} (${m.unit})</label>
+            <input type="text" inputmode="decimal" autocomplete="off" class="form-input" id="bf-${k}" value="${esc(f[k])}" placeholder="${last !== null && !state.editingBodyId ? 'vorige: ' + fmtVal(last) : ''}">
+          </div>`;
+      };
+      return `
+        <div class="modal-overlay" onclick="if(event.target === this) closeBodyModal();">
+          <div class="modal" style="max-width: 480px;">
+            <div class="modal-title" style="color: #fafafa;">${state.editingBodyId ? 'Meting bewerken' : 'Nieuwe meting'}</div>
+            <div style="font-size: 11px; color: #737373; margin-bottom: 4px;">Vul in wat je hebt, de rest mag leeg blijven.</div>
+
+            <label class="form-label">Datum</label>
+            <input type="date" class="form-input" id="bf-date" value="${esc(f.entry_date)}" max="${todayStr()}">
+
+            <div class="form-row">${field('weight')}${field('bodyfat_percentage')}</div>
+            <div class="form-row">${field('waist')}${field('chest')}</div>
+            <div class="form-row">${field('hips')}${field('biceps')}</div>
+            <div class="form-row">${field('thighs')}<div></div></div>
+
+            <div style="font-size: 10px; color: #525252; margin-top: 12px; line-height: 1.6;">Tip: weeg jezelf 's ochtends, na het toilet en voor het ontbijt. Meet taille op navelhoogte.</div>
+
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 8px; margin-top: 20px;">
+              <button class="btn btn-secondary" onclick="closeBodyModal()">Annuleren</button>
+              <button class="btn btn-primary" id="body-save-btn" onclick="saveMeasurement()">Opslaan</button>
             </div>
           </div>
         </div>
@@ -2264,7 +2819,6 @@
         <div class="card">
           <label class="label">Komt binnenkort</label>
           <div style="color: #525252; font-size: 12px;">
-            <p style="margin-bottom: 12px;">• Lichaamsmetingen</p>
             <p style="margin-bottom: 12px;">• Challenges</p>
             <p style="margin-bottom: 12px;">• Voeding logboek</p>
             <p style="margin-bottom: 12px;">• Supplementen</p>
@@ -2303,6 +2857,7 @@
           ${state.activeSection === 'dashboard' ? renderDashboard() : ''}
           ${state.activeSection === 'journal' ? renderJournal() : ''}
           ${state.activeSection === 'missions' ? renderMissions() : ''}
+          ${state.activeSection === 'body' ? renderBody() : ''}
           ${state.activeSection === 'retention' ? renderRetention() : ''}
           ${state.activeSection === 'more' ? renderMore() : ''}
         </div>
@@ -2316,6 +2871,9 @@
           </button>
           <button class="nav-item ${state.activeSection === 'missions' ? 'active' : ''}" onclick="setSection('missions')">
             <span class="nav-icon">🎯</span>Missies
+          </button>
+          <button class="nav-item ${state.activeSection === 'body' ? 'active' : ''}" onclick="setSection('body')">
+            <span class="nav-icon">💪</span>Lichaam
           </button>
           <button class="nav-item ${state.activeSection === 'retention' ? 'active' : ''}" onclick="setSection('retention')">
             <span class="nav-icon">🔥</span>Retention
@@ -2338,6 +2896,7 @@
         return;
       }
       app.innerHTML = renderApp();
+      if (state.activeSection === 'body') setupBodyChart();
     }
 
     // ============================================
@@ -2398,7 +2957,7 @@
     // INIT
     // ============================================
     async function loadAll() {
-      await Promise.all([loadEntries(), loadRetention(), loadHabits(), loadGoals()]);
+      await Promise.all([loadEntries(), loadRetention(), loadHabits(), loadGoals(), loadBody()]);
     }
 
     async function init() {
@@ -2422,6 +2981,8 @@
           state.entries = [];
           state.retentionStreak = null;
           state.goals = [];
+      state.bodyStats = [];
+      state.bodySettings = {};
         }
         render();
       });
