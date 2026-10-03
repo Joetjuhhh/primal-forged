@@ -3079,17 +3079,36 @@
     const positiveHabitKeys = Object.keys(habitConfig).filter(k => habitConfig[k].positive);
     const negativeHabitKeys = Object.keys(habitConfig).filter(k => !habitConfig[k].positive);
 
-    // Eigen afbeeldingen? Zet rank-1.png t/m rank-11.png in de map ranks, dan gebruikt de app die.
-    // Anders de meegeleverde emblemen (rank-1.svg t/m rank-11.svg). Dit wordt één keer gecontroleerd.
+    // Rang-afbeeldingen: eigen PNG's (rank-1.png t/m rank-11.png) gaan voor de meegeleverde SVG-emblemen.
+    // De app zoekt in de map 'ranks' en ook in 'ranks/ranks' (gebeurt vaak bij het uitpakken van een zip).
+    // Dit wordt één keer bij het opstarten bepaald.
+    let rankBase = 'ranks/';
     let rankExt = 'svg';
     (function detectRankImages() {
-      const probe = new Image();
-      probe.onload = () => { rankExt = 'png'; if (state.user && !state.loading) render(); };
-      probe.src = 'ranks/rank-1.png';
+      const options = [
+        ['ranks/', 'png'], ['ranks/ranks/', 'png'],
+        ['ranks/', 'svg'], ['ranks/ranks/', 'svg']
+      ];
+      let i = 0;
+      const tryNext = () => {
+        if (i >= options.length) return;
+        const [base, ext] = options[i++];
+        const probe = new Image();
+        probe.onload = () => {
+          if (base === rankBase && ext === rankExt) return;
+          rankBase = base; rankExt = ext;
+          if (state.user && !state.loading) render();
+        };
+        probe.onerror = tryNext;
+        probe.src = base + 'rank-1.' + ext;
+      };
+      tryNext();
     })();
 
     function rankImg(n, size, style) {
-      return `<img src="ranks/rank-${n}.${rankExt}" alt="" width="${size}" height="${size}" style="display: block; width: ${size}px; height: ${size}px; border-radius: 50%; ${style || ''}">`;
+      // Ontbreekt één eigen PNG, dan valt alleen die terug op het embleem
+      const fallback = rankExt === 'png' ? `this.onerror=null; this.src='${rankBase}rank-${n}.svg';` : '';
+      return `<img src="${rankBase}rank-${n}.${rankExt}" ${fallback ? `onerror="${fallback}"` : ''} alt="" width="${size}" height="${size}" style="display: block; width: ${size}px; height: ${size}px; border-radius: 50%; object-fit: cover; ${style || ''}">`;
     }
 
     function weekKey(dateStr) {
