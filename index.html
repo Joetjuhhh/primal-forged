@@ -291,15 +291,6 @@
       showEmergencyModal: false,
       showHabitModal: null,
 
-      // Missies
-      goals: [],
-      goalsError: null,
-      goalTab: 'short',
-      goalDomain: 'all',
-      showGoalModal: false,
-      editingGoalId: null,
-      goalForm: null,
-      templateDomain: 'physical',
 
       // Lichaam
       bodyStats: [],
@@ -525,94 +516,6 @@
     ];
 
     // ============================================
-    // MISSIES CONFIG
-    // ============================================
-    const domainConfig = {
-      physical:  { icon: '💪', label: 'Fysiek' },
-      mental:    { icon: '🧠', label: 'Mentaal' },
-      financial: { icon: '💰', label: 'Financieel' },
-      social:    { icon: '👥', label: 'Sociaal' },
-      purpose:   { icon: '🔱', label: 'Zingeving' }
-    };
-
-    const timeframeConfig = {
-      short:  { label: 'Kort',   full: 'Korte termijn (± 4 weken)',  days: 28 },
-      medium: { label: 'Middel', full: 'Middellang (± 3 maanden)',   days: 90 },
-      long:   { label: 'Lang',   full: 'Lange termijn (± 1 jaar)',   days: 365 }
-    };
-
-    const priorityConfig = {
-      high:   { label: 'Hoog',   color: '#dc2626' },
-      medium: { label: 'Medium', color: '#eab308' },
-      low:    { label: 'Laag',   color: '#22c55e' }
-    };
-
-    // [domein, termijn, titel, start, doel, eenheid, tip]
-    const goalTemplates = [
-      // FYSIEK - kort
-      ['physical','short','10 push-ups achter elkaar',0,10,'reps','Elke dag 3 sets, stop net voor falen. Noteer je beste set.'],
-      ['physical','short','12 trainingen in 4 weken (3x/week)',0,12,'trainingen','Plan je trainingsdagen vast in je agenda.'],
-      ['physical','short','1 minuut plank volhouden',0,60,'seconden','Elke dag 3 pogingen, bouw 5 seconden per keer op.'],
-      // FYSIEK - middel
-      ['physical','medium','25 push-ups achter elkaar',10,25,'reps','Bouw op met extra sets en tempo-push-ups.'],
-      ['physical','short','1 kg afvallen',null,null,'kg','Elke ochtend wegen, zelfde tijd, na het toilet.',{metric:'weight',delta:-1}],
-      ['physical','medium','3 kg afvallen',null,null,'kg','Kleine calorie-deficit (±300 kcal) en veel eiwit.',{metric:'weight',delta:-3}],
-      ['physical','medium','3 cm van je taille',null,null,'cm','Meet op navelhoogte, ontspannen uitademen.',{metric:'waist',delta:-3}],
-      ['physical','medium','5 km hardlopen zonder stoppen',0,5,'km','Begin met hardlopen/wandelen in intervallen.'],
-      ['physical','medium','5 kg erbij op bankdrukken',0,5,'kg erbij','Elke week 1-2,5 kg erbij als alle reps lukken.'],
-      ['physical','medium','5 pull-ups achter elkaar',0,5,'reps','Start met negatieve pull-ups en hangen.'],
-      // FYSIEK - lang
-      ['physical','long','50 push-ups achter elkaar',25,50,'reps','Volg een vast schema, test elke 2 weken.'],
-      ['physical','long','10 km hardlopen',0,10,'km','Bouw je langste loop max 10% per week op.'],
-      ['physical','long','10 kg afvallen',null,null,'kg','Gemiddeld ±1 kg per maand is duurzaam.',{metric:'weight',delta:-10}],
-      ['physical','long','3% lager vetpercentage',null,null,'%','Krachttraining + eiwit, geduld.',{metric:'bodyfat_percentage',delta:-3}],
-      ['physical','long','100 trainingen in een jaar',0,100,'trainingen','Twee trainingen per week is genoeg.'],
-      // MENTAAL - kort
-      ['mental','short','1 boek uitlezen',0,1,'boek','10 pagina\'s per dag is genoeg.'],
-      ['mental','short','Eén module van een cursus afronden',0,1,'module','Plan twee vaste studiemomenten deze week.'],
-      ['mental','short','Een nieuwe vaardigheid: 5 lessen',0,5,'lessen','Bijvoorbeeld schaken, koken of een instrument.'],
-      // MENTAAL - middel
-      ['mental','medium','3 boeken lezen',0,3,'boeken','Houd een lijst bij van boeken die je nog wilt lezen.'],
-      ['mental','medium','30 uur bewust leren',0,30,'uur','Cursus, boek of oefenen: noteer je uren.'],
-      ['mental','medium','Online cursus afronden',0,100,'%','Plan 2 vaste studiemomenten per week.'],
-      // MENTAAL - lang
-      ['mental','long','12 boeken in een jaar',0,12,'boeken','Eén boek per maand.'],
-      ['mental','long','100 lessen van een nieuwe taal',0,100,'lessen','Elke dag 10 minuten.'],
-      // FINANCIEEL - kort
-      ['financial','short','€250 sparen',0,250,'euro','Zet direct na je salaris automatisch geld apart.'],
-      ['financial','short','Maandbudget maken',0,1,'budget','Vaste lasten, boodschappen, vrij besteedbaar.'],
-      ['financial','short','Abonnementen checken en 1 opzeggen',0,1,'opgezegd','Check je bankafschriften van de laatste 3 maanden.'],
-      // FINANCIEEL - middel
-      ['financial','medium','€1.000 sparen',0,1000,'euro','±€85 per week.'],
-      ['financial','medium','Eerste €100 bijverdienen',0,100,'euro','Verkoop spullen of bied een vaardigheid aan.'],
-      ['financial','medium','3 maanden binnen budget blijven',0,3,'maanden','Check je budget elke zondag.'],
-      // FINANCIEEL - lang
-      ['financial','long','Noodbuffer van €3.000',0,3000,'euro','Aparte spaarrekening, niet aankomen.'],
-      ['financial','long','€5.000 sparen of beleggen',0,5000,'euro','Automatiseer een vast bedrag per maand.'],
-      ['financial','long','Schuld volledig afbetalen',null,null,'','Vul zelf start (schuld) en doel (0) in.'],
-      // SOCIAAL - kort
-      ['social','short','1 oude vriend opnieuw spreken',0,1,'contact','Een berichtje is genoeg om te beginnen.'],
-      ['social','short','4 weken 1x per week quality time',0,4,'keer','Telefoon weg, volle aandacht.'],
-      ['social','short','4 weken familie 1x per week bellen',0,4,'keer','Vast moment, bijv. zondagavond.'],
-      // SOCIAAL - middel
-      ['social','medium','3 nieuwe mensen leren kennen',0,3,'mensen','Sportclub, cursus of meetup.'],
-      ['social','medium','Lid worden van een club of vereniging',0,1,'club','Kies iets wat je toch al leuk vindt.'],
-      ['social','medium','12 sociale afspraken in 3 maanden',0,12,'afspraken','Eén per week, jij neemt het initiatief.'],
-      // SOCIAAL - lang
-      ['social','long','Een mentor vinden',0,1,'mentor','Vraag iemand die al bereikt heeft wat jij wilt.'],
-      ['social','long','50 sociale afspraken in een jaar',0,50,'afspraken','Gemiddeld één per week.'],
-      // ZINGEVING - kort
-      ['purpose','short','Je top 5 waarden opschrijven',0,5,'waarden','Wat vind je echt belangrijk? Wees eerlijk.'],
-      ['purpose','short','1 keer vrijwilligerswerk doen',0,1,'keer','Zoek iets lokaals dat bij je past.'],
-      // ZINGEVING - middel
-      ['purpose','medium','Persoonlijke missie in 1 zin schrijven',0,1,'missie','Schrijf, laat liggen, herschrijf.'],
-      ['purpose','medium','5 mensen concreet helpen',0,5,'mensen','Klein mag: verhuizen, advies, een klus.'],
-      // ZINGEVING - lang
-      ['purpose','long','12 keer vrijwilligerswerk in een jaar',0,12,'keer','Eén keer per maand.'],
-      ['purpose','long','Persoonlijk project afronden',0,100,'%','Breek het op in stappen (subtaken).']
-    ];
-
-    // ============================================
     // HELPERS
     // ============================================
     function getColor(value, isStress = false) {
@@ -714,7 +617,7 @@
       }
     }
 
-    // Missies helpers
+    // Algemene helpers
     function esc(str) {
       return String(str ?? '')
         .replace(/&/g, '&amp;')
@@ -758,41 +661,8 @@
       return v !== null && v !== undefined && v !== '';
     }
 
-    function emptyGoalForm(timeframe) {
-      return {
-        title: '', domain: '', priority: 'medium', linked: '',
-        timeframe: timeframe || 'short', deadline: '',
-        start: '', current: '', target: '', notes: ''
-      };
-    }
 
-    function calcGoalProgress(goal) {
-      const subtasks = goal.goal_subtasks || [];
-      if (hasValue(goal.target_value)) {
-        const start = hasValue(goal.start_value) ? Number(goal.start_value) : 0;
-        const current = hasValue(goal.current_value) ? Number(goal.current_value) : start;
-        const target = Number(goal.target_value);
-        if (target === start) return current === target ? 100 : 0;
-        const pct = ((current - start) / (target - start)) * 100;
-        return Math.max(0, Math.min(100, Math.round(pct)));
-      }
-      if (subtasks.length > 0) {
-        const done = subtasks.filter(s => s.is_completed).length;
-        return Math.round((done / subtasks.length) * 100);
-      }
-      return goal.is_completed ? 100 : 0;
-    }
 
-    function deadlineText(deadline) {
-      if (!deadline) return '';
-      const today = new Date(); today.setHours(0, 0, 0, 0);
-      const d = new Date(deadline + 'T00:00:00');
-      const diff = Math.round((d - today) / 86400000);
-      if (diff > 1) return diff + ' dagen';
-      if (diff === 1) return 'Morgen';
-      if (diff === 0) return 'Vandaag';
-      return 'Verlopen';
-    }
 
     function getInsights() {
       // Filter entries that have habits data
@@ -888,7 +758,6 @@
       state.user = null;
       state.entries = [];
       state.retentionStreak = null;
-      state.goals = [];
       state.bodyStats = [];
       state.bodySettings = {};
       state.challenges = [];
@@ -1197,317 +1066,6 @@
     }
 
     // ============================================
-    // DATABASE: MISSIES
-    // ============================================
-    async function loadGoals() {
-      if (!state.user) return;
-      let { data, error } = await supabaseClient
-        .from('goals')
-        .select('*, goal_subtasks(*)')
-        .eq('user_id', state.user.id)
-        .order('created_at', { ascending: false });
-
-      // Fallback: als subtaken-koppeling faalt, laad alleen doelen
-      if (error) {
-        console.warn('Subtaken laden mislukt, probeer zonder:', error);
-        const retry = await supabaseClient
-          .from('goals')
-          .select('*')
-          .eq('user_id', state.user.id)
-          .order('created_at', { ascending: false });
-        data = retry.data;
-        error = retry.error;
-      }
-
-      if (error) {
-        console.error('Fout bij laden missies:', error);
-        state.goalsError = error.message;
-        return;
-      }
-
-      state.goalsError = null;
-      state.goals = (data || []).map(g => ({
-        ...g,
-        goal_subtasks: (g.goal_subtasks || []).sort((a, b) => (a.position || 0) - (b.position || 0))
-      }));
-    }
-
-    async function refreshGoals() {
-      await loadGoals();
-      render();
-    }
-
-    async function ensureProfile() {
-      const { error } = await supabaseClient.from('profiles').upsert({ id: state.user.id });
-      if (error) console.error('Profiel aanmaken mislukt:', error);
-      return error;
-    }
-
-    async function writeGoal(data) {
-      if (state.editingGoalId) {
-        const { error } = await supabaseClient
-          .from('goals')
-          .update({ ...data, updated_at: new Date().toISOString() })
-          .eq('id', state.editingGoalId);
-        return error;
-      }
-      const { error } = await supabaseClient.from('goals').insert([{ ...data, is_completed: false }]);
-      return error;
-    }
-
-    async function saveGoal() {
-      readGoalForm();
-      const f = state.goalForm;
-      if (!f.title.trim()) {
-        alert('Vul een titel in voor je missie');
-        return;
-      }
-
-      const num = v => {
-        if (!hasValue(v)) return null;
-        const n = parseFloat(String(v).replace(',', '.'));
-        return isNaN(n) ? null : n;
-      };
-
-      const startVal = num(f.start);
-      const currentVal = num(f.current);
-      const data = {
-        user_id: state.user.id,
-        title: f.title.trim(),
-        domain: f.domain || null,
-        priority: f.priority || 'medium',
-        timeframe: f.timeframe || 'short',
-        deadline: f.deadline || null,
-        start_value: startVal,
-        current_value: currentVal !== null ? currentVal : startVal,
-        target_value: num(f.target),
-        notes: f.notes.trim() || null,
-        linked_metric: f.linked || null
-      };
-
-      const btn = document.getElementById('goal-save-btn');
-      if (btn) { btn.disabled = true; btn.textContent = 'Opslaan...'; }
-
-      let error = await writeGoal(data);
-
-      // Foreign key fout: profiel bestaat nog niet -> aanmaken en opnieuw proberen
-      // Kolom linked_metric bestaat nog niet -> opslaan zonder koppeling
-      if (error && /linked_metric/.test(error.message || '')) {
-        delete data.linked_metric;
-        error = await writeGoal(data);
-        if (!error && f.linked) showToast('⚠️ Koppeling niet opgeslagen: voer body-update.sql uit');
-      }
-
-      if (error && error.code === '23503') {
-        const profileError = await ensureProfile();
-        if (!profileError) error = await writeGoal(data);
-      }
-
-      if (error) {
-        console.error('Fout bij opslaan missie:', error);
-        alert('Fout bij opslaan: ' + error.message);
-        if (btn) { btn.disabled = false; btn.textContent = 'Opslaan'; }
-        return;
-      }
-
-      const wasEditing = !!state.editingGoalId;
-      state.showGoalModal = false;
-      state.editingGoalId = null;
-      state.goalTab = data.timeframe;
-      await refreshGoals();
-      showToast(wasEditing ? '✓ Missie bijgewerkt' : '🎯 Missie gestart!');
-    }
-
-    async function toggleGoalComplete(goalId) {
-      const goal = state.goals.find(g => g.id === goalId);
-      if (!goal) return;
-      const completing = !goal.is_completed;
-      const { error } = await supabaseClient.from('goals').update({
-        is_completed: completing,
-        last_completed_date: completing ? todayStr() : goal.last_completed_date,
-        updated_at: new Date().toISOString()
-      }).eq('id', goalId);
-      if (error) { alert('Fout bij bijwerken: ' + error.message); return; }
-      await refreshGoals();
-      if (completing) showToast('🏆 Missie voltooid!');
-    }
-
-    async function updateGoalValue(goalId) {
-      const input = document.getElementById(`gv-${goalId}`);
-      if (!input || !hasValue(input.value)) return;
-      const value = parseFloat(String(input.value).replace(',', '.'));
-      if (isNaN(value)) { alert('Vul een getal in'); return; }
-
-      const goal = state.goals.find(g => g.id === goalId);
-      const update = { current_value: value, updated_at: new Date().toISOString() };
-
-      if (goal && hasValue(goal.target_value)) {
-        const start = hasValue(goal.start_value) ? Number(goal.start_value) : 0;
-        const target = Number(goal.target_value);
-        const reached = target >= start ? value >= target : value <= target;
-        if (reached && confirm('🎯 Doel bereikt! Markeren als voltooid?')) {
-          update.is_completed = true;
-          update.last_completed_date = todayStr();
-        }
-      }
-
-      const { error } = await supabaseClient.from('goals').update(update).eq('id', goalId);
-      if (error) { alert('Fout bij bijwerken: ' + error.message); return; }
-      await refreshGoals();
-      showToast('✓ Voortgang bijgewerkt');
-    }
-
-    async function deleteGoal(goalId) {
-      if (!confirm('Missie permanent verwijderen?')) return;
-      // Eerst subtaken verwijderen (voor het geval er geen cascade is)
-      await supabaseClient.from('goal_subtasks').delete().eq('goal_id', goalId);
-      const { error } = await supabaseClient.from('goals').delete().eq('id', goalId);
-      if (error) { alert('Fout bij verwijderen: ' + error.message); return; }
-      await refreshGoals();
-    }
-
-    async function addSubtask(goalId) {
-      const input = document.getElementById(`st-${goalId}`);
-      if (!input || !input.value.trim()) return;
-      const goal = state.goals.find(g => g.id === goalId);
-      const position = goal ? (goal.goal_subtasks || []).length : 0;
-      const { error } = await supabaseClient.from('goal_subtasks').insert([{
-        goal_id: goalId,
-        user_id: state.user.id,
-        title: input.value.trim(),
-        is_completed: false,
-        position
-      }]);
-      if (error) { alert('Fout bij toevoegen stap: ' + error.message); return; }
-      await refreshGoals();
-      const again = document.getElementById(`st-${goalId}`);
-      if (again) again.focus();
-    }
-
-    async function toggleSubtask(goalId, subtaskId) {
-      const goal = state.goals.find(g => g.id === goalId);
-      const st = goal ? (goal.goal_subtasks || []).find(s => s.id === subtaskId) : null;
-      if (!st) return;
-      const { error } = await supabaseClient.from('goal_subtasks')
-        .update({ is_completed: !st.is_completed })
-        .eq('id', subtaskId);
-      if (error) { alert('Fout bij bijwerken stap: ' + error.message); return; }
-      await refreshGoals();
-    }
-
-    async function deleteSubtask(subtaskId) {
-      const { error } = await supabaseClient.from('goal_subtasks').delete().eq('id', subtaskId);
-      if (error) { alert('Fout bij verwijderen stap: ' + error.message); return; }
-      await refreshGoals();
-    }
-
-    // ============================================
-    // MISSIES: MODAL / FORM
-    // ============================================
-    function readGoalForm() {
-      const get = id => { const el = document.getElementById(id); return el ? el.value : null; };
-      if (!document.getElementById('gf-title')) return;
-      state.goalForm = {
-        title: get('gf-title') || '',
-        domain: get('gf-domain') || '',
-        priority: get('gf-priority') || 'medium',
-        timeframe: get('gf-timeframe') || 'short',
-        deadline: get('gf-deadline') || '',
-        start: get('gf-start') || '',
-        current: get('gf-current') || '',
-        target: get('gf-target') || '',
-        notes: get('gf-notes') || '',
-        linked: get('gf-linked') || ''
-      };
-    }
-
-    function openGoalModal(goalId) {
-      if (goalId) {
-        const g = state.goals.find(x => x.id === goalId);
-        if (!g) return;
-        state.editingGoalId = goalId;
-        state.goalForm = {
-          title: g.title || '',
-          domain: g.domain || '',
-          priority: g.priority || 'medium',
-          timeframe: g.timeframe || 'short',
-          deadline: g.deadline || '',
-          start: hasValue(g.start_value) ? String(Number(g.start_value)) : '',
-          current: hasValue(g.current_value) ? String(Number(g.current_value)) : '',
-          target: hasValue(g.target_value) ? String(Number(g.target_value)) : '',
-          notes: g.notes || '',
-          linked: g.linked_metric || ''
-        };
-      } else {
-        state.editingGoalId = null;
-        const tf = state.goalTab === 'completed' ? 'short' : state.goalTab;
-        state.goalForm = emptyGoalForm(tf);
-        if (state.goalDomain !== 'all') {
-          state.goalForm.domain = state.goalDomain;
-          state.templateDomain = state.goalDomain;
-        }
-      }
-      state.showGoalModal = true;
-      render();
-    }
-
-    function closeGoalModal() {
-      state.showGoalModal = false;
-      state.editingGoalId = null;
-      render();
-    }
-
-    function setTemplateDomain(domain) {
-      readGoalForm();
-      state.templateDomain = domain;
-      render();
-    }
-
-    function onGoalTimeframeChange() {
-      readGoalForm();
-      render();
-    }
-
-    function applyTemplate(index) {
-      const t = goalTemplates[index];
-      if (!t) return;
-      readGoalForm();
-      state.goalForm = {
-        ...state.goalForm,
-        title: t[2],
-        domain: t[0],
-        timeframe: t[1],
-        start: t[3] === null ? '' : String(t[3]),
-        current: t[3] === null ? '' : String(t[3]),
-        target: t[4] === null ? '' : String(t[4]),
-        notes: t[6] || '',
-        linked: t[7] ? t[7].metric : '',
-        deadline: addDays(timeframeConfig[t[1]].days)
-      };
-      if (t[7]) {
-        const latest = latestBodyValue(t[7].metric);
-        if (latest !== null) {
-          state.goalForm.start = String(latest);
-          state.goalForm.current = String(latest);
-          state.goalForm.target = String(Math.round((latest + t[7].delta) * 10) / 10);
-        } else {
-          state.goalForm.notes += ' Voeg eerst een meting toe bij Lichaam, dan vult de app start en doel zelf in.';
-        }
-      }
-      render();
-    }
-
-    function setGoalTab(tab) {
-      state.goalTab = tab;
-      render();
-    }
-
-    function setGoalDomain(domain) {
-      state.goalDomain = domain;
-      render();
-    }
-
-    // ============================================
     // RENDER: AUTH
     // ============================================
     let authMode = 'login';
@@ -1602,8 +1160,8 @@
             <div class="stat-label">Retention</div>
           </div>
           <div class="stat">
-            <div class="stat-value">${state.goals.filter(g => !g.is_completed).length}</div>
-            <div class="stat-label">Missies</div>
+            <div class="stat-value">${activeChallenges().length}</div>
+            <div class="stat-label">Challenges</div>
           </div>
           <div class="stat">
             <div class="stat-value">${getPositiveHabitsCount()}/9</div>
@@ -1616,8 +1174,6 @@
         </div>
 
         ${renderBackupReminder()}
-
-        ${renderDashboardMissions()}
 
         ${renderDashboardChallenges()}
         
@@ -1676,7 +1232,7 @@
     }
 
     function renderBackupReminder() {
-      const hasData = state.entries.length > 0 || state.goals.length > 0;
+      const hasData = state.entries.length > 0 || state.challenges.length > 0 || state.bodyStats.length > 0;
       const since = daysSinceBackup();
       if (!hasData || (since !== null && since <= 30)) return '';
       return `
@@ -1690,41 +1246,6 @@
       `;
     }
 
-    function renderDashboardMissions() {
-      const prio = { high: 0, medium: 1, low: 2 };
-      const active = state.goals
-        .filter(g => !g.is_completed)
-        .sort((a, b) =>
-          ((prio[a.priority] ?? 1) - (prio[b.priority] ?? 1)) ||
-          (a.deadline || '9999-12-31').localeCompare(b.deadline || '9999-12-31'))
-        .slice(0, 3);
-
-      return `
-        <div class="card">
-          <label class="label">🎯 Actieve Missies</label>
-          ${active.length ? active.map(g => {
-            const p = calcGoalProgress(g);
-            const d = domainConfig[g.domain];
-            return `
-              <div style="margin-bottom: 14px; cursor: pointer;" onclick="setSection('missions')">
-                <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 12px;">
-                  <span>${d ? d.icon + ' ' : ''}${esc(g.title)}</span>
-                  <span style="color: #737373;">${p}%</span>
-                </div>
-                <div class="progress-bar" style="margin-top: 6px;">
-                  <div class="progress-fill" style="width: ${p}%; background: #7f1d1d;"></div>
-                </div>
-              </div>
-            `;
-          }).join('') : `
-            <div style="font-size: 12px; color: #525252; margin-bottom: 12px;">Nog geen actieve missies. Begin klein.</div>
-          `}
-          <button class="btn btn-secondary btn-small" style="width: 100%;" onclick="setSection('missions')">
-            ${active.length ? 'Alle missies →' : '+ Eerste missie kiezen'}
-          </button>
-        </div>
-      `;
-    }
     
     function renderHabitModal() {
       const habit = habitConfig[state.showHabitModal];
@@ -1758,255 +1279,6 @@
               <button class="btn btn-primary" onclick="toggleHabit('${state.showHabitModal}'); state.showHabitModal = null; render();">
                 ${state.habits[state.showHabitModal] ? '✓ Gedaan' : 'Afvinken'}
               </button>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    // ============================================
-    // RENDER: MISSIES
-    // ============================================
-    function renderMissions() {
-      const active = state.goals.filter(g => !g.is_completed);
-      const done = state.goals.filter(g => g.is_completed);
-      const avg = active.length
-        ? Math.round(active.reduce((a, g) => a + calcGoalProgress(g), 0) / active.length)
-        : 0;
-      const high = active.filter(g => g.priority === 'high').length;
-
-      let list = state.goalTab === 'completed'
-        ? done
-        : active.filter(g => g.timeframe === state.goalTab);
-      if (state.goalDomain !== 'all') list = list.filter(g => g.domain === state.goalDomain);
-
-      const countFor = tf => active.filter(g => g.timeframe === tf).length;
-
-      return `
-        <div class="page-header">
-          <div class="page-sub">Discipline boven motivatie</div>
-          <div class="page-title">Missies</div>
-        </div>
-
-        <div class="stats">
-          <div class="stat">
-            <div class="stat-value">${active.length}</div>
-            <div class="stat-label">Actief</div>
-          </div>
-          <div class="stat">
-            <div class="stat-value" style="color: #22c55e;">${done.length}</div>
-            <div class="stat-label">Voltooid</div>
-          </div>
-          <div class="stat">
-            <div class="stat-value" style="color: #eab308;">${avg}%</div>
-            <div class="stat-label">Gem. voortgang</div>
-          </div>
-          <div class="stat">
-            <div class="stat-value" style="color: #dc2626;">${high}</div>
-            <div class="stat-label">Hoge prio</div>
-          </div>
-        </div>
-
-        <div class="tabs">
-          <button class="tab ${state.goalTab === 'short' ? 'active' : ''}" onclick="setGoalTab('short')">Kort (${countFor('short')})</button>
-          <button class="tab ${state.goalTab === 'medium' ? 'active' : ''}" onclick="setGoalTab('medium')">Middel (${countFor('medium')})</button>
-          <button class="tab ${state.goalTab === 'long' ? 'active' : ''}" onclick="setGoalTab('long')">Lang (${countFor('long')})</button>
-          <button class="tab ${state.goalTab === 'completed' ? 'active' : ''}" onclick="setGoalTab('completed')">Voltooid (${done.length})</button>
-        </div>
-
-        <div class="chips">
-          <button class="chip ${state.goalDomain === 'all' ? 'active' : ''}" onclick="setGoalDomain('all')">Alle</button>
-          ${Object.entries(domainConfig).map(([key, d]) => `
-            <button class="chip ${state.goalDomain === key ? 'active' : ''}" onclick="setGoalDomain('${key}')">${d.icon} ${d.label}</button>
-          `).join('')}
-        </div>
-
-        <button class="btn btn-primary" style="width: 100%; margin-bottom: 16px;" onclick="openGoalModal()">+ Nieuwe Missie</button>
-
-        ${state.goalsError ? `
-          <div class="info-box">
-            <div class="info-title">⚠️ Missies konden niet laden</div>
-            <div class="info-text">${esc(state.goalsError)}</div>
-          </div>
-        ` : ''}
-
-        ${list.length ? list.map(renderGoalCard).join('') : `
-          <div class="empty">
-            ${state.goalTab === 'completed'
-              ? 'Nog geen voltooide missies. Je eerste overwinning komt eraan.'
-              : 'Nog geen missies hier.<br><br>Kies een template: kleine stappen, echte resultaten.'}
-          </div>
-        `}
-
-        ${state.showGoalModal ? renderGoalModal() : ''}
-      `;
-    }
-
-    function renderGoalCard(g) {
-      const p = calcGoalProgress(g);
-      const d = domainConfig[g.domain];
-      const pr = priorityConfig[g.priority];
-      const st = g.goal_subtasks || [];
-      const stDone = st.filter(s => s.is_completed).length;
-      const hasTarget = hasValue(g.target_value);
-      const dl = deadlineText(g.deadline);
-      const barColor = p >= 75 ? '#22c55e' : p >= 40 ? '#eab308' : '#7f1d1d';
-
-      return `
-        <div class="goal ${g.is_completed ? 'done' : ''}">
-          <div class="goal-top">
-            <button class="goal-check ${g.is_completed ? 'checked' : ''}" onclick="toggleGoalComplete('${g.id}')" title="${g.is_completed ? 'Terugzetten naar actief' : 'Markeer als voltooid'}">${g.is_completed ? '✓' : ''}</button>
-            <div style="flex: 1; min-width: 0;">
-              <div class="goal-title">${esc(g.title)}</div>
-              <div class="goal-meta">
-                ${d ? `<span class="badge" style="color: #a3a3a3;">${d.icon} ${d.label}</span>` : ''}
-                ${pr ? `<span class="badge" style="color: ${pr.color}; border-color: ${pr.color}55;">${pr.label}</span>` : ''}
-                ${g.linked_metric && bodyMetrics[g.linked_metric] ? `<span class="badge">🔗 ${bodyMetrics[g.linked_metric].label}</span>` : ''}
-                ${dl ? `<span class="badge" style="${dl === 'Verlopen' && !g.is_completed ? 'color: #dc2626; border-color: #dc262655;' : ''}">📅 ${dl}</span>` : ''}
-              </div>
-            </div>
-          </div>
-
-          ${g.notes ? `<div class="goal-notes">${esc(g.notes)}</div>` : ''}
-
-          ${(hasTarget || st.length) ? `
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: ${p}%; background: ${barColor};"></div>
-            </div>
-            <div class="goal-progress-row">
-              <span>${hasTarget
-                ? `${fmtNum(g.start_value)} → <strong style="color: #fafafa;">${fmtNum(hasValue(g.current_value) ? g.current_value : g.start_value)}</strong> → ${fmtNum(g.target_value)}`
-                : `${stDone}/${st.length} stappen`}</span>
-              <span>${p}%</span>
-            </div>
-          ` : ''}
-
-          ${hasTarget && !g.is_completed ? `
-            <div class="goal-update">
-              <input type="number" step="any" inputmode="decimal" class="input-sm" id="gv-${g.id}" placeholder="Nieuwe waarde" onkeydown="if(event.key === 'Enter') updateGoalValue('${g.id}')">
-              <button class="btn btn-primary btn-small" onclick="updateGoalValue('${g.id}')">Bijwerken</button>
-            </div>
-          ` : ''}
-
-          ${(st.length || !g.is_completed) ? `
-            <div class="subtasks">
-              ${st.map(s => `
-                <div class="subtask">
-                  <button class="subtask-check ${s.is_completed ? 'checked' : ''}" onclick="toggleSubtask('${g.id}', '${s.id}')">${s.is_completed ? '✓' : ''}</button>
-                  <div class="subtask-text ${s.is_completed ? 'done' : ''}">${esc(s.title)}</div>
-                  <button class="icon-btn" onclick="deleteSubtask('${s.id}')" title="Stap verwijderen">×</button>
-                </div>
-              `).join('')}
-              ${!g.is_completed ? `
-                <div class="goal-update" style="margin-top: 8px;">
-                  <input type="text" class="input-sm" id="st-${g.id}" placeholder="+ Stap toevoegen" onkeydown="if(event.key === 'Enter') addSubtask('${g.id}')">
-                  <button class="btn btn-secondary btn-small" onclick="addSubtask('${g.id}')">+</button>
-                </div>
-              ` : ''}
-            </div>
-          ` : ''}
-
-          <div class="goal-actions">
-            <button class="entry-action" onclick="openGoalModal('${g.id}')">✏️ Bewerken</button>
-            <button class="entry-action delete" onclick="deleteGoal('${g.id}')">🗑️ Verwijderen</button>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderGoalModal() {
-      const f = state.goalForm || emptyGoalForm();
-      const isEdit = !!state.editingGoalId;
-      const td = state.templateDomain;
-      const templates = goalTemplates
-        .map((t, i) => ({ t, i }))
-        .filter(x => x.t[0] === td && x.t[1] === f.timeframe);
-
-      const opt = (value, label, current) =>
-        `<option value="${value}" ${current === value ? 'selected' : ''}>${label}</option>`;
-
-      return `
-        <div class="modal-overlay" onclick="if(event.target === this) closeGoalModal();">
-          <div class="modal" style="max-width: 520px;">
-            <div class="modal-title" style="color: #fafafa;">${isEdit ? 'Missie Bewerken' : 'Nieuwe Missie'}</div>
-
-            <div class="smart-row">
-              ${[['S','Specifiek'],['M','Meetbaar'],['A','Acceptabel'],['R','Realistisch'],['T','Tijdgebonden']].map(([c, w]) => `
-                <div class="smart-cell"><div class="smart-char">${c}</div><div class="smart-word">${w}</div></div>
-              `).join('')}
-            </div>
-
-            ${!isEdit ? `
-              <label class="form-label" style="margin-top: 0;">⚡ Kies een template (of vul zelf in)</label>
-              <div class="chips" style="margin-bottom: 8px;">
-                ${Object.entries(domainConfig).map(([key, d]) => `
-                  <button class="chip ${td === key ? 'active' : ''}" onclick="setTemplateDomain('${key}')">${d.icon} ${d.label}</button>
-                `).join('')}
-              </div>
-              <div class="template-list">
-                ${templates.length ? templates.map(({ t, i }) => `
-                  <button class="template" onclick="applyTemplate(${i})">
-                    ${esc(t[2])}
-                    <div class="template-sub">${t[7] ? `Gekoppeld aan ${bodyMetrics[t[7].metric].label.toLowerCase()}: ${t[7].delta} ${esc(t[5])}` : t[4] !== null ? `Doel: ${t[4]} ${esc(t[5])}` : 'Zelf waarden invullen'}${t[6] ? ' · ' + esc(t[6]) : ''}</div>
-                  </button>
-                `).join('') : `<div class="empty" style="padding: 20px;">Geen templates voor deze termijn.</div>`}
-              </div>
-              <div style="font-size: 10px; color: #525252; margin-top: 6px;">Templates passen bij de gekozen termijn hieronder.</div>
-              <div style="font-size: 11px; color: #a3a3a3; margin-top: 8px; line-height: 1.5;">💡 Iets elke dag volhouden (koud douchen, geen suiker)? Dat is een <a href="#" onclick="closeGoalModal(); state.bodyTab = 'challenges'; setSection('body'); return false;">challenge</a>.</div>
-            ` : ''}
-
-            <label class="form-label">Missie</label>
-            <input type="text" class="form-input" id="gf-title" placeholder="Wat wil je bereiken? (wees specifiek)" value="${esc(f.title)}">
-
-            <div class="form-row">
-              <div>
-                <label class="form-label">Domein</label>
-                <select class="form-input" id="gf-domain">
-                  ${opt('', 'Kies...', f.domain)}
-                  ${Object.entries(domainConfig).map(([key, d]) => opt(key, d.icon + ' ' + d.label, f.domain)).join('')}
-                </select>
-              </div>
-              <div>
-                <label class="form-label">Prioriteit</label>
-                <select class="form-input" id="gf-priority">
-                  ${Object.entries(priorityConfig).map(([key, p]) => opt(key, p.label, f.priority)).join('')}
-                </select>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div>
-                <label class="form-label">Termijn</label>
-                <select class="form-input" id="gf-timeframe" onchange="onGoalTimeframeChange()">
-                  ${Object.entries(timeframeConfig).map(([key, t]) => opt(key, t.full, f.timeframe)).join('')}
-                </select>
-              </div>
-              <div>
-                <label class="form-label">Deadline</label>
-                <input type="date" class="form-input" id="gf-deadline" value="${esc(f.deadline)}">
-              </div>
-            </div>
-
-            <label class="form-label">🔗 Koppelen aan meting (optioneel)</label>
-            <select class="form-input" id="gf-linked" onchange="onGoalLinkChange()">
-              ${opt('', 'Niet koppelen', f.linked)}
-              ${Object.entries(bodyMetrics).map(([key, m]) => opt(key, m.label + ' (' + m.unit + ')', f.linked)).join('')}
-            </select>
-            <div style="font-size: 10px; color: #525252; margin-top: 4px;">Gekoppeld? Dan werkt elke nieuwe meting bij Lichaam de voortgang automatisch bij.</div>
-
-            <label class="form-label">Meetbaar maken (optioneel)</label>
-            <div class="form-row-3">
-              <input type="number" step="any" inputmode="decimal" class="form-input" id="gf-start" placeholder="Start" value="${esc(f.start)}">
-              <input type="number" step="any" inputmode="decimal" class="form-input" id="gf-current" placeholder="Nu" value="${esc(f.current)}">
-              <input type="number" step="any" inputmode="decimal" class="form-input" id="gf-target" placeholder="Doel" value="${esc(f.target)}">
-            </div>
-
-            <label class="form-label">Notities / aanpak</label>
-            <textarea class="form-input" id="gf-notes" placeholder="Hoe ga je dit aanpakken?">${esc(f.notes)}</textarea>
-
-            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 8px; margin-top: 20px;">
-              <button class="btn btn-secondary" onclick="closeGoalModal()">Annuleren</button>
-              <button class="btn btn-primary" id="goal-save-btn" onclick="saveGoal()">Opslaan</button>
             </div>
           </div>
         </div>
@@ -2067,18 +1339,6 @@
       return Math.round((today - new Date(dateStr + 'T00:00:00')) / 86400000);
     }
 
-    function onGoalLinkChange() {
-      readGoalForm();
-      const f = state.goalForm;
-      if (f.linked && !hasValue(f.start)) {
-        const latest = latestBodyValue(f.linked);
-        if (latest !== null) {
-          f.start = String(latest);
-          f.current = String(latest);
-        }
-      }
-      render();
-    }
 
     // ============================================
     // LICHAAM: DATABASE
@@ -2197,13 +1457,10 @@
         await saveBodySettings({ body_start_date: earliest });
       }
 
-      const reached = await syncLinkedGoals();
       state.showBodyModal = false;
       state.editingBodyId = null;
-      await loadGoals();
       render();
-      if (isFirst) showToast('📍 Startdatum vastgelegd: ' + fmtDateShort(getBodyStartDate()) + (reached.length ? ' · 🏆 Missie behaald' : ''));
-      else if (reached.length) showToast('🏆 Missie behaald: ' + reached[0]);
+      if (isFirst) showToast('📍 Startdatum vastgelegd: ' + fmtDateShort(getBodyStartDate()));
       else showToast('✓ Meting opgeslagen');
     }
 
@@ -2212,36 +1469,9 @@
       const { error } = await supabaseClient.from('body_stats').delete().eq('id', id);
       if (error) { alert('Fout bij verwijderen: ' + error.message); return; }
       await loadBody();
-      await syncLinkedGoals();
-      await loadGoals();
       render();
     }
 
-    // Gekoppelde missies bijwerken met de laatste meting
-    async function syncLinkedGoals() {
-      const reached = [];
-      const linked = state.goals.filter(g => !g.is_completed && g.linked_metric && bodyMetrics[g.linked_metric]);
-      for (const g of linked) {
-        const latest = latestBodyValue(g.linked_metric);
-        if (latest === null) continue;
-        const update = { current_value: latest, updated_at: new Date().toISOString() };
-        if (!hasValue(g.start_value)) update.start_value = latest;
-        if (hasValue(g.target_value)) {
-          const start = hasValue(g.start_value) ? Number(g.start_value) : latest;
-          const target = Number(g.target_value);
-          const done = target >= start ? latest >= target : latest <= target;
-          if (done) {
-            update.is_completed = true;
-            update.last_completed_date = todayStr();
-            reached.push(g.title);
-          }
-        }
-        if (Number(g.current_value) === latest && !update.is_completed && hasValue(g.start_value)) continue;
-        const { error } = await supabaseClient.from('goals').update(update).eq('id', g.id);
-        if (error) console.error('Fout bij bijwerken gekoppelde missie:', error);
-      }
-      return reached;
-    }
 
     async function saveHeight() {
       const el = document.getElementById('body-height');
@@ -4105,7 +3335,7 @@
         <div class="card card-accent">
           <label class="label">💾 Back-up</label>
           <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-bottom: 12px;">
-            Download al je data (journal, missies, habits, retention) als bestand. Bewaar het op je computer of in de cloud.
+            Download al je data (journal, habits, challenges, metingen, retention) als bestand. Bewaar het op je computer of in de cloud.
           </div>
           <div style="font-size: 11px; color: ${backupColor}; margin-bottom: 16px;">${backupText}</div>
           <button class="btn btn-primary" id="backup-btn" style="width: 100%;" onclick="exportBackup()">Back-up downloaden</button>
@@ -4169,7 +3399,6 @@
         <div class="container">
           ${state.activeSection === 'dashboard' ? renderDashboard() : ''}
           ${state.activeSection === 'journal' ? renderJournal() : ''}
-          ${state.activeSection === 'missions' ? renderMissions() : ''}
           ${state.activeSection === 'body' ? renderBody() : ''}
           ${state.activeSection === 'retention' ? renderRetention() : ''}
           ${state.activeSection === 'more' ? renderMore() : ''}
@@ -4181,9 +3410,6 @@
           </button>
           <button class="nav-item ${state.activeSection === 'journal' ? 'active' : ''}" onclick="setSection('journal')">
             <span class="nav-icon">📝</span>Journal
-          </button>
-          <button class="nav-item ${state.activeSection === 'missions' ? 'active' : ''}" onclick="setSection('missions')">
-            <span class="nav-icon">🎯</span>Missies
           </button>
           <button class="nav-item ${state.activeSection === 'body' ? 'active' : ''}" onclick="setSection('body')">
             <span class="nav-icon">💪</span>Lichaam
@@ -4270,10 +3496,16 @@
     // INIT
     // ============================================
     async function loadAll() {
-      await Promise.all([loadEntries(), loadRetention(), loadHabits(), loadGoals(), loadBody()]);
-      await loadChallenges();
-      const msgs = await settleChallenges();
-      if (msgs.length) setTimeout(() => showToast(msgs[0]), 600);
+      await Promise.all([loadEntries(), loadRetention(), loadHabits(), loadBody()]);
+      // Eén onderdeel dat faalt mag de rest van de app niet blokkeren
+      try {
+        await loadChallenges();
+        const msgs = await settleChallenges();
+        if (msgs.length) setTimeout(() => showToast(msgs[0]), 600);
+      } catch (e) {
+        console.error('Challenges laden mislukt:', e);
+        state.challengesError = 'Challenges konden niet laden.';
+      }
     }
 
     async function init() {
@@ -4296,8 +3528,7 @@
           state.user = null;
           state.entries = [];
           state.retentionStreak = null;
-          state.goals = [];
-      state.bodyStats = [];
+          state.bodyStats = [];
       state.bodySettings = {};
       state.challenges = [];
       state.challengeLogs = [];
