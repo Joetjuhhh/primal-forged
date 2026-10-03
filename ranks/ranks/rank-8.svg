@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<rect width="512" height="512" fill="#050505"/>
+<circle cx="256" cy="256" r="236" fill="#0a0a0a"/>
+<circle cx="256" cy="256" r="224" fill="none" stroke="#e5484d" stroke-width="6"/><circle cx="256" cy="256" r="204" fill="none" stroke="#7f1d1d" stroke-width="4"/><path d="M136 372 L224 214 L262 274 L300 182 L376 372 Z" fill="#1a0606" stroke="#e5484d" stroke-width="8" stroke-linejoin="round"/><path d="M300 182 L284 222 L300 214 L318 228 Z" fill="#b8b8b8"/><circle cx="256" cy="150" r="14" fill="#d9a441"/><circle cx="256.0" cy="32.0" r="8" fill="#b8b8b8"/><circle cx="414.4" cy="97.6" r="8" fill="#b8b8b8"/><circle cx="480.0" cy="256.0" r="8" fill="#b8b8b8"/><circle cx="414.4" cy="414.4" r="8" fill="#b8b8b8"/><circle cx="256.0" cy="480.0" r="8" fill="#b8b8b8"/><circle cx="97.6" cy="414.4" r="8" fill="#b8b8b8"/><circle cx="32.0" cy="256.0" r="8" fill="#b8b8b8"/><circle cx="97.6" cy="97.6" r="8" fill="#b8b8b8"/>
+</svg>

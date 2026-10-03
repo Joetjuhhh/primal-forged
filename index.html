@@ -314,6 +314,10 @@
       chDetailId: null,
       chSetupTemplate: null,
       chDomain: 'all',
+
+      // Motivatie
+      retentionAll: [],
+      showRankUp: null,
       
       // Daily habits (positive + negative situations)
       habits: {
@@ -763,6 +767,8 @@
       state.challenges = [];
       state.challengeLogs = [];
       state.chLogIndex = {};
+      state.retentionAll = [];
+      state.showRankUp = null;
       render();
     }
 
@@ -781,6 +787,8 @@
 
     async function loadRetention() {
       if (!state.user) return;
+      const all = await supabaseClient.from('retention').select('*').eq('user_id', state.user.id);
+      if (!all.error) state.retentionAll = all.data || [];
       const { data, error } = await supabaseClient
         .from('retention')
         .select('*')
@@ -911,6 +919,7 @@
       }]).select().single();
       if (!error) {
         state.retentionStreak = data;
+        state.retentionAll = [...(state.retentionAll || []), data];
         render();
         showToast('🔥 Streak gestart!');
       }
@@ -925,7 +934,8 @@
         end_date: todayStr(),
         streak_days: getRetentionDays()
       }).eq('id', state.retentionStreak.id);
-      
+
+      state.retentionAll = (state.retentionAll || []).map(r => r.id === state.retentionStreak.id ? { ...r, is_active: false, end_date: todayStr() } : r);
       state.retentionStreak = null;
       render();
     }
@@ -1146,6 +1156,8 @@
           <div class="greeting">${getGreeting()}, Strijder</div>
           <div class="greeting-sub">${hard75Active() ? '75 Hard is je hoofdfocus' : 'Dag ' + (state.entries.length > 0 ? getJournalStreak() : 1) + ' van je transformatie'}</div>
         </div>
+
+        ${renderRankCard()}
 
         ${hard75Active() ? renderHard75Hero(hard75Active()) : ''}
         
@@ -2037,14 +2049,11 @@
     }
 
     async function loadHabitHistory() {
-      const active = activeChallenges();
-      let from = addDays(-2);
-      active.forEach(c => { if (c.start_date < from) from = c.start_date; });
+      // Volledige geschiedenis: nodig voor challenges, XP en dagscore
       const { data, error } = await supabaseClient
         .from('daily_habits')
         .select('*')
-        .eq('user_id', state.user.id)
-        .gte('date', from);
+        .eq('user_id', state.user.id);
       if (error) { console.error('Fout bij laden habit-geschiedenis:', error); return; }
       const hist = {};
       (data || []).forEach(row => {
@@ -3033,6 +3042,386 @@
     }
 
     // ============================================
+    // MOTIVATIE: XP, DAGSCORE, RANGEN
+    // ============================================
+    const XP = {
+      habit: 5,
+      journal: 15,
+      challengeDay: 10,
+      retentionDay: 5,
+      measurement: 10,
+      hard75Day: 40,
+      challengeDonePerDay: 8,
+      hard75Done: 1500
+    };
+
+    const ranks = [
+      { n: 1, name: 'The Awakening', xp: 0, req: 'first', text: 'Je ogen zijn open. De eerste stap is gezet.' },
+      { n: 2, name: 'The Initiate', xp: 250, text: 'Je bent begonnen. Nu begint het echte werk: herhalen.' },
+      { n: 3, name: 'The Disciple', xp: 800, text: 'Je volgt het pad, ook als niemand kijkt.' },
+      { n: 4, name: 'The Warrior', xp: 1700, text: 'Discipline is geen voornemen meer. Het is wat je doet.' },
+      { n: 5, name: 'The Iron Will', xp: 2900, req: 'iron', text: 'Dertig dagen volgehouden. Je wil is van ijzer.' },
+      { n: 6, name: 'The Warden', xp: 4500, text: 'Je bewaakt je gewoontes zoals een wachter zijn poort.' },
+      { n: 7, name: 'The Conqueror', xp: 6500, text: 'Je hebt je zwakkere zelf overwonnen. Keer op keer.' },
+      { n: 8, name: 'The Apex', xp: 9200, text: 'Weinigen komen zo ver. Je staat op de top van je eigen berg.' },
+      { n: 9, name: 'The Forged', xp: 12500, req: 'forged', text: 'Door het vuur van 75 Hard gegaan. Gesmeed, niet geboren.' },
+      { n: 10, name: 'The Sovereign', xp: 16500, text: 'Je regeert over je eigen gedrag. Niets regeert jou.' },
+      { n: 11, name: 'THE PRIMAL FORGED', xp: 21500, req: 'primal', text: 'Een jaar lang elke dag gekozen voor wie je wilt zijn. Dit ben jij.' }
+    ];
+
+    const rankReqText = {
+      first: 'Start je eerste challenge',
+      iron: 'Voltooi een challenge van 30 dagen of langer',
+      forged: 'Voltooi 75 Hard',
+      primal: '365 dagen met een dagscore van 50 of hoger'
+    };
+
+    const positiveHabitKeys = Object.keys(habitConfig).filter(k => habitConfig[k].positive);
+    const negativeHabitKeys = Object.keys(habitConfig).filter(k => !habitConfig[k].positive);
+
+    // Eigen afbeeldingen? Zet rank-1.png t/m rank-11.png in de map ranks, dan gebruikt de app die.
+    // Anders de meegeleverde emblemen (rank-1.svg t/m rank-11.svg). Dit wordt één keer gecontroleerd.
+    let rankExt = 'svg';
+    (function detectRankImages() {
+      const probe = new Image();
+      probe.onload = () => { rankExt = 'png'; if (state.user && !state.loading) render(); };
+      probe.src = 'ranks/rank-1.png';
+    })();
+
+    function rankImg(n, size, style) {
+      return `<img src="ranks/rank-${n}.${rankExt}" alt="" width="${size}" height="${size}" style="display: block; width: ${size}px; height: ${size}px; border-radius: 50%; ${style || ''}">`;
+    }
+
+    function weekKey(dateStr) {
+      const d = new Date(dateStr + 'T00:00:00');
+      const day = (d.getDay() + 6) % 7; // maandag = 0
+      d.setDate(d.getDate() - day);
+      return localDateStr(d);
+    }
+
+    function dateOf(ts) {
+      return ts ? localDateStr(new Date(ts)) : null;
+    }
+
+    // Alles wordt berekend uit je eigen gegevens: niets apart opgeslagen, niets te sjoemelen
+    let progressCache = null;
+    let progressCacheKey = -1;
+    let renderCount = 0;
+
+    function getProgress() {
+      if (progressCache && progressCacheKey === renderCount) return progressCache;
+      progressCache = computeProgress();
+      progressCacheKey = renderCount;
+      return progressCache;
+    }
+
+    function computeProgress() {
+      const today = todayStr();
+      const hist = { ...state.habitHistory, [today]: { ...state.habits } };
+      const journalDates = new Set(state.entries.map(e => e.date));
+      const retentions = state.retentionAll || [];
+
+      // Challenges één keer doorrekenen
+      const chDays = {};       // datum -> [{done}]
+      const bonusOn = {};      // datum -> extra XP (voltooide challenges)
+      const failDates = new Set();
+      state.challenges.forEach(c => {
+        const ev = evalChallenge(c);
+        const stopAt = c.ended_on || null;
+        ev.days.forEach(d => {
+          if (d.st === 'future') return;
+          if (stopAt && d.date > stopAt) return;
+          (chDays[d.date] = chDays[d.date] || []).push({ done: d.st === 'done', hard: c.kind === 'hard75' });
+        });
+        if (c.status === 'completed' && c.ended_on) {
+          bonusOn[c.ended_on] = (bonusOn[c.ended_on] || 0) + (c.kind === 'hard75' ? XP.hard75Done : (Number(c.duration) || 0) * XP.challengeDonePerDay);
+        }
+        if (c.status === 'failed' && c.end_reason === 'missed' && c.ended_on) failDates.add(c.ended_on);
+      });
+
+      // Begindatum: je eerste gegevens
+      const starts = [];
+      Object.keys(state.habitHistory).forEach(d => starts.push(d));
+      state.entries.forEach(e => starts.push(e.date));
+      state.challenges.forEach(c => starts.push(c.start_date));
+      retentions.forEach(r => r.start_date && starts.push(r.start_date));
+      state.bodyStats.forEach(b => starts.push(b.entry_date));
+      const first = starts.filter(Boolean).filter(d => d <= today).sort()[0] || today;
+
+      const retentionOn = (date) => retentions.some(r => r.start_date && r.start_date <= date && (r.is_active ? date <= today : (r.end_date ? date < r.end_date : false)));
+      const retentionUsedBy = (date) => retentions.some(r => r.start_date && r.start_date <= date);
+      const measuredWeeks = new Set();
+
+      const days = [];
+      let total = 0, comeback = false, hadActivity = false, goodDays = 0, primalDate = null;
+
+      for (let date = first; date <= today; date = dateAdd(date, 1)) {
+        const h = hist[date] || {};
+        const pos = positiveHabitKeys.filter(k => h[k]).length;
+        const neg = negativeHabitKeys.filter(k => h[k]).length;
+        const journal = journalDates.has(date);
+        const chs = chDays[date] || [];
+        const ret = retentionOn(date);
+
+        // Dagscore 0-100
+        const parts = [{ w: 40, v: Math.min(pos, 6) / 6 }, { w: 15, v: journal ? 1 : 0 }];
+        if (chs.length) parts.push({ w: 30, v: chs.filter(x => x.done).length / chs.length });
+        if (retentionUsedBy(date)) parts.push({ w: 15, v: ret ? 1 : 0 });
+        const wSum = parts.reduce((a, p) => a + p.w, 0);
+        let score = Math.round(parts.reduce((a, p) => a + p.w * p.v, 0) / wSum * 100) - neg * 5;
+        score = Math.max(0, Math.min(100, score));
+
+        // XP van die dag
+        let xp = pos * XP.habit + (journal ? XP.journal : 0);
+        chs.forEach(x => { if (x.done) xp += x.hard ? XP.hard75Day : XP.challengeDay; });
+        if (ret) xp += XP.retentionDay;
+        const measured = state.bodyStats.some(b => b.entry_date === date);
+        if (measured && !measuredWeeks.has(weekKey(date))) { xp += XP.measurement; measuredWeeks.add(weekKey(date)); }
+
+        // Comeback: eerste goede dag (score 50+) na een gemiste dag of mislukte challenge telt dubbel
+        let doubled = false;
+        if (comeback && score >= 50) { xp *= 2; doubled = true; comeback = false; }
+        xp += bonusOn[date] || 0;
+        if (xp > 0) hadActivity = true;
+        if ((score < 20 && hadActivity && date < today) || failDates.has(date)) comeback = true;
+
+        if (score >= 50) { goodDays++; if (goodDays === 365 && !primalDate) primalDate = date; }
+        total += xp;
+        days.push({ date, xp, score, doubled, total });
+      }
+
+      // Bewijs-eisen met datum
+      const createdDates = state.challenges.map(c => dateOf(c.created_at) || c.start_date).filter(Boolean).sort();
+      const proof = {
+        first: createdDates[0] || null,
+        iron: state.challenges.filter(c => c.status === 'completed' && Number(c.duration) >= 30 && c.ended_on).map(c => c.ended_on).sort()[0] || null,
+        forged: state.challenges.filter(c => c.kind === 'hard75' && c.status === 'completed' && c.ended_on).map(c => c.ended_on).sort()[0] || null,
+        primal: primalDate
+      };
+
+      // Wanneer is elke rang behaald?
+      const achieved = {};
+      let current = 0;
+      days.forEach(d => {
+        for (let r = current + 1; r <= ranks.length; r++) {
+          const rk = ranks[r - 1];
+          if (d.total < rk.xp) break;
+          if (rk.req && !(proof[rk.req] && proof[rk.req] <= d.date)) break;
+          achieved[r] = d.date;
+          current = r;
+        }
+      });
+      // Eerste challenge kan vandaag pas aangemaakt zijn
+      if (!current && proof.first) { achieved[1] = proof.first; current = 1; }
+
+      const todayDay = days[days.length - 1] || { xp: 0, score: 0 };
+      const next = ranks[current] || null;
+      return {
+        total, days, current, achieved, proof, next, goodDays,
+        today: todayDay,
+        comebackReady: comeback,
+        week: Array.from({ length: 7 }, (_, i) => {
+          const date = dateAdd(today, i - 6);
+          return days.find(d => d.date === date) || { date, xp: 0, score: 0, empty: true };
+        })
+      };
+    }
+
+    // ============================================
+    // RANG-POP-UP
+    // ============================================
+    function getSeenRank() {
+      const s = state.bodySettings || {};
+      if (s.seen_rank !== undefined && s.seen_rank !== null) return Number(s.seen_rank);
+      try { const v = localStorage.getItem('pf_seen_rank'); return v === null ? null : Number(v); } catch (e) { return null; }
+    }
+
+    async function saveSeenRank(n) {
+      state.bodySettings = { ...(state.bodySettings || {}), seen_rank: n };
+      try { localStorage.setItem('pf_seen_rank', String(n)); } catch (e) {}
+      if (state.bodySettingsMissing || !state.user) return;
+      const { error } = await supabaseClient.from('user_settings').upsert({ user_id: state.user.id, seen_rank: n }, { onConflict: 'user_id' });
+      if (error) console.warn('seen_rank niet opgeslagen (voer rank-update.sql uit):', error.message);
+    }
+
+    function checkRankUp() {
+      if (!state.user || state.loading || state.showRankUp) return;
+      const p = getProgress();
+      const seen = getSeenRank();
+      if (p.current > 0 && (seen === null || p.current > seen)) {
+        state.showRankUp = p.current;
+        saveSeenRank(p.current);
+        render();
+      }
+    }
+
+    function closeRankUp() {
+      state.showRankUp = null;
+      render();
+    }
+
+    function renderRankUp() {
+      const rk = ranks[state.showRankUp - 1];
+      if (!rk) return '';
+      const p = getProgress();
+      return `
+        <div class="modal-overlay" style="background: rgba(0,0,0,0.95); z-index: 500;" onclick="if(event.target === this) closeRankUp();">
+          <div style="max-width: 360px; width: 100%; text-align: center; padding: 24px;">
+            <div style="font-size: 10px; color: #e5484d; letter-spacing: 0.35em; font-weight: 600; margin-bottom: 24px;">NIEUWE RANG BEHAALD</div>
+            <div style="display: flex; justify-content: center; margin-bottom: 24px;">${rankImg(rk.n, 220, 'box-shadow: 0 0 60px rgba(229,72,77,0.35);')}</div>
+            <div style="font-size: 11px; color: #8a8a8a; letter-spacing: 0.2em;">RANG ${rk.n} VAN ${ranks.length}</div>
+            <div style="font-size: 28px; font-weight: 300; letter-spacing: 0.08em; margin-top: 8px; text-transform: uppercase;">${rk.name}</div>
+            <div style="font-size: 14px; color: #a3a3a3; line-height: 1.6; margin-top: 16px; font-style: italic;">${rk.text}</div>
+            <div style="font-size: 12px; color: #8a8a8a; margin-top: 16px;">${fmtInt(p.total)} XP</div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 28px;" onclick="closeRankUp()">Verder</button>
+            <button class="entry-action" style="margin-top: 12px; border: none;" onclick="state.showRankUp = null; setSection('ranks');">Bekijk alle rangen</button>
+          </div>
+        </div>
+      `;
+    }
+
+    // ============================================
+    // DASHBOARD: RANG + DAGSCORE
+    // ============================================
+    function scoreColor(s) {
+      if (s >= 75) return '#22c55e';
+      if (s >= 50) return '#a3e635';
+      if (s >= 25) return '#eab308';
+      return '#7f1d1d';
+    }
+
+    function renderRankCard() {
+      const p = getProgress();
+      const rk = p.current ? ranks[p.current - 1] : null;
+      const next = p.next;
+      let barPct = 100, nextText = 'Hoogste rang bereikt';
+      if (next) {
+        const base = rk ? rk.xp : 0;
+        barPct = next.xp > base ? Math.max(0, Math.min(100, Math.round(((p.total - base) / (next.xp - base)) * 100))) : 100;
+        const xpLeft = Math.max(0, next.xp - p.total);
+        const reqMissing = next.req && !p.proof[next.req];
+        if (!p.current) nextText = rankReqText.first + ' → The Awakening';
+        else if (xpLeft > 0) nextText = `Nog ${fmtInt(xpLeft)} XP tot ${next.name}`;
+        else if (reqMissing) nextText = `${next.name}: ${rankReqText[next.req].toLowerCase()}`;
+        else nextText = `Bijna ${next.name}`;
+        if (reqMissing && xpLeft > 0) nextText += ` · eis: ${rankReqText[next.req].toLowerCase()}`;
+      }
+      const dayNames = ['ma', 'di', 'wo', 'do', 'vr', 'za', 'zo'];
+      const week = p.week;
+      const todayScore = p.today.score || 0;
+
+      return `
+        <div class="card" style="cursor: pointer; padding: 16px;" onclick="setSection('ranks')">
+          <div style="display: flex; gap: 14px; align-items: center;">
+            ${rk ? rankImg(rk.n, 56) : `<div style="width: 56px; height: 56px; border-radius: 50%; border: 1px dashed #525252; flex-shrink: 0;"></div>`}
+            <div style="flex: 1; min-width: 0;">
+              <div style="font-size: 9px; color: #8a8a8a; letter-spacing: 0.15em;">${rk ? 'RANG ' + rk.n + ' VAN ' + ranks.length : 'NOG GEEN RANG'}</div>
+              <div style="font-size: 15px; font-weight: 500; letter-spacing: 0.04em; margin-top: 2px;">${rk ? rk.name : 'Ongesmeed'}</div>
+              <div style="font-size: 11px; color: #a3a3a3; margin-top: 2px;">${fmtInt(p.total)} XP · vandaag +${fmtInt(p.today.xp || 0)}${p.today.doubled ? ' (x2)' : ''}</div>
+            </div>
+            <div style="text-align: center; flex-shrink: 0;">
+              <div style="font-size: 26px; font-weight: 300; line-height: 1; color: ${scoreColor(todayScore)};">${todayScore}</div>
+              <div style="font-size: 8px; color: #8a8a8a; letter-spacing: 0.1em; margin-top: 4px;">DAGSCORE</div>
+            </div>
+          </div>
+          <div class="progress-bar" style="margin-top: 14px;"><div class="progress-fill" style="width: ${barPct}%; background: #e5484d;"></div></div>
+          <div style="font-size: 10px; color: #8a8a8a; margin-top: 6px;">${nextText}</div>
+          ${p.comebackReady ? `<div style="font-size: 11px; color: #eab308; margin-top: 10px;">🔥 Comeback: haal vandaag een dagscore van 50 en je XP telt dubbel</div>` : ''}
+          ${p.today.doubled ? `<div style="font-size: 11px; color: #22c55e; margin-top: 10px;">🔥 Comeback-bonus actief: vandaag dubbele XP</div>` : ''}
+          <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; margin-top: 14px; align-items: end;">
+            ${week.map(d => {
+              const dn = dayNames[(new Date(d.date + 'T00:00:00').getDay() + 6) % 7];
+              const h = Math.max(3, Math.round(d.score * 0.32));
+              return `<div style="text-align: center;" title="${fmtDateLong(d.date)}: dagscore ${d.score}, +${d.xp} XP">
+                <div style="height: 32px; display: flex; align-items: flex-end;"><div style="width: 100%; height: ${h}px; background: ${d.date === todayStr() ? '#e5484d' : d.empty ? '#141414' : (d.score >= 50 ? '#525252' : '#262626')};"></div></div>
+                <div style="font-size: 8px; color: ${d.date === todayStr() ? '#fafafa' : '#8a8a8a'}; margin-top: 4px;">${dn}</div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // ============================================
+    // RANGEN-OVERZICHT
+    // ============================================
+    function renderRanks() {
+      const p = getProgress();
+      const xpRows = [
+        ['Positieve habit', `+${XP.habit} per habit`],
+        ['Journal-entry', `+${XP.journal} per dag`],
+        ['Challenge-dag gehaald', `+${XP.challengeDay} per challenge`],
+        ['Retention-dag', `+${XP.retentionDay} per dag`],
+        ['Lichaamsmeting', `+${XP.measurement} (1x per week)`],
+        ['75 Hard-dag volledig', `+${XP.hard75Day}`],
+        ['Challenge voltooid', `+${XP.challengeDonePerDay} × aantal dagen`],
+        ['75 Hard voltooid', `+${fmtInt(XP.hard75Done)}`],
+        ['Comeback', 'eerste dag met score 50+ na een gemiste dag (score onder 20) of mislukte challenge: XP × 2']
+      ];
+      return `
+        <div class="page-header">
+          <div class="page-sub">Motivatie</div>
+          <div class="page-title">Rangen</div>
+        </div>
+
+        <div class="stats" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="stat"><div class="stat-value">${fmtInt(p.total)}</div><div class="stat-label">Totaal XP</div></div>
+          <div class="stat"><div class="stat-value">${p.current}/${ranks.length}</div><div class="stat-label">Rang</div></div>
+          <div class="stat"><div class="stat-value">${p.goodDays}</div><div class="stat-label">Dagen ≥ 50</div></div>
+        </div>
+
+        ${ranks.map(rk => {
+          const got = !!p.achieved[rk.n];
+          const isNext = rk.n === p.current + 1;
+          const filter = got ? '' : isNext ? 'filter: grayscale(1) brightness(0.6);' : 'filter: grayscale(1) brightness(0.25);';
+          const xpLeft = Math.max(0, rk.xp - p.total);
+          let status;
+          if (got) status = `<span style="color: #22c55e;">Behaald ${fmtDateLong(p.achieved[rk.n])}</span>`;
+          else {
+            const bits = [];
+            if (rk.n > 1 && xpLeft > 0) bits.push(`nog ${fmtInt(xpLeft)} XP`);
+            if (rk.req && !p.proof[rk.req]) bits.push(rankReqText[rk.req].toLowerCase());
+            if (rk.req === 'primal' && !p.proof.primal) bits[bits.length - 1] += ` (${p.goodDays}/365)`;
+            status = bits.length ? bits.join(' · ') : 'eerst de vorige rang';
+            status = `<span style="color: ${isNext ? '#a3a3a3' : '#525252'};">${status.charAt(0).toUpperCase() + status.slice(1)}</span>`;
+          }
+          return `
+            <div class="goal" style="display: flex; gap: 14px; align-items: center; ${got ? '' : 'opacity: ' + (isNext ? 1 : 0.8) + ';'} ${rk.n === p.current ? 'border-color: #7f1d1d;' : ''}">
+              <div style="flex-shrink: 0; cursor: ${got ? 'pointer' : 'default'};" ${got ? `onclick="state.showRankUp = ${rk.n}; render();"` : ''}>${rankImg(rk.n, 64, filter)}</div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 9px; color: #8a8a8a; letter-spacing: 0.15em;">RANG ${rk.n}${rk.n > 1 ? ' · ' + fmtInt(rk.xp) + ' XP' : ''}${rk.n === p.current ? ' · <span style="color: #e5484d;">HUIDIG</span>' : ''}</div>
+                <div style="font-size: 15px; font-weight: 500; letter-spacing: 0.04em; margin-top: 2px; ${got || isNext ? '' : 'color: #737373;'}">${rk.name}</div>
+                ${got || isNext ? `<div style="font-size: 11px; color: #a3a3a3; margin-top: 4px; line-height: 1.5; font-style: italic;">${rk.text}</div>` : ''}
+                <div style="font-size: 11px; margin-top: 4px;">${status}</div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+
+        <div class="card">
+          <label class="label">Hoe verdien je XP</label>
+          ${xpRows.map(r => `
+            <div style="display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid #1c1c1c; font-size: 12px;">
+              <span style="color: #a3a3a3;">${r[0]}</span><span style="text-align: right;">${r[1]}</span>
+            </div>
+          `).join('')}
+          <div style="font-size: 11px; color: #8a8a8a; line-height: 1.6; margin-top: 12px;">Je verliest nooit XP. Alles wordt berekend uit wat je echt hebt gedaan, ook je dagen van vóór deze update.</div>
+        </div>
+
+        <div class="card">
+          <label class="label">Dagscore</label>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.7;">
+            Habits 40 (6 of meer = vol) · Challenges 30 · Journal 15 · Retention 15.<br>
+            Geen challenges of retention actief? Dan worden die punten over de rest verdeeld.<br>
+            Elke negatieve habit (slecht geslapen, stress, alcohol, junk): −5.
+          </div>
+        </div>
+
+        <button class="btn btn-secondary" style="width: 100%;" onclick="setSection('dashboard')">← Terug naar dashboard</button>
+      `;
+    }
+
+    // ============================================
     // RENDER: RETENTION
     // ============================================
     function renderRetention() {
@@ -3400,10 +3789,13 @@
           ${state.activeSection === 'dashboard' ? renderDashboard() : ''}
           ${state.activeSection === 'journal' ? renderJournal() : ''}
           ${state.activeSection === 'body' ? renderBody() : ''}
+          ${state.activeSection === 'ranks' ? renderRanks() : ''}
           ${state.activeSection === 'retention' ? renderRetention() : ''}
           ${state.activeSection === 'more' ? renderMore() : ''}
         </div>
         
+        ${state.showRankUp ? renderRankUp() : ''}
+
         <nav class="nav">
           <button class="nav-item ${state.activeSection === 'dashboard' ? 'active' : ''}" onclick="setSection('dashboard')">
             <span class="nav-icon">📊</span>Dashboard
@@ -3425,6 +3817,7 @@
     }
 
     function render() {
+      renderCount++;
       const app = document.getElementById('app');
       if (state.loading) {
         app.innerHTML = '<div class="loading"><span class="loading-text">Laden...</span></div>';
@@ -3436,6 +3829,7 @@
       }
       app.innerHTML = renderApp();
       if (state.activeSection === 'body') setupBodyChart();
+      if (!state.showRankUp) setTimeout(checkRankUp, 50);
     }
 
     // ============================================
@@ -3533,6 +3927,8 @@
       state.challenges = [];
       state.challengeLogs = [];
       state.chLogIndex = {};
+      state.retentionAll = [];
+      state.showRankUp = null;
         }
         render();
       });
