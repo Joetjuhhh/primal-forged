@@ -311,6 +311,18 @@
       bodyMetric: 'weight',
       bodyRange: 90,
       bodyShowAll: false,
+      bodyTab: 'metingen',
+
+      // Challenges
+      challenges: [],
+      challengeLogs: [],
+      chLogIndex: {},
+      challengesError: null,
+      habitHistory: {},
+      chView: 'list',
+      chDetailId: null,
+      chSetupTemplate: null,
+      chDomain: 'all',
       
       // Daily habits (positive + negative situations)
       habits: {
@@ -540,18 +552,12 @@
       // FYSIEK - kort
       ['physical','short','10 push-ups achter elkaar',0,10,'reps','Elke dag 3 sets, stop net voor falen. Noteer je beste set.'],
       ['physical','short','12 trainingen in 4 weken (3x/week)',0,12,'trainingen','Plan je trainingsdagen vast in je agenda.'],
-      ['physical','short','14 dagen 2 liter water per dag',0,14,'dagen','Zet een fles van 1 liter op je bureau, 2x vullen.'],
-      ['physical','short','14 nachten minimaal 7 uur slaap',0,14,'nachten','Vaste bedtijd, telefoon buiten de slaapkamer.'],
-      ['physical','short','7 dagen 8.000 stappen per dag',0,7,'dagen','Een wandeling na het eten scheelt al 2.000 stappen.'],
-      ['physical','short','14 dagen 10 minuten stretchen',0,14,'dagen','Koppel het aan iets vasts, bijv. direct na het tandenpoetsen.'],
       ['physical','short','1 minuut plank volhouden',0,60,'seconden','Elke dag 3 pogingen, bouw 5 seconden per keer op.'],
-      ['physical','short','14 dagen geen frisdrank',0,14,'dagen','Vervang door bruiswater met citroen.'],
       // FYSIEK - middel
       ['physical','medium','25 push-ups achter elkaar',10,25,'reps','Bouw op met extra sets en tempo-push-ups.'],
       ['physical','short','1 kg afvallen',null,null,'kg','Elke ochtend wegen, zelfde tijd, na het toilet.',{metric:'weight',delta:-1}],
       ['physical','medium','3 kg afvallen',null,null,'kg','Kleine calorie-deficit (±300 kcal) en veel eiwit.',{metric:'weight',delta:-3}],
       ['physical','medium','3 cm van je taille',null,null,'cm','Meet op navelhoogte, ontspannen uitademen.',{metric:'waist',delta:-3}],
-      ['physical','medium','30 dagen geen alcohol',0,30,'dagen','Vertel vrienden vooraf dat je een challenge doet.'],
       ['physical','medium','5 km hardlopen zonder stoppen',0,5,'km','Begin met hardlopen/wandelen in intervallen.'],
       ['physical','medium','5 kg erbij op bankdrukken',0,5,'kg erbij','Elke week 1-2,5 kg erbij als alle reps lukken.'],
       ['physical','medium','5 pull-ups achter elkaar',0,5,'reps','Start met negatieve pull-ups en hangen.'],
@@ -562,25 +568,20 @@
       ['physical','long','3% lager vetpercentage',null,null,'%','Krachttraining + eiwit, geduld.',{metric:'bodyfat_percentage',delta:-3}],
       ['physical','long','100 trainingen in een jaar',0,100,'trainingen','Twee trainingen per week is genoeg.'],
       // MENTAAL - kort
-      ['mental','short','7 dagen 5 minuten mediteren',0,7,'dagen','Gebruik een timer, focus alleen op je adem.'],
       ['mental','short','1 boek uitlezen',0,1,'boek','10 pagina\'s per dag is genoeg.'],
-      ['mental','short','7 dagen journalen',0,7,'dagen','Gebruik de Journal-tab, ook 3 zinnen telt.'],
-      ['mental','short','7 dagen geen social media voor 10:00',0,7,'dagen','Telefoon in een andere kamer bij het opstaan.'],
-      ['mental','short','14 dagen 20 pagina\'s lezen',0,14,'dagen','Lees op een vast moment, bijv. voor het slapen.'],
+      ['mental','short','Eén module van een cursus afronden',0,1,'module','Plan twee vaste studiemomenten deze week.'],
+      ['mental','short','Een nieuwe vaardigheid: 5 lessen',0,5,'lessen','Bijvoorbeeld schaken, koken of een instrument.'],
       // MENTAAL - middel
-      ['mental','medium','30 dagen mediteren',0,30,'dagen','Mis je een dag? Nooit twee dagen achter elkaar.'],
       ['mental','medium','3 boeken lezen',0,3,'boeken','Houd een lijst bij van boeken die je nog wilt lezen.'],
+      ['mental','medium','30 uur bewust leren',0,30,'uur','Cursus, boek of oefenen: noteer je uren.'],
       ['mental','medium','Online cursus afronden',0,100,'%','Plan 2 vaste studiemomenten per week.'],
-      ['mental','medium','30 dagen schermvrij laatste uur voor bed',0,30,'dagen','Lezen of stretchen in plaats van scrollen.'],
       // MENTAAL - lang
       ['mental','long','12 boeken in een jaar',0,12,'boeken','Eén boek per maand.'],
       ['mental','long','100 lessen van een nieuwe taal',0,100,'lessen','Elke dag 10 minuten.'],
-      ['mental','long','100 dagen mediteren',0,100,'dagen','Verleng langzaam naar 15-20 minuten.'],
       // FINANCIEEL - kort
       ['financial','short','€250 sparen',0,250,'euro','Zet direct na je salaris automatisch geld apart.'],
       ['financial','short','Maandbudget maken',0,1,'budget','Vaste lasten, boodschappen, vrij besteedbaar.'],
       ['financial','short','Abonnementen checken en 1 opzeggen',0,1,'opgezegd','Check je bankafschriften van de laatste 3 maanden.'],
-      ['financial','short','14 dagen geen afhaaleten',0,14,'dagen','Kook in batches voor drukke dagen.'],
       // FINANCIEEL - middel
       ['financial','medium','€1.000 sparen',0,1000,'euro','±€85 per week.'],
       ['financial','medium','Eerste €100 bijverdienen',0,100,'euro','Verkoop spullen of bied een vaardigheid aan.'],
@@ -592,7 +593,6 @@
       // SOCIAAL - kort
       ['social','short','1 oude vriend opnieuw spreken',0,1,'contact','Een berichtje is genoeg om te beginnen.'],
       ['social','short','4 weken 1x per week quality time',0,4,'keer','Telefoon weg, volle aandacht.'],
-      ['social','short','7 dagen elke dag een oprecht compliment',0,7,'dagen','Wees specifiek: benoem wat je echt waardeert.'],
       ['social','short','4 weken familie 1x per week bellen',0,4,'keer','Vast moment, bijv. zondagavond.'],
       // SOCIAAL - middel
       ['social','medium','3 nieuwe mensen leren kennen',0,3,'mensen','Sportclub, cursus of meetup.'],
@@ -603,11 +603,9 @@
       ['social','long','50 sociale afspraken in een jaar',0,50,'afspraken','Gemiddeld één per week.'],
       // ZINGEVING - kort
       ['purpose','short','Je top 5 waarden opschrijven',0,5,'waarden','Wat vind je echt belangrijk? Wees eerlijk.'],
-      ['purpose','short','7 dagen 3 dingen waar je dankbaar voor bent',0,7,'dagen','Elke avond, kort opschrijven.'],
       ['purpose','short','1 keer vrijwilligerswerk doen',0,1,'keer','Zoek iets lokaals dat bij je past.'],
       // ZINGEVING - middel
       ['purpose','medium','Persoonlijke missie in 1 zin schrijven',0,1,'missie','Schrijf, laat liggen, herschrijf.'],
-      ['purpose','medium','30 dagen dankbaarheidsdagboek',0,30,'dagen','Mis geen twee dagen achter elkaar.'],
       ['purpose','medium','5 mensen concreet helpen',0,5,'mensen','Klein mag: verhuizen, advies, een klus.'],
       // ZINGEVING - lang
       ['purpose','long','12 keer vrijwilligerswerk in een jaar',0,12,'keer','Eén keer per maand.'],
@@ -726,14 +724,29 @@
         .replace(/'/g, '&#39;');
     }
 
+    // Datums altijd in lokale tijd (niet UTC), anders klopt 'vandaag' niet tussen 00:00 en 02:00
+    function localDateStr(d) {
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
+
     function todayStr() {
-      return new Date().toISOString().split('T')[0];
+      return localDateStr(new Date());
     }
 
     function addDays(n) {
       const d = new Date();
       d.setDate(d.getDate() + n);
-      return d.toISOString().split('T')[0];
+      return localDateStr(d);
+    }
+
+    function dateAdd(dateStr, n) {
+      const d = new Date(dateStr + 'T00:00:00');
+      d.setDate(d.getDate() + n);
+      return localDateStr(d);
+    }
+
+    function diffDays(a, b) {
+      return Math.round((new Date(b + 'T00:00:00') - new Date(a + 'T00:00:00')) / 86400000);
     }
 
     function fmtNum(v) {
@@ -878,6 +891,9 @@
       state.goals = [];
       state.bodyStats = [];
       state.bodySettings = {};
+      state.challenges = [];
+      state.challengeLogs = [];
+      state.chLogIndex = {};
       render();
     }
 
@@ -965,7 +981,7 @@
       
       const entry = {
         user_id: state.user.id,
-        date: new Date().toISOString().split('T')[0],
+        date: todayStr(),
         content: state.content,
         mood: state.mood,
         energy: state.energy,
@@ -1021,7 +1037,7 @@
       if (!state.user) return;
       const { data, error } = await supabaseClient.from('retention').insert([{
         user_id: state.user.id,
-        start_date: new Date().toISOString().split('T')[0],
+        start_date: todayStr(),
         is_active: true
       }]).select().single();
       if (!error) {
@@ -1037,7 +1053,7 @@
       
       await supabaseClient.from('retention').update({ 
         is_active: false, 
-        end_date: new Date().toISOString().split('T')[0],
+        end_date: todayStr(),
         streak_days: getRetentionDays()
       }).eq('id', state.retentionStreak.id);
       
@@ -1082,12 +1098,17 @@
         console.error('Fout bij opslaan habits:', error);
         showToast('⚠️ Habit niet opgeslagen');
       }
+      state.habitHistory[today] = { ...(state.habitHistory[today] || {}), [habit]: !!state.habits[habit] };
+      if (habitChallenge(habit)) {
+        const msgs = await settleChallenges();
+        if (msgs.length) { render(); showToast(msgs[0]); }
+      }
     }
 
     // ============================================
     // BACK-UP
     // ============================================
-    const backupTables = ['journal_entries', 'retention', 'daily_habits', 'goals', 'goal_subtasks', 'body_stats', 'challenges', 'user_settings'];
+    const backupTables = ['journal_entries', 'retention', 'daily_habits', 'goals', 'goal_subtasks', 'body_stats', 'challenges', 'challenge_logs', 'user_settings'];
 
     function getLastBackup() {
       try { return localStorage.getItem('pf_last_backup'); } catch (e) { return null; }
@@ -1609,6 +1630,7 @@
                 ontouchcancel="cancelHabitPress()">
                 <span class="habit-icon">${cfg.icon}</span>
                 <span class="habit-label">${cfg.label}</span>
+                ${habitChallengeLabel(key)}
               </button>
             `).join('')}
           </div>
@@ -1627,6 +1649,7 @@
                 ontouchcancel="cancelHabitPress()">
                 <span class="habit-icon">${cfg.icon}</span>
                 <span class="habit-label">${cfg.label}</span>
+                ${habitChallengeLabel(key)}
               </button>
             `).join('')}
           </div>
@@ -1639,6 +1662,13 @@
         
         ${state.showHabitModal ? renderHabitModal() : ''}
       `;
+    }
+
+    function habitChallengeLabel(key) {
+      const c = habitChallenge(key);
+      if (!c || c.start_date > todayStr()) return '';
+      const ev = evalChallenge(c);
+      return `<span style="display: block; font-size: 8px; color: #e5484d; margin-top: 3px; letter-spacing: 0.02em;">${ev.dayNum}/${ev.D}</span>`;
     }
 
     function renderBackupReminder() {
@@ -1918,6 +1948,7 @@
                 `).join('') : `<div class="empty" style="padding: 20px;">Geen templates voor deze termijn.</div>`}
               </div>
               <div style="font-size: 10px; color: #525252; margin-top: 6px;">Templates passen bij de gekozen termijn hieronder.</div>
+              <div style="font-size: 11px; color: #a3a3a3; margin-top: 8px; line-height: 1.5;">💡 Iets elke dag volhouden (koud douchen, geen suiker)? Dat is een <a href="#" onclick="closeGoalModal(); state.bodyTab = 'challenges'; setSection('body'); return false;">challenge</a>.</div>
             ` : ''}
 
             <label class="form-label">Missie</label>
@@ -2224,6 +2255,7 @@
     // RENDER: LICHAAM
     // ============================================
     function renderBody() {
+      if (state.bodyTab === 'challenges') return renderChallenges();
       const start = getBodyStartDate();
       const w = latestBodyValue('weight');
       const wList = bodyEntriesFor('weight');
@@ -2260,10 +2292,7 @@
       const shown = state.bodyShowAll ? history : history.slice(0, 8);
 
       return `
-        <div class="page-header">
-          <div class="page-sub">Fysiek</div>
-          <div class="page-title">Lichaam</div>
-        </div>
+        ${renderBodyHeader()}
 
         ${start ? `
           <div class="card card-accent" style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
@@ -2484,6 +2513,1026 @@
               <button class="btn btn-primary" id="body-save-btn" onclick="saveMeasurement()">Opslaan</button>
             </div>
           </div>
+        </div>
+      `;
+    }
+
+    // ============================================
+    // CHALLENGES: CONFIG
+    // ============================================
+    const chDomains = {
+      physical:   { icon: '💪', label: 'Fysiek' },
+      nutrition:  { icon: '🍽️', label: 'Voeding' },
+      mental:     { icon: '🧠', label: 'Mentaal' },
+      financial:  { icon: '💰', label: 'Financieel' },
+      social:     { icon: '👥', label: 'Sociaal' },
+      purpose:    { icon: '🔱', label: 'Zingeving' },
+      discipline: { icon: '🔥', label: 'Discipline' }
+    };
+
+    const chKinds = {
+      check:   'Dagelijks afvinken',
+      number:  'Dagelijks een getal halen',
+      abstain: 'Onthouding (telt vanzelf door)'
+    };
+
+    const chRules = {
+      strict:   { label: 'Streng', text: 'Eén dag missen = opnieuw beginnen bij dag 1.' },
+      jokers:   { label: 'Jokers', text: '1 vrije dag per 10 dagen. Op = opnieuw beginnen.' },
+      continue: { label: 'Mild',   text: 'Missen breekt je reeks, de challenge loopt gewoon door.' }
+    };
+
+    // link: 'habit:<key>' leest de habit van het dashboard, 'retention' de Retention-streak, 'journal' je Journal
+    const challengeTemplates = [
+      { id: 'cold', domain: 'physical', name: 'Koud douchen', kind: 'check', link: 'habit:coldShower', durations: [7, 30, 90], rule: 'jokers' },
+      { id: 'sun', domain: 'physical', name: 'Ochtendzon', kind: 'check', link: 'habit:sunlight', durations: [14, 30], rule: 'jokers' },
+      { id: 'stretch', domain: 'physical', name: 'Dagelijks stretchen', kind: 'check', link: 'habit:stretching', durations: [14, 30], rule: 'jokers' },
+      { id: 'steps', domain: 'physical', name: '10.000 stappen', kind: 'number', target: 10000, unit: 'stappen', durations: [14, 30], rule: 'jokers',
+        what: 'Elke dag minimaal 10.000 stappen.',
+        how: 'Wandel 10-15 minuten na elke maaltijd en neem de trap. Vul \'s avonds je totaal in van je telefoon of horloge.',
+        why: 'Dagelijks bewegen verbetert je conditie, bloedsuiker en stemming, en helpt bij vetverlies zonder extra training.' },
+      { id: 'water', domain: 'physical', name: '2 liter water', kind: 'number', target: 2, unit: 'liter', durations: [14, 30], rule: 'jokers',
+        what: 'Elke dag minimaal 2 liter water.',
+        how: 'Een fles van 1 liter op je bureau, twee keer vullen. Een glas bij elke maaltijd.',
+        why: 'Al licht uitgedroogd zijn kost je focus en energie.' },
+      { id: 'pushups', domain: 'physical', name: 'Push-up ladder', kind: 'number', target: 10, step: 3, unit: 'push-ups', durations: [30], rule: 'jokers',
+        what: 'Dag 1: 10 push-ups. Elke dag 3 meer. Dag 30: 97.',
+        how: 'Verdeel het over de dag in sets. Goede techniek gaat voor het aantal.',
+        why: 'Kleine stappen per dag bouwen kracht en discipline op.' },
+      { id: 'sleep', domain: 'physical', name: '8 uur slaap', kind: 'check', durations: [14, 30], rule: 'jokers',
+        what: 'Elke nacht minimaal 8 uur in bed.',
+        how: 'Vaste bedtijd, telefoon buiten de slaapkamer, kamer koel en donker.',
+        why: 'Slaap is je belangrijkste herstel: energie, focus, eetlust en hormonen hangen ervan af.' },
+      { id: 'early', domain: 'physical', name: 'Vroeg opstaan (voor 06:30)', kind: 'check', durations: [21, 30], rule: 'jokers',
+        what: 'Elke dag voor 06:30 uit bed, ook in het weekend.',
+        how: 'Wekker aan de andere kant van de kamer. Direct licht aan en een glas water.',
+        why: 'Een rustige ochtend voor jezelf geeft je regie over je dag.' },
+
+      { id: 'clean', domain: 'nutrition', name: 'Clean eten', kind: 'check', link: 'habit:cleanEating', durations: [14, 30], rule: 'jokers' },
+      { id: 'nosugar', domain: 'nutrition', name: 'Geen suiker', kind: 'abstain', durations: [14, 30, 60], rule: 'strict',
+        what: 'Geen toegevoegde suiker: snoep, koek, frisdrank, gezoete sauzen en ontbijtgranen.',
+        how: 'Lees etiketten, haal het uit huis en eet genoeg eiwit tegen trek.',
+        why: 'Na 1-2 weken minder energiedips en minder trek in zoet.' },
+      { id: 'noalcohol', domain: 'nutrition', name: 'Geen alcohol', kind: 'check', link: 'habit:noAlcohol', durations: [30, 60, 90], rule: 'strict' },
+      { id: 'nosoda', domain: 'nutrition', name: 'Geen frisdrank', kind: 'abstain', durations: [30], rule: 'strict',
+        what: 'Geen frisdrank, ook geen light.',
+        how: 'Vervang door bruiswater met citroen of thee.',
+        why: 'Minder suiker of zoetstof, minder trek, beter voor je tanden.' },
+
+      { id: 'meditate', domain: 'mental', name: 'Mediteren', kind: 'check', link: 'habit:meditation', durations: [7, 30], rule: 'jokers' },
+      { id: 'read', domain: 'mental', name: 'Dagelijks lezen', kind: 'check', link: 'habit:reading', durations: [30], rule: 'jokers' },
+      { id: 'journal', domain: 'mental', name: 'Dagelijks journalen', kind: 'check', link: 'journal', durations: [30], rule: 'jokers',
+        what: 'Elke dag een entry in je Journal.',
+        how: 'Drie zinnen is genoeg. De vraag van de dag helpt je op weg.',
+        why: 'Schrijven geeft rust in je hoofd en laat je patronen zien.' },
+      { id: 'nosocial', domain: 'mental', name: 'Geen social media voor 12:00', kind: 'check', durations: [14, 30], rule: 'jokers',
+        what: 'Geen social media voor het middaguur.',
+        how: 'Apps van je beginscherm halen, telefoon niet naast je bed.',
+        why: 'Je beste uren gaan naar je eigen doelen in plaats van naar andermans feed.' },
+      { id: 'noscreen', domain: 'mental', name: 'Schermvrij laatste uur voor bed', kind: 'check', durations: [30], rule: 'jokers',
+        what: 'Het laatste uur voor het slapen geen telefoon, tv of laptop.',
+        how: 'Telefoon aan de lader buiten de slaapkamer. Lezen of stretchen in plaats daarvan.',
+        why: 'Je valt sneller in slaap en slaapt dieper.' },
+
+      { id: 'nospend', domain: 'financial', name: 'No-spend week', kind: 'check', durations: [7], rule: 'strict',
+        what: 'Een week niets kopen behalve vaste lasten en boodschappen.',
+        how: 'Plan je maaltijden, laat je pas thuis en verwijder winkel-apps.',
+        why: 'Je ziet hoeveel je normaal ongemerkt uitgeeft.' },
+      { id: 'save5', domain: 'financial', name: 'Elke dag €5 apart zetten', kind: 'check', durations: [30], rule: 'jokers',
+        what: 'Elke dag €5 naar je spaarrekening.',
+        how: 'Direct overmaken in je bank-app, of een vast moment per dag.',
+        why: '30 dagen is €150, en vooral: de gewoonte van sparen.' },
+
+      { id: 'message', domain: 'social', name: 'Elke dag iemand een bericht sturen', kind: 'check', durations: [14], rule: 'jokers',
+        what: 'Elke dag iemand bewust een persoonlijk bericht sturen.',
+        how: 'Iemand die je al lang niet sprak, of gewoon laten weten dat je aan iemand denkt.',
+        why: 'Relaties blijven sterk door kleine, regelmatige aandacht.' },
+      { id: 'compliment', domain: 'social', name: 'Elke dag een oprecht compliment', kind: 'check', durations: [14], rule: 'jokers',
+        what: 'Elke dag iemand een gemeend compliment geven.',
+        how: 'Wees specifiek: benoem wat je echt waardeert.',
+        why: 'Je leert letten op het goede in anderen, en mensen voelen zich gezien.' },
+
+      { id: 'gratitude', domain: 'purpose', name: 'Dankbaarheid: 3 dingen per dag', kind: 'check', durations: [30], rule: 'jokers',
+        what: 'Elke dag 3 dingen opschrijven waar je dankbaar voor bent.',
+        how: '\'s Avonds, kort. Kan ook in je Journal.',
+        why: 'Je stemming verschuift langzaam naar wat er wél goed gaat.' },
+      { id: 'gooddeed', domain: 'purpose', name: 'Elke dag een goede daad', kind: 'check', durations: [30], rule: 'jokers',
+        what: 'Elke dag iets doen voor een ander, zonder iets terug te verwachten.',
+        how: 'Klein mag: iemand helpen, iets opruimen, een boodschap meenemen.',
+        why: 'Iets bijdragen geeft richting en voldoening.' },
+
+      { id: 'nofap', domain: 'discipline', name: 'NoFap', kind: 'abstain', link: 'retention', durations: [30, 90], rule: 'strict',
+        what: 'Geen porno en geen masturbatie.',
+        how: 'Gekoppeld aan je Retention-streak. Gebruik het noodprotocol in de Retention-tab bij een urge.',
+        why: 'Zie de mijlpalen in je Retention-tab.' },
+      { id: 'dopamine', domain: 'discipline', name: 'Dopamine reset', kind: 'abstain', durations: [7, 30], rule: 'strict',
+        what: 'Geen games, porno, social media en series.',
+        how: 'Vul de tijd met wandelen, lezen, trainen en mensen spreken.',
+        why: 'Je hersenen worden weer gevoelig voor gewone, gezonde beloningen.' }
+    ];
+
+    function chTemplate(id) {
+      return challengeTemplates.find(t => t.id === id) || null;
+    }
+
+    function chLinkedHabit(c) {
+      return c && c.link && c.link.startsWith('habit:') ? c.link.slice(6) : null;
+    }
+
+    // Uitleg: bij een gekoppelde habit de bestaande habit-uitleg
+    function chInfo(c) {
+      const t = chTemplate(c.template_id) || {};
+      const hk = chLinkedHabit(c);
+      if (hk && habitConfig[hk]) {
+        return { what: habitConfig[hk].what, how: habitConfig[hk].how, why: habitConfig[hk].why };
+      }
+      return { what: t.what || c.description || '', how: t.how || '', why: t.why || '' };
+    }
+
+    function chTargetFor(c, dayN) {
+      const t = Number(c.target) || 0;
+      const s = Number(c.step) || 0;
+      return t + s * (dayN - 1);
+    }
+
+    function chUnit(c) {
+      return c.unit || '';
+    }
+
+    function fmtInt(n) {
+      const v = Number(n);
+      if (isNaN(v)) return '—';
+      return Number.isInteger(v) ? v.toLocaleString('nl-NL') : String(Math.round(v * 10) / 10).replace('.', ',');
+    }
+
+    // ============================================
+    // CHALLENGES: BEREKENEN
+    // ============================================
+    function chLog(c, date) {
+      return state.chLogIndex[c.id + '|' + date] || null;
+    }
+
+    function rebuildChLogIndex() {
+      const idx = {};
+      state.challengeLogs.forEach(l => { idx[l.challenge_id + '|' + l.date] = l; });
+      state.chLogIndex = idx;
+    }
+
+    function habitDoneOn(key, date) {
+      if (date === todayStr()) return !!state.habits[key];
+      const row = state.habitHistory[date];
+      return !!(row && row[key]);
+    }
+
+    // done | fail | pending (nog in te vullen: vandaag of gisteren)
+    function chDayStatus(c, date, today) {
+      const log = chLog(c, date);
+      if (c.link === 'retention') {
+        const r = state.retentionStreak;
+        const failDate = !r ? today : (r.start_date > c.start_date ? r.start_date : null);
+        if (failDate && date >= failDate) return 'fail';
+        return 'done';
+      }
+      if (c.kind === 'abstain') return (log && log.failed) ? 'fail' : 'done';
+
+      let done = false;
+      const hk = chLinkedHabit(c);
+      if (hk) done = habitDoneOn(hk, date);
+      else if (c.link === 'journal') done = state.entries.some(e => e.date === date);
+      else if (c.kind === 'number') done = !!log && hasValue(log.value) && Number(log.value) >= chTargetFor(c, diffDays(c.start_date, date) + 1);
+      else done = !!(log && log.done);
+
+      if (done) return 'done';
+      return date >= dateAdd(today, -1) ? 'pending' : 'fail';
+    }
+
+    function evalChallenge(c) {
+      const today = todayStr();
+      const D = Number(c.duration) || 30;
+      const S = c.start_date;
+      const rule = c.link === 'retention' ? 'strict' : (c.miss_rule || 'jokers');
+      const jokersTotal = rule === 'jokers' ? Math.max(1, Math.floor(D / 10)) : 0;
+      const days = [];
+      let used = 0, failedOn = null, doneCount = 0, missedCount = 0;
+
+      for (let i = 0; i < D; i++) {
+        const date = dateAdd(S, i);
+        if (failedOn || date > today) { days.push({ n: i + 1, date, st: 'future' }); continue; }
+        let st = chDayStatus(c, date, today);
+        if (st === 'fail') {
+          if (rule === 'continue') { st = 'missed'; missedCount++; }
+          else if (rule === 'jokers' && used < jokersTotal) { used++; st = 'joker'; }
+          else { failedOn = date; st = 'missed'; missedCount++; }
+        }
+        if (st === 'done') doneCount++;
+        days.push({ n: i + 1, date, st, today: date === today });
+      }
+
+      const lastDate = dateAdd(S, D - 1);
+      const passive = c.kind === 'abstain' || c.link === 'retention';
+      const complete = !failedOn && (passive
+        ? lastDate < today
+        : days.every(d => d.st !== 'pending' && d.st !== 'future'));
+
+      let streak = 0;
+      for (let j = days.length - 1; j >= 0; j--) {
+        const st = days[j].st;
+        if (st === 'future' || st === 'pending') continue;
+        if (st === 'done' || st === 'joker') streak++;
+        else break;
+      }
+      let best = 0, run = 0;
+      days.forEach(d => {
+        if (d.st === 'done' || d.st === 'joker') { run++; best = Math.max(best, run); }
+        else if (d.st === 'missed') run = 0;
+      });
+      const resolved = days.filter(d => d.st === 'done' || d.st === 'joker' || d.st === 'missed').length;
+      const pct = resolved ? Math.round((doneCount / resolved) * 100) : 100;
+      const dayNum = Math.min(D, Math.max(1, diffDays(S, today) + 1));
+      const todayDay = days.find(d => d.date === today) || null;
+      const yesterdayDay = days.find(d => d.date === dateAdd(today, -1)) || null;
+
+      return { days, D, dayNum, doneCount, missedCount, failedOn, complete, rule, jokersTotal, jokersLeft: jokersTotal - used, streak, best, pct, todayDay, yesterdayDay };
+    }
+
+    function activeChallenges() {
+      return state.challenges.filter(c => c.status === 'active' && c.is_active !== false);
+    }
+
+    function habitChallenge(habitKey) {
+      return activeChallenges().find(c => chLinkedHabit(c) === habitKey) || null;
+    }
+
+    // ============================================
+    // CHALLENGES: DATABASE
+    // ============================================
+    async function loadChallenges() {
+      if (!state.user) return;
+      const { data, error } = await supabaseClient
+        .from('challenges')
+        .select('*')
+        .eq('user_id', state.user.id)
+        .order('created_at', { ascending: false });
+      if (error) {
+        console.error('Fout bij laden challenges:', error);
+        state.challengesError = error.message;
+        return;
+      }
+      state.challengesError = null;
+      // Alleen challenges van de nieuwe versie (met een soort)
+      state.challenges = (data || []).filter(c => c.kind);
+
+      const logs = await supabaseClient.from('challenge_logs').select('*').eq('user_id', state.user.id);
+      if (logs.error) {
+        console.error('challenge_logs niet beschikbaar:', logs.error);
+        state.challengesError = 'De challenges-update in Supabase is nog niet uitgevoerd.';
+        state.challengeLogs = [];
+      } else {
+        state.challengeLogs = logs.data || [];
+      }
+      rebuildChLogIndex();
+      await loadHabitHistory();
+    }
+
+    async function loadHabitHistory() {
+      const active = activeChallenges();
+      let from = addDays(-2);
+      active.forEach(c => { if (c.start_date < from) from = c.start_date; });
+      const { data, error } = await supabaseClient
+        .from('daily_habits')
+        .select('*')
+        .eq('user_id', state.user.id)
+        .gte('date', from);
+      if (error) { console.error('Fout bij laden habit-geschiedenis:', error); return; }
+      const hist = {};
+      (data || []).forEach(row => {
+        const h = {};
+        Object.entries(habitColumns).forEach(([key, col]) => { h[key] = !!row[col]; });
+        hist[row.date] = h;
+      });
+      state.habitHistory = hist;
+    }
+
+    // Mislukte of voltooide challenges afronden in de database
+    async function settleChallenges() {
+      const messages = [];
+      for (const c of activeChallenges()) {
+        const ev = evalChallenge(c);
+        let update = null;
+        if (ev.failedOn) {
+          update = { status: 'failed', is_active: false, end_reason: 'missed', ended_on: ev.failedOn, days_completed: ev.doneCount };
+          messages.push(`${c.name}: dag ${diffDays(c.start_date, ev.failedOn) + 1} gemist`);
+        } else if (ev.complete) {
+          update = { status: 'completed', is_active: false, is_completed: true, end_reason: 'completed', ended_on: todayStr(), days_completed: ev.doneCount };
+          messages.push(`🏆 ${c.name} voltooid!`);
+        } else if (Number(c.days_completed) !== ev.doneCount) {
+          update = { days_completed: ev.doneCount };
+        }
+        if (update) {
+          const { error } = await supabaseClient.from('challenges').update(update).eq('id', c.id);
+          if (!error) Object.assign(c, update);
+          else console.error('Fout bij bijwerken challenge:', error);
+        }
+      }
+      return messages;
+    }
+
+    async function refreshChallenges() {
+      await loadChallenges();
+      const msgs = await settleChallenges();
+      render();
+      if (msgs.length) showToast(msgs[0]);
+    }
+
+    async function setChallengeLog(c, date, patch) {
+      const existing = chLog(c, date);
+      const row = { challenge_id: c.id, user_id: state.user.id, date, done: false, value: null, failed: false, ...(existing ? { done: existing.done, value: existing.value, failed: existing.failed } : {}), ...patch };
+      const { error } = await supabaseClient.from('challenge_logs').upsert(row, { onConflict: 'challenge_id,date' });
+      if (error) {
+        alert('Fout bij opslaan: ' + error.message);
+        return false;
+      }
+      return true;
+    }
+
+    function findChallenge(id) {
+      return state.challenges.find(c => c.id === id) || null;
+    }
+
+    async function chToggle(id, date) {
+      const c = findChallenge(id);
+      if (!c) return;
+      const hk = chLinkedHabit(c);
+      if (hk) {
+        if (date === todayStr()) { await toggleHabit(hk); }
+        else { await setHabitForDate(hk, date, !habitDoneOn(hk, date)); }
+        await refreshChallenges();
+        return;
+      }
+      const log = chLog(c, date);
+      if (await setChallengeLog(c, date, { done: !(log && log.done) })) await refreshChallenges();
+    }
+
+    async function chSetValue(id, date) {
+      const c = findChallenge(id);
+      const el = document.getElementById(`cv-${id}-${date}`);
+      if (!c || !el || !hasValue(el.value)) return;
+      const n = parseFloat(String(el.value).replace(',', '.'));
+      if (isNaN(n)) { alert('Vul een getal in'); return; }
+      if (await setChallengeLog(c, date, { value: n })) {
+        await refreshChallenges();
+        const dayN = diffDays(c.start_date, date) + 1;
+        if (n >= chTargetFor(c, dayN)) showToast('✓ Doel gehaald voor vandaag');
+      }
+    }
+
+    async function chFail(id) {
+      const c = findChallenge(id);
+      if (!c) return;
+      const ev = evalChallenge(c);
+      const consequence = ev.rule === 'strict' || (ev.rule === 'jokers' && ev.jokersLeft === 0)
+        ? 'De challenge stopt en je kunt opnieuw beginnen.'
+        : ev.rule === 'jokers' ? 'Dit kost een joker.' : 'Je reeks begint opnieuw, de challenge loopt door.';
+      if (!confirm(`Vandaag niet gelukt?\n\n${consequence}`)) return;
+      if (await setChallengeLog(c, todayStr(), { failed: true })) await refreshChallenges();
+    }
+
+    async function setHabitForDate(key, date, value) {
+      const row = { user_id: state.user.id, date };
+      row[habitColumns[key]] = value;
+      const { error } = await supabaseClient.from('daily_habits').upsert(row, { onConflict: 'user_id,date' });
+      if (error) { alert('Fout bij opslaan habit: ' + error.message); return; }
+      state.habitHistory[date] = { ...(state.habitHistory[date] || {}), [key]: value };
+    }
+
+    async function startChallenge() {
+      const get = id => { const el = document.getElementById(id); return el ? el.value : ''; };
+      const custom = state.chSetupTemplate === 'custom';
+      const t = custom ? null : chTemplate(state.chSetupTemplate);
+
+      const name = custom ? get('cs-name').trim() : t.name;
+      if (!name) { alert('Geef je challenge een naam'); return; }
+      const kind = custom ? get('cs-kind') : t.kind;
+      const duration = parseInt(get('cs-duration'), 10);
+      if (!duration || duration < 1 || duration > 365) { alert('Kies een duur tussen 1 en 365 dagen'); return; }
+
+      let target = null, unit = null, step = null;
+      if (kind === 'number') {
+        target = parseFloat(String(get('cs-target')).replace(',', '.'));
+        if (isNaN(target) || target <= 0) { alert('Vul een doel per dag in'); return; }
+        unit = custom ? (get('cs-unit').trim() || null) : t.unit;
+        step = t && t.step ? t.step : null;
+      }
+      const link = t && t.link ? t.link : null;
+
+      if (link && activeChallenges().some(c => c.link === link)) {
+        alert('Je hebt al een actieve challenge die aan deze habit gekoppeld is.');
+        return;
+      }
+
+      const previous = state.challenges.filter(c => c.template_id === (custom ? 'custom' : t.id) && c.name === name).length;
+      const row = {
+        user_id: state.user.id,
+        template_id: custom ? 'custom' : t.id,
+        name,
+        description: custom ? null : (t.what || null),
+        duration,
+        start_date: (link === 'retention')
+          ? [get('cs-start') || todayStr(), state.retentionStreak ? state.retentionStreak.start_date : todayStr()].sort().pop()
+          : (get('cs-start') || todayStr()),
+        status: 'active',
+        is_active: true,
+        is_completed: false,
+        days_completed: 0,
+        today_completed: false,
+        kind,
+        target,
+        unit,
+        step,
+        link,
+        miss_rule: link === 'retention' ? 'strict' : (get('cs-rule') || 'jokers'),
+        why: get('cs-why').trim() || null,
+        attempt: previous + 1
+      };
+
+      const btn = document.getElementById('cs-start-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Starten...'; }
+      const { error } = await supabaseClient.from('challenges').insert([row]);
+      if (error) {
+        console.error('Fout bij starten challenge:', error);
+        alert('Fout bij starten: ' + error.message + (/column/i.test(error.message) ? '\n\nVoer eerst challenges-update.sql uit in Supabase.' : ''));
+        if (btn) { btn.disabled = false; btn.textContent = 'Challenge starten'; }
+        return;
+      }
+      if (link === 'retention' && !state.retentionStreak) await startRetention();
+      state.chView = 'list';
+      await refreshChallenges();
+      showToast('🔥 Challenge gestart: ' + name);
+    }
+
+    async function stopChallenge(id) {
+      if (!confirm('Challenge stoppen? Hij komt in je geschiedenis.')) return;
+      const { error } = await supabaseClient.from('challenges').update({
+        status: 'failed', is_active: false, end_reason: 'stopped', ended_on: todayStr()
+      }).eq('id', id);
+      if (error) { alert('Fout bij stoppen: ' + error.message); return; }
+      state.chView = 'list';
+      await refreshChallenges();
+    }
+
+    async function restartChallenge(id) {
+      const old = findChallenge(id);
+      if (!old) return;
+      if (old.link && activeChallenges().some(c => c.link === old.link)) {
+        alert('Je hebt al een actieve challenge die aan deze habit gekoppeld is.');
+        return;
+      }
+      const row = {
+        user_id: state.user.id, template_id: old.template_id, name: old.name, description: old.description,
+        duration: old.duration, start_date: todayStr(), status: 'active', is_active: true, is_completed: false,
+        days_completed: 0, today_completed: false, kind: old.kind, target: old.target, unit: old.unit, step: old.step,
+        link: old.link, miss_rule: old.miss_rule, why: old.why, attempt: (Number(old.attempt) || 1) + 1
+      };
+      const { error } = await supabaseClient.from('challenges').insert([row]);
+      if (error) { alert('Fout bij starten: ' + error.message); return; }
+      await refreshChallenges();
+      showToast('🔥 Poging ' + row.attempt + ' gestart');
+    }
+
+    async function deleteChallenge(id) {
+      if (!confirm('Challenge definitief verwijderen uit je geschiedenis?')) return;
+      await supabaseClient.from('challenge_logs').delete().eq('challenge_id', id);
+      const { error } = await supabaseClient.from('challenges').delete().eq('id', id);
+      if (error) { alert('Fout bij verwijderen: ' + error.message); return; }
+      await refreshChallenges();
+    }
+
+    // ============================================
+    // CHALLENGES: NAVIGATIE
+    // ============================================
+    function setBodyTab(tab) {
+      state.bodyTab = tab;
+      state.chView = 'list';
+      render();
+      window.scrollTo(0, 0);
+    }
+
+    function chGo(view, arg) {
+      state.chView = view;
+      if (view === 'detail') state.chDetailId = arg;
+      if (view === 'setup') state.chSetupTemplate = arg;
+      render();
+      window.scrollTo(0, 0);
+    }
+
+    function setChDomain(d) {
+      state.chDomain = d;
+      render();
+    }
+
+    // ============================================
+    // RENDER: CHALLENGES
+    // ============================================
+    function renderBodyHeader() {
+      return `
+        <div class="page-header">
+          <div class="page-sub">Fysiek</div>
+          <div class="page-title">Lichaam</div>
+        </div>
+        <div class="tabs">
+          <button class="tab ${state.bodyTab !== 'challenges' ? 'active' : ''}" onclick="setBodyTab('metingen')">Metingen</button>
+          <button class="tab ${state.bodyTab === 'challenges' ? 'active' : ''}" onclick="setBodyTab('challenges')">Challenges${activeChallenges().length ? ' (' + activeChallenges().length + ')' : ''}</button>
+        </div>
+      `;
+    }
+
+    function renderChallenges() {
+      if (state.chView === 'library') return renderChLibrary();
+      if (state.chView === 'setup') return renderChSetup();
+      if (state.chView === 'detail') return renderChDetail();
+      if (state.chView === 'hard75') return renderHard75Info();
+      return renderChList();
+    }
+
+    function chCheckBox(done, onclick, label) {
+      return `<button class="goal-check ${done ? 'checked' : ''}" style="width: 28px; height: 28px;" onclick="${onclick}" aria-label="${esc(label)}">${done ? '✓' : ''}</button>`;
+    }
+
+    // Eén regel in "Vandaag" (of "Gisteren nog invullen")
+    function renderChActionRow(c, ev, date, isYesterday) {
+      const dayN = diffDays(c.start_date, date) + 1;
+      const hk = chLinkedHabit(c);
+      const st = (ev.days.find(d => d.date === date) || {}).st;
+      const done = st === 'done';
+      const prefix = isYesterday ? '<span style="color: #eab308;">Gisteren · </span>' : '';
+      const sub = `${prefix}Dag ${dayN} van ${ev.D}${ev.streak ? ' · reeks ' + ev.streak : ''}`;
+      const titleLink = `onclick="chGo('detail', '${c.id}')" style="cursor: pointer;"`;
+
+      if (c.link === 'retention') {
+        return `
+          <div class="subtask" style="padding: 12px 0; border-bottom: 1px solid #1c1c1c;">
+            <div style="width: 28px; height: 28px; border: 1px solid #1c1c1c; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0;">${getRetentionDays()}</div>
+            <div style="flex: 1; min-width: 0;" ${titleLink}>
+              <div style="font-size: 14px;">${esc(c.name)}</div>
+              <div style="font-size: 11px; color: #8a8a8a;">Dag ${ev.dayNum} van ${ev.D} · loopt via Retention</div>
+            </div>
+            <button class="entry-action" onclick="setSection('retention')">Retention →</button>
+          </div>`;
+      }
+
+      if (c.kind === 'abstain') {
+        return `
+          <div class="subtask" style="padding: 12px 0; border-bottom: 1px solid #1c1c1c;">
+            <div style="width: 28px; height: 28px; border: 1px solid #1c1c1c; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0;">${ev.streak}</div>
+            <div style="flex: 1; min-width: 0;" ${titleLink}>
+              <div style="font-size: 14px;">${esc(c.name)}</div>
+              <div style="font-size: 11px; color: #8a8a8a;">${ev.streak} ${ev.streak === 1 ? 'dag' : 'dagen'} schoon · dag ${ev.dayNum} van ${ev.D}</div>
+            </div>
+            <button class="entry-action" onclick="chFail('${c.id}')">Niet gelukt</button>
+          </div>`;
+      }
+
+      if (c.kind === 'number' && !hk && c.link !== 'journal') {
+        const log = chLog(c, date);
+        const val = log && hasValue(log.value) ? Number(log.value) : 0;
+        const target = chTargetFor(c, dayN);
+        const pct = Math.min(100, Math.round((val / target) * 100));
+        return `
+          <div style="padding: 12px 0; border-bottom: 1px solid #1c1c1c;">
+            <div style="display: flex; justify-content: space-between; gap: 8px;" ${titleLink}>
+              <span style="font-size: 14px;">${done ? '✓ ' : ''}${esc(c.name)}</span>
+              <span style="font-size: 12px; color: ${done ? '#22c55e' : '#a3a3a3'};">${fmtInt(val)} / ${fmtInt(target)} ${esc(chUnit(c))}</span>
+            </div>
+            <div class="progress-bar" style="margin-top: 6px;"><div class="progress-fill" style="width: ${pct}%; background: ${done ? '#22c55e' : '#e5484d'};"></div></div>
+            <div style="font-size: 11px; color: #8a8a8a; margin-top: 4px;">${sub}</div>
+            <div class="goal-update" style="margin-top: 8px;">
+              <input type="text" inputmode="decimal" autocomplete="off" class="input-sm" id="cv-${c.id}-${date}" placeholder="Totaal ${isYesterday ? 'gisteren' : 'vandaag'}" onkeydown="if(event.key === 'Enter') chSetValue('${c.id}', '${date}')">
+              <button class="btn btn-secondary btn-small" onclick="chSetValue('${c.id}', '${date}')">Opslaan</button>
+            </div>
+          </div>`;
+      }
+
+      if (c.link === 'journal') {
+        return `
+          <div class="subtask" style="padding: 12px 0; border-bottom: 1px solid #1c1c1c;">
+            <div class="goal-check ${done ? 'checked' : ''}" style="width: 28px; height: 28px;">${done ? '✓' : ''}</div>
+            <div style="flex: 1; min-width: 0;" ${titleLink}>
+              <div style="font-size: 14px;">${esc(c.name)}</div>
+              <div style="font-size: 11px; color: #8a8a8a;">${sub} · via Journal</div>
+            </div>
+            ${!done && !isYesterday ? `<button class="entry-action" onclick="setSection('journal')">Schrijven →</button>` : ''}
+          </div>`;
+      }
+
+      return `
+        <div class="subtask" style="padding: 12px 0; border-bottom: 1px solid #1c1c1c;">
+          ${chCheckBox(done, `chToggle('${c.id}', '${date}')`, c.name + (done ? ' gedaan' : ' afvinken'))}
+          <div style="flex: 1; min-width: 0;" ${titleLink}>
+            <div style="font-size: 14px;">${esc(c.name)}</div>
+            <div style="font-size: 11px; color: #8a8a8a;">${sub}${hk ? ' · telt via habit ' + habitConfig[hk].icon : ''}</div>
+          </div>
+        </div>`;
+    }
+
+    function chStrip(ev, count) {
+      const today = todayStr();
+      const cells = [];
+      for (let i = count - 1; i >= 0; i--) {
+        const date = dateAdd(today, -i);
+        const d = ev.days.find(x => x.date === date);
+        let bg = '#1c1c1c', border = 'none';
+        if (d) {
+          if (d.st === 'done') bg = '#22c55e';
+          else if (d.st === 'joker') bg = '#eab308';
+          else if (d.st === 'missed') bg = '#7f1d1d';
+          if (d.today) border = '1px solid #fafafa';
+        } else {
+          bg = 'transparent';
+        }
+        cells.push(`<div style="height: 14px; background: ${bg}; border: ${border}; box-sizing: border-box;"></div>`);
+      }
+      return `<div style="display: grid; grid-template-columns: repeat(${count}, minmax(0, 1fr)); gap: 3px; margin-top: 12px;">${cells.join('')}</div>`;
+    }
+
+    function renderChList() {
+      const active = activeChallenges();
+      const finished = state.challenges.filter(c => c.status !== 'active' || c.is_active === false);
+      const completed = finished.filter(c => c.status === 'completed').length;
+      const evs = {};
+      active.forEach(c => { evs[c.id] = evalChallenge(c); });
+      const bestStreak = Math.max(0, ...active.map(c => evs[c.id].best), ...finished.map(c => Number(c.days_completed) || 0));
+
+      const yesterday = dateAdd(todayStr(), -1);
+      const started = active.filter(c => c.start_date <= todayStr());
+      const todayRows = started.map(c => renderChActionRow(c, evs[c.id], todayStr(), false)).join('') + active.filter(c => c.start_date > todayStr()).map(c => `<div style="padding: 12px 0; border-bottom: 1px solid #1c1c1c; font-size: 13px; color: #a3a3a3;">${esc(c.name)} · start ${fmtDateShort(c.start_date)}</div>`).join('');
+      const yRows = active.filter(c => {
+        const ev = evs[c.id];
+        return ev.yesterdayDay && ev.yesterdayDay.st === 'pending' && c.kind !== 'abstain' && c.link !== 'retention' && c.link !== 'journal';
+      }).map(c => renderChActionRow(c, evs[c.id], yesterday, true)).join('');
+      const openToday = active.filter(c => evs[c.id].todayDay && evs[c.id].todayDay.st === 'pending').length;
+
+      return `
+        ${renderBodyHeader()}
+
+        ${state.challengesError ? `
+          <div class="info-box">
+            <div class="info-title">⚠️ Challenges nog niet klaar</div>
+            <div class="info-text">${esc(state.challengesError)} Voer challenges-update.sql uit in Supabase.</div>
+          </div>
+        ` : ''}
+
+        <div class="stats" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="stat"><div class="stat-value">${active.length}</div><div class="stat-label">Actief</div></div>
+          <div class="stat"><div class="stat-value" style="color: #22c55e;">${completed}</div><div class="stat-label">Voltooid</div></div>
+          <div class="stat"><div class="stat-value">${bestStreak}d</div><div class="stat-label">Beste reeks</div></div>
+        </div>
+
+        ${active.length ? `
+          <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <label class="label" style="margin-bottom: 0;">Vandaag</label>
+              <span style="font-size: 11px; color: #a3a3a3;">${openToday ? openToday + ' nog te doen' : 'Alles gedaan ✓'}</span>
+            </div>
+            ${todayRows}
+            ${yRows ? `
+              <div style="font-size: 10px; color: #eab308; letter-spacing: 0.1em; margin-top: 16px;">GISTEREN NOG INVULLEN</div>
+              ${yRows}
+            ` : ''}
+          </div>
+
+          <label class="label" style="margin-top: 8px;">Actieve challenges</label>
+          ${active.map(c => {
+            const ev = evs[c.id];
+            return `
+              <div class="goal" style="cursor: pointer;" onclick="chGo('detail', '${c.id}')">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;">
+                  <div class="goal-title" style="margin-bottom: 0;">${esc(c.name)}</div>
+                  <div style="font-size: 11px; color: #a3a3a3; white-space: nowrap;">Dag ${ev.dayNum} / ${ev.D}</div>
+                </div>
+                <div style="font-size: 11px; color: #8a8a8a; margin-top: 4px;">${chKinds[c.kind] || ''} · ${chRules[ev.rule].label}${ev.rule === 'jokers' ? ' (' + ev.jokersLeft + ' over)' : ''}</div>
+                ${chStrip(ev, 14)}
+                <div style="font-size: 10px; color: #8a8a8a; margin-top: 6px;">Laatste 14 dagen</div>
+              </div>
+            `;
+          }).join('')}
+        ` : `
+          <div class="empty">Nog geen actieve challenges.<br><br>Kies er een uit de bibliotheek of maak je eigen.</div>
+        `}
+
+        <button class="btn btn-primary" style="width: 100%; margin: 8px 0 16px;" onclick="chGo('library')">+ Challenge kiezen</button>
+
+        <div class="card" style="border-color: #7f1d1d; cursor: pointer;" onclick="chGo('hard75')">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-size: 10px; color: #e5484d; letter-spacing: 0.2em; font-weight: 600;">OPTIONEEL · HOOFDFOCUS</div>
+            <div style="font-size: 10px; color: #8a8a8a;">75 dagen</div>
+          </div>
+          <div style="font-size: 22px; font-weight: 300; letter-spacing: 0.08em; margin-top: 8px;">75 HARD</div>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-top: 6px;">Het zwaarste programma voor mentale hardheid. Zes dagelijkse regels, geen uitzonderingen.</div>
+          <div style="font-size: 11px; color: #e5484d; margin-top: 12px;">Bekijk de uitleg →</div>
+        </div>
+
+        ${finished.length ? `
+          <div class="card">
+            <label class="label">Geschiedenis</label>
+            ${finished.map(c => {
+              const icon = c.status === 'completed' ? '🏆' : c.end_reason === 'stopped' ? '⏹' : '✕';
+              const label = c.status === 'completed' ? 'Voltooid' : c.end_reason === 'stopped' ? 'Gestopt' : 'Gemist';
+              return `
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px solid #1c1c1c;">
+                  <div style="min-width: 0;">
+                    <div style="font-size: 13px;">${icon} ${esc(c.name)}${Number(c.attempt) > 1 ? ` <span style="color: #8a8a8a; font-size: 11px;">· poging ${c.attempt}</span>` : ''}</div>
+                    <div style="font-size: 11px; color: #8a8a8a; margin-top: 2px;">${label} · ${Number(c.days_completed) || 0} van ${c.duration} dagen${c.ended_on ? ' · ' + fmtDateShort(c.ended_on) : ''}</div>
+                  </div>
+                  <div style="display: flex; gap: 4px; flex-shrink: 0;">
+                    ${c.status !== 'completed' ? `<button class="entry-action" onclick="restartChallenge('${c.id}')">Opnieuw</button>` : ''}
+                    <button class="icon-btn" onclick="deleteChallenge('${c.id}')" title="Verwijderen">🗑️</button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        ` : ''}
+      `;
+    }
+
+    function renderChLibrary() {
+      const d = state.chDomain;
+      const list = challengeTemplates.filter(t => d === 'all' || t.domain === d);
+      const activeIds = activeChallenges().map(c => c.template_id);
+      return `
+        ${renderBodyHeader()}
+        <button class="entry-action" style="margin-bottom: 16px;" onclick="chGo('list')">← Terug</button>
+        <div style="font-size: 18px; font-weight: 300; letter-spacing: 0.06em; margin-bottom: 12px;">KIES EEN CHALLENGE</div>
+
+        <div class="chips">
+          <button class="chip ${d === 'all' ? 'active' : ''}" onclick="setChDomain('all')">Alle</button>
+          ${Object.entries(chDomains).map(([k, v]) => `<button class="chip ${d === k ? 'active' : ''}" onclick="setChDomain('${k}')">${v.icon} ${v.label}</button>`).join('')}
+        </div>
+
+        <button class="goal" style="width: 100%; text-align: left; background: transparent; border: 1px dashed #525252; color: #fafafa; font-family: inherit; cursor: pointer;" onclick="chGo('setup', 'custom')">
+          <div style="font-size: 14px;">+ Eigen challenge maken</div>
+          <div style="font-size: 11px; color: #8a8a8a; margin-top: 4px;">Kies zelf naam, soort, duur en regels</div>
+        </button>
+
+        ${list.map(t => {
+          const info = t.link && t.link.startsWith('habit:') ? habitConfig[t.link.slice(6)] : null;
+          const desc = info ? info.what : t.what;
+          const running = activeIds.includes(t.id);
+          return `
+            <button class="goal" style="width: 100%; text-align: left; color: #fafafa; font-family: inherit; cursor: pointer; ${running ? 'opacity: 0.5;' : ''}" onclick="chGo('setup', '${t.id}')">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;">
+                <div style="font-size: 14px; font-weight: 500;">${esc(t.name)}</div>
+                <div style="font-size: 10px; color: #8a8a8a; white-space: nowrap;">${chDomains[t.domain].icon} ${chDomains[t.domain].label}</div>
+              </div>
+              <div style="font-size: 12px; color: #a3a3a3; line-height: 1.5; margin-top: 6px;">${esc(desc || '')}</div>
+              <div class="goal-meta" style="margin-top: 10px;">
+                <span class="badge">${chKinds[t.kind]}</span>
+                <span class="badge">${t.durations.join(' · ')} dagen</span>
+                ${t.link && t.link.startsWith('habit:') ? `<span class="badge">telt via habit ${habitConfig[t.link.slice(6)].icon}</span>` : ''}
+                ${t.link === 'retention' ? '<span class="badge">via Retention</span>' : ''}
+                ${t.link === 'journal' ? '<span class="badge">via Journal</span>' : ''}
+                ${running ? '<span class="badge" style="color: #22c55e;">loopt al</span>' : ''}
+              </div>
+            </button>
+          `;
+        }).join('')}
+
+        <div class="card" style="border-color: #7f1d1d; cursor: pointer;" onclick="chGo('hard75')">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <div style="font-size: 14px; font-weight: 600; letter-spacing: 0.06em;">75 HARD</div>
+            <div style="font-size: 10px; color: #e5484d;">🔥 HOOFDFOCUS</div>
+          </div>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.5; margin-top: 6px;">6 regels per dag, 75 dagen lang. Komt in de volgende update.</div>
+        </div>
+      `;
+    }
+
+    function renderChSetup() {
+      const custom = state.chSetupTemplate === 'custom';
+      const t = custom ? null : chTemplate(state.chSetupTemplate);
+      if (!custom && !t) { state.chView = 'list'; return renderChList(); }
+      const info = t ? chInfo({ template_id: t.id, link: t.link }) : null;
+      const opt = (v, l, cur) => `<option value="${v}" ${String(cur) === String(v) ? 'selected' : ''}>${l}</option>`;
+      const durations = custom ? [7, 14, 21, 30, 60, 90] : t.durations;
+      const defDuration = durations.includes(30) ? 30 : durations[0];
+      const rule = t ? t.rule : 'jokers';
+      const linkedTaken = t && t.link && activeChallenges().some(c => c.link === t.link);
+
+      return `
+        ${renderBodyHeader()}
+        <button class="entry-action" style="margin-bottom: 16px;" onclick="chGo('library')">← Terug</button>
+
+        <div class="card card-accent">
+          <div style="font-size: 10px; color: #e5484d; letter-spacing: 0.2em; font-weight: 600;">${custom ? 'EIGEN CHALLENGE' : chDomains[t.domain].label.toUpperCase() + ' · ' + chKinds[t.kind].toUpperCase()}</div>
+          <div style="font-size: 22px; font-weight: 300; letter-spacing: 0.06em; margin-top: 6px;">${custom ? 'Nieuwe challenge' : esc(t.name)}</div>
+          ${info && info.what ? `
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+              <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;"><strong style="color: #fafafa;">WAT</strong> · ${esc(info.what)}</div>
+              ${info.how ? `<div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;"><strong style="color: #fafafa;">HOE</strong> · ${esc(info.how)}</div>` : ''}
+              ${info.why ? `<div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;"><strong style="color: #fafafa;">WAAROM</strong> · ${esc(info.why)}</div>` : ''}
+            </div>
+          ` : ''}
+          ${t && t.link && t.link.startsWith('habit:') ? `<div class="info-text" style="margin-top: 12px;">🔗 Telt automatisch via je habit ${habitConfig[t.link.slice(6)].icon} ${habitConfig[t.link.slice(6)].label} op het dashboard. Je vinkt maar één keer af.</div>` : ''}
+          ${t && t.link === 'retention' ? `<div class="info-text" style="margin-top: 12px;">🔗 Loopt via je Retention-streak. Reset je die, dan stopt deze challenge.</div>` : ''}
+          ${t && t.link === 'journal' ? `<div class="info-text" style="margin-top: 12px;">🔗 Telt automatisch zodra je die dag een Journal-entry hebt.</div>` : ''}
+        </div>
+
+        ${linkedTaken ? `
+          <div class="info-box"><div class="info-text">Deze challenge loopt al. Rond hem eerst af of stop hem.</div></div>
+        ` : `
+          <div class="card">
+            ${custom ? `
+              <label class="form-label" style="margin-top: 0;">Naam</label>
+              <input type="text" class="form-input" id="cs-name" placeholder="Bijv. elke dag 50 squats">
+              <label class="form-label">Soort</label>
+              <select class="form-input" id="cs-kind" onchange="document.getElementById('cs-number').style.display = this.value === 'number' ? 'block' : 'none'">
+                ${Object.entries(chKinds).map(([k, l]) => opt(k, l, 'check')).join('')}
+              </select>
+              <div id="cs-number" style="display: none;">
+                <div class="form-row">
+                  <div><label class="form-label">Doel per dag</label><input type="text" inputmode="decimal" class="form-input" id="cs-target" placeholder="50"></div>
+                  <div><label class="form-label">Eenheid</label><input type="text" class="form-input" id="cs-unit" placeholder="squats"></div>
+                </div>
+              </div>
+            ` : (t.kind === 'number' ? `
+              <label class="form-label" style="margin-top: 0;">${t.step ? 'Start (dag 1)' : 'Doel per dag'} (${esc(t.unit)})</label>
+              <input type="text" inputmode="decimal" class="form-input" id="cs-target" value="${t.target}">
+              ${t.step ? `<div style="font-size: 10px; color: #8a8a8a; margin-top: 4px;">Elke dag ${t.step} meer.</div>` : ''}
+            ` : '')}
+
+            <label class="form-label">Duur</label>
+            <select class="form-input" id="cs-duration">
+              ${durations.map(n => opt(n, n + ' dagen', defDuration)).join('')}
+            </select>
+
+            ${t && t.link === 'retention' ? '' : `
+              <label class="form-label">Als je een dag mist</label>
+              <select class="form-input" id="cs-rule">
+                ${Object.entries(chRules).map(([k, r]) => opt(k, r.label + ': ' + r.text, rule)).join('')}
+              </select>
+            `}
+
+            <label class="form-label">Startdatum</label>
+            <select class="form-input" id="cs-start">
+              ${opt(todayStr(), 'Vandaag', todayStr())}
+              ${opt(addDays(-1), 'Gisteren (al begonnen)', todayStr())}
+              ${opt(addDays(1), 'Morgen', todayStr())}
+            </select>
+
+            <label class="form-label">Jouw waarom</label>
+            <textarea class="form-input" id="cs-why" placeholder="Waarom doe je dit? Dit zie je terug op moeilijke dagen."></textarea>
+
+            <button class="btn btn-primary" id="cs-start-btn" style="width: 100%; margin-top: 20px;" onclick="startChallenge()">Challenge starten</button>
+          </div>
+        `}
+      `;
+    }
+
+    function renderChDetail() {
+      const c = findChallenge(state.chDetailId);
+      if (!c) { state.chView = 'list'; return renderChList(); }
+      const ev = evalChallenge(c);
+      const info = chInfo(c);
+      const isActive = c.status === 'active' && c.is_active !== false;
+      const cols = ev.D <= 30 ? 10 : ev.D <= 60 ? 10 : 15;
+      const cell = d => {
+        let bg = '#1c1c1c', color = '#8a8a8a', extra = '';
+        if (d.st === 'done') { bg = '#22c55e'; color = '#050505'; }
+        else if (d.st === 'joker') { bg = '#eab308'; color = '#050505'; }
+        else if (d.st === 'missed') { bg = '#7f1d1d'; color = '#fafafa'; }
+        if (d.today) extra = 'outline: 2px solid #fafafa; outline-offset: 1px;';
+        return `<div style="aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: ${ev.D > 60 ? 8 : 10}px; background: ${bg}; color: ${color}; ${extra}" title="${fmtDateLong(d.date)}">${d.n}</div>`;
+      };
+      const milestones = [7, 14, 21, 30, 60, 90].filter(m => m <= ev.D);
+      if (!milestones.includes(ev.D)) milestones.push(ev.D);
+      const today = todayStr();
+
+      return `
+        ${renderBodyHeader()}
+        <button class="entry-action" style="margin-bottom: 16px;" onclick="chGo('list')">← Terug</button>
+
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 10px; color: #e5484d; letter-spacing: 0.2em; font-weight: 600;">${(chKinds[c.kind] || '').toUpperCase()}${Number(c.attempt) > 1 ? ' · POGING ' + c.attempt : ''}</div>
+          <div style="font-size: 24px; font-weight: 300; letter-spacing: 0.06em; margin-top: 4px;">${esc(c.name.toUpperCase())}</div>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 64px; font-weight: 200; line-height: 1;">${isActive ? ev.dayNum : (Number(c.days_completed) || ev.doneCount)}</div>
+          <div style="font-size: 11px; color: #8a8a8a; letter-spacing: 0.15em; margin-top: 8px;">${isActive ? `DAG ${ev.dayNum} VAN ${ev.D}` : (c.status === 'completed' ? 'VOLTOOID' : c.end_reason === 'stopped' ? 'GESTOPT' : 'GEMIST') + ` · ${ev.D} DAGEN`}</div>
+          <div class="progress-bar"><div class="progress-fill" style="width: ${Math.round((ev.doneCount / ev.D) * 100)}%; background: #e5484d;"></div></div>
+          ${isActive && c.start_date <= today ? `<div style="text-align: left; margin-top: 12px;">${renderChActionRow(c, ev, today, false)}</div>` : ''}
+          ${isActive && c.start_date > today ? `<div style="font-size: 12px; color: #a3a3a3; margin-top: 12px;">Start op ${fmtDateLong(c.start_date)}</div>` : ''}
+        </div>
+
+        <div class="stats" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="stat"><div class="stat-value">${ev.streak}</div><div class="stat-label">Huidige reeks</div></div>
+          <div class="stat"><div class="stat-value">${ev.best}</div><div class="stat-label">Langste reeks</div></div>
+          <div class="stat"><div class="stat-value">${ev.pct}%</div><div class="stat-label">Gelukt</div></div>
+        </div>
+
+        <div class="card">
+          <label class="label">Kalender</label>
+          <div style="display: grid; grid-template-columns: repeat(${cols}, minmax(0, 1fr)); gap: 4px;">
+            ${ev.days.map(cell).join('')}
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; font-size: 10px; color: #a3a3a3;">
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; background: #22c55e;"></span>Gelukt</span>
+            ${ev.rule === 'jokers' ? '<span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; background: #eab308;"></span>Joker</span>' : ''}
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; background: #7f1d1d;"></span>Gemist</span>
+            <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; background: #1c1c1c;"></span>Nog te gaan</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <label class="label">Mijlpalen</label>
+          <div style="display: grid; grid-template-columns: repeat(${Math.min(4, milestones.length)}, minmax(0, 1fr)); gap: 8px; text-align: center;">
+            ${milestones.map(m => {
+              const reached = ev.doneCount + (ev.jokersTotal - ev.jokersLeft) >= m;
+              return `<div style="border: 1px solid ${reached ? '#22c55e' : '#262626'}; padding: 10px 4px;">
+                <div style="font-size: 16px; color: ${reached ? '#22c55e' : '#a3a3a3'};">${m}</div>
+                <div style="font-size: 9px; color: #8a8a8a; margin-top: 2px;">${reached ? 'gehaald ✓' : 'dagen'}</div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+
+        ${c.why ? `
+          <div class="card">
+            <label class="label">Jouw waarom</label>
+            <div style="font-size: 14px; font-style: italic; line-height: 1.6;">"${esc(c.why)}"</div>
+          </div>
+        ` : ''}
+
+        <div class="card">
+          <label class="label">Regels</label>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;"><strong style="color: #fafafa;">${chRules[ev.rule].label}:</strong> ${chRules[ev.rule].text}${ev.rule === 'jokers' ? ` Je hebt nog ${ev.jokersLeft} van ${ev.jokersTotal} ${ev.jokersTotal === 1 ? 'joker' : 'jokers'}.` : ''}</div>
+          ${c.kind === 'number' && c.target ? `<div style="font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-top: 8px;"><strong style="color: #fafafa;">Doel:</strong> ${c.step ? `dag 1: ${fmtInt(c.target)}, elke dag ${fmtInt(c.step)} meer (vandaag ${fmtInt(chTargetFor(c, ev.dayNum))})` : fmtInt(c.target)} ${esc(chUnit(c))}</div>` : ''}
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-top: 8px;"><strong style="color: #fafafa;">Gestart:</strong> ${fmtDateLong(c.start_date)} · eindigt ${fmtDateLong(dateAdd(c.start_date, ev.D - 1))}</div>
+        </div>
+
+        ${info.what || info.how || info.why ? `
+          <div class="card">
+            <label class="label">Uitleg</label>
+            ${info.what ? `<div style="font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-bottom: 8px;"><strong style="color: #fafafa;">WAT</strong> · ${esc(info.what)}</div>` : ''}
+            ${info.how ? `<div style="font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-bottom: 8px;"><strong style="color: #fafafa;">HOE</strong> · ${esc(info.how)}</div>` : ''}
+            ${info.why ? `<div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;"><strong style="color: #fafafa;">WAAROM</strong> · ${esc(info.why)}</div>` : ''}
+          </div>
+        ` : ''}
+
+        ${isActive
+          ? `<button class="btn btn-secondary" style="width: 100%;" onclick="stopChallenge('${c.id}')">Challenge stoppen</button>`
+          : (c.status !== 'completed' ? `<button class="btn btn-primary" style="width: 100%;" onclick="restartChallenge('${c.id}')">Opnieuw beginnen</button>` : '')}
+      `;
+    }
+
+    function renderHard75Info() {
+      const rules = [
+        ['Twee trainingen per dag', 'Elke training duurt minimaal 45 minuten. Eén van de twee moet buiten, bij elk weer. De trainingen doe je los van elkaar, niet achter elkaar als één lange sessie.'],
+        ['Volg een dieet', 'Kies een dieet dat past bij je doel en houd je er 75 dagen aan. Geen cheat meals, ook niet in het weekend of op feestjes.'],
+        ['Geen alcohol', 'Geen enkele druppel, 75 dagen lang.'],
+        ['Drink 3,8 liter water', 'Verdeeld over de dag. Alleen water telt mee, geen koffie, thee of frisdrank.'],
+        ['Lees 10 pagina’s', 'Uit een non-fictieboek, bijvoorbeeld over zelfontwikkeling. Luisterboeken tellen niet mee.'],
+        ['Maak een voortgangsfoto', 'Elke dag één foto, zodat je de verandering over 75 dagen ziet.']
+      ];
+      return `
+        ${renderBodyHeader()}
+        <button class="entry-action" style="margin-bottom: 16px;" onclick="chGo('list')">← Terug</button>
+
+        <div style="border-top: 2px solid #7f1d1d; padding-top: 20px; margin-bottom: 16px;">
+          <div style="font-size: 10px; color: #e5484d; letter-spacing: 0.25em; font-weight: 600;">DISCIPLINE · 75 DAGEN</div>
+          <div style="font-size: 40px; font-weight: 200; letter-spacing: 0.06em; margin-top: 6px;">75 HARD</div>
+          <div style="font-size: 13px; color: #a3a3a3; line-height: 1.7; margin-top: 12px;">Een programma voor mentale hardheid, bedacht door ondernemer Andy Frisella. Geen fitnessprogramma maar een test van discipline: 75 dagen achter elkaar elke dag dezelfde regels, zonder één uitzondering.</div>
+        </div>
+
+        <div class="card">
+          <label class="label">De 6 dagelijkse regels</label>
+          ${rules.map((r, i) => `
+            <div style="display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid #1c1c1c;">
+              <div style="font-size: 22px; font-weight: 200; color: #e5484d; width: 22px; flex-shrink: 0;">${i + 1}</div>
+              <div>
+                <div style="font-size: 14px; font-weight: 500;">${r[0]}</div>
+                <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-top: 4px;">${r[1]}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="card" style="background: #1a0606; border-color: #7f1d1d;">
+          <div style="font-size: 10px; color: #e5484d; letter-spacing: 0.15em; font-weight: 600; margin-bottom: 8px;">DE HOOFDREGEL</div>
+          <div style="font-size: 16px; line-height: 1.5;">Mis je één regel op één dag, dan begin je opnieuw bij dag 1.</div>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-top: 8px;">Geen cheat days, geen jokers, geen "morgen dubbel". Je mag een regel ook niet aanpassen of inruilen: twee trainingen blijven twee trainingen. Inhalen kan alleen op dezelfde dag.</div>
+        </div>
+
+        <div class="card">
+          <label class="label">Goed om te weten</label>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-bottom: 8px;">Er hoort geen vast dieet bij: je kiest er zelf een dat past bij je doel en schrijft je regels op bij de start.</div>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-bottom: 8px;">Twee trainingen en bijna 4 liter water per dag is zwaar. Heb je klachten of een medische aandoening, overleg dan eerst met je huisarts.</div>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">Reken op ongeveer 2 uur per dag aan trainen, lezen en voorbereiden.</div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-title">🔜 Starten kan binnenkort</div>
+          <div class="info-text">75 Hard met dagelijkse checklist, dagteller en hoofdfocus op je dashboard komt in de volgende update.</div>
         </div>
       `;
     }
@@ -2819,7 +3868,6 @@
         <div class="card">
           <label class="label">Komt binnenkort</label>
           <div style="color: #525252; font-size: 12px;">
-            <p style="margin-bottom: 12px;">• Challenges</p>
             <p style="margin-bottom: 12px;">• Voeding logboek</p>
             <p style="margin-bottom: 12px;">• Supplementen</p>
             <p style="margin-bottom: 12px;">• Slaap analyse</p>
@@ -2958,6 +4006,9 @@
     // ============================================
     async function loadAll() {
       await Promise.all([loadEntries(), loadRetention(), loadHabits(), loadGoals(), loadBody()]);
+      await loadChallenges();
+      const msgs = await settleChallenges();
+      if (msgs.length) setTimeout(() => showToast(msgs[0]), 600);
     }
 
     async function init() {
@@ -2983,6 +4034,9 @@
           state.goals = [];
       state.bodyStats = [];
       state.bodySettings = {};
+      state.challenges = [];
+      state.challengeLogs = [];
+      state.chLogIndex = {};
         }
         render();
       });
