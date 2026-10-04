@@ -385,6 +385,41 @@
     .hs-prot-g { display: block; font-size: 10px; color: #8a8a8a; margin-top: 4px; }
     .hs-prot-row.mine .hs-prot-g { color: #d9a441; }
     .hs-prot-scale { display: flex; justify-content: space-between; font-size: 9px; color: #525252; }
+
+    /* Journal: vandaag */
+    .j-mode { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid #262626; margin-bottom: 12px; }
+    .j-mode button { background: transparent; border: none; color: #a3a3a3; font-family: inherit; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px; cursor: pointer; }
+    .j-mode button.on { background: #7f1d1d; color: #fff; font-weight: 600; }
+    .j-date { font-size: 12px; color: #a3a3a3; margin-bottom: 14px; }
+    .j-times { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: end; }
+    .j-times label { font-size: 10px; color: #8a8a8a; letter-spacing: 0.1em; text-transform: uppercase; }
+    .j-times input { margin-top: 6px; text-align: center; font-size: 16px; }
+    .j-times span { color: #525252; padding-bottom: 14px; }
+    .j-tip { background: #120d04; border: 1px solid #3a2c0c; padding: 12px 14px; font-size: 13px; color: #d4d4d4; line-height: 1.5; margin-bottom: 16px; }
+    .j-tip span { display: block; font-size: 10px; color: #d9a441; letter-spacing: 0.15em; font-weight: 600; text-transform: uppercase; margin-bottom: 2px; }
+    .j-main { border-top: 3px solid #e5484d; }
+    .j-main.gold { border-top-color: #d9a441; }
+    .j-q { display: block; font-size: 15px; font-weight: 500; line-height: 1.5; color: #fafafa; margin-bottom: 12px; }
+    .j-lines { min-height: 120px; line-height: 2; }
+    .j-hint { font-size: 11px; color: #8a8a8a; margin-top: 8px; }
+    .j-hint a { color: #e5484d; }
+    .j-qhead { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 10px; color: #e5484d; letter-spacing: 0.18em; font-weight: 600; text-transform: uppercase; }
+    .j-swap { background: transparent; border: 1px solid #262626; color: #a3a3a3; font-family: inherit; font-size: 10px; padding: 8px 10px; cursor: pointer; white-space: nowrap; letter-spacing: 0; text-transform: none; font-weight: 400; min-height: 36px; }
+    .j-lbl { display: block; font-size: 10px; letter-spacing: 0.15em; font-weight: 600; text-transform: uppercase; margin-bottom: 10px; }
+    .j-lbl.green { color: #22c55e; } .j-lbl.gold { color: #d9a441; }
+    .j-goal { display: flex; gap: 12px; align-items: center; min-height: 44px; padding: 0 12px; border: 1px solid #1c1c1c; background: #050505; cursor: pointer; font-size: 13px; color: #a3a3a3; }
+    .j-goal input { width: 20px; height: 20px; accent-color: #22c55e; flex-shrink: 0; }
+    .j-goal.done { border-color: #14532d; background: rgba(34,197,94,0.06); color: #d4d4d4; }
+    .j-opt { background: #0a0a0a; border: 1px dashed #262626; margin-bottom: 16px; }
+    .j-opt summary { list-style: none; display: flex; justify-content: space-between; align-items: center; min-height: 52px; padding: 0 18px; font-size: 13px; color: #a3a3a3; cursor: pointer; }
+    .j-opt summary::-webkit-details-marker { display: none; }
+    .j-opt summary i { color: #525252; font-size: 11px; font-style: normal; }
+    .j-opt summary b::before { content: '+'; font-weight: 400; }
+    .j-opt[open] summary b::before { content: '−'; }
+    .j-opt textarea { margin: 0 18px 18px; width: calc(100% - 36px); box-sizing: border-box; }
+    .j-foot { font-size: 11px; color: #8a8a8a; text-align: center; margin-top: 8px; }
+    .j-h-lbl { font-size: 10px; color: #8a8a8a; letter-spacing: 0.1em; text-transform: uppercase; margin: 12px 0 4px; }
+    .j-h-list { margin: 0; padding-left: 18px; font-size: 13px; color: #a3a3a3; line-height: 1.7; }
   </style>
 </head>
 <body>
@@ -421,6 +456,7 @@
       stress: 4,
       sleep: 7,
       editingId: null,
+      jd: null, jMode: null,
       
       // Retention
       retentionStreak: null,
@@ -1155,21 +1191,23 @@
     }
 
     function getAverageMood() {
-      if (state.entries.length === 0) return '—';
-      const sum = state.entries.reduce((a, e) => a + (e.mood || 5), 0);
-      return (sum / state.entries.length).toFixed(1);
+      const list = state.entries.filter(e => e.mood);
+      if (list.length === 0) return '—';
+      const sum = list.reduce((a, e) => a + e.mood, 0);
+      return (sum / list.length).toFixed(1);
     }
 
     function getAverageEnergy() {
-      if (state.entries.length === 0) return '—';
-      const sum = state.entries.reduce((a, e) => a + (e.energy || 5), 0);
-      return (sum / state.entries.length).toFixed(1);
+      const list = state.entries.filter(e => e.energy);
+      if (list.length === 0) return '—';
+      const sum = list.reduce((a, e) => a + e.energy, 0);
+      return (sum / list.length).toFixed(1);
     }
 
     function getJournalStreak() {
       if (state.entries.length === 0) return 0;
       let streak = 1;
-      const dates = state.entries.map(e => e.date).sort().reverse();
+      const dates = [...new Set(state.entries.map(e => e.date))].sort().reverse();
       for (let i = 1; i < dates.length; i++) {
         const d1 = new Date(dates[i-1]);
         const d2 = new Date(dates[i]);
@@ -1253,7 +1291,7 @@
 
     function getInsights() {
       // Filter entries that have habits data
-      const entriesWithHabits = state.entries.filter(e => e.habits && Object.keys(e.habits).length > 0);
+      const entriesWithHabits = state.entries.filter(e => e.habits && Object.keys(e.habits).length > 0 && e.mood);
       
       if (entriesWithHabits.length < 3) return [];
       
@@ -1355,7 +1393,7 @@
       state.workouts = [];
       state.workoutSets = [];
       state.trainForm = null;
-      Object.assign(state, { ts: null, tpick: {}, tswap: null, tsetup: null, tc: null, tday: null, trainView: 'list' });
+      Object.assign(state, { ts: null, tpick: {}, tswap: null, tsetup: null, tc: null, tday: null, trainView: 'list', jd: null, jMode: null });
       render();
     }
 
@@ -5736,6 +5774,642 @@
     // ============================================
     // RENDER: JOURNAL
     // ============================================
+
+    // ============================================
+    // JOURNAL: VRAAG VAN VANDAAG (thema per weekdag, 50 vragen per thema)
+    // ============================================
+    const journalThemes = [
+      { day: 'maandag', name: 'Focus & doelen', q: [
+        'Wat is het ene ding dat deze week alles makkelijker maakt?',
+        'Als je deze week maar één doel haalt, welke moet het zijn?',
+        'Waar wil je over een jaar staan, en wat doe je deze week om daar dichterbij te komen?',
+        'Welk doel heb je al te lang uitgesteld? Wat is de kleinste eerste stap?',
+        'Waar ben je mee bezig dat eigenlijk niet bijdraagt aan wat je wilt?',
+        'Wat zou je doen als je zeker wist dat het niet kon mislukken?',
+        'Welk doel is écht van jou, en welk doel heb je overgenomen van anderen?',
+        'Wat wil je over 5 jaar kunnen zeggen dat je nu nog niet kunt?',
+        'Welke versie van jezelf wil je deze week laten zien?',
+        'Waar zeg je deze week nee tegen, zodat je ergens anders ja tegen kunt zeggen?',
+        'Wat staat er deze week op je planning dat je energie geeft, en wat kost energie?',
+        'Welke taak schuif je steeds voor je uit? Wanneer doe je hem deze week?',
+        'Wat moet er deze week af zijn om tevreden terug te kijken?',
+        'Hoe ziet je ideale dag eruit, en hoeveel daarvan kun je deze week inbouwen?',
+        'Welk moment van de dag is je sterkste? Waar gebruik je het voor?',
+        'Wat kun je deze week loslaten of aan een ander overlaten?',
+        'Welke afspraak met jezelf ga je deze week écht nakomen?',
+        'Wat is het moeilijkste wat je deze week moet doen? Wanneer pak je het aan?',
+        'Welke afleiding kost je de meeste tijd, en hoe zet je die deze week op afstand?',
+        'Hoeveel uur per week besteed je echt aan je belangrijkste doel?',
+        'Welk doel van vorige week heb je niet gehaald? Wat hield je tegen?',
+        'Waar zie je vooruitgang die je nog niet hebt gevierd?',
+        'Hoe weet je aan het eind van de week of het een goede week was?',
+        'Welk getal wil je deze week verbeteren: gewicht, kracht, uren slaap of iets anders?',
+        'Wat werkte vorige week goed, en hoe herhaal je dat?',
+        'Welke gewoonte heeft je de afgelopen maand het meest opgeleverd?',
+        'Op welk doel loop je achter? Wat is een eerlijke reden, en wat is een excuus?',
+        'Wat is de volgende mijlpaal, en wanneer wil je die halen?',
+        'Welke kleine winst kun je deze week elke dag pakken?',
+        'Als je deze week alleen een 6 haalt, wat heb je dan in elk geval wél gedaan?',
+        'Wat zou de beste versie van jezelf vandaag anders doen dan jij gisteren?',
+        'Waar ben je druk mee, maar kom je niet vooruit?',
+        'Wat ga je deze week bewust níét doen?',
+        'Welk doel is te groot? Hoe hak je het in stukken?',
+        'Wat is het risico als je deze week niks verandert?',
+        'Welke beslissing stel je uit? Wat heb je nodig om hem te nemen?',
+        'Wie kan je helpen met je belangrijkste doel, en heb je het gevraagd?',
+        'Waar besteed je geld aan dat niet past bij je doelen?',
+        'Wat zou je adviseren aan een vriend met jouw doelen en jouw week?',
+        'Welke vraag stel je jezelf te weinig?',
+        'Waarom wil je je belangrijkste doel echt halen? Graaf drie keer "waarom" dieper.',
+        'Wat verlies je als je stopt met waar je nu mee bezig bent?',
+        'Wie heb je voor ogen als je aan je doelen werkt?',
+        'Wanneer voelde je je het meest gefocust, en wat was er toen anders?',
+        'Wat geeft je het gevoel dat je leeft, en hoeveel tijd geef je daaraan?',
+        'Waar zou je spijt van hebben als je het dit jaar niet deed?',
+        'Welk doel geeft je rust, en welk doel geeft je stress?',
+        'Wat betekent "succes" voor jou, los van wat anderen vinden?',
+        'Hoe wil je dat deze maand voelt als je erop terugkijkt?',
+        'Wat is je volgende stap? Geen plan, alleen de eerstvolgende stap.'
+      ]},
+      { day: 'dinsdag', name: 'Discipline', q: [
+        'Waar koos je vandaag voor gemak in plaats van je doel, en wat was de trigger?',
+        'Welk moment van de dag is je zwakste plek? Wat is je plan voor dat moment?',
+        'Wat deed je vandaag terwijl je er geen zin in had?',
+        'Welke verleiding heb je vandaag weerstaan, en hoe deed je dat?',
+        'Waar onderhandel je met jezelf, en wie wint meestal?',
+        'Welke regel voor jezelf heb je deze week gebroken? Wat was het excuus?',
+        'Wat doe je als niemand kijkt?',
+        'Welk "nog even" kostte je vandaag het meest: nog even scrollen, nog even liggen, nog even uitstellen?',
+        'Welke keuze van vandaag maakt morgen makkelijker?',
+        'Waar heb je vandaag "ja" gezegd terwijl je "nee" bedoelde?',
+        'Welke gewoonte loopt op dit moment het slechtst? Wat is de echte reden?',
+        'Welke gewoonte gaat inmiddels vanzelf? Hoe heb je dat voor elkaar gekregen?',
+        'Wat kun je vanavond al klaarzetten om het morgen makkelijker te maken?',
+        'Welke slechte gewoonte kun je moeilijker maken, door één stap ertussen te zetten?',
+        'Aan welke vaste routine kun je een nieuwe gewoonte koppelen?',
+        'Welke gewoonte doe je al lang, maar levert niks meer op?',
+        'Wat is het kleinste dat je kunt doen op een dag dat alles tegenzit?',
+        'Hoe lang is je langste reeks ooit geweest, en wat brak hem?',
+        'Welke gewoonte zou je leven het meest veranderen als je hem een jaar volhoudt?',
+        'Wat heb je nodig om een gemiste dag niet te laten uitlopen tot een gemiste week?',
+        'Wat stel je uit, en welk gevoel probeer je daarmee te ontlopen?',
+        'Wat zou er gebeuren als je de moeilijkste taak morgen als eerste doet?',
+        'Waar wacht je op "de juiste motivatie" in plaats van gewoon te beginnen?',
+        'Wat zou je doen als je maar 10 minuten had? Doe je dat ook?',
+        'Welke taak is in je hoofd groter dan in werkelijkheid?',
+        'Waar heb je vandaag tijd aan verloren zonder dat je het doorhad?',
+        'Welke excuses gebruik je het vaakst? Schrijf ze eerlijk op.',
+        'Wat is de prijs van nog een week uitstellen?',
+        'Wanneer begon je vandaag echt aan je werk, en wat ging daaraan vooraf?',
+        'Welke beslissing kun je nu nemen, zodat je er morgen niet meer over hoeft na te denken?',
+        'Wat deed je vandaag dat moeilijk was?',
+        'Wanneer heb je voor het laatst iets afgemaakt terwijl je wilde stoppen?',
+        'Waar ben je te zacht voor jezelf, en waar juist te streng?',
+        'Welk ongemak ontwijk je het meest?',
+        'Wat zou je doen als je net zo gedisciplineerd was als je wilt zijn?',
+        'Welke belofte aan jezelf heb je deze maand gebroken?',
+        'Wat is het verschil tussen een dag waarop je wint en een dag waarop je verliest?',
+        'Waar haal je je kracht vandaan als je motivatie op is?',
+        'Welke kleine overwinning van vandaag telt meer dan hij lijkt?',
+        'Wat heb je deze week gedaan waar je over een jaar trots op bent?',
+        'Wat in je omgeving maakt het je moeilijk? Kun je het weghalen?',
+        'Wie in je omgeving helpt je discipline, en wie ondermijnt hem?',
+        'Hoe ziet je telefoon eruit: helpt hij je doelen of werkt hij ertegen?',
+        'Waar ligt de verleiding in je huis het dichtst bij de hand?',
+        'Welke plek helpt je het best om gefocust te werken?',
+        'Wat zou je veranderen als je je kamer opnieuw inrichtte voor je doelen?',
+        'Welke app of gewoonte kost je de meeste discipline?',
+        'Wie kan je aanspreken als je verslapt?',
+        'Welke situatie ga je deze week vermijden omdat je weet dat het misgaat?',
+        'Wat heb je vanavond nodig om morgen sterk te beginnen?'
+      ]},
+      { day: 'woensdag', name: 'Lichaam', q: [
+        'Hoe voelde je lichaam vandaag, en wat zegt dat over je slaap, eten of training?',
+        'Waar in je lichaam zit spanning? Wanneer merkte je het vandaag?',
+        'Wat at je vandaag dat je energie gaf, en wat kostte energie?',
+        'Hoe sliep je de afgelopen nachten, en wat had daar invloed op?',
+        'Op welk moment van de dag zakt je energie in? Wat ging daaraan vooraf?',
+        'Wat heeft je lichaam deze week nodig dat het nog niet kreeg?',
+        'Welke training voelde deze week het best, en waarom?',
+        'Waar ben je trots op als je naar je lichaam kijkt?',
+        'Hoe praat je in je hoofd over je lichaam? Zou je zo tegen een vriend praten?',
+        'Wat is één kleine aanpassing in je eten die je deze week kunt volhouden?',
+        'Hoeveel water dronk je vandaag? Merkte je het verschil?',
+        'Wanneer at je vandaag uit honger, en wanneer uit verveling of stress?',
+        'Welke pijntje of klacht negeer je al een tijdje?',
+        'Hoe voelt je lichaam na een avond scherm, en hoe na een avond zonder?',
+        'Wat betekent "sterk zijn" voor jou, los van gewicht en spieren?',
+        'Hoe herstel je na een zware training, en is dat genoeg?',
+        'Welke beweging mis je in je week: kracht, cardio, mobiliteit of rust?',
+        'Wat doe je de eerste 30 minuten na het opstaan, en helpt dat je lichaam?',
+        'Hoe vaak zat je vandaag langer dan een uur stil?',
+        'Wat merkte je aan je lichaam toen je vandaag buiten was?',
+        'Welk record wil je deze maand breken?',
+        'Hoe reageert je lichaam op stress? Waar voel je het eerst?',
+        'Welke maaltijd van deze week was het beste voor je, en welke het slechtste?',
+        'Wat doe je in het uur voor het slapen? Helpt het of houdt het je wakker?',
+        'Hoe ademde je vandaag op een stressvol moment?',
+        'Wat zou je lichaam zeggen als het kon praten?',
+        'Wanneer voelde je je deze week fit en vol energie? Wat ging eraan vooraf?',
+        'Welke gewoonte zou je energie het meest verhogen als je hem vanaf morgen deed?',
+        'Hoe ga je om met een dag waarop je lichaam niet wil?',
+        'Wat is je verhouding met suiker op dit moment?',
+        'Hoe vaak eet je bewust, zonder scherm erbij?',
+        'Welke training sla je het vaakst over, en waarom?',
+        'Waar merk je dat je ouder wordt, en wat doe je eraan?',
+        'Wat heb je deze week gedaan voor je herstel: slaap, rust, stretchen?',
+        'Hoe voelde de koude douche vandaag, en wat gebeurde er in je hoofd?',
+        'Wat at je toen je moe was, en wat had je beter kunnen eten?',
+        'Welke kleine pijn verdwijnt als je meer beweegt?',
+        'Hoe is je houding als je achter je bureau of telefoon zit?',
+        'Wat is het beste dat je deze week voor je gezondheid hebt gedaan?',
+        'Wat heb je nodig om om 23:00 in bed te liggen?',
+        'Wanneer voelde je je het sterkst in je hele leven? Wat deed je toen anders?',
+        'Hoe beïnvloedt je eten je humeur? Wanneer merkte je dat deze week?',
+        'Waar heb je vandaag naar je lichaam geluisterd, en waar niet?',
+        'Welk sportdoel heb je losgelaten dat je eigenlijk nog wilt halen?',
+        'Hoe voelt het als je een training hebt afgemaakt die je wilde overslaan?',
+        'Wat is één gezonde ruil die je deze week kunt maken?',
+        'Wat doet alcohol, suiker of te laat slapen met je volgende dag?',
+        'Welke kleine pijn of stijfheid kun je met 5 minuten mobiliteit verhelpen?',
+        'Hoe zou je dag eruitzien als je lichaam je hoogste prioriteit was?',
+        'Waar ben je je lichaam vandaag dankbaar voor?'
+      ]},
+      { day: 'donderdag', name: 'Mindset', q: [
+        'Welke gedachte hield je vandaag tegen? Is die echt waar?',
+        'Waar maakte je je vandaag zorgen over, en hoeveel daarvan heb je in de hand?',
+        'Welk verhaal vertel je jezelf steeds over wie je bent?',
+        'Wat zou je doen als je niet bang was voor het oordeel van anderen?',
+        'Welke tegenslag van deze week kun je zien als les?',
+        'Waar was je vandaag te hard voor jezelf?',
+        'Welke overtuiging heb je over jezelf die je zou willen veranderen?',
+        'Wanneer voelde je je vandaag onzeker, en wat deed je toen?',
+        'Wat zegt je innerlijke stem als het tegenzit? Wat zou een coach zeggen?',
+        'Waar vergeleek je jezelf vandaag met anderen? Wat leverde het op?',
+        'Welke angst stuurt je beslissingen het meest?',
+        'Wat heb je vandaag geaccepteerd dat je niet kon veranderen?',
+        'Waar heb je controle over, en waar verspil je energie aan wat buiten je macht ligt?',
+        'Welke fout van deze week heeft je het meest geleerd?',
+        'Wanneer was je vandaag écht in het moment?',
+        'Waar zocht je vandaag naar een excuus, en wat was de waarheid?',
+        'Welk compliment van iemand anders vind je moeilijk om te geloven?',
+        'Wat zou je tegen jezelf van 10 jaar geleden zeggen?',
+        'Welk gevoel probeerde je vandaag te vermijden?',
+        'Hoe ga je om met kritiek? Wanneer merkte je dat deze week?',
+        'Wat maakte je vandaag boos of geïrriteerd, en wat zegt dat over jou?',
+        'Waar wacht je op toestemming die je jezelf ook kunt geven?',
+        'Wat is het ergste dat kan gebeuren, en hoe zou je ermee omgaan?',
+        'Welke situatie bekeek je vandaag te zwart-wit?',
+        'Waar was je vandaag dapper, ook al was het klein?',
+        'Welke gedachte gaf je vandaag energie?',
+        'Waar hield perfectionisme je tegen?',
+        'Wat zou je doen als je wist dat je het niet hoefde te verdienen?',
+        'Hoe reageer je als iets misgaat: op jezelf, op anderen of op de situatie?',
+        'Welke zorg van vorige maand bleek achteraf niet nodig?',
+        'Wat betekent falen voor jou? Is dat een eerlijke definitie?',
+        'Waar heb je geduld nodig, en waar juist actie?',
+        'Welke grens heb je vandaag goed bewaakt, of juist niet?',
+        'Wanneer voelde je je vandaag rustig van binnen? Wat was er toen?',
+        'Welke gedachte kwam vandaag steeds terug? Wat wil hij je vertellen?',
+        'Wat heb je over jezelf geleerd door een moeilijk moment?',
+        'Welke "moet" in je hoofd is eigenlijk een "wil"? En andersom?',
+        'Hoe zou de sterkste versie van jou omgaan met wat je nu dwarszit?',
+        'Waar ben je te snel tevreden, en waar nooit tevreden?',
+        'Welk oordeel over iemand anders zegt eigenlijk iets over jou?',
+        'Wat laat je vandaag los voordat je gaat slapen?',
+        'Wanneer twijfelde je deze week aan jezelf, en had je gelijk?',
+        'Welke uitdaging van nu is over een jaar onbelangrijk?',
+        'Waar heb je meer zelfvertrouwen gekregen dan een jaar geleden?',
+        'Wat zou je anders doen als je deze dag opnieuw kon beginnen?',
+        'Hoe vaak keek je vandaag op je telefoon om een gevoel te ontlopen?',
+        'Welke gewoonte van denken wil je kwijt?',
+        'Wat is iets wat je nu weet, maar een jaar geleden nog niet?',
+        'Waar heb je vandaag voor jezelf gekozen?',
+        'Welke zin wil je morgenochtend als eerste tegen jezelf zeggen?'
+      ]},
+      { day: 'vrijdag', name: 'Mensen & relaties', q: [
+        'Wie maakte je week beter, en weet die persoon dat?',
+        'Met wie heb je te lang geen contact gehad dat je eigenlijk mist?',
+        'Wie kost je energie, en wie geeft je energie?',
+        'Wanneer luisterde je deze week écht naar iemand, zonder aan je antwoord te denken?',
+        'Welk gesprek stel je uit? Wat houdt je tegen?',
+        'Wie zou je willen bedanken, en waarvoor?',
+        'Hoe ben je deze week geweest voor de mensen dicht bij je?',
+        'Wie inspireert je, en wat neem je van die persoon over?',
+        'Waar heb je deze week iemand geholpen, en hoe voelde dat?',
+        'Wie kun je deze week een berichtje sturen, zomaar?',
+        'Met wie voel je je het meest jezelf?',
+        'Welke relatie verdient meer aandacht dan je hem nu geeft?',
+        'Wanneer was je deze week ongeduldig met iemand? Wat zat erachter?',
+        'Wie heeft je ooit iets geleerd dat je nog steeds gebruikt?',
+        'Hoe vaak was je deze week aanwezig zonder telefoon bij iemand?',
+        'Welke vriendschap heb je laten verwateren, en wil je hem terug?',
+        'Wat heb je nodig van anderen dat je niet durft te vragen?',
+        'Wie zou er trots op je zijn als ze je nu zagen?',
+        'Waar heb je deze week een grens aangegeven, of had je dat moeten doen?',
+        'Wie in je omgeving heeft het moeilijk? Hoe kun je er zijn?',
+        'Welk gesprek van deze week bleef bij je hangen, en waarom?',
+        'Hoe laat je mensen weten dat ze belangrijk voor je zijn?',
+        'Met wie wil je over een jaar nog steeds bevriend zijn?',
+        'Wie heeft je deze week verrast?',
+        'Waar ben je in een relatie te veel aan het geven, of te weinig?',
+        'Wie zou je mentor kunnen zijn op het gebied waar je wilt groeien?',
+        'Welke herinnering met familie maakt je blij?',
+        'Wanneer heb je voor het laatst iemand vergeven, of jezelf?',
+        'Wat bewonder je in je beste vriend?',
+        'Welk sociaal moment van deze week gaf je de meeste energie?',
+        'Wie kan je helpen met je doelen, en wie remt je juist af?',
+        'Hoe reageer je als iemand iets van je vraagt wat je niet wilt?',
+        'Welke eigenschap waarderen anderen in jou?',
+        'Wie zie je te weinig omdat het altijd "volgende keer" wordt?',
+        'Waar heb je deze week iemand verkeerd beoordeeld?',
+        'Hoe kun je deze week iemand een beetje gelukkiger maken?',
+        'Wat heb je geleerd van een lastig persoon in je leven?',
+        'Met wie kun je echt eerlijk zijn, zelfs over je zwakke kanten?',
+        'Wie zou je bellen als het echt slecht ging? Weet die persoon dat?',
+        'Wanneer voelde je je deze week verbonden met iemand?',
+        'Welke relatie maakt je beter als mens?',
+        'Waar ben je deze week jaloers geweest, en wat zegt dat over wat je wilt?',
+        'Welk excuus ben je nog iemand schuldig?',
+        'Hoe ziet een goede vriend eruit, en ben jij dat voor anderen?',
+        'Welke mensen wil je meer om je heen hebben?',
+        'Met wie wil je iets nieuws ondernemen?',
+        'Wat heb je deze week van iemand anders geleerd?',
+        'Wie behandel je anders dan je zou willen?',
+        'Welk compliment kun je deze week aan iemand geven?',
+        'Wie wil je dit weekend écht zien?'
+      ]},
+      { day: 'zaterdag', name: 'Groei', q: [
+        'Wat lukt je nu wat een jaar geleden nog niet lukte?',
+        'Wat heb je deze week geleerd, en hoe ga je het gebruiken?',
+        'Welke vaardigheid wil je dit jaar onder de knie krijgen?',
+        'Welk boek, gesprek of video veranderde deze week je kijk op iets?',
+        'Waar ben je beginner in, en hoe voelt dat?',
+        'Wat zou je doen als je een heel weekend alleen aan jezelf mocht werken?',
+        'Welke fout herhaal je steeds? Wat is het patroon?',
+        'Waar heb je deze week je comfortzone verlaten?',
+        'Wat is iets nieuws dat je deze maand wilt proberen?',
+        'Welke feedback heb je gekregen die je eigenlijk moet aannemen?',
+        'Wie is een stap verder dan jij op het gebied waar je wilt groeien? Wat doet die persoon anders?',
+        'Welke gewoonte van een jaar geleden zou je nu niet meer willen?',
+        'Wat wil je over jezelf weten dat je nog niet weet?',
+        'Welke uitdaging past nu bij je, niet te makkelijk en niet te zwaar?',
+        'Wat zou je leren als je zeker wist dat je niet zou falen?',
+        'Hoe ga je om met vooruitgang die langzaam gaat?',
+        'Welk talent gebruik je te weinig?',
+        'Wat heb je dit jaar losgelaten, en wat heeft dat opgeleverd?',
+        'Welke les leer je steeds opnieuw?',
+        'Waar ben je beter in geworden zonder dat je het doorhad?',
+        'Wat is de belangrijkste les van deze maand?',
+        'Welke nieuwe gewoonte wil je volgende maand beginnen?',
+        'Wat wil je leren van je ouders, en wat juist niet?',
+        'Hoe meet je of je groeit?',
+        'Welke vraag heb je nog nooit goed beantwoord?',
+        'Waar sta je over 90 dagen als je zo doorgaat?',
+        'Wat zou je doen als je niemand iets hoefde te bewijzen?',
+        'Welke kennis zou je leven makkelijker maken?',
+        'Wat wil je anders doen in je volgende 30 dagen?',
+        'Welk deel van je leven groeit het hardst, en welk deel staat stil?',
+        'Wat heb je dit jaar overwonnen?',
+        'Welke grens heb je verlegd sinds je met Primal Forged begon?',
+        'Wat is een kleine stap richting een grote verandering?',
+        'Waar leer je het meest van: succes of tegenslag?',
+        'Welke gewoonte zou je aan een jongere versie van jezelf leren?',
+        'Wat wil je volgend jaar kunnen wat je nu nog niet kunt?',
+        'Welk risico zou je moeten nemen om te groeien?',
+        'Waar heb je hulp nodig om verder te komen?',
+        'Wat is het beste advies dat je ooit kreeg, en volg je het?',
+        'Hoe ziet de volgende versie van jou eruit?',
+        'Wat heb je opgegeven dat je eigenlijk opnieuw wilt proberen?',
+        'Welke gewoonte maakte het grootste verschil sinds je bent begonnen?',
+        'Waar heb je deze week geoefend in plaats van alleen gepraat?',
+        'Welke vaardigheid heb je deze week getraind, ook al was het niet in de gym?',
+        'Wat zou je doen met een extra uur per dag?',
+        'Welke kritiek op jezelf is terecht, en welke niet?',
+        'Wat wil je deze maand loslaten om ruimte te maken voor groei?',
+        'Welk moment van deze week was een keerpunt, hoe klein ook?',
+        'Waar wil je over een jaar op terugkijken als het begin van iets?',
+        'Wat zou het jou van een jaar geleden het meest verbazen aan wie je nu bent?'
+      ]},
+      { day: 'zondag', name: 'Terugblik', q: [
+        'Als deze week een cijfer krijgt, welk is het, en wat maakt het één punt hoger?',
+        'Wat was het hoogtepunt van deze week?',
+        'Wat was het dieptepunt van deze week, en wat leerde je ervan?',
+        'Welke gewoonte liep deze week het best, en welke het slechtst?',
+        'Wat wil je volgende week anders doen? Eén ding.',
+        'Waar ben je deze week trots op dat niemand anders heeft gezien?',
+        'Welke beslissing van deze week was de beste?',
+        'Waar heb je deze week tijd aan besteed, en klopt dat met wat je belangrijk vindt?',
+        'Welke doelen van deze week heb je gehaald?',
+        'Hoe was je energie deze week, en wat had er invloed op?',
+        'Welk moment van deze week wil je onthouden?',
+        'Wat heb je deze week uitgesteld, en neem je het mee naar volgende week?',
+        'Welke les neem je mee uit deze week?',
+        'Als je deze week opnieuw mocht doen, wat zou je veranderen?',
+        'Hoe heb je deze week voor je lichaam gezorgd?',
+        'Welke relatie heb je deze week gevoed?',
+        'Waar heb je deze week je woord gehouden tegenover jezelf?',
+        'Wat gaf je deze week de meeste voldoening?',
+        'Welk patroon zie je als je terugkijkt op je journal van deze week?',
+        'Hoe sliep je deze week gemiddeld, en wat betekende dat voor je dagen?',
+        'Wat maakt volgende week makkelijker als je het vandaag regelt?',
+        'Welke kleine winst van deze week verdient een feestje?',
+        'Waar was je deze week het meest jezelf?',
+        'Welke zorg van het begin van de week bleek achteraf mee te vallen?',
+        'Hoe kijk je terug op je discipline deze week?',
+        'Wat zou je tegen jezelf zeggen aan het begin van deze week?',
+        'Welke dag was het best, en waarom?',
+        'Welke dag was het moeilijkst, en wat had je nodig?',
+        'Wat heeft deze week je geld, tijd of energie gekost zonder dat het iets opleverde?',
+        'Waar ben je deze week gegroeid?',
+        'Wat heb je deze week geleerd over je lichaam?',
+        'Welke afspraak met jezelf neem je mee naar volgende week?',
+        'Hoe tevreden ben je over je training deze week?',
+        'Waar ga je volgende week nee tegen zeggen?',
+        'Welke mensen maakten je week beter?',
+        'Wat is je focus voor de komende week, in één zin?',
+        'Welke gewoonte ga je volgende week extra aandacht geven?',
+        'Wat wil je volgende zondag kunnen opschrijven?',
+        'Hoe rustig of onrustig was je hoofd deze week?',
+        'Welk moment van rust heb je deze week echt genomen?',
+        'Wat heb je deze week gedaan dat je toekomstige zelf zal bedanken?',
+        'Waar was je deze week te druk mee?',
+        'Hoe vaak schreef je deze week in je journal, en wat leverde het op?',
+        'Welke vraag van deze week bleef in je hoofd hangen?',
+        'Wat zou een goede vriend zeggen over jouw week?',
+        'Wat wil je deze maand nog bereiken?',
+        'Hoe staat het met je challenges, en wat is je plan?',
+        'Waar heb je deze week te veel van gedaan, en waar te weinig?',
+        'Hoe wil je je voelen op vrijdag van volgende week?',
+        'Wat is het eerste dat je morgen doet om sterk aan de week te beginnen?'
+      ]}
+    ];
+
+    // Thema volgt de weekdag; binnen het thema schuift de vraag elke week één plek op
+    function journalPromptFor(dateStr, swap) {
+      const d = new Date(dateStr + 'T12:00:00');
+      const wd = (d.getDay() + 6) % 7;
+      const theme = journalThemes[wd];
+      const week = Math.floor((d - new Date('2024-01-01T12:00:00')) / (7 * 86400000));
+      const idx = ((week + (swap ? 25 : 0)) % theme.q.length + theme.q.length) % theme.q.length;
+      return { theme: theme.name, day: theme.day, text: theme.q[idx] };
+    }
+
+    // ============================================
+    // JOURNAL: VANDAAG (ochtend & avond)
+    // ============================================
+    function todayJournalEntry() {
+      const t = todayStr();
+      return state.entries.find(e => e.date === t && e.daily) || null;
+    }
+    function yesterdayJournalEntry() {
+      const y = dateAdd(todayStr(), -1);
+      return state.entries.find(e => e.date === y && e.daily) || null;
+    }
+    function jdInit() {
+      const t = todayStr();
+      if (state.jd && state.jd.date === t) return state.jd;
+      const e = todayJournalEntry();
+      const d = (e && e.daily) || {};
+      state.jd = {
+        date: t, id: e ? e.id : null,
+        bed: d.bed || '', wake: d.wake || '',
+        goals: d.goals || '', goalsDone: d.goalsDone || [],
+        gratitude: d.gratitude || '', answer: d.answer || '', win: d.win || '',
+        tomorrow: d.tomorrow || '', hard: d.hard || '', free: (e && e.content) || '',
+        swap: !!d.swap, morningAt: d.morningAt || null, eveningAt: d.eveningAt || null,
+        sleep: e && e.sleep_quality ? e.sleep_quality : 7, energy: e && e.energy ? e.energy : 7,
+        mood: e && e.mood ? e.mood : 7, focus: e && e.focus ? e.focus : 7,
+        stress: e && e.stress ? e.stress : 4, libido: e && e.libido ? e.libido : 7
+      };
+      if (!state.jMode) state.jMode = (state.jd.morningAt && !state.jd.eveningAt) || new Date().getHours() >= 15 ? 'avond' : 'ochtend';
+      return state.jd;
+    }
+    function jSet(field, value) { if (state.jd) state.jd[field] = value; }
+    function jSlider(field, value) {
+      if (!state.jd) return;
+      state.jd[field] = parseInt(value);
+      const el = document.getElementById('jv-' + field);
+      if (el) { el.textContent = value; el.style.color = getColor(parseInt(value), field === 'stress'); }
+    }
+    function jSleepCalc() {
+      const jd = state.jd; if (!jd || !jd.bed || !jd.wake) return null;
+      const [bh, bm] = jd.bed.split(':').map(Number), [wh, wm] = jd.wake.split(':').map(Number);
+      if ([bh, bm, wh, wm].some(isNaN)) return null;
+      let min = (wh * 60 + wm) - (bh * 60 + bm);
+      if (min <= 0) min += 24 * 60;
+      return min;
+    }
+    function jSleepText() {
+      const m = jSleepCalc();
+      return m === null ? 'Vul je tijden in' : `${Math.floor(m / 60)} u ${String(m % 60).padStart(2, '0')} min geslapen`;
+    }
+    function jTime(field, value) {
+      jSet(field, value);
+      const el = document.getElementById('j-sleeptxt');
+      if (el) { el.textContent = jSleepText(); el.style.color = jSleepCalc() !== null && jSleepCalc() >= 420 ? '#22c55e' : '#a3a3a3'; }
+    }
+    function jGoalList(text) {
+      return String(text || '').split('\n').map(l => l.replace(/^\s*\d+\s*[.)\-:]\s*/, '').trim()).filter(Boolean).slice(0, 5);
+    }
+    function jGoalToggle(i, checked) {
+      const jd = state.jd; if (!jd) return;
+      const n = jGoalList(jd.goals).length;
+      jd.goalsDone = Array.from({ length: n }, (_, k) => k === i ? checked : !!jd.goalsDone[k]);
+      const done = jd.goalsDone.filter(Boolean).length;
+      const el = document.getElementById('j-goalscore'); if (el) el.textContent = `${done} / ${n}`;
+      const row = document.getElementById('j-goal-' + i); if (row) row.classList.toggle('done', checked);
+    }
+    function jSwapPrompt() { if (state.jd) { state.jd.swap = !state.jd.swap; render(); } }
+    function setJMode(m) { state.jMode = m; render(); window.scrollTo(0, 0); }
+
+    async function saveJournalDay(part) {
+      if (!state.user) return;
+      const jd = jdInit();
+      document.querySelectorAll('[data-jf]').forEach(el => { jd[el.dataset.jf] = el.value; });
+      const now = new Date().toISOString();
+      if (part === 'ochtend') {
+        if (!jGoalList(jd.goals).length) { alert('Schrijf minstens één ding op dat je vandaag wilt waarmaken.'); return; }
+        jd.morningAt = jd.morningAt || now;
+      } else {
+        if (!jd.gratitude.trim() && !jd.answer.trim() && !jd.win.trim()) { alert('Vul minstens je dankbaarheid, de vraag of je overwinning in.'); return; }
+        jd.eveningAt = jd.eveningAt || now;
+      }
+      const prompt = journalPromptFor(jd.date, jd.swap);
+      const daily = {
+        bed: jd.bed, wake: jd.wake, sleepMin: jSleepCalc(), goals: jd.goals, goalsDone: jd.goalsDone,
+        gratitude: jd.gratitude, prompt: prompt.text, theme: prompt.theme, answer: jd.answer, win: jd.win,
+        tomorrow: jd.tomorrow, hard: jd.hard, swap: jd.swap, morningAt: jd.morningAt, eveningAt: jd.eveningAt
+      };
+      const row = { user_id: state.user.id, date: jd.date, daily, content: jd.free || '', habits: { ...state.habits }, energy: jd.energy, sleep_quality: jd.sleep };
+      if (jd.eveningAt) Object.assign(row, { mood: jd.mood, focus: jd.focus, stress: jd.stress, libido: jd.libido });
+      const btn = document.getElementById('j-save');
+      if (btn) { btn.disabled = true; btn.textContent = 'Opslaan...'; }
+      let res;
+      if (jd.id) res = await supabaseClient.from('journal_entries').update(row).eq('id', jd.id);
+      else {
+        res = await supabaseClient.from('journal_entries').insert([row]).select().single();
+        if (!res.error && res.data) jd.id = res.data.id;
+      }
+      if (res.error) {
+        if (btn) { btn.disabled = false; btn.textContent = part === 'ochtend' ? 'Ochtend opslaan' : 'Dag afsluiten'; }
+        alert('Fout bij opslaan: ' + res.error.message + (/daily/.test(res.error.message) ? '\n\nVoer eerst journal-update.sql uit in Supabase.' : ''));
+        return;
+      }
+      await loadEntries();
+      state.jd = null; jdInit();
+      if (part === 'ochtend') state.jMode = 'avond';
+      render();
+      window.scrollTo(0, 0);
+      showToast(part === 'ochtend' ? '☀️ Ochtend opgeslagen · tot vanavond' : '🌙 Dag afgesloten');
+    }
+
+    function jSliderHtml(field, label) {
+      const v = state.jd[field];
+      return `
+        <div class="slider-group">
+          <div class="slider-header">
+            <span class="slider-label">${label}</span>
+            <span class="slider-value" id="jv-${field}" style="color: ${getColor(v, field === 'stress')}">${v}</span>
+          </div>
+          <input type="range" class="slider ${field === 'stress' ? 'slider-stress' : ''}" min="1" max="10" value="${v}" oninput="jSlider('${field}', this.value)" aria-label="${label}">
+        </div>`;
+    }
+
+    function renderJournalToday() {
+      const jd = jdInit();
+      const mode = state.jMode;
+      const dateLabel = new Date().toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' });
+      const tabs = `
+        <div class="j-mode">
+          <button class="${mode === 'ochtend' ? 'on' : ''}" onclick="setJMode('ochtend')">☀ Ochtend${jd.morningAt ? ' ✓' : ''}</button>
+          <button class="${mode === 'avond' ? 'on' : ''}" onclick="setJMode('avond')">☾ Avond${jd.eveningAt ? ' ✓' : ''}</button>
+        </div>
+        <div class="j-date">${dateLabel.charAt(0).toUpperCase() + dateLabel.slice(1)}</div>`;
+
+      if (mode === 'ochtend') {
+        const y = yesterdayJournalEntry();
+        const tip = y && y.daily && y.daily.tomorrow ? y.daily.tomorrow : '';
+        const sl = jSleepCalc();
+        return `
+          ${tabs}
+          <div class="card">
+            <label class="label">Hoe heb je geslapen?</label>
+            <div class="j-times">
+              <label>Naar bed<input type="time" class="form-input" value="${esc(jd.bed)}" oninput="jTime('bed', this.value)"></label>
+              <span aria-hidden="true">→</span>
+              <label>Opgestaan<input type="time" class="form-input" value="${esc(jd.wake)}" oninput="jTime('wake', this.value)"></label>
+            </div>
+            <div id="j-sleeptxt" style="font-size: 12px; margin: 10px 0 6px; color: ${sl !== null && sl >= 420 ? '#22c55e' : '#a3a3a3'};">${jSleepText()}</div>
+            ${jSliderHtml('sleep', '😴 Slaapkwaliteit')}
+            ${jSliderHtml('energy', '⚡ Energie')}
+          </div>
+          ${tip ? `<div class="j-tip"><span>Gisteren: morgen beter</span>"${esc(tip)}"</div>` : ''}
+          <div class="card j-main">
+            <label class="j-q" for="j-goals">Wat zijn 3 dingen die ik vandaag wil waarmaken?</label>
+            <textarea class="textarea j-lines" id="j-goals" data-jf="goals" placeholder="1.&#10;2.&#10;3." oninput="jSet('goals', this.value)">${esc(jd.goals || '')}</textarea>
+            <div class="j-hint">Vanavond vink je ze af.</div>
+          </div>
+          <button class="btn btn-primary" id="j-save" style="width: 100%; padding: 18px;" onclick="saveJournalDay('ochtend')">${jd.morningAt ? 'Ochtend bijwerken' : 'Ochtend opslaan'}</button>
+          <div class="j-foot">±2 minuten · vanavond verder bij Avond</div>
+        `;
+      }
+
+      const prompt = journalPromptFor(jd.date, jd.swap);
+      const goals = jGoalList(jd.goals);
+      const done = goals.filter((g, i) => jd.goalsDone[i]).length;
+      return `
+        ${tabs}
+        <div class="card j-main gold">
+          <label class="j-q" for="j-grat">Waar ben ik dankbaar voor vandaag?</label>
+          <textarea class="textarea j-lines" id="j-grat" data-jf="gratitude" placeholder="1.&#10;2.&#10;3." oninput="jSet('gratitude', this.value)">${esc(jd.gratitude || '')}</textarea>
+        </div>
+
+        <div class="card j-main">
+          <div class="j-qhead">
+            <span>Vraag van vandaag · ${prompt.theme}</span>
+            <button class="j-swap" onclick="jSwapPrompt()">${jd.swap ? '↺ Vorige vraag' : '↻ Andere vraag'}</button>
+          </div>
+          <label class="j-q" for="j-answer" style="margin-top: 10px;">${esc(prompt.text)}</label>
+          <textarea class="textarea" id="j-answer" data-jf="answer" placeholder="Je antwoord…" oninput="jSet('answer', this.value)">${esc(jd.answer || '')}</textarea>
+        </div>
+
+        <div class="card">
+          <label class="j-lbl green" for="j-win">Overwinning van vandaag</label>
+          <input type="text" class="form-input" id="j-win" data-jf="win" value="${esc(jd.win || '')}" placeholder="Wat deed jíj vandaag goed, hoe klein ook?" oninput="jSet('win', this.value)">
+        </div>
+
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span class="label" style="margin: 0;">Waargemaakt?</span>
+            ${goals.length ? `<span id="j-goalscore" style="font-size: 13px; color: #22c55e; font-weight: 500;">${done} / ${goals.length}</span>` : ''}
+          </div>
+          ${goals.length ? `<div style="display: flex; flex-direction: column; gap: 6px; margin-top: 12px;">
+            ${goals.map((g, i) => `
+              <label class="j-goal ${jd.goalsDone[i] ? 'done' : ''}" id="j-goal-${i}">
+                <input type="checkbox" ${jd.goalsDone[i] ? 'checked' : ''} onchange="jGoalToggle(${i}, this.checked)">
+                <span>${esc(g)}</span>
+              </label>`).join('')}
+          </div>` : `<div class="j-hint" style="margin-top: 10px;">Je hebt vanochtend geen doelen opgeschreven. <a href="#" onclick="setJMode('ochtend'); return false;">Nu nog invullen →</a></div>`}
+        </div>
+
+        <div class="card">
+          <label class="label">Hoe was je dag?</label>
+          ${jSliderHtml('mood', '😊 Stemming')}
+          ${jSliderHtml('focus', '🧠 Focus')}
+          ${jSliderHtml('stress', '😰 Stress')}
+          ${jSliderHtml('libido', '🔥 Libido')}
+        </div>
+
+        <details class="j-opt" ${jd.hard ? 'open' : ''}>
+          <summary><span>Lastig moment vandaag? <i>· optioneel</i></span><b aria-hidden="true"></b></summary>
+          <textarea class="textarea" data-jf="hard" placeholder="Wat was de trigger, en wat deed je?" oninput="jSet('hard', this.value)">${esc(jd.hard || '')}</textarea>
+        </details>
+
+        <div class="card">
+          <label class="j-lbl gold" for="j-tom">Morgen beter</label>
+          <input type="text" class="form-input" id="j-tom" data-jf="tomorrow" value="${esc(jd.tomorrow || '')}" placeholder="Eén ding dat je morgen anders doet" oninput="jSet('tomorrow', this.value)">
+          <div class="j-hint">Staat morgenochtend klaar boven je 3 doelen.</div>
+        </div>
+
+        <details class="j-opt" ${jd.free ? 'open' : ''}>
+          <summary><span>Vrij schrijven <i>· optioneel</i></span><b aria-hidden="true"></b></summary>
+          <textarea class="textarea" data-jf="free" placeholder="Wat houdt je bezig?" oninput="jSet('free', this.value)">${esc(jd.free || '')}</textarea>
+        </details>
+
+        <button class="btn btn-primary" id="j-save" style="width: 100%; padding: 18px; margin-top: 8px;" onclick="saveJournalDay('avond')">${jd.eveningAt ? 'Dag bijwerken' : 'Dag afsluiten'}</button>
+        <div class="j-foot">±5 minuten</div>
+      `;
+    }
+
+    function renderDailyEntry(entry) {
+      const d = entry.daily || {};
+      const goals = jGoalList(d.goals);
+      const done = goals.filter((g, i) => (d.goalsDone || [])[i]).length;
+      const lines = t => jGoalList(t).map(x => `<li>${esc(x)}</li>`).join('');
+      const isToday = entry.date === todayStr();
+      return `
+        <div class="entry">
+          <div class="entry-date">${formatDate(entry.date)}${d.theme ? ` · <span style="color: #8a8a8a;">${esc(d.theme)}</span>` : ''}</div>
+          <div class="entry-scores">
+            ${entry.mood ? `<span class="entry-score" style="color: ${getColor(entry.mood)}">😊 ${entry.mood}</span>` : ''}
+            ${entry.energy ? `<span class="entry-score" style="color: ${getColor(entry.energy)}">⚡ ${entry.energy}</span>` : ''}
+            ${d.sleepMin ? `<span class="entry-score" style="color: #a3a3a3;">😴 ${Math.floor(d.sleepMin / 60)}u${String(d.sleepMin % 60).padStart(2, '0')}</span>` : ''}
+            ${goals.length ? `<span class="entry-score" style="color: ${done === goals.length ? '#22c55e' : '#a3a3a3'};">🎯 ${done}/${goals.length}</span>` : ''}
+          </div>
+          ${d.gratitude ? `<div class="j-h-lbl">Dankbaar</div><ol class="j-h-list">${lines(d.gratitude)}</ol>` : ''}
+          ${d.answer ? `<div class="j-h-lbl">${esc(d.prompt || 'Vraag van vandaag')}</div><div class="entry-content">${esc(d.answer)}</div>` : ''}
+          ${d.win ? `<div class="j-h-lbl">Overwinning</div><div class="entry-content">${esc(d.win)}</div>` : ''}
+          ${d.tomorrow ? `<div class="j-h-lbl">Morgen beter</div><div class="entry-content">${esc(d.tomorrow)}</div>` : ''}
+          ${d.hard ? `<div class="j-h-lbl">Lastig moment</div><div class="entry-content">${esc(d.hard)}</div>` : ''}
+          ${entry.content ? `<div class="j-h-lbl">Vrij geschreven</div><div class="entry-content">${esc(entry.content)}</div>` : ''}
+          <div class="entry-actions">
+            ${isToday ? `<button class="entry-action" onclick="state.journalTab = 'new'; state.editingId = null; render(); window.scrollTo(0, 0);">✏️ Bewerken</button>` : ''}
+            <button class="entry-action delete" onclick="deleteEntry('${entry.id}')">🗑️ Verwijderen</button>
+          </div>
+        </div>`;
+    }
+
     function renderJournal() {
       return `
         <div class="page-header">
@@ -5763,12 +6437,12 @@
         </div>
         
         <div class="tabs">
-          <button class="tab ${state.journalTab === 'new' ? 'active' : ''}" onclick="setJournalTab('new')">Nieuwe Entry</button>
+          <button class="tab ${state.journalTab === 'new' ? 'active' : ''}" onclick="setJournalTab('new')">Vandaag</button>
           <button class="tab ${state.journalTab === 'history' ? 'active' : ''}" onclick="setJournalTab('history')">Geschiedenis</button>
           <button class="tab ${state.journalTab === 'patterns' ? 'active' : ''}" onclick="setJournalTab('patterns')">Patronen</button>
         </div>
         
-        ${state.journalTab === 'new' ? renderNewEntry() : ''}
+        ${state.journalTab === 'new' ? (state.editingId ? renderNewEntry() : renderJournalToday()) : ''}
         ${state.journalTab === 'history' ? renderHistory() : ''}
         ${state.journalTab === 'patterns' ? renderPatterns() : ''}
       `;
@@ -5843,7 +6517,7 @@
       if (state.entries.length === 0) {
         return `<div class="empty">Nog geen entries. Begin met schrijven!</div>`;
       }
-      return state.entries.map(entry => `
+      return state.entries.map(entry => entry.daily ? renderDailyEntry(entry) : `
         <div class="entry">
           <div class="entry-date">${formatDate(entry.date)}</div>
           <div class="entry-scores">
@@ -5876,7 +6550,7 @@
 
     function renderPatterns() {
       const insights = getInsights();
-      const entriesWithHabits = state.entries.filter(e => e.habits && Object.keys(e.habits).length > 0);
+      const entriesWithHabits = state.entries.filter(e => e.habits && Object.keys(e.habits).length > 0 && e.mood);
       
       let html = `
         <div class="info-box">
@@ -6149,7 +6823,7 @@
       state.workouts = [];
       state.workoutSets = [];
       state.trainForm = null;
-      Object.assign(state, { ts: null, tpick: {}, tswap: null, tsetup: null, tc: null, tday: null, trainView: 'list' });
+      Object.assign(state, { ts: null, tpick: {}, tswap: null, tsetup: null, tc: null, tday: null, trainView: 'list', jd: null, jMode: null });
         }
         render();
       });
