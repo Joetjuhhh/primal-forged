@@ -530,6 +530,21 @@
     .tf-ev { font-size: 9px; color: #a3a3a3; border: 1px solid #262626; padding: 3px 6px; white-space: nowrap; flex-shrink: 0; }
     .tf-add { display: block; width: 100%; margin-top: 12px; background: transparent; border: 1px solid #262626; color: #e5484d; font-family: inherit; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; min-height: 44px; cursor: pointer; }
     .tf-add:active { background: #1a0606; }
+    .sd-box { margin-top: 12px; border-top: 1px solid #1c1c1c; border-bottom: none; }
+    .sd-now { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+    .sd-now div { border: 1px solid #1c1c1c; background: #050505; padding: 10px 6px; text-align: center; }
+    .sd-now b { display: block; font-size: 20px; font-weight: 300; color: #fafafa; }
+    .sd-now span { display: block; font-size: 9px; color: #8a8a8a; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 3px; line-height: 1.3; }
+    .sd-grid { margin-top: 12px; display: flex; flex-direction: column; gap: 2px; }
+    .sd-row { display: grid; grid-template-columns: 30px repeat(13, minmax(0, 1fr)); gap: 2px; align-items: center; }
+    .sd-row b { font-size: 10px; color: #8a8a8a; font-weight: 400; }
+    .sd-row.now b { color: #d9a441; font-weight: 600; }
+    .sd-row span { height: 14px; }
+    .sd-row.now span { outline: 1px solid #333; }
+    .sd-head i { font-size: 9px; color: #737373; font-style: normal; text-align: center; }
+    .sd-app { background: #050505; border: 1px solid #1c1c1c; padding: 12px; font-size: 12px; line-height: 1.6; margin-top: 12px; }
+    .sd-links { display: flex; gap: 8px; margin-top: 8px; }
+    .sd-links a { flex: 1; text-align: center; border: 1px solid #262626; padding: 10px; text-decoration: none; color: #e5484d; font-size: 12px; }
     #pf-night { position: fixed; inset: 0; background: #b80000; mix-blend-mode: multiply; pointer-events: none; z-index: 2147483647; }
   </style>
 </head>
@@ -827,7 +842,7 @@
               '<b>Je klok gaat goed staan.</b> Mensen die een week kampeerden met alleen daglicht, kregen een klok die gelijkliep met zonsopgang en -ondergang en werden \'s avonds eerder moe. [1]',
               '<b>Beter in je vel.</b> Bij bijna 87.000 mensen met een lichtmeter om de pols hadden mensen met meer licht overdag minder vaak een depressie, en mensen met veel licht \'s nachts juist vaker. Een verband, nog geen bewijs. [2]',
               '<b>Je slaaphormoon.</b> Daglicht remt overdag melatonine: overdag wakker, \'s avonds op tijd moe. [3]',
-              '<b>Vitamine D.</b> Van maart t/m oktober maakt je huid vitamine D aan als je tussen 11 en 15 uur 15–30 minuten buiten bent met gezicht en handen bloot. In de winter staat de zon daar te laag voor. [4]'
+              '<b>Vitamine D.</b> Van het voorjaar tot het najaar maakt je huid vitamine D aan als je tussen 11 en 15 uur 15–30 minuten buiten bent met gezicht en handen bloot. [4] Vuistregel: alleen als je schaduw korter is dan jijzelf. In Nederland is dat volop van ongeveer april t/m augustus, weinig in maart en september, en van oktober t/m februari niets. Bij Voeding → Supplementen → Vitamine D zie je de zonnestand van vandaag.'
             ])],
             ['Valkuilen & tips', ulH([
               'Ochtendlicht is voor je klok, middaglicht voor vitamine D: twee verschillende momenten.',
@@ -1306,23 +1321,26 @@
     }
 
     function getAverageMood() {
-      const list = state.entries.filter(e => e.mood);
+      const list = journaledEntries().filter(e => e.mood);
       if (list.length === 0) return '—';
       const sum = list.reduce((a, e) => a + e.mood, 0);
       return (sum / list.length).toFixed(1);
     }
 
     function getAverageEnergy() {
-      const list = state.entries.filter(e => e.energy);
+      const list = journaledEntries().filter(e => e.energy);
       if (list.length === 0) return '—';
       const sum = list.reduce((a, e) => a + e.energy, 0);
       return (sum / list.length).toFixed(1);
     }
 
+    // Alleen echte journal-dagen tellen (niet een nacht die je alleen bij Slaap invulde)
+    function isJournaled(e) { return !e.daily || !!(e.daily.morningAt || e.daily.eveningAt); }
+    function journaledEntries() { return state.entries.filter(isJournaled); }
     function getJournalStreak() {
-      if (state.entries.length === 0) return 0;
+      const dates = [...new Set(journaledEntries().map(e => e.date))].sort().reverse();
+      if (!dates.length || dates[0] < dateAdd(todayStr(), -1)) return 0;
       let streak = 1;
-      const dates = [...new Set(state.entries.map(e => e.date))].sort().reverse();
       for (let i = 1; i < dates.length; i++) {
         const d1 = new Date(dates[i-1]);
         const d2 = new Date(dates[i]);
@@ -1404,9 +1422,29 @@
 
 
 
+    // Gewoontes van die dag: wat je op het dashboard afvinkte (valt terug op wat bij het opslaan in de entry stond)
+    function patternEntries() {
+      return journaledEntries().filter(e => e.mood).map(e => {
+        const day = e.date === todayStr() ? state.habits : state.habitHistory[e.date];
+        return { ...e, habits: day && Object.keys(day).length ? day : (e.habits || {}) };
+      }).filter(e => Object.keys(e.habits).length > 0);
+    }
+    function sleepInsights() {
+      // Energie en stemming na nachten van 7+ uur vs korter
+      const rows = journaledEntries().map(e => ({ e, n: sleepNight(e.date) })).filter(x => x.n);
+      const long = rows.filter(x => x.n.min >= 420), short = rows.filter(x => x.n.min < 420);
+      const out = [];
+      if (long.length >= 2 && short.length >= 2) {
+        const avg = (arr, k) => { const v = arr.map(x => x.e[k]).filter(Boolean); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+        [['energy', 'energie'], ['mood', 'stemming']].forEach(([k, l]) => {
+          const a = avg(long, k), b = avg(short, k);
+          if (a !== null && b !== null && a - b >= 0.5) out.push({ icon: '😴', title: `7+ uur slaap verbetert je ${l}`, text: `Na 7+ uur: ${a.toFixed(1)} | Korter: ${b.toFixed(1)} (+${(a - b).toFixed(1)})`, positive: true, impact: a - b });
+        });
+      }
+      return out;
+    }
     function getInsights() {
-      // Filter entries that have habits data
-      const entriesWithHabits = state.entries.filter(e => e.habits && Object.keys(e.habits).length > 0 && e.mood);
+      const entriesWithHabits = patternEntries();
       
       if (entriesWithHabits.length < 3) return [];
       
@@ -1894,7 +1932,7 @@
       return `
         <div class="page-header">
           <div class="greeting">${getGreeting()}, Strijder</div>
-          <div class="greeting-sub">${hard75Active() ? '75 Hard is je hoofdfocus' : 'Dag ' + (state.entries.length > 0 ? getJournalStreak() : 1) + ' van je transformatie'}</div>
+          <div class="greeting-sub">${hard75Active() ? '75 Hard is je hoofdfocus' : 'Dag ' + Math.max(1, getJournalStreak()) + ' van je transformatie'}</div>
         </div>
 
         ${renderRankCard()}
@@ -1909,9 +1947,9 @@
         </div>
         
         <div class="stats">
-          <div class="stat">
-            <div class="stat-value" style="color: ${phase.color}">${retDays}</div>
-            <div class="stat-label">Retention</div>
+          <div class="stat" style="cursor: pointer;" onclick="setSection('sleep')">
+            <div class="stat-value">${(() => { const a = sleepAvg(sleepNights(dateAdd(todayStr(), -6), todayStr())); return a !== null ? fmtSleepDur(a) : '—'; })()}</div>
+            <div class="stat-label">Slaap</div>
           </div>
           <div class="stat">
             <div class="stat-value">${activeChallenges().length}</div>
@@ -1955,10 +1993,6 @@
         </div>
         
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-          <button class="btn btn-secondary btn-small" onclick="setSection('journal')">+ Journal</button>
-          <button class="btn btn-secondary btn-small" onclick="setSection('retention')">Retention →</button>
-        </div>
         
         ${state.showHabitModal ? renderHabitModal() : ''}
       `;
@@ -2480,7 +2514,20 @@
       continue: { label: 'Mild',   text: 'Missen breekt je reeks, de challenge loopt gewoon door.' }
     };
 
-    // link: 'habit:<key>' leest de habit van het dashboard, 'retention' de Retention-streak, 'journal' je Journal
+    // link: 'habit:<key>' leest de habit van het dashboard, 'retention' de Retention-streak,
+    // 'journal' en 'auto:*' vinken vanzelf af vanuit Journal of Slaap (zie autoLinks)
+    const autoLinks = {
+      journal: { via: 'Journal', btn: 'Schrijven →', go: "setSection('journal')", info: 'Telt automatisch zodra je die dag je Journal (ochtend of avond) invult.',
+        done: d => state.entries.some(e => e.date === d && isJournaled(e)) },
+      'auto:sleep8': { via: 'Slaap', btn: 'Invullen →', go: "setSection('sleep')", info: 'Telt automatisch als je bij Slaap (of Journal-ochtend) een nacht van 8 uur of meer invult.',
+        done: d => { const n = sleepNight(d); return !!n && n.min >= 480; } },
+      'auto:wake630': { via: 'Slaap', btn: 'Invullen →', go: "setSection('sleep')", info: 'Telt automatisch als je opsta-tijd bij Slaap (of Journal-ochtend) uiterlijk 06:30 is.',
+        done: d => { const n = sleepNight(d); const w = n ? hm2min(n.wake) : null; return w !== null && w <= 390; } },
+      'auto:screen': { via: 'Avondroutine', btn: 'Afvinken →', go: "setSection('sleep')", info: 'Telt automatisch als je bij Slaap → Avondroutine "Scherm weg" afvinkt.',
+        done: d => ((sleepSettings().routine || {})[d] || []).includes('screen') },
+      'auto:gratitude': { via: 'Journal', btn: 'Schrijven →', go: "state.jMode = 'avond'; setSection('journal')", info: 'Telt automatisch als je \'s avonds in je Journal 3 dingen opschrijft waar je dankbaar voor bent.',
+        done: d => state.entries.some(e => e.date === d && e.daily && jGoalList(e.daily.gratitude).length >= 3) }
+    };
     const challengeTemplates = [
       { id: 'cold', domain: 'physical', name: 'Koud douchen', kind: 'check', link: 'habit:coldShower', durations: [7, 30, 90], rule: 'jokers' },
       { id: 'sun', domain: 'physical', name: 'Ochtendzon', kind: 'check', link: 'habit:sunlight', durations: [14, 30], rule: 'jokers' },
@@ -2497,11 +2544,11 @@
         what: 'Dag 1: 10 push-ups. Elke dag 3 meer. Dag 30: 97.',
         how: 'Verdeel het over de dag in sets. Goede techniek gaat voor het aantal.',
         why: 'Kleine stappen per dag bouwen kracht en discipline op.' },
-      { id: 'sleep', domain: 'physical', name: '8 uur slaap', kind: 'check', durations: [14, 30], rule: 'jokers',
+      { id: 'sleep', domain: 'physical', name: '8 uur slaap', kind: 'check', link: 'auto:sleep8', durations: [14, 30], rule: 'jokers',
         what: 'Elke nacht minimaal 8 uur in bed.',
         how: 'Vaste bedtijd, telefoon buiten de slaapkamer, kamer koel en donker.',
         why: 'Slaap is je belangrijkste herstel: energie, focus, eetlust en hormonen hangen ervan af.' },
-      { id: 'early', domain: 'physical', name: 'Vroeg opstaan (voor 06:30)', kind: 'check', durations: [21, 30], rule: 'jokers',
+      { id: 'early', domain: 'physical', name: 'Vroeg opstaan (voor 06:30)', kind: 'check', link: 'auto:wake630', durations: [21, 30], rule: 'jokers',
         what: 'Elke dag voor 06:30 uit bed, ook in het weekend.',
         how: 'Wekker aan de andere kant van de kamer. Direct licht aan en een glas water.',
         why: 'Een rustige ochtend voor jezelf geeft je regie over je dag.' },
@@ -2527,7 +2574,7 @@
         what: 'Geen social media voor het middaguur.',
         how: 'Apps van je beginscherm halen, telefoon niet naast je bed.',
         why: 'Je beste uren gaan naar je eigen doelen in plaats van naar andermans feed.' },
-      { id: 'noscreen', domain: 'mental', name: 'Schermvrij laatste uur voor bed', kind: 'check', durations: [30], rule: 'jokers',
+      { id: 'noscreen', domain: 'mental', name: 'Schermvrij laatste uur voor bed', kind: 'check', link: 'auto:screen', durations: [30], rule: 'jokers',
         what: 'Het laatste uur voor het slapen geen telefoon, tv of laptop.',
         how: 'Telefoon aan de lader buiten de slaapkamer. Lezen of stretchen in plaats daarvan.',
         why: 'Je valt sneller in slaap en slaapt dieper.' },
@@ -2550,9 +2597,9 @@
         how: 'Wees specifiek: benoem wat je echt waardeert.',
         why: 'Je leert letten op het goede in anderen, en mensen voelen zich gezien.' },
 
-      { id: 'gratitude', domain: 'purpose', name: 'Dankbaarheid: 3 dingen per dag', kind: 'check', durations: [30], rule: 'jokers',
+      { id: 'gratitude', domain: 'purpose', name: 'Dankbaarheid: 3 dingen per dag', kind: 'check', link: 'auto:gratitude', durations: [30], rule: 'jokers',
         what: 'Elke dag 3 dingen opschrijven waar je dankbaar voor bent.',
-        how: '\'s Avonds, kort. Kan ook in je Journal.',
+        how: '\'s Avonds in je Journal, bij "Waar ben ik dankbaar voor vandaag?". Drie regels = afgevinkt.',
         why: 'Je stemming verschuift langzaam naar wat er wél goed gaat.' },
       { id: 'gooddeed', domain: 'purpose', name: 'Elke dag een goede daad', kind: 'check', durations: [30], rule: 'jokers',
         what: 'Elke dag iets doen voor een ander, zonder iets terug te verwachten.',
@@ -2650,7 +2697,7 @@
       let done = false;
       const hk = chLinkedHabit(c);
       if (hk) done = habitDoneOn(hk, date);
-      else if (c.link === 'journal') done = state.entries.some(e => e.date === date);
+      else if (autoLinks[c.link]) done = autoLinks[c.link].done(date);
       else if (c.kind === 'number') done = !!log && hasValue(log.value) && Number(log.value) >= chTargetFor(c, diffDays(c.start_date, date) + 1);
       else done = !!(log && log.done);
 
@@ -2733,6 +2780,8 @@
       state.challengesError = null;
       // Alleen challenges van de nieuwe versie (met een soort)
       state.challenges = (data || []).filter(c => c.kind);
+      // Oudere challenges zonder koppeling krijgen de koppeling van hun sjabloon (bijv. 8 uur slaap → Slaap)
+      state.challenges.forEach(c => { if (!c.link) { const t = chTemplate(c.template_id); if (t && t.link) c.link = t.link; } });
 
       const logs = await supabaseClient.from('challenge_logs').select('*').eq('user_id', state.user.id);
       if (logs.error) {
@@ -3044,7 +3093,7 @@
           </div>`;
       }
 
-      if (c.kind === 'number' && !hk && c.link !== 'journal') {
+      if (c.kind === 'number' && !hk && !autoLinks[c.link]) {
         const log = chLog(c, date);
         const val = log && hasValue(log.value) ? Number(log.value) : 0;
         const target = chTargetFor(c, dayN);
@@ -3064,15 +3113,16 @@
           </div>`;
       }
 
-      if (c.link === 'journal') {
+      if (autoLinks[c.link]) {
+        const al = autoLinks[c.link];
         return `
           <div class="subtask" style="padding: 12px 0; border-bottom: 1px solid #1c1c1c;">
             <div class="goal-check ${done ? 'checked' : ''}" style="width: 28px; height: 28px;">${done ? '✓' : ''}</div>
             <div style="flex: 1; min-width: 0;" ${titleLink}>
               <div style="font-size: 14px;">${esc(c.name)}</div>
-              <div style="font-size: 11px; color: #8a8a8a;">${sub} · via Journal</div>
+              <div style="font-size: 11px; color: #8a8a8a;">${sub} · via ${al.via}</div>
             </div>
-            ${!done && !isYesterday ? `<button class="entry-action" onclick="setSection('journal')">Schrijven →</button>` : ''}
+            ${!done && !isYesterday ? `<button class="entry-action" onclick="${al.go}">${al.btn}</button>` : ''}
           </div>`;
       }
 
@@ -3120,7 +3170,7 @@
       const todayRows = started.map(c => renderChActionRow(c, evs[c.id], todayStr(), false)).join('') + active.filter(c => c.start_date > todayStr()).map(c => `<div style="padding: 12px 0; border-bottom: 1px solid #1c1c1c; font-size: 13px; color: #a3a3a3;">${esc(c.name)} · start ${fmtDateShort(c.start_date)}</div>`).join('');
       const yRows = active.filter(c => {
         const ev = evs[c.id];
-        return ev.yesterdayDay && ev.yesterdayDay.st === 'pending' && c.kind !== 'abstain' && c.link !== 'retention' && c.link !== 'journal';
+        return ev.yesterdayDay && ev.yesterdayDay.st === 'pending' && c.kind !== 'abstain' && c.link !== 'retention' && !autoLinks[c.link];
       }).map(c => renderChActionRow(c, evs[c.id], yesterday, true)).join('');
       const openToday = active.filter(c => evs[c.id].todayDay && evs[c.id].todayDay.st === 'pending').length;
 
@@ -3245,7 +3295,7 @@
                 <span class="badge">${t.durations.join(' · ')} dagen</span>
                 ${t.link && t.link.startsWith('habit:') ? `<span class="badge">telt via habit ${habitConfig[t.link.slice(6)].icon}</span>` : ''}
                 ${t.link === 'retention' ? '<span class="badge">via Retention</span>' : ''}
-                ${t.link === 'journal' ? '<span class="badge">via Journal</span>' : ''}
+                ${autoLinks[t.link] ? `<span class="badge">via ${autoLinks[t.link].via}</span>` : ''}
                 ${running ? '<span class="badge" style="color: #22c55e;">loopt al</span>' : ''}
               </div>
             </button>
@@ -3289,7 +3339,7 @@
           ` : ''}
           ${t && t.link && t.link.startsWith('habit:') ? `<div class="info-text" style="margin-top: 12px;">🔗 Telt automatisch via je habit ${habitConfig[t.link.slice(6)].icon} ${habitConfig[t.link.slice(6)].label} op het dashboard. Je vinkt maar één keer af.</div>` : ''}
           ${t && t.link === 'retention' ? `<div class="info-text" style="margin-top: 12px;">🔗 Loopt via je Retention-streak. Reset je die, dan stopt deze challenge.</div>` : ''}
-          ${t && t.link === 'journal' ? `<div class="info-text" style="margin-top: 12px;">🔗 Telt automatisch zodra je die dag een Journal-entry hebt.</div>` : ''}
+          ${t && autoLinks[t.link] ? `<div class="info-text" style="margin-top: 12px;">🔗 ${autoLinks[t.link].info}</div>` : ''}
         </div>
 
         ${linkedTaken ? `
@@ -3715,7 +3765,7 @@
           const val = log && hasValue(log.value) ? Number(log.value) : 0;
           right = `<span style="color: ${done ? '#22c55e' : '#a3a3a3'};">${fmtInt(val)}/${fmtInt(chTargetFor(c, ev.dayNum))}</span>`;
         } else if (hk) right = `<span style="color: ${done ? '#22c55e' : '#8a8a8a'};">${done ? '✓' : 'via ' + habitConfig[hk].icon}</span>`;
-        else if (c.link === 'journal') right = `<span style="color: ${done ? '#22c55e' : '#8a8a8a'};">${done ? '✓' : 'via Journal'}</span>`;
+        else if (autoLinks[c.link]) right = `<span style="color: ${done ? '#22c55e' : '#8a8a8a'};">${done ? '✓' : 'via ' + autoLinks[c.link].via}</span>`;
         else right = `<button class="goal-check ${done ? 'checked' : ''}" style="width: 24px; height: 24px; font-size: 12px;" onclick="event.stopPropagation(); chToggle('${c.id}', '${today}')" aria-label="${esc(c.name)} afvinken">${done ? '✓' : ''}</button>`;
         return `
           <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px solid #1c1c1c; cursor: pointer;" onclick="state.bodyTab = 'challenges'; state.chView = 'detail'; state.chDetailId = '${c.id}'; setSection('body');">
@@ -3750,7 +3800,11 @@
       measurement: 10,
       hard75Day: 40,
       challengeDonePerDay: 8,
-      hard75Done: 1500
+      hard75Done: 1500,
+      training: 10,      // dag met minstens één training
+      sleepLog: 10,      // nacht ingevuld bij Slaap of Journal-ochtend
+      sleepRoutine: 10,  // avondroutine: 5 of meer van de 7 afgevinkt
+      foodDay: 10        // dagboek: 3 of meer dingen gelogd
     };
 
     const ranks = [
@@ -3835,7 +3889,7 @@
     function computeProgress() {
       const today = todayStr();
       const hist = { ...state.habitHistory, [today]: { ...state.habits } };
-      const journalDates = new Set(state.entries.map(e => e.date));
+      const journalDates = new Set(journaledEntries().map(e => e.date));
       const retentions = state.retentionAll || [];
 
       // Challenges één keer doorrekenen
@@ -3863,6 +3917,9 @@
       state.challenges.forEach(c => starts.push(c.start_date));
       retentions.forEach(r => r.start_date && starts.push(r.start_date));
       state.bodyStats.forEach(b => starts.push(b.entry_date));
+      (state.workouts || []).forEach(w => starts.push(w.date));
+      Object.keys(state.foodDayCounts || {}).forEach(d => starts.push(d));
+      Object.keys(sleepSettings().routine || {}).forEach(d => starts.push(d));
       const first = starts.filter(Boolean).filter(d => d <= today).sort()[0] || today;
 
       const retentionOn = (date) => retentions.some(r => r.start_date && r.start_date <= date && (r.is_active ? date <= today : (r.end_date ? date < r.end_date : false)));
@@ -3873,6 +3930,8 @@
       let total = 0, comeback = false, hadActivity = false, goodDays = 0, primalDate = null;
 
       const valuesDate = valuesBonusDate();
+      const trainDates = new Set((state.workouts || []).map(w => w.date));
+      const routine = sleepSettings().routine || {};
       for (let date = first; date <= today; date = dateAdd(date, 1)) {
         const h = hist[date] || {};
         const pos = positiveHabitKeys.filter(k => h[k]).length;
@@ -3893,6 +3952,10 @@
         let xp = pos * XP.habit + (journal ? XP.journal : 0);
         chs.forEach(x => { if (x.done) xp += x.hard ? XP.hard75Day : XP.challengeDay; });
         if (ret) xp += XP.retentionDay;
+        if (trainDates.has(date)) xp += XP.training;
+        if (sleepNight(date)) xp += XP.sleepLog;
+        if ((routine[date] || []).length >= 5) xp += XP.sleepRoutine;
+        if ((state.foodDayCounts || {})[date] >= 3) xp += XP.foodDay;
         const measured = state.bodyStats.some(b => b.entry_date === date);
         if (measured && !measuredWeeks.has(weekKey(date))) { xp += XP.measurement; measuredWeeks.add(weekKey(date)); }
 
@@ -4071,6 +4134,10 @@
         ['Journal-entry', `+${XP.journal} per dag`],
         ['Challenge-dag gehaald', `+${XP.challengeDay} per challenge`],
         ['Retention-dag', `+${XP.retentionDay} per dag`],
+        ['Training', `+${XP.training} per dag`],
+        ['Nacht ingevuld (Slaap)', `+${XP.sleepLog} per nacht`],
+        ['Avondroutine 5/7 of meer', `+${XP.sleepRoutine} per avond`],
+        ['Voeding: 3+ dingen gelogd', `+${XP.foodDay} per dag`],
         ['Lichaamsmeting', `+${XP.measurement} (1x per week)`],
         ['Waarden-opdracht', `+${VALUES_BONUS_XP} (eenmalig)`],
         ['75 Hard-dag volledig', `+${XP.hard75Day}`],
@@ -5913,7 +5980,7 @@
 
       const workouts = (state.workouts || []).filter(w => inWeek(w.date));
       const minutes = workouts.reduce((a, w) => a + (Number(w.duration_min) || 0), 0);
-      const journals = state.entries.filter(e => inWeek(e.date)).length;
+      const journals = journaledEntries().filter(e => inWeek(e.date)).length;
 
       // Gewicht: laatste meting tot en met deze week vs. laatste meting daarvoor
       const wl = bodyEntriesFor('weight');
@@ -6840,7 +6907,7 @@
         
         <div class="stats">
           <div class="stat">
-            <div class="stat-value">${state.entries.length}</div>
+            <div class="stat-value">${journaledEntries().length}</div>
             <div class="stat-label">Entries</div>
           </div>
           <div class="stat">
@@ -6937,10 +7004,10 @@
     }
 
     function renderHistory() {
-      if (state.entries.length === 0) {
+      if (journaledEntries().length === 0) {
         return `<div class="empty">Nog geen entries. Begin met schrijven!</div>`;
       }
-      return state.entries.map(entry => entry.daily ? renderDailyEntry(entry) : `
+      return journaledEntries().map(entry => entry.daily ? renderDailyEntry(entry) : `
         <div class="entry">
           <div class="entry-date">${formatDate(entry.date)}</div>
           <div class="entry-scores">
@@ -6973,17 +7040,19 @@
 
     function renderPatterns() {
       const insights = getInsights();
-      const entriesWithHabits = state.entries.filter(e => e.habits && Object.keys(e.habits).length > 0 && e.mood);
+      const entriesWithHabits = patternEntries();
+      insights.push(...sleepInsights());
+      insights.sort((a, b) => b.impact - a.impact);
       
       let html = `
         <div class="info-box">
           <div class="info-title">📊 Hoe werkt dit?</div>
-          <div class="info-text">De app analyseert welke habits correleren met hogere of lagere mood/energie scores. Hoe meer data, hoe accurater de patronen.</div>
+          <div class="info-text">De app vergelijkt je stemming en energie met je gewoontes en je slaap van diezelfde dag. Hoe meer dagen, hoe betrouwbaarder.</div>
         </div>
       `;
       
-      if (entriesWithHabits.length < 3) {
-        html += `<div class="empty">Log minimaal 3 entries MET habits om patronen te zien.<br><br>💡 Tip: Vink habits af op Dashboard vóórdat je een journal entry maakt!</div>`;
+      if (entriesWithHabits.length < 3 && !insights.length) {
+        html += `<div class="empty">Nog te weinig gegevens.<br><br>Sluit minimaal 3 dagen af met je avond-journal (daar vul je je stemming in). De app koppelt dat vanzelf aan de gewoontes die je die dag afvinkte en aan je slaap.</div>`;
       } else if (insights.length === 0) {
         html += `<div class="empty">Nog geen duidelijke patronen gevonden.<br><br>Je hebt ${entriesWithHabits.length} entries met habits. Blijf consistent loggen voor betere inzichten!</div>`;
       } else {
@@ -7334,6 +7403,11 @@
       if (res.error) { state.foodError = true; state.foodLogs = []; return; }
       state.foodError = false;
       state.foodLogs = res.data || [];
+      // Voor XP: aantal gelogde items per dag, alle tijd (alleen de datumkolom)
+      const all = await supabaseClient.from('food_logs').select('date').eq('user_id', state.user.id);
+      const cnt = {};
+      (all.error ? state.foodLogs : (all.data || [])).forEach(r => { cnt[r.date] = (cnt[r.date] || 0) + 1; });
+      state.foodDayCounts = cnt;
     }
 
     // Doelen: Mifflin-St Jeor × activiteit ± doel; eiwit uit het eiwitschema; vet 30%; rest koolhydraten
@@ -7936,11 +8010,6 @@
           </div>
         </div>
         
-        <div class="card">
-          <label class="label">Account</label>
-          <div style="font-size: 12px; color: #525252; margin-bottom: 16px;">${esc(state.user.email)}</div>
-          <button class="btn btn-secondary" style="width: 100%;" onclick="signOut()">Uitloggen</button>
-        </div>
       `;
     }
 
@@ -8036,9 +8105,8 @@
       const cur = sleepSettings();
       delete cur.set;
       const n = { ...cur, ...patch };
-      // routine-historie beperken tot 60 dagen
-      const cut = dateAdd(todayStr(), -60);
-      Object.keys(n.routine || {}).forEach(d => { if (d < cut) delete n.routine[d]; });
+      // routine-historie blijft bewaard: telt mee voor je XP
+      Object.keys(n.routine || {}).forEach(d => { if (!n.routine[d] || !n.routine[d].length) delete n.routine[d]; });
       state.bodySettings = { ...(state.bodySettings || {}), sleep: n };
       try { localStorage.setItem('pf_sleep', JSON.stringify(n)); } catch (e) {}
       applyNightMode();
@@ -8387,7 +8455,7 @@
       ['☀️', 'Vitamine D', 'Een laag vitamine D gaat vaak samen met een laag testosteron. Maar extra vitamine D gaf in 11 onderzoeken samen gemiddeld géén hoger testosteron. [5] Wel nuttig tegen het wintertekort hieronder.', '10–25 µg per dag', 'Max. 100 µg. Stapelt op in je lichaam.', 'Ontbijt, met vet [8]']
     ];
     const suppLow = [
-      ['Vitamine D', 'vooral in de winter', 'Van oktober tot april staat de zon in Nederland te laag: je huid maakt dan geen vitamine D aan. [7] In Europa zit ±40% van de mensen te laag, 13% heeft een echt tekort. [6]'],
+      ['Vitamine D', 'vooral in de winter', 'Van ongeveer oktober t/m maart staat de zon in Nederland te laag: je huid maakt dan weinig tot geen vitamine D aan. [7] In Europa zit ±40% van de mensen te laag, 13% heeft een echt tekort. [6]'],
       ['Omega-3', 'als je weinig vette vis eet', 'Minder dan 1–2× per week vette vis? Neem 250–500 mg EPA+DHA per dag bij een maaltijd. Geen vis: algenolie.'],
       ['Magnesium', 'als je weinig noten, groen en volkoren eet', 'Noten, zaden, groene groente en volkoren zijn de grote bronnen.'],
       ['Zink', 'als je weinig vlees, vis of schaaldieren eet', 'Vlees, schaaldieren en eieren zijn de grote bronnen.']
@@ -8410,6 +8478,7 @@
               <div><span>Wanneer</span>${ref(when)}</div>
             </div>
             <div class="su-warn">⚠ ${ref(warn)}</div>
+            ${name === 'Vitamine D' ? renderSunD() : ''}
           </div>`).join('')}
 
         <label class="label" style="margin: 22px 0 10px;">Wat mannen waarschijnlijk tekortkomen</label>
@@ -8468,7 +8537,7 @@
       ['Vis & schaaldieren', [
         ['🦪', 'Oesters', 'Zink', '85 g (±6 oesters) → 28–32 mg zink, bijna 3× je dagbehoefte (11 mg) [1]', '1–2× per week', 'Niet dagelijks: boven 25 mg zink per dag is te veel.', 'y', 'oesters'],
         ['🦀', 'Krab', 'Zink, B12', '85 g → 3,2 mg zink [1]', 'Wanneer je wilt', '', 'y', 'krab'],
-        ['🐟', 'Vette vis (zalm, forel, haring, makreel)', 'Vitamine D, omega-3', '85 g zalm → ±14 µg vitamine D [4]', '2× per week', 'Zeker in de winter: van oktober tot april maakt je huid geen vitamine D aan. [15]', 'y', 'zalm'],
+        ['🐟', 'Vette vis (zalm, forel, haring, makreel)', 'Vitamine D, omega-3', '85 g zalm → ±14 µg vitamine D [4]', '2× per week', 'Zeker in de winter: van ongeveer oktober t/m maart maakt je huid weinig tot geen vitamine D aan. [15]', 'y', 'zalm'],
         ['🐠', 'Sardines', 'Omega-3, selenium, beetje vitamine D', '', '1–2× per week', '', 'y', 'sardines'],
         ['🫙', 'Levertraan', 'Veel vitamine D', '1 eetlepel → 34 µg vitamine D [4]', 'Max. 1 theelepel per dag', 'Bevat ook veel vitamine A.', 'y', 'levertraan']
       ]],
@@ -8550,6 +8619,101 @@
         </div>
         ${suppSourcesHtml(tFoodSources)}
       `;
+    }
+
+    // ============================================
+    // ZONNESTAND & VITAMINE D (bij Supplementen → Vitamine D)
+    // ============================================
+    // Zonnehoogte in graden (benadering, nauwkeurig tot ±0,5°)
+    function sunElevation(date, lat, lon) {
+      const rad = Math.PI / 180;
+      const d = (date.getTime() - 946728000000) / 86400000; // dagen sinds 1 jan 2000 12:00 UTC
+      const g = (357.529 + 0.98560028 * d) * rad;
+      const q = 280.459 + 0.98564736 * d;
+      const L = (q + 1.915 * Math.sin(g) + 0.020 * Math.sin(2 * g)) * rad;
+      const e = (23.439 - 0.00000036 * d) * rad;
+      const ra = Math.atan2(Math.cos(e) * Math.sin(L), Math.cos(L)) / rad;
+      const decl = Math.asin(Math.sin(e) * Math.sin(L));
+      const gmst = 18.697374558 + 24.06570982441908 * d;
+      const ha = (((gmst + lon / 15) * 15 - ra) % 360 + 360) % 360 * rad;
+      const la = lat * rad;
+      return Math.asin(Math.sin(la) * Math.sin(decl) + Math.cos(la) * Math.cos(decl) * Math.cos(ha)) / rad;
+    }
+    function sunLoc() {
+      try { const v = JSON.parse(localStorage.getItem('pf_geo') || 'null'); if (v && isFinite(v.lat)) return v; } catch (e) {}
+      return { lat: 52.37, lon: 4.90, name: 'Amsterdam' };
+    }
+    function sunUseMyLocation() {
+      if (!navigator.geolocation) { alert('Je browser kan je locatie niet bepalen.'); return; }
+      navigator.geolocation.getCurrentPosition(p => {
+        const v = { lat: Math.round(p.coords.latitude * 100) / 100, lon: Math.round(p.coords.longitude * 100) / 100, name: 'jouw locatie' };
+        try { localStorage.setItem('pf_geo', JSON.stringify(v)); } catch (e) {}
+        render();
+      }, () => alert('Locatie niet beschikbaar. De app rekent met Amsterdam.'), { timeout: 10000 });
+    }
+    // Venster van de dag waarin de zon boven de drempel staat
+    function sunWindow(day, loc, min) {
+      let start = null, end = null, max = -90, maxAt = null;
+      for (let m = 4 * 60; m <= 22 * 60; m += 5) {
+        const t = new Date(day.getFullYear(), day.getMonth(), day.getDate(), 0, m);
+        const el = sunElevation(t, loc.lat, loc.lon);
+        if (el > max) { max = el; maxAt = t; }
+        if (el >= min) { if (!start) start = t; end = t; }
+      }
+      return { start, end, max, maxAt };
+    }
+    const hhmm = t => t ? String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0') : '—';
+    function renderSunD() {
+      const loc = sunLoc();
+      const now = new Date();
+      const elNow = sunElevation(now, loc.lat, loc.lon);
+      const w = sunWindow(now, loc, 45);
+      const statusNow = elNow >= 45 ? ['#22c55e', 'Nu: vitamine D mogelijk'] : elNow >= 35 ? ['#eab308', 'Nu: weinig, de zon staat net te laag'] : elNow > 0 ? ['#8a8a8a', 'Nu: te laag voor vitamine D'] : ['#525252', 'Nu: de zon is onder'];
+      // Eerste en laatste dag van het jaar met een vitamine D-venster
+      let first = null, last = null;
+      for (let i = 0; i < 366; i += 2) {
+        const day = new Date(now.getFullYear(), 0, 1 + i);
+        if (day.getFullYear() !== now.getFullYear()) break;
+        const el = sunElevation(new Date(day.getFullYear(), day.getMonth(), day.getDate(), 13, 30), loc.lat, loc.lon);
+        if (el >= 45) { if (!first) first = day; last = day; }
+      }
+      const dm = d => d ? d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' }) : '—';
+      const hours = [];
+      for (let h = 7; h <= 19; h++) hours.push(h);
+      const months = ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
+      const grid = months.map((mn, mi) => {
+        const cells = hours.map(h => {
+          const el = sunElevation(new Date(now.getFullYear(), mi, 15, h, 30), loc.lat, loc.lon);
+          const c = el >= 45 ? '#d9a441' : el >= 35 ? '#5c4615' : '#141414';
+          return `<span style="background: ${c};" title="${mn} ${h}:30 · zon ${Math.round(el)}°"></span>`;
+        }).join('');
+        return `<div class="sd-row ${mi === now.getMonth() ? 'now' : ''}"><b>${mn}</b>${cells}</div>`;
+      }).join('');
+      return `
+        <details class="hs-sec sd-box">
+          <summary><span>☀️ Wanneer maakt je huid vitamine D?</span><span class="hs-pm" aria-hidden="true"></span></summary>
+          <div class="hs-body">
+            <div class="sd-now">
+              <div><b style="color: ${statusNow[0]};">${Math.round(elNow)}°</b><span>Zon nu</span></div>
+              <div><b>${Math.round(w.max)}°</b><span>Hoogst vandaag (${hhmm(w.maxAt)})</span></div>
+              <div><b style="font-size: 15px;">${w.start ? hhmm(w.start) + '–' + hhmm(w.end) : 'Geen'}</b><span>Vitamine D-venster</span></div>
+            </div>
+            <div style="font-size: 12px; color: ${statusNow[0]}; margin: 8px 0 12px;">${statusNow[1]}</div>
+            <p><b>Vuistregel: je schaduw is korter dan jijzelf.</b> Dan staat de zon hoger dan 45° en komt er genoeg UVB door om vitamine D te maken. Staat de zon lager, dan maakt je huid weinig tot niets.</p>
+            <p>${loc.name === 'Amsterdam' ? 'In Amsterdam' : 'Op jouw locatie'} staat de zon dit jaar van <b>${dm(first)}</b> tot <b>${dm(last)}</b> rond het middaguur hoog genoeg. Daarbuiten heb je het van je voorraad, je eten of een supplement nodig.</p>
+            <div class="sd-grid" role="img" aria-label="Zonnestand per maand en uur">
+              <div class="sd-row sd-head"><b></b>${hours.map(h => `<i>${h % 2 ? '' : h}</i>`).join('')}</div>
+              ${grid}
+            </div>
+            <div class="sl-legend"><span><i style="background: #d9a441;"></i>boven 45°: vitamine D</span><span><i style="background: #5c4615;"></i>35–45°: weinig</span><span><i style="background: #262626;"></i>te laag</span></div>
+            <p class="hs-small" style="margin-top: 10px;">Berekend voor ${loc.name} (${loc.lat}° NB), de 15e van elke maand, wintertijd/zomertijd van je telefoon. Bewolking, ozon en je huidtype tellen niet mee: het is een vuistregel, geen meting.
+              ${loc.name === 'Amsterdam' ? `<a href="#" style="color: #e5484d;" onclick="sunUseMyLocation(); return false;">Gebruik mijn locatie →</a>` : `<a href="#" style="color: #e5484d;" onclick="try { localStorage.removeItem('pf_geo'); } catch (e) {} render(); return false;">Terug naar Amsterdam</a>`}</p>
+            <div class="sd-app">
+              <b>Precies willen weten?</b> De gratis app <b>D Minder</b> rekent ook met bewolking, ozon en je huidtype, en houdt bij hoeveel vitamine D je opbouwt.
+              <div class="sd-links"><a href="https://apps.apple.com/app/d-minder-pro/id547102495" target="_blank" rel="noopener noreferrer">iPhone ↗</a><a href="https://play.google.com/store/apps/details?id=com.ontometrics.dminder" target="_blank" rel="noopener noreferrer">Android ↗</a></div>
+            </div>
+          </div>
+        </details>`;
     }
 
     // ============================================
