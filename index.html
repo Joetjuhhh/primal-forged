@@ -1049,11 +1049,15 @@
       return false;
     }
 
+    // Eén doel voor eiwitschema én voeding (bewaard bij je voedingsinstellingen)
     function proteinGoalIdx() {
+      const g = (typeof nutritionSettings === 'function' ? nutritionSettings().goals : null) || {};
+      if (g.goalIdx !== undefined && g.goalIdx !== null) return Number(g.goalIdx);
       try { const v = localStorage.getItem('pf_protein_goal'); return v === null ? 3 : Number(v); } catch (e) { return 3; }
     }
     function setProteinGoal(i) {
       try { localStorage.setItem('pf_protein_goal', String(i)); } catch (e) {}
+      saveNutritionSettings({ goals: { ...(nutritionSettings().goals || {}), goalIdx: i } });
       document.querySelectorAll('.hs-prot-row').forEach((el, j) => el.classList.toggle('mine', j === i));
     }
     function renderProteinTable() {
@@ -7282,7 +7286,8 @@
 
     // Doelen: Mifflin-St Jeor × activiteit ± doel; eiwit uit het eiwitschema; vet 30%; rest koolhydraten
     const activityLevels = [['Weinig actief', 'Zittend werk, weinig sport', 1.2], ['Licht actief', '1–3 trainingen per week', 1.375], ['Actief', '4–5 trainingen per week', 1.55], ['Zeer actief', '6+ trainingen of zwaar lichamelijk werk', 1.725]];
-    const foodGoalTypes = [['cut', 'Afvallen', -500], ['keep', 'Onderhouden', 0], ['bulk', 'Spieropbouw', 250]];
+    // Calorie-aanpassing per doel uit het eiwitschema (zelfde volgorde als proteinGoals)
+    const goalKcalAdj = [0, 0, 0, 250, -500, 0];
     function foodTargets() {
       const g = nutritionSettings().goals || {};
       const w = Number(latestBodyValue('weight')) || Number(g.weight) || null;
@@ -7292,9 +7297,10 @@
       if (!w || !h || !age) return null;
       const bmr = 10 * w + 6.25 * h - 5 * age + (g.sex === 'v' ? -161 : 5);
       const act = (activityLevels[g.activity ?? 2] || activityLevels[2])[2];
-      const adj = (foodGoalTypes.find(x => x[0] === (g.type || 'keep')) || foodGoalTypes[1])[2];
+      const gi = proteinGoalIdx();
+      const adj = goalKcalAdj[gi] || 0;
       const kcal = Math.round((bmr * act + adj) / 10) * 10;
-      const pg = proteinGoals[proteinGoalIdx()] || proteinGoals[3];
+      const pg = proteinGoals[gi] || proteinGoals[3];
       const prot = Math.round(w * (pg[1] + pg[2]) / 2);
       const fat = Math.round(kcal * 0.3 / 9);
       const carb = Math.max(0, Math.round((kcal - prot * 4 - fat * 9) / 4));
@@ -7762,10 +7768,11 @@
         </div>
         <div class="card">
           <div class="tq">3 · WAT IS JE DOEL?</div>
-          <div class="f-meals" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
-            ${foodGoalTypes.map(([k, n, a]) => `<button class="${(g.type || 'keep') === k ? 'on' : ''}" onclick="setFoodGoal('type', '${k}')">${n}<br><small>${a > 0 ? '+' : a < 0 ? '−' : '±'}${Math.abs(a)} kcal</small></button>`).join('')}
-          </div>
-          <div class="hs-small" style="margin-top: 10px;">Je eiwitdoel volgt je keuze in het eiwitschema bij Clean eating (tik op ⓘ bij die gewoonte).</div>
+          ${proteinGoals.map(([n, lo, hi], i) => {
+            const a = goalKcalAdj[i] || 0;
+            return `<button class="topt ${proteinGoalIdx() === i ? 'on' : ''}" onclick="setProteinGoal(${i}); render();"><span class="topt-t">${n}</span><span class="topt-s">Eiwit ${String(lo).replace('.', ',')}${hi !== lo ? '–' + String(hi).replace('.', ',') : ''} g/kg · ${a > 0 ? '+' + a + ' kcal' : a < 0 ? '−' + Math.abs(a) + ' kcal' : 'calorieën op onderhoud'}</span></button>`;
+          }).join('')}
+          <div class="hs-small" style="margin-top: 4px;">Dit is hetzelfde doel als in het eiwitschema bij Clean eating: verander je het hier, dan verandert het daar ook.</div>
         </div>
         <div class="card" style="background: #120d04; border-color: #d9a441;">
           <div style="font-size: 10px; color: #d9a441; letter-spacing: 0.15em; font-weight: 600;">JOUW DAGDOEL</div>
