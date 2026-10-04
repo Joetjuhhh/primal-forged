@@ -526,6 +526,10 @@
     .su-low:last-child { border-bottom: none; }
     .su-n { width: 22px; height: 22px; flex-shrink: 0; border: 1px solid #d9a441; color: #d9a441; font-size: 11px; display: flex; align-items: center; justify-content: center; }
     .su-when { font-size: 11px; color: #8a8a8a; }
+    .tf-legend { display: flex; flex-direction: column; gap: 4px; font-size: 10px; color: #8a8a8a; line-height: 1.5; }
+    .tf-ev { font-size: 9px; color: #a3a3a3; border: 1px solid #262626; padding: 3px 6px; white-space: nowrap; flex-shrink: 0; }
+    .tf-add { display: block; width: 100%; margin-top: 12px; background: transparent; border: 1px solid #262626; color: #e5484d; font-family: inherit; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; min-height: 44px; cursor: pointer; }
+    .tf-add:active { background: #1a0606; }
     #pf-night { position: fixed; inset: 0; background: #b80000; mix-blend-mode: multiply; pointer-events: none; z-index: 2147483647; }
   </style>
 </head>
@@ -7567,6 +7571,12 @@
       if (state.fView === 'goals') return renderFoodGoals();
       if (state.fView === 'quick') return renderFoodQuick();
       if (state.fView === 'custom') return renderFoodCustom();
+      const fm = state.fMain || 'dagboek';
+      const foodTabs = `<div class="tabs" role="tablist">${[['dagboek', 'Dagboek'], ['tvoed', 'T-voeding'], ['supps', 'Supplementen']].map(([k, l]) => `<button class="tab ${fm === k ? 'active' : ''}" role="tab" aria-selected="${fm === k}" onclick="state.fMain = '${k}'; render(); window.scrollTo(0, 0);">${l}</button>`).join('')}</div>`;
+      if (fm !== 'dagboek') return `
+        <div class="page-header" style="margin-bottom: 16px;"><div class="page-sub">Fysiek</div><div class="page-title">Voeding</div></div>
+        ${foodTabs}
+        ${fm === 'tvoed' ? renderTFood() : renderSupps()}`;
       const date = state.fDate;
       const logs = foodDayLogs(date);
       const sum = foodSum(logs);
@@ -7583,6 +7593,7 @@
       };
       return `
         <div class="page-header" style="margin-bottom: 16px;"><div class="page-sub">Fysiek</div><div class="page-title">Voeding</div></div>
+        ${foodTabs}
         ${state.foodError ? `<div class="info-box"><div class="info-title">⚠️ Nog één update</div><div class="info-text">Voer voeding-update.sql uit in Supabase om je eten op te slaan.</div></div>` : ''}
         <div class="f-datebar">
           <button class="f-nav" onclick="setFoodDate(-1)" aria-label="Vorige dag">‹</button>
@@ -7877,12 +7888,6 @@
           <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Open retention →</div>
         </div>
         
-        <div class="card card-accent" style="cursor: pointer;" onclick="setSection('supps')">
-          <label class="label">💊 Supplementen</label>
-          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">Welke vitamines je testosteron steunen, wat mannen vaak tekortkomen en wanneer je wat inneemt.</div>
-          <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Bekijk de lijst →</div>
-        </div>
-
         <div class="card card-accent">
           <label class="label">💾 Back-up</label>
           <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-bottom: 12px;">
@@ -7968,7 +7973,6 @@
           ${state.activeSection === 'values' ? renderValues() : ''}
           ${state.activeSection === 'food' ? renderFood() : ''}
           ${state.activeSection === 'sleep' ? renderSleep() : ''}
-          ${state.activeSection === 'supps' ? renderSupps() : ''}
         </div>
         
         ${state.showRankUp ? renderRankUp() : ''}
@@ -8389,14 +8393,8 @@
       ['Zink', 'als je weinig vlees, vis of schaaldieren eet', 'Vlees, schaaldieren en eieren zijn de grote bronnen.']
     ];
     function renderSupps() {
-      const ref = s => s.replace(/\[(\d+)\]/g, (m, n) => `<a href="#hs-src-${n}" class="hs-ref" onclick="return habitSrcJump(${n})" aria-label="Bron ${n}">${n}</a>`);
-      const typeCls = t => ({ Onderzoek: 'r', Overzicht: 'o', Uitleg: 'u', Richtlijn: 'g' }[t] || 'u');
+      const ref = suppRef;
       return `
-        <div class="page-header">
-          <div class="page-sub">Meer</div>
-          <div class="page-title">Supplementen</div>
-        </div>
-
         <div class="hs-side" style="margin: 0 0 16px;">
           <div class="hs-side-t">Eerst je eten op orde</div>
           Supplementen vullen een tekort aan, ze vervangen geen goed eten. Vitamines en mineralen verhogen je testosteron alleen als je een tekort hebt. Slaap, training en een gezond vetpercentage maken meer verschil.
@@ -8436,18 +8434,121 @@
           <div class="su-txt">Voor tribulus en andere "T-boosters" is er geen goed bewijs. In een onderzoek naar 66 sportsupplementen met een hoog risico zat in 38% een verboden dopingstof. Koop je toch iets, kies dan een product met het <b>NZVT</b>-keurmerk: dat wordt per productiepartij getest. ${ref('[10]')}</div>
         </div>
 
+        ${suppSourcesHtml(suppSources)}
+      `;
+    }
+
+    // ============================================
+    // T-VOEDING (tab in Voeding)
+    // ============================================
+    const tFoodSources = [
+      ['Overzicht', 'NIH: zink, met tabel van voedingsbronnen (Engels)', 'https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/'],
+      ['Onderzoek', 'Zinkstatus en testosteron bij gezonde volwassenen (Prasad 1996)', 'https://pubmed.ncbi.nlm.nih.gov/8875519/'],
+      ['Overzicht', 'NIH: magnesium, met tabel van voedingsbronnen (Engels)', 'https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/'],
+      ['Overzicht', 'NIH: vitamine D, met tabel van voedingsbronnen (Engels)', 'https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/'],
+      ['Overzicht', 'NIH: selenium, paranoten en vruchtbaarheid (Engels)', 'https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/'],
+      ['Richtlijn', 'EFSA 2023: bovengrens voor selenium (Engels)', 'https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2023.7704'],
+      ['Uitleg', 'Vitamine A: bovengrens en lever (Oregon State University, Engels)', 'https://lpi.oregonstate.edu/mic/vitamins/vitamin-A'],
+      ['Overzicht', 'Grasgevoerd vs. graangevoerd rundvlees: vetzuren (Daley 2010)', 'https://link.springer.com/article/10.1186/1475-2891-9-10'],
+      ['Onderzoek', 'Hele eieren vs. eiwit bij krachttraining, 12 weken (Bagheri 2021)', 'https://journals.lww.com/nsca-jscr/fulltext/2021/02000/whole_egg_vs__egg_white_ingestion_during_12_weeks.17.aspx'],
+      ['Onderzoek', 'Olijf- en arganolie en testosteron, 60 mannen (Derouiche 2013)', 'https://www.semanticscholar.org/paper/Effect-of-Argan-and-Olive-Oil-Consumption-on-the-of-Derouiche-Jafri/d4a4d30f1305b91806148c2d9436915edefe6027'],
+      ['Overzicht', 'Vetarm eten en testosteron: meta-analyse (Whittaker & Wu 2021)', 'https://www.semanticscholar.org/paper/Low-fat-diets-and-testosterone-in-men:-Systematic-Whittaker-Wu/6ab690bb5988d6d1a59d9243c1cd79b744d8ea11'],
+      ['Overzicht', 'Langdurig alcohol en testosteron: meta-analyse (Santi 2024)', 'https://onlinelibrary.wiley.com/doi/10.1111/andr.13526'],
+      ['Onderzoek', 'Zoethout en testosteron bij mannen (Armanini 1999)', 'https://pubmed.ncbi.nlm.nih.gov/10515764/'],
+      ['Overzicht', 'Soja en mannelijke hormonen: meta-analyse (Reed 2021)', 'https://www.sciencedirect.com/science/article/pii/S0890623820302926'],
+      ['Uitleg', 'Vitamine D-aanmaak in de winter (Oregon State University, Engels)', 'https://lpi.oregonstate.edu/mic/health-disease/skin-health/vitamin-D']
+    ];
+    // [icoon, naam, levert, per portie, hoe vaak, let op, bewijs g/y/w, zoekterm]
+    const tFoodGroups = [
+      ['Vlees, orgaanvlees & eieren', [
+        ['🥩', 'Lever', 'Vitamine A, B12, zink, ijzer', '68 g → ±6.400 µg vitamine A [7]', 'Max. 1× per week, 50–75 g', 'Eén plak is al 2× de bovengrens voor vitamine A (3.000 µg). Vitamine A stapelt op. [7] Grasgevoerd: voor lever zelf niet onderzocht.', 'y', 'lever runder'],
+        ['🐄', 'Rundvlees (grasgevoerd)', 'Zink, eiwit, B12', '85 g → 3,8 mg zink [1]', 'Een paar keer per week', 'Grasgevoerd heeft een veel betere omega-6/omega-3-verhouding (1,5:1 vs 7,7:1) en 2–3× meer CLA. [8]', 'y', 'rundvlees'],
+        ['🥚', 'Hele eieren', 'Cholesterol (grondstof voor testosteron), eiwit', '3 hele eieren per dag na de training: testosteron +2,4 ng/ml, bij alleen eiwit +0,7. Spiermassa groeide even hard. [9]', '2–4 per dag', 'Eet de dooier mee.', 'g', 'ei kippen gekookt']
+      ]],
+      ['Vis & schaaldieren', [
+        ['🦪', 'Oesters', 'Zink', '85 g (±6 oesters) → 28–32 mg zink, bijna 3× je dagbehoefte (11 mg) [1]', '1–2× per week', 'Niet dagelijks: boven 25 mg zink per dag is te veel.', 'y', 'oesters'],
+        ['🦀', 'Krab', 'Zink, B12', '85 g → 3,2 mg zink [1]', 'Wanneer je wilt', '', 'y', 'krab'],
+        ['🐟', 'Vette vis (zalm, forel, haring, makreel)', 'Vitamine D, omega-3', '85 g zalm → ±14 µg vitamine D [4]', '2× per week', 'Zeker in de winter: van oktober tot april maakt je huid geen vitamine D aan. [15]', 'y', 'zalm'],
+        ['🐠', 'Sardines', 'Omega-3, selenium, beetje vitamine D', '', '1–2× per week', '', 'y', 'sardines'],
+        ['🫙', 'Levertraan', 'Veel vitamine D', '1 eetlepel → 34 µg vitamine D [4]', 'Max. 1 theelepel per dag', 'Bevat ook veel vitamine A.', 'y', 'levertraan']
+      ]],
+      ['Noten & zaden', [
+        ['🌰', 'Paranoten', 'Selenium', '1 noot → ±70–90 µg selenium [5]', '1–2 per dag, niet meer', '6–8 noten (±550 µg) zit al boven de bovengrens. [5][6] Te veel geeft haaruitval en broze nagels. Selenium helpt vooral je zaadkwaliteit en schildklier; voor testosteron zelf is geen bewijs. [5]', 'w', 'noten para ongezouten'],
+        ['🎃', 'Pompoenpitten', 'Zink + magnesium', '28 g → 2,2 mg zink en 156 mg magnesium [1][3]', 'Elke dag een handje', '', 'y', 'pompoenpitten'],
+        ['🌱', 'Chiazaad', 'Magnesium', '28 g → 111 mg magnesium [3]', 'Dagelijks kan', '', 'y', 'chiazaad'],
+        ['🥜', 'Amandelen / cashews', 'Magnesium', '28 g → 74–80 mg magnesium [3]', 'Dagelijks een handje', '', 'y', 'noten amandelen']
+      ]],
+      ['Groente & overig', [
+        ['🥬', 'Spinazie (gekookt)', 'Magnesium', '±90 g → 78 mg magnesium [3]', 'Dagelijks', '', 'y', 'spinazie gekookt'],
+        ['🍄', 'Paddenstoelen (UV-belicht)', 'Vitamine D', '½ kop → 9,2 µg vitamine D [4]', 'Vooral in de winter', 'Alleen UV-belichte paddenstoelen; dat staat op de verpakking.', 'y', 'champignon'],
+        ['🥑', 'Avocado', 'Enkelvoudig onverzadigd vet', '', 'Dagelijks kan', 'Telt mee voor "genoeg vet". [11]', 'y', 'avocado']
+      ]],
+      ['Vetten', [
+        ['🫒', 'Olijfolie (extra vierge)', 'Enkelvoudig onverzadigd vet', '60 mannen namen 3 weken 25 ml per dag (±2 eetlepels): totaal testosteron +17%. [10]', 'Dagelijks', 'Eén klein onderzoek.', 'g', 'olie olijf'],
+        ['🧈', 'Roomboter, ghee, kokos', 'Verzadigd vet', 'Vetarm eten (±20% vet) verlaagde testosteron 10–15%, vetarm vegetarisch zelfs tot 26% (6 onderzoeken, 206 mannen). [11]', 'Dagelijks: vet als ±30–40% van je calorieën', '', 'g', 'boter ongezouten']
+      ]]
+    ];
+    function tFoodAdd(q) {
+      state.fMain = 'dagboek';
+      openFoodAdd();
+      state.fQuery = q;
+      render();
+    }
+    function suppRef(s) { return s.replace(/\[(\d+)\]/g, (m, n) => `<a href="#hs-src-${n}" class="hs-ref" onclick="return habitSrcJump(${n})" aria-label="Bron ${n}">${n}</a>`); }
+    function suppSourcesHtml(list) {
+      const typeCls = t => ({ Onderzoek: 'r', Overzicht: 'o', Uitleg: 'u', Richtlijn: 'g' }[t] || 'u');
+      return `
         <details class="hs-sec hs-src" id="hs-sources" style="margin-top: 8px;">
-          <summary><span>Bronnen & meer lezen · ${suppSources.length}</span><span class="hs-pm" aria-hidden="true"></span></summary>
+          <summary><span>Bronnen & meer lezen · ${list.length}</span><span class="hs-pm" aria-hidden="true"></span></summary>
           <div class="hs-body">
-            ${suppSources.map(([type, title, url], i) => `
+            ${list.map(([type, title, url], i) => `
               <a class="hs-source" id="hs-src-${i + 1}" href="${url}" target="_blank" rel="noopener noreferrer">
                 <span class="hs-source-n">${i + 1}</span>
                 <span style="min-width: 0;"><span class="hs-tag ${typeCls(type)}">${type}</span><span class="hs-source-t">${title} ↗</span></span>
               </a>`).join('')}
           </div>
-        </details>
+        </details>`;
+    }
+    function renderTFood() {
+      const badge = { g: ['🟢', 'Direct onderzoek'], y: ['🟡', 'Via tekort'], w: ['⚪', 'Indirect'] };
+      return `
+        <div class="hs-side" style="margin: 0 0 14px;">
+          <div class="hs-side-t">Voeding voor je testosteron</div>
+          Je lichaam maakt testosteron van cholesterol, en heeft zink, magnesium, vitamine D en genoeg vet nodig. Deze voedingsmiddelen leveren dat. Ze werken vooral als je er een tekort aan had: geen wondermiddel, wel de basis.
+        </div>
+        <div class="tf-legend">
+          <span>🟢 Direct onderzoek: testosteron gemeten bij mannen</span>
+          <span>🟡 Via tekort: levert een stof waarvan een tekort testosteron verlaagt</span>
+          <span>⚪ Indirect: goed voor hormonen of zaad, niet voor testosteron zelf</span>
+        </div>
+        ${tFoodGroups.map(([group, items]) => `
+          <label class="label" style="margin: 20px 0 10px;">${group}</label>
+          ${items.map(([icon, name, gives, portion, freq, warn, ev, q]) => `
+            <div class="card su-card">
+              <div class="su-head">
+                <span class="su-icon">${icon}</span>
+                <span class="su-name" style="flex: 1; min-width: 0;">${name}</span>
+                <span class="tf-ev" title="${badge[ev][1]}">${badge[ev][0]} ${badge[ev][1]}</span>
+              </div>
+              <div class="su-txt"><b style="color: #fafafa;">Levert:</b> ${gives}</div>
+              <div class="su-grid">
+                ${portion ? `<div><span>Per portie</span>${suppRef(portion)}</div>` : ''}
+                <div ${portion ? '' : 'style="grid-column: 1 / -1;"'}><span>Hoe vaak</span>${freq}</div>
+              </div>
+              ${warn ? `<div class="su-warn">⚠ ${suppRef(warn)}</div>` : ''}
+              <button class="tf-add" onclick="tFoodAdd('${q}')">+ Aan dagboek toevoegen</button>
+            </div>`).join('')}
+        `).join('')}
 
-        <button class="btn btn-secondary" style="width: 100%; margin-top: 16px;" onclick="setSection('more')">← Terug naar Meer</button>
+        <label class="label" style="margin: 22px 0 10px;">Remmers, fabels & hype</label>
+        <div class="card">
+          <div class="su-low"><span class="su-n" style="border-color: #e5484d; color: #e5484d;">−</span><div><b>Vetarm eten</b><div class="su-txt" style="margin-top: 4px;">Testosteron 10–15% lager. ${suppRef('[11]')}</div></div></div>
+          <div class="su-low"><span class="su-n" style="border-color: #e5484d; color: #e5484d;">−</span><div><b>Veel alcohol</b><div class="su-txt" style="margin-top: 4px;">Wie langdurig veel drinkt, heeft gemiddeld minder testosteron. ${suppRef('[12]')}</div></div></div>
+          <div class="su-low"><span class="su-n" style="border-color: #e5484d; color: #e5484d;">−</span><div><b>Zoethout (echte drop)</b><div class="su-txt" style="margin-top: 4px;">7 mannen aten een week 7 g zoethout per dag; hun testosteron daalde flink. ${suppRef('[13]')} Een later klein onderzoek vond geen effect.</div></div></div>
+          <div class="su-low"><span class="su-n">✓</span><div><b>Fabel: soja</b><div class="su-txt" style="margin-top: 4px;">Een meta-analyse van onderzoeken bij mannen vond geen effect op testosteron. ${suppRef('[14]')}</div></div></div>
+          <div class="su-low"><span class="su-n">?</span><div><b>Hype: maca, gember, knoflook, granaatappel, honing</b><div class="su-txt" style="margin-top: 4px;">Vooral dieronderzoek of kleine onderzoeken. Daarom niet in de lijst.</div></div></div>
+        </div>
+        ${suppSourcesHtml(tFoodSources)}
       `;
     }
 
