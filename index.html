@@ -420,6 +420,15 @@
     .j-foot { font-size: 11px; color: #8a8a8a; text-align: center; margin-top: 8px; }
     .j-h-lbl { font-size: 10px; color: #8a8a8a; letter-spacing: 0.1em; text-transform: uppercase; margin: 12px 0 4px; }
     .j-h-list { margin: 0; padding-left: 18px; font-size: 13px; color: #a3a3a3; line-height: 1.7; }
+
+    .tgroup.skill { color: #d9a441; }
+    .cali-line { margin-top: 8px; font-size: 11px; }
+    .cali-prog { color: #8a8a8a; }
+    .cali-ok { color: #22c55e; }
+    .cali-next { width: 100%; text-align: left; background: #120d04; border: 1px solid #d9a441; color: #f2cf7a; font-family: inherit; font-size: 12px; padding: 10px 12px; cursor: pointer; min-height: 44px; }
+    .cali-warn { background: rgba(234,179,8,0.08); border: 1px solid #574515; color: #eab308; font-size: 12px; line-height: 1.5; padding: 10px 12px; margin-bottom: 10px; }
+    .cali-how { font-size: 12px; color: #d4d4d4; line-height: 1.6; margin-bottom: 10px; }
+    .cali-how b { color: #fafafa; }
   </style>
 </head>
 <body>
@@ -497,7 +506,7 @@
       trainingError: null,
       trainView: 'list',
       trainForm: null,
-      trainTab: 'list', tday: null, ts: null, tpick: {}, tswap: null, tsetup: null, tc: null,
+      trainTab: 'list', tcali: null, tday: null, ts: null, tpick: {}, tswap: null, tsetup: null, tc: null,
       trainShowAll: false,
 
       // Weekrapport en back-up
@@ -1393,7 +1402,7 @@
       state.workouts = [];
       state.workoutSets = [];
       state.trainForm = null;
-      Object.assign(state, { ts: null, tpick: {}, tswap: null, tsetup: null, tc: null, tday: null, trainView: 'list', jd: null, jMode: null });
+      Object.assign(state, { tcali: null, ts: null, tpick: {}, tswap: null, tsetup: null, tc: null, tday: null, trainView: 'list', jd: null, jMode: null });
       render();
     }
 
@@ -4684,11 +4693,252 @@
       return plan.days[idx];
     }
 
+
+    // ============================================
+    // TRAINING: CALISTHENICS (ladders en skills)
+    // unit: 'reps' of 'sec' · t: doel per set · mode: 'all3' = alle 3 werksets, 'best' = één set
+    // ============================================
+    const caliLadders = {
+      push: { label: 'Push-ups', steps: [
+        ['Incline push-up', 'Handen op een tafel of bank, lichaam recht als een plank.'],
+        ['Push-up', 'Handen iets breder dan je schouders, borst tot een vuist boven de grond.'],
+        ['Diamond push-up', 'Duimen en wijsvingers raken elkaar onder je borst; ellebogen langs je lichaam.'],
+        ['Archer push-up', 'Handen heel breed, zak naar één kant terwijl de andere arm gestrekt blijft.'],
+        ['Pseudo planche push-up', 'Handen bij je heupen, vingers naar opzij, leun ver naar voren.'],
+        ['One-arm push-up', 'Voeten breed, één hand achter je rug, heupen recht.']
+      ]},
+      pull: { label: 'Pull-ups', steps: [
+        ['Dead hang', 'Hang met gestrekte armen, schouders actief (niet "in je oren").', 'sec'],
+        ['Scapula pulls', 'Blijf hangen en trek alleen je schouderbladen naar beneden, zonder je armen te buigen.'],
+        ['Negative pull-up', 'Spring omhoog met je kin boven de stang en zak in 5 seconden.'],
+        ['Pull-up met elastiek', 'Elastiek om de stang, voet of knie erin.'],
+        ['Pull-up', 'Vanuit gestrekte armen tot je kin boven de stang.'],
+        ['Chest-to-bar pull-up', 'Trek door tot je borst de stang raakt.'],
+        ['Archer pull-up', 'Trek naar één hand, de andere arm blijft gestrekt.'],
+        ['Muscle-up', 'Explosief trekken, stang naar je heupen, valse grip. Zie ook het skill-blok.']
+      ]},
+      row: { label: 'Rows', steps: [
+        ['Hoge inverted row', 'Stang of tafel op heuphoogte, lichaam schuin, trek je borst naar de stang.'],
+        ['Inverted row', 'Stang lager, lichaam bijna horizontaal.'],
+        ['Inverted row voeten verhoogd', 'Voeten op een stoel, zodat het zwaarder wordt.'],
+        ['Archer row', 'Trek naar één kant, de andere arm blijft gestrekt.']
+      ]},
+      dip: { label: 'Dips', steps: [
+        ['Bench dip', 'Handen op een bank achter je, benen gebogen.'],
+        ['Negative dip', 'Zak in 5 seconden tot je ellebogen op 90° staan.'],
+        ['Dip', 'Tussen twee stoelen of aan handvatten, licht voorover leunend.'],
+        ['Ring dip', 'Aan ringen. Die bewegen, dus het vraagt veel meer stabiliteit.']
+      ]},
+      shoulder: { label: 'Schouders', steps: [
+        ['Pike push-up', 'Heupen hoog, hoofd zakt richting de grond vóór je handen.'],
+        ['Verhoogde pike push-up', 'Voeten op een stoel.'],
+        ['Handstand hold tegen de muur', 'Borst naar de muur, armen gestrekt, duw de grond weg.', 'sec'],
+        ['Negative handstand push-up', 'In handstand tegen de muur langzaam zakken tot je hoofd op een kussen rust.'],
+        ['Handstand push-up', 'Helemaal op en neer tegen de muur.']
+      ]},
+      legs: { label: 'Benen', steps: [
+        ['Squat (lichaamsgewicht)', 'Voeten op schouderbreedte, heupen onder je knieën, borst omhoog.'],
+        ['Split squat', 'Grote stap, achterste knie zakt naar de grond.'],
+        ['Bulgarian split squat (lichaamsgewicht)', 'Achterste voet op een stoel.'],
+        ['Shrimp squat', 'Op één been, pak je achterste voet vast en zak tot je knie de grond raakt.'],
+        ['Pistol squat', 'Op één been helemaal door, andere been gestrekt voor je. Zie ook het skill-blok.']
+      ]},
+      ham: { label: 'Hamstrings & billen', steps: [
+        ['Glute bridge', 'Op je rug, voeten plat, heupen omhoog en billen aanspannen.'],
+        ['Single-leg glute bridge', 'Hetzelfde op één been.'],
+        ['Nordic negative', 'Knieën op een kussen, voeten vast onder de bank, val langzaam voorover.'],
+        ['Nordic curl', 'Zak langzaam en trek jezelf weer omhoog.']
+      ]},
+      calf: { label: 'Kuiten', steps: [
+        ['Calf raise op twee benen', 'Op je tenen omhoog, rustig weer zakken.'],
+        ['Single-leg calf raise', 'Op één been, hand tegen de muur voor balans.'],
+        ['Single-leg calf raise op een trede', 'Hiel zakt onder de trede, helemaal op en neer.']
+      ]},
+      core: { label: 'Core', steps: [
+        ['Plank', 'Op je ellebogen, lichaam recht, billen aanspannen.', 'sec'],
+        ['Hollow hold', 'Op je rug, armen en benen gestrekt en iets van de grond, onderrug plat.', 'sec'],
+        ['Hanging knee raise', 'Hangen en knieën naar je borst.'],
+        ['Hanging leg raise', 'Hangen en gestrekte benen tot heuphoogte.'],
+        ['L-sit', 'Steun op twee stoelen of handvatten, benen gestrekt vooruit.', 'sec'],
+        ['Toes-to-bar', 'Hangen en tenen tegen de stang.']
+      ]}
+    };
+    const caliDefaultLevels = { push: 1, pull: 2, row: 0, dip: 1, shoulder: 0, legs: 0, ham: 0, calf: 0, core: 0 };
+
+    // [naam, unit, doel, mode]
+    const caliSkills = {
+      handstand: { label: 'Handstand', unit: 'sec', start: 'Kun je 30 sec in een pike hold staan, handen op de grond en heupen hoog? Loop dan met je voeten tegen de muur omhoog, met je borst naar de muur. Handen op schouderbreedte, vingers gespreid, armen gestrekt.', cues: 'Duw de grond weg, schouders bij je oren. Kijk tussen je handen.', steps: [['Pike hold', 'sec', 30], ['Handstand borst naar de muur', 'sec', 30], ['Handstand rug naar de muur', 'sec', 30], ['Kick-up naar vrije handstand', 'sec', 10], ['Vrije handstand', 'sec', 30]] },
+      frontlever: { label: 'Front lever', unit: 'sec', req: 'Pas aan te raden vanaf minstens 8 pull-ups.', start: 'Begin met de tuck: hang aan de stang, knieën naar je borst, rug horizontaal.', cues: 'Armen gestrekt, schouderbladen naar beneden en naar achteren, alsof je de stang naar je heupen trekt.', steps: [['Tuck front lever', 'sec', 15], ['Advanced tuck front lever', 'sec', 15], ['Front lever één been', 'sec', 10], ['Straddle front lever', 'sec', 10], ['Front lever', 'sec', 10]] },
+      planche: { label: 'Planche', unit: 'sec', req: 'Pas aan te raden vanaf 20 push-ups en 10 dips.', start: 'Begin met de planche lean: in push-up-positie, vingers naar opzij of achter, leun naar voren tot je schouders voorbij je handen zijn.', cues: 'Armen helemaal gestrekt, rug iets bol. Bouw heel langzaam op: zwaar voor polsen en ellebogen.', steps: [['Planche lean', 'sec', 20], ['Tuck planche', 'sec', 15], ['Advanced tuck planche', 'sec', 10], ['Straddle planche', 'sec', 10], ['Planche', 'sec', 5]] },
+      lsit: { label: 'L-sit', unit: 'sec', start: 'Zit tussen twee stoelen of op dip-handvatten, druk je billen omhoog en houd je voeten nog op de grond.', cues: 'Schouders omlaag en weg van je oren, duw de grond hard weg.', steps: [['L-sit voeten op de grond', 'sec', 20], ['L-sit één been', 'sec', 15], ['Tuck L-sit', 'sec', 20], ['L-sit', 'sec', 20], ['V-sit', 'sec', 10]] },
+      flag: { label: 'Human flag', unit: 'sec', req: 'Pas aan te raden vanaf 10 pull-ups en een stevige zijplank.', start: 'Begin met een zijplank met je bovenste arm omhoog, daarna de verticale flag aan een paal met je benen omhoog.', cues: 'Je onderste arm duwt, je bovenste arm trekt. Beide armen blijven gestrekt.', steps: [['Zijplank arm omhoog', 'sec', 45], ['Verticale flag', 'sec', 15], ['Tuck flag', 'sec', 10], ['Straddle flag', 'sec', 10], ['Human flag', 'sec', 10]] },
+      backlever: { label: 'Back lever', unit: 'sec', req: 'Pas aan te raden vanaf 8 pull-ups en met gezonde schouders.', start: 'Begin met de German hang: hang en draai rustig door, zodat je schouders gerekt worden. Eerst 10 seconden.', cues: 'Dit rekt je schouder ver op. Ga langzaam; stop bij pijn (stijfheid is normaal).', steps: [['German hang', 'sec', 20], ['Skin the cat', 'reps', 5], ['Tuck back lever', 'sec', 15], ['Straddle back lever', 'sec', 10], ['Back lever', 'sec', 10]] },
+      pullups: { label: 'Pull-ups', unit: 'reps', start: 'Kun je 30 seconden hangen? Doe dan negatives: spring omhoog met je kin boven de stang en zak in 5 seconden. 3 × 5.', cues: 'Begin elke herhaling met je schouderbladen naar beneden en strek je armen helemaal uit.', steps: [['Dead hang', 'sec', 30, 'best'], ['Negative pull-up', 'reps', 5], ['Pull-up', 'reps', 1, 'best'], ['Pull-up', 'reps', 5, 'best'], ['Pull-up', 'reps', 10, 'best'], ['Pull-up', 'reps', 15, 'best'], ['Pull-up', 'reps', 20, 'best']] },
+      dips: { label: 'Dips', unit: 'reps', start: 'Kun je 30 seconden in de support hold blijven, gestrekte armen op twee stoelen of handvatten? Doe dan negatives: zak in 5 seconden tot 90° en stap weer omhoog.', cues: 'Leun licht naar voren en ga niet dieper dan 90° als je schouders dat niet prettig vinden.', steps: [['Support hold', 'sec', 30, 'best'], ['Negative dip', 'reps', 5], ['Dip', 'reps', 1, 'best'], ['Dip', 'reps', 10, 'best'], ['Dip', 'reps', 20, 'best'], ['Dip met +10 kg', 'reps', 5, 'best']] },
+      muscleup: { label: 'Muscle-up', unit: 'reps', req: 'Pas aan te raden vanaf 10 strikte pull-ups.', start: 'Begin met de explosieve pull-up: trek zo hard dat je borst de stang raakt.', cues: 'Het gaat om de overgang: trek de stang naar je heupen, niet naar je kin, met een valse grip (pols over de stang).', steps: [['Pull-up', 'reps', 10, 'best'], ['Explosieve pull-up', 'reps', 5], ['Muscle-up met elastiek', 'reps', 3], ['Negative muscle-up', 'reps', 3], ['Muscle-up', 'reps', 1, 'best']] },
+      pistol: { label: 'Pistol squat', unit: 'reps', start: 'Begin met de box pistol: ga op één been zitten op een bankje en sta weer op, andere been gestrekt voor je.', cues: 'Hiel op de grond, knie in de lijn van je tenen. Een gewichtje in je handen helpt juist je balans.', steps: [['Box pistol', 'reps', 8], ['Pistol met hand vast', 'reps', 8], ['Negative pistol', 'reps', 5], ['Pistol squat', 'reps', 1, 'best'], ['Pistol squat', 'reps', 5, 'best']] },
+      hspu: { label: 'Handstand push-up', unit: 'reps', req: 'Pas aan te raden vanaf 30 sec handstand tegen de muur.', start: 'Begin met de pike push-up: heupen hoog, en zak met je hoofd naar de grond vóór je handen.', cues: 'Hoofd en handen vormen een driehoek, zodat je hoofd niet tussen je handen zakt. Kussen onder je hoofd bij de negatives.', steps: [['Pike push-up', 'reps', 12], ['Verhoogde pike push-up', 'reps', 10], ['Negative handstand push-up', 'reps', 5], ['Handstand push-up', 'reps', 1, 'best'], ['Handstand push-up', 'reps', 5, 'best']] },
+      dragonflag: { label: 'Dragon flag', unit: 'reps', start: 'Begin met de lying leg raise: lig op een bankje, houd het vast achter je hoofd en til je gestrekte benen op.', cues: 'Je onderrug blijft plat. Gaat die hol staan, ga dan terug naar de tuck-variant.', steps: [['Lying leg raise', 'reps', 12], ['Tuck dragon flag', 'reps', 8], ['Dragon flag negative', 'reps', 5], ['Dragon flag één been', 'reps', 5], ['Dragon flag', 'reps', 5]] }
+    };
+
+    const caliSessions = {
+      push: { sub: 'Push-ups, dips, schouders', ladders: ['push', 'dip', 'shoulder'] },
+      pull: { sub: 'Pull-ups, rows, core', ladders: ['pull', 'row', 'core'] },
+      legs: { sub: 'Benen, hamstrings, kuiten, core', ladders: ['legs', 'ham', 'calf', 'core'] },
+      upper: { sub: 'Push, pull, dips, rows, schouders', ladders: ['push', 'pull', 'dip', 'row', 'shoulder'] },
+      lower: { sub: 'Benen, hamstrings, kuiten, core', ladders: ['legs', 'ham', 'calf', 'core'] },
+      fa: { sub: 'Push-ups, pull-ups, benen, core', ladders: ['push', 'pull', 'legs', 'core'] },
+      fb: { sub: 'Dips, rows, hamstrings, schouders', ladders: ['dip', 'row', 'ham', 'shoulder'] }
+    };
+
+    function caliPlan(plan) { return { levels: { ...caliDefaultLevels, ...((plan.cali || {}).levels || {}) }, skill: (plan.cali || {}).skill || null, skillLevel: (plan.cali || {}).skillLevel || 0 }; }
+    function caliLadderStep(ladder, lvl) {
+      const L = caliLadders[ladder]; const i = Math.max(0, Math.min(L.steps.length - 1, lvl));
+      const [name, how, unit] = L.steps[i];
+      return { name, how, unit: unit || 'reps', t: unit === 'sec' ? 30 : 12, mode: 'all3', i, last: i === L.steps.length - 1 };
+    }
+    function caliSkillStep(skill, lvl) {
+      const S = caliSkills[skill]; const i = Math.max(0, Math.min(S.steps.length - 1, lvl));
+      const [name, unit, t, mode] = S.steps[i];
+      return { name, unit, t, mode: mode || 'all3', i, last: i === S.steps.length - 1, goalW: /\+10 kg/.test(name) ? 10 : 0 };
+    }
+    const caliStepLabel = (st) => st.mode === 'best' ? `${st.name} · doel ${st.t}${st.unit === 'sec' ? ' sec' : ''}` : st.name;
+    const caliRange = (st) => st.mode === 'best' ? `doel: 1 set van ${st.t} ${st.unit === 'sec' ? 'sec' : 'reps'}` : `doel: 3 × ${st.t} ${st.unit === 'sec' ? 'sec' : 'reps'}`;
+
+    function caliSessionExercises(plan, key) {
+      const cp = caliPlan(plan);
+      const out = [];
+      if (cp.skill && caliSkills[cp.skill]) {
+        const st = caliSkillStep(cp.skill, cp.skillLevel);
+        out.push({ slot: 'skill', group: 'skill', groupLabel: 'Skill · ' + caliSkills[cp.skill].label, name: st.name.replace(/ met \+10 kg$/, ''), label: caliStepLabel(st), cali: { kind: 'skill', id: cp.skill, step: st } });
+      }
+      (caliSessions[key] || { ladders: [] }).ladders.forEach(l => {
+        const st = caliLadderStep(l, cp.levels[l]);
+        if (out.some(o => o.name === st.name)) return; // al in het skill-blok
+        out.push({ slot: 'cali-' + l, group: 'cali-' + l, groupLabel: caliLadders[l].label, name: st.name, label: st.name, cali: { kind: 'ladder', id: l, step: st } });
+      });
+      return out.map(x => ({ ...x, range: caliRange(x.cali.step) }));
+    }
+
+    // Klaar voor de volgende stap? all3: 3 trainingen op rij alle 3 werksets ≥ doel · best: één keer een set ≥ doel
+    function caliSetsOk(st, sets) {
+      const ok = s => (Number(s.r) || 0) >= st.t && (!st.goalW || (Number(s.w) || 0) >= st.goalW);
+      const work = sets.filter(s => s.r !== '' && s.r !== null && s.r !== undefined);
+      if (st.mode === 'best') return work.some(ok);
+      return work.length >= 3 && work.slice(0, 3).every(ok);
+    }
+    function caliProgress(ex) {
+      const st = ex.cali.step;
+      const need = st.mode === 'best' ? 1 : 3;
+      const key = ex.name.trim().toLowerCase();
+      const cur = ex.sets.slice(1).map(s => ({ w: pnum(s.w), r: pnum(s.r) })).filter(s => s.r !== null);
+      let streak = 0, broken = false;
+      if (cur.length) { if (caliSetsOk(st, cur)) streak++; else broken = true; }
+      if (!broken) {
+        const ws = state.workouts.filter(w => w.id !== (state.ts && state.ts.workoutId) && workoutSetsOf(w.id).some(s => s.exercise.trim().toLowerCase() === key))
+          .sort((a, b) => b.date.localeCompare(a.date) || String(b.created_at).localeCompare(String(a.created_at)));
+        for (const w of ws) {
+          const sets = workoutSetsOf(w.id).filter(s => s.exercise.trim().toLowerCase() === key && s.set_no !== 0).map(s => ({ w: s.weight, r: s.reps }));
+          if (caliSetsOk(st, sets)) streak++; else break;
+          if (streak >= need) break;
+        }
+      }
+      return { streak: Math.min(streak, need), need, ready: streak >= need && !st.last };
+    }
+    function caliNextName(ex) {
+      const c = ex.cali;
+      const nx = c.kind === 'skill' ? caliSkillStep(c.id, c.step.i + 1) : caliLadderStep(c.id, c.step.i + 1);
+      return caliStepLabel(nx);
+    }
+    function caliProgressHtml(ex, ei) {
+      if (ex.advanced) return `<span class="cali-ok">✓ Volgende training: ${esc(ex.advanced)}</span>`;
+      const p = caliProgress(ex);
+      if (p.ready) return `<button class="cali-next" onclick="caliAdvance(${ei})">Klaar voor de volgende stap → ${esc(caliNextName(ex))}</button>`;
+      if (ex.cali.step.last) return `<span class="cali-prog">Laatste stap van deze ladder · ga voor meer herhalingen</span>`;
+      return `<span class="cali-prog">${p.need === 1 ? 'Haal het doel één keer' : `${p.streak}/3 trainingen gehaald`}</span>`;
+    }
+    function caliRepaint(ei) {
+      const ex = state.ts && state.ts.exercises[ei];
+      const el = document.getElementById('tcp-' + ei);
+      if (ex && ex.cali && el) el.innerHTML = caliProgressHtml(ex, ei);
+    }
+    function caliSetLevel(kind, id, lvl) {
+      const plan = { ...trainingPlan() };
+      const cp = caliPlan(plan);
+      if (kind === 'skill') { cp.skillLevel = lvl; } else { cp.levels = { ...cp.levels, [id]: lvl }; }
+      plan.cali = cp;
+      saveTrainingPlan(plan);
+      return plan;
+    }
+    function caliAdvance(ei) {
+      const ex = state.ts.exercises[ei];
+      const next = caliNextName(ex);
+      caliSetLevel(ex.cali.kind, ex.cali.id, ex.cali.step.i + 1);
+      ex.advanced = next;
+      caliRepaint(ei);
+      showToast('⬆️ Volgende training: ' + next);
+    }
+
+    // Niveau-scherm met uitleg per stap
+    function openCaliSheet(ei) { state.tcali = { ei }; render(); }
+    function closeCaliSheet() { state.tcali = null; render(); }
+    function chooseCaliLevel(lvl) {
+      const ts = state.ts; const ex = ts.exercises[state.tcali.ei];
+      const typed = ex.sets.some(s => s.w !== '' || s.r !== '');
+      if (typed && !confirm('Je sets van deze oefening worden leeggemaakt. Toch wisselen?')) return;
+      const plan = caliSetLevel(ex.cali.kind, ex.cali.id, lvl);
+      const fresh = caliSessionExercises(plan, ts.session).find(x => x.slot === ex.slot);
+      if (fresh) {
+        const base = recordFor(fresh.name, ts.workoutId);
+        const nx = { ...fresh, sets: [0, 1, 2, 3].map(() => ({ w: '', r: '' })), base, rec: { w: '', r: '' }, recManual: false, hit: false };
+        refreshRecordState(nx);
+        ts.exercises[state.tcali.ei] = nx;
+      }
+      state.tcali = null;
+      render();
+    }
+    function renderCaliSheet() {
+      const ex = state.ts && state.ts.exercises[state.tcali.ei];
+      if (!ex || !ex.cali) return '';
+      const c = ex.cali;
+      const isSkill = c.kind === 'skill';
+      const S = isSkill ? caliSkills[c.id] : null;
+      const steps = isSkill ? S.steps.map((s, i) => caliSkillStep(c.id, i)) : caliLadders[c.id].steps.map((s, i) => ({ ...caliLadderStep(c.id, i), how: s[1] }));
+      return `
+        <div class="modal-overlay tsheet-wrap" onclick="if(event.target === this) closeCaliSheet();">
+          <div class="tsheet" role="dialog" aria-label="Niveau kiezen">
+            <div class="tsheet-handle"></div>
+            <div style="font-size: 10px; color: #e5484d; letter-spacing: 0.2em; font-weight: 600;">${isSkill ? 'SKILL · ' + esc(S.label.toUpperCase()) : esc(caliLadders[c.id].label.toUpperCase()) + ' · LADDER'}</div>
+            <div style="font-size: 12px; color: #a3a3a3; line-height: 1.5; margin: 6px 0 12px;">${isSkill ? 'Werk 5–10 minuten aan je skill, aan het begin van je training.' : 'Van makkelijk naar moeilijk.'} Ga pas een stap hoger als je het doel ${isSkill ? 'haalt' : '3 trainingen achter elkaar haalt'}. Bij scherpe pijn in een gewricht of pees: stop en ga een stap terug.</div>
+            ${isSkill ? `
+              ${S.req ? `<div class="cali-warn">⚠️ ${S.req} Zwaar voor je pezen: bouw rustig op.</div>` : ''}
+              <div class="cali-how"><b>Hoe begin je:</b> ${S.start}</div>
+              <div class="cali-how"><b>Let op:</b> ${S.cues}</div>
+            ` : ''}
+            ${steps.map((st, i) => {
+              const rec = recordFor(st.name.replace(/ met \+10 kg$/, ''), state.ts.workoutId);
+              const cur = i === c.step.i;
+              return `<button class="tswap-opt ${cur ? 'cur' : ''}" onclick="${cur ? 'closeCaliSheet()' : `chooseCaliLevel(${i})`}">
+                <span style="width: 20px; flex-shrink: 0; font-size: 12px; color: #8a8a8a;">${i + 1}</span>
+                <span style="flex: 1; text-align: left; min-width: 0;">
+                  <span style="display: block; font-size: 14px;">${esc(caliStepLabel(st))}${cur ? ' · <span style="color: #e5484d; font-size: 11px;">huidig</span>' : ''}</span>
+                  ${st.how ? `<span style="display: block; font-size: 11px; color: #a3a3a3; margin-top: 3px; line-height: 1.5;">${esc(st.how)}</span>` : ''}
+                  <span style="display: block; font-size: 10px; color: #8a8a8a; margin-top: 3px;">${caliRange(st)}</span>
+                </span>
+                <span style="font-size: 12px; color: #d9a441; white-space: nowrap;">${rec.r ? (rec.w ? '+' + fmtKg(rec.w) + ' kg × ' + rec.r : rec.r + (st.unit === 'sec' ? ' sec' : '')) : '—'}</span>
+              </button>`;
+            }).join('')}
+            <button class="btn btn-secondary btn-small" style="width: 100%; margin-top: 8px;" onclick="closeCaliSheet()">Sluiten</button>
+          </div>
+        </div>`;
+    }
+    function tsuSkill(k) { state.tsetup.cali = { ...(state.tsetup.cali || {}), skill: k, skillLevel: 0 }; render(); }
+
     function buildSession(plan, idx, key) {
       const date = trainWeekDates()[idx];
       const def = sessionDefs[key];
       const saved = state.workouts.find(w => w.date === date && w.name === def.label && (w.kind || 'strength') !== 'cardio');
-      const list = sessionExercises(plan, key, absDays(plan).includes(idx));
+      const list = plan.loc === 'cali' ? caliSessionExercises(plan, key) : sessionExercises(plan, key, absDays(plan).includes(idx));
       const savedGroups = saved ? groupSets(workoutSetsOf(saved.id)) : [];
       savedGroups.forEach(g => {
         if (!list.some(x => x.name.toLowerCase() === g.name.trim().toLowerCase())) {
@@ -4704,7 +4954,7 @@
           sets[i] = { w: hasValue(s.weight) ? fmtKg(s.weight) : '', r: s.reps !== null && s.reps !== undefined ? String(s.reps) : '' };
         });
         const base = recordFor(x.name, saved ? saved.id : null);
-        const ex = { ...x, sets, base, rec: { w: base.r ? fmtKg(base.w) : '', r: base.r ? String(base.r) : '' }, recManual: false, hit: false };
+        const ex = { ...x, sets, base, rec: { w: base.w ? fmtKg(base.w) : '', r: base.r ? String(base.r) : '' }, recManual: false, hit: false };
         refreshRecordState(ex);
         return ex;
       });
@@ -4729,7 +4979,7 @@
         ex.hit = true;
       } else {
         ex.hit = false;
-        if (!ex.recManual) ex.rec = { w: ex.base.r ? fmtKg(ex.base.w) : '', r: ex.base.r ? String(ex.base.r) : '' };
+        if (!ex.recManual) ex.rec = { w: ex.base.w ? fmtKg(ex.base.w) : '', r: ex.base.r ? String(ex.base.r) : '' };
       }
     }
 
@@ -4745,6 +4995,7 @@
       if (!ts.startedAt) ts.startedAt = Date.now();
       refreshRecordState(ex);
       paintRecord(ei);
+      if (ex.cali) caliRepaint(ei);
     }
     function tcRec(ei, field, value) {
       const ts = state.ts; if (!ts) return;
@@ -4767,6 +5018,11 @@
       if (note) note.innerHTML = ex.hit ? recordNote(ex) : '';
     }
     function recordNote(ex) {
+      if (ex.cali) {
+        const u = ex.cali.step.unit === 'sec' ? ' sec' : ' reps';
+        const f = (w, r) => (Number(String(w).replace(',', '.')) ? '+' + w + ' kg × ' : '') + r + u;
+        return `Nieuw record: ${f(ex.rec.w, ex.rec.r)}${ex.base.r ? ' (was ' + f(ex.base.w ? fmtKg(ex.base.w) : '', ex.base.r) + ')' : ''}`;
+      }
       const was = ex.base.r ? (ex.base.w ? fmtKg(ex.base.w) + ' kg × ' + ex.base.r : ex.base.r + ' reps') : null;
       const now = ex.rec.w ? ex.rec.w + ' kg × ' + ex.rec.r : ex.rec.r + ' reps';
       return `Nieuw record: ${now}${was ? ' (was ' + was + ')' : ''}`;
@@ -5046,6 +5302,7 @@
         </div>
         ${state.trainTab === 'prs' ? renderRecords() : renderWorkoutList()}
         ${state.tswap ? renderSwapSheet(plan) : ''}
+        ${state.tcali ? renderCaliSheet() : ''}
       `;
     }
 
@@ -5086,7 +5343,7 @@
             <div>
               <div style="font-size: 10px; color: #e5484d; letter-spacing: 0.2em; font-weight: 600;">${weekdayLong[idx].toUpperCase()}${when}</div>
               <div style="font-size: 26px; font-weight: 300; letter-spacing: 0.08em; margin-top: 2px;">${esc(def.label.toUpperCase())}</div>
-              <div style="font-size: 11px; color: #8a8a8a; margin-top: 2px;">${esc(def.sub)}</div>
+              <div style="font-size: 11px; color: #8a8a8a; margin-top: 2px;">${esc(plan.loc === 'cali' && caliSessions[key] ? 'Calisthenics · ' + caliSessions[key].sub : def.sub)}</div>
             </div>
             <select class="tsel" aria-label="Andere training kiezen" onchange="pickSession(this.value || null)">
               ${ses.map(k => `<option value="${k}" ${k === key ? 'selected' : ''}>${esc(sessionDefs[k].label)}</option>`).join('')}
@@ -5100,33 +5357,35 @@
         </div>
 
         ${ts.exercises.map((ex, ei) => {
-          const head = ex.group !== lastGroup ? `<div class="tgroup">${esc((muscleGroups[ex.group] || 'Extra').toUpperCase())}</div>` : '';
+          const head = ex.group !== lastGroup ? `<div class="tgroup ${ex.group === 'skill' ? 'skill' : ''}">${esc((ex.groupLabel || muscleGroups[ex.group] || 'Extra').toUpperCase())}</div>` : '';
+          const ph = ex.cali ? ['+kg', ex.cali.step.unit === 'sec' ? 'sec' : 'reps'] : ['kg', 'reps'];
           lastGroup = ex.group;
           return `
             ${head}
             <div class="tex">
               <div class="tex-top">
                 <div style="min-width: 0;">
-                  <div class="tex-name">${esc(ex.name)}</div>
-                  <div class="tex-range">${ex.range ? 'werksets ' + esc(ex.range) + (/sec|mogelijk/.test(ex.range) ? '' : ' reps') : ''}</div>
+                  <div class="tex-name">${esc(ex.label || ex.name)}</div>
+                  <div class="tex-range">${ex.cali ? esc(ex.range) : ex.range ? 'werksets ' + esc(ex.range) + (/sec|mogelijk/.test(ex.range) ? '' : ' reps') : ''}</div>
                 </div>
-                ${ex.slot === 'extra'
+                ${ex.cali ? `<button class="tex-btn" onclick="openCaliSheet(${ei})">ⓘ Niveau</button>` : ex.slot === 'extra'
                   ? `<button class="tex-btn" onclick="removeExtra(${ei})" aria-label="Oefening weghalen">✕</button>`
                   : `<button class="tex-btn" onclick="openSwap(${ei})">⇄ Vervangen</button>`}
               </div>
               <div class="tgrid">
                 ${ex.sets.map((s, si) => `
                   <div class="tcell${si === 0 ? ' warm' : ''}">
-                    <input type="text" inputmode="decimal" value="${esc(s.w)}" placeholder="kg" aria-label="${esc(ex.name)} ${si === 0 ? 'warm-up' : 'set ' + si} gewicht" oninput="tcSet(${ei}, ${si}, 'w', this.value)">
-                    <input type="text" inputmode="numeric" class="reps" value="${esc(s.r)}" placeholder="reps" aria-label="${esc(ex.name)} ${si === 0 ? 'warm-up' : 'set ' + si} reps" oninput="tcSet(${ei}, ${si}, 'r', this.value)">
+                    <input type="text" inputmode="decimal" value="${esc(s.w)}" placeholder="${ph[0]}" aria-label="${esc(ex.name)} ${si === 0 ? 'warm-up' : 'set ' + si} gewicht" oninput="tcSet(${ei}, ${si}, 'w', this.value)">
+                    <input type="text" inputmode="numeric" class="reps" value="${esc(s.r)}" placeholder="${ph[1]}" aria-label="${esc(ex.name)} ${si === 0 ? 'warm-up' : 'set ' + si} reps" oninput="tcSet(${ei}, ${si}, 'r', this.value)">
                   </div>
                 `).join('')}
                 <div class="tcell tcell-rec${ex.hit ? ' hit' : ''}" id="trb-${ei}">
-                  <input type="text" inputmode="decimal" id="trw-${ei}" value="${esc(ex.rec.w)}" placeholder="kg" aria-label="${esc(ex.name)} record gewicht" oninput="tcRec(${ei}, 'w', this.value)">
-                  <input type="text" inputmode="numeric" id="trr-${ei}" class="reps" value="${esc(ex.rec.r)}" placeholder="reps" aria-label="${esc(ex.name)} record reps" oninput="tcRec(${ei}, 'r', this.value)">
+                  <input type="text" inputmode="decimal" id="trw-${ei}" value="${esc(ex.rec.w)}" placeholder="${ph[0]}" aria-label="${esc(ex.name)} record gewicht" oninput="tcRec(${ei}, 'w', this.value)">
+                  <input type="text" inputmode="numeric" id="trr-${ei}" class="reps" value="${esc(ex.rec.r)}" placeholder="${ph[1]}" aria-label="${esc(ex.name)} record reps" oninput="tcRec(${ei}, 'r', this.value)">
                 </div>
               </div>
               <div class="tex-note" id="trn-${ei}">${ex.hit ? recordNote(ex) : ''}</div>
+              ${ex.cali ? `<div class="cali-line" id="tcp-${ei}">${caliProgressHtml(ex, ei)}</div>` : ''}
             </div>
           `;
         }).join('')}
@@ -5222,7 +5481,7 @@
         </div>
 
         <div class="card">
-          <div class="tq">2 · WAAR TRAIN JE?</div>
+          <div class="tq">2 · HOE TRAIN JE?</div>
           <button class="topt ${s.loc === 'gym' ? 'on' : ''}" onclick="tsuLoc('gym')"><span class="topt-t">Gym</span><span class="topt-s">Barbells, dumbbells, kabels en machines</span></button>
           <button class="topt ${s.loc === 'home' ? 'on' : ''}" onclick="tsuLoc('home')"><span class="topt-t">Thuis</span><span class="topt-s">Kies hieronder wat je hebt</span></button>
           ${s.loc === 'home' ? `
@@ -5231,7 +5490,7 @@
             </div>
             <div style="font-size: 10px; color: #8a8a8a; margin-bottom: 8px;">Niks aangevinkt? Dan krijg je oefeningen met je eigen lichaamsgewicht.</div>
           ` : ''}
-          <button class="topt soon" disabled><span class="topt-t">Calisthenics</span><span class="topt-s">Binnenkort</span></button>
+          <button class="topt ${s.loc === 'cali' ? 'on' : ''}" onclick="tsuLoc('cali')" style="margin-bottom: 0;"><span class="topt-t">Calisthenics</span><span class="topt-s">Lichaamsgewicht: ladders van makkelijk naar moeilijk. Optrekstang en dipstation of twee stoelen.</span></button>
         </div>
 
         <div class="card">
@@ -5248,13 +5507,27 @@
           </div>
         </div>
 
+        ${s.loc === 'cali' ? `
+        <div class="card">
+          <div class="tq" style="margin-bottom: 4px;">4 · SKILL (OPTIONEEL)</div>
+          <div style="font-size: 11px; color: #a3a3a3; line-height: 1.5; margin-bottom: 12px;">Eén vaardigheid waar je 5–10 minuten aan werkt, aan het begin van elke training.</div>
+          <div class="chips" style="margin: 0;">
+            <button class="chip ${!(s.cali && s.cali.skill) ? 'active' : ''}" onclick="tsuSkill(null)">Geen</button>
+            ${Object.keys(caliSkills).map(k => `<button class="chip ${s.cali && s.cali.skill === k ? 'active' : ''}" onclick="tsuSkill('${k}')">${esc(caliSkills[k].label)}</button>`).join('')}
+          </div>
+          ${s.cali && s.cali.skill ? `
+            ${caliSkills[s.cali.skill].req ? `<div class="cali-warn" style="margin-top: 12px;">⚠️ ${caliSkills[s.cali.skill].req} Zwaar voor je pezen: bouw rustig op.</div>` : ''}
+            <div class="cali-how" style="margin-top: 12px;"><b>Hoe begin je:</b> ${caliSkills[s.cali.skill].start}</div>
+          ` : ''}
+          <div style="font-size: 11px; color: #8a8a8a; line-height: 1.5; margin-top: 12px;">Je startniveau per oefening stel je in de training in met <b style="color: #a3a3a3;">ⓘ Niveau</b>.</div>
+        </div>` : `
         <div class="card" style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
           <div>
             <div class="tq" style="margin-bottom: 0;">4 · BUIKSPIEREN ERBIJ?</div>
             <div style="font-size: 11px; color: #a3a3a3; margin-top: 6px; line-height: 1.5;">Eén oefening aan het eind van 2 trainingen per week</div>
           </div>
           <button class="ttoggle ${s.abs ? 'on' : ''}" role="switch" aria-checked="${s.abs ? 'true' : 'false'}" aria-label="Buikspieren" onclick="state.tsetup.abs = !state.tsetup.abs; render();"><span></span></button>
-        </div>
+        </div>`}
 
         <div class="card" style="background: #120d04; border-color: #d9a441;">
           <div style="font-size: 10px; color: #d9a441; letter-spacing: 0.15em; font-weight: 600;">ONS ADVIES</div>
