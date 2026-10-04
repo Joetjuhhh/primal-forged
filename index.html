@@ -429,6 +429,24 @@
     .cali-warn { background: rgba(234,179,8,0.08); border: 1px solid #574515; color: #eab308; font-size: 12px; line-height: 1.5; padding: 10px 12px; margin-bottom: 10px; }
     .cali-how { font-size: 12px; color: #d4d4d4; line-height: 1.6; margin-bottom: 10px; }
     .cali-how b { color: #fafafa; }
+
+    /* Waarden */
+    .v-intro p { font-size: 13px; color: #a3a3a3; line-height: 1.7; margin: 10px 0 0; }
+    .v-intro b { color: #fafafa; }
+    .v-big { font-size: 20px; font-weight: 300; letter-spacing: 0.02em; line-height: 1.4; }
+    .v-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin-bottom: 16px; }
+    .v-steps span { text-align: center; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 10px 0; border-bottom: 2px solid #1c1c1c; color: #525252; }
+    .v-steps span.on { border-color: #e5484d; color: #fafafa; }
+    .v-steps span.done { border-color: #7f1d1d; color: #a3a3a3; }
+    .v-row { display: grid; grid-template-columns: 22px minmax(0, 1fr) 90px 26px; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #1c1c1c; }
+    .v-rank { font-size: 12px; color: #e5484d; font-weight: 600; }
+    .v-name { font-size: 14px; }
+    .v-bar { display: block; height: 6px; background: #1c1c1c; position: relative; }
+    .v-bar span { position: absolute; left: 0; top: 0; bottom: 0; }
+    .v-score { font-size: 14px; text-align: right; font-weight: 500; }
+    .v-trend { font-size: 10px; color: #8a8a8a; padding: 4px 0 0 32px; }
+    .v-order { display: flex; gap: 10px; align-items: center; min-height: 44px; border-bottom: 1px solid #1c1c1c; font-size: 14px; }
+    .j-values { display: flex; gap: 8px; align-items: center; width: 100%; text-align: left; background: #0a0a0a; border: 1px solid #1c1c1c; color: #d4d4d4; font-family: inherit; font-size: 12px; padding: 10px 12px; margin-bottom: 12px; cursor: pointer; line-height: 1.5; }
   </style>
 </head>
 <body>
@@ -465,7 +483,7 @@
       stress: 4,
       sleep: 7,
       editingId: null,
-      jd: null, jMode: null,
+      jd: null, jMode: null, vf: null, valuesView: 'overview',
       
       // Retention
       retentionStreak: null,
@@ -1822,6 +1840,7 @@
         </div>
 
         ${renderBackupReminder()}
+        ${valuesReminderDue() ? `<div class="card" style="cursor: pointer; border-left: 3px solid #d9a441;" onclick="state.valuesView = 'overview'; setSection('values');"><div style="font-size: 13px;">🧭 Kloppen je waarden nog?</div><div style="font-size: 11px; color: #a3a3a3; margin-top: 4px;">Al 3 maanden niet bekeken. Waarden veranderen per levensfase →</div></div>` : ''}
 
         ${renderDashboardChallenges()}
         
@@ -3763,6 +3782,7 @@
       const days = [];
       let total = 0, comeback = false, hadActivity = false, goodDays = 0, primalDate = null;
 
+      const valuesDate = valuesBonusDate();
       for (let date = first; date <= today; date = dateAdd(date, 1)) {
         const h = hist[date] || {};
         const pos = positiveHabitKeys.filter(k => h[k]).length;
@@ -3790,6 +3810,7 @@
         let doubled = false;
         if (comeback && score >= 50) { xp *= 2; doubled = true; comeback = false; }
         xp += bonusOn[date] || 0;
+        if (date === valuesDate) xp += VALUES_BONUS_XP;
         if (xp > 0) hadActivity = true;
         if ((score < 20 && hadActivity && date < today) || failDates.has(date)) comeback = true;
 
@@ -3961,6 +3982,7 @@
         ['Challenge-dag gehaald', `+${XP.challengeDay} per challenge`],
         ['Retention-dag', `+${XP.retentionDay} per dag`],
         ['Lichaamsmeting', `+${XP.measurement} (1x per week)`],
+        ['Waarden-opdracht', `+${VALUES_BONUS_XP} (eenmalig)`],
         ['75 Hard-dag volledig', `+${XP.hard75Day}`],
         ['Challenge voltooid', `+${XP.challengeDonePerDay} × aantal dagen`],
         ['75 Hard voltooid', `+${fmtInt(XP.hard75Done)}`],
@@ -6450,7 +6472,7 @@
         goals: d.goals || '', goalsDone: d.goalsDone || [],
         gratitude: d.gratitude || '', answer: d.answer || '', win: d.win || '',
         tomorrow: d.tomorrow || '', hard: d.hard || '', free: (e && e.content) || '',
-        swap: !!d.swap, morningAt: d.morningAt || null, eveningAt: d.eveningAt || null,
+        swap: !!d.swap, valuesCheck: d.valuesCheck || null, morningAt: d.morningAt || null, eveningAt: d.eveningAt || null,
         sleep: e && e.sleep_quality ? e.sleep_quality : 7, energy: e && e.energy ? e.energy : 7,
         mood: e && e.mood ? e.mood : 7, focus: e && e.focus ? e.focus : 7,
         stress: e && e.stress ? e.stress : 4, libido: e && e.libido ? e.libido : 7
@@ -6493,9 +6515,24 @@
       const el = document.getElementById('j-goalscore'); if (el) el.textContent = `${done} / ${n}`;
       const row = document.getElementById('j-goal-' + i); if (row) row.classList.toggle('done', checked);
     }
+    function jValue(v, val) {
+      if (!state.jd) return;
+      state.jd.valuesCheck = { ...(state.jd.valuesCheck || {}), [v]: parseInt(val) };
+      const el = document.getElementById('jvc-' + valueSlug(v));
+      if (el) { el.textContent = val; el.style.color = getColor(parseInt(val)); }
+    }
     function jSwapPrompt() { if (state.jd) { state.jd.swap = !state.jd.swap; render(); } }
     function setJMode(m) { state.jMode = m; render(); window.scrollTo(0, 0); }
 
+    // Zondag: alle 5 waarden meegeven (niet aangeraakt = 5)
+    function jdValuesCheck(jd) {
+      const top = latestValues();
+      if (!top || new Date(jd.date + 'T12:00:00').getDay() !== 0 || !jd.eveningAt) return jd.valuesCheck || null;
+      const out = {};
+      const prev = valuesLiving() || {};
+      top.top.forEach(v => out[v] = (jd.valuesCheck || {})[v] || (prev[v] && prev[v].score) || 5);
+      return out;
+    }
     async function saveJournalDay(part) {
       if (!state.user) return;
       const jd = jdInit();
@@ -6512,7 +6549,7 @@
       const daily = {
         bed: jd.bed, wake: jd.wake, sleepMin: jSleepCalc(), goals: jd.goals, goalsDone: jd.goalsDone,
         gratitude: jd.gratitude, prompt: prompt.text, theme: prompt.theme, answer: jd.answer, win: jd.win,
-        tomorrow: jd.tomorrow, hard: jd.hard, swap: jd.swap, morningAt: jd.morningAt, eveningAt: jd.eveningAt
+        tomorrow: jd.tomorrow, hard: jd.hard, swap: jd.swap, valuesCheck: jdValuesCheck(jd), morningAt: jd.morningAt, eveningAt: jd.eveningAt
       };
       const row = { user_id: state.user.id, date: jd.date, daily, content: jd.free || '', habits: { ...state.habits }, energy: jd.energy, sleep_quality: jd.sleep };
       if (jd.eveningAt) Object.assign(row, { mood: jd.mood, focus: jd.focus, stress: jd.stress, libido: jd.libido });
@@ -6553,7 +6590,9 @@
       const jd = jdInit();
       const mode = state.jMode;
       const dateLabel = new Date().toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' });
+      const vtop = latestValues();
       const tabs = `
+        ${vtop ? `<button class="j-values" onclick="state.valuesView = 'overview'; setSection('values');" aria-label="Mijn waarden bekijken"><span>🧭</span>${vtop.top.map(esc).join(' · ')}</button>` : ''}
         <div class="j-mode">
           <button class="${mode === 'ochtend' ? 'on' : ''}" onclick="setJMode('ochtend')">☀ Ochtend${jd.morningAt ? ' ✓' : ''}</button>
           <button class="${mode === 'avond' ? 'on' : ''}" onclick="setJMode('avond')">☾ Avond${jd.eveningAt ? ' ✓' : ''}</button>
@@ -6633,6 +6672,22 @@
           ${jSliderHtml('stress', '😰 Stress')}
           ${jSliderHtml('libido', '🔥 Libido')}
         </div>
+
+        ${vtop && new Date(jd.date + 'T12:00:00').getDay() === 0 ? `
+          <div class="card" style="border-top: 3px solid #d9a441;">
+            <label class="label">🧭 Waarden-check · hoe goed leefde je hier deze week naar?</label>
+            ${vtop.top.map((v, i) => {
+              const val = (jd.valuesCheck || {})[v] || ((valuesLiving() || {})[v] || {}).score || 5;
+              return `
+                <div class="slider-group">
+                  <div class="slider-header">
+                    <span class="slider-label">${i + 1}. ${esc(v)}</span>
+                    <span class="slider-value" id="jvc-${valueSlug(v)}" style="color: ${getColor(val)}">${val}</span>
+                  </div>
+                  <input type="range" class="slider" min="1" max="10" value="${val}" oninput="jValue(${esc(JSON.stringify(v))}, this.value)" aria-label="${esc(v)}">
+                </div>`;
+            }).join('')}
+          </div>` : ''}
 
         <details class="j-opt" ${jd.hard ? 'open' : ''}>
           <summary><span>Lastig moment vandaag? <i>· optioneel</i></span><b aria-hidden="true"></b></summary>
@@ -6853,6 +6908,288 @@
     // ============================================
     // RENDER: MORE
     // ============================================
+
+    // ============================================
+    // WAARDEN
+    // ============================================
+    const valueQuestions = [
+      'Wat doe je het liefst?',
+      'Waar gaat je hart sneller van kloppen?',
+      'Wanneer voel je je van betekenis?',
+      'Met welke mensen of in welke omstandigheden voel je je het meest verbonden?',
+      'Waarmee vul je je persoonlijke of professionele ruimte?',
+      'Waaraan besteed je je tijd, geld en energie?',
+      'Op welke gebieden ben je het meest georganiseerd?',
+      'Op welke gebieden heb je de meeste focus of discipline?',
+      'Waar denk je het meest aan? Wat is je interne dialoog?',
+      'Over welke onderwerpen lees je het liefst?'
+    ];
+    const valueOptions = ['Vrijheid', 'Familie', 'Gezondheid', 'Eerlijkheid', 'Groei', 'Discipline', 'Avontuur', 'Rust', 'Liefde', 'Vriendschap',
+      'Kracht', 'Moed', 'Respect', 'Loyaliteit', 'Creativiteit', 'Kennis', 'Wijsheid', 'Succes', 'Financiële zekerheid', 'Onafhankelijkheid',
+      'Plezier', 'Spiritualiteit', 'Natuur', 'Rechtvaardigheid', 'Behulpzaamheid', 'Betekenis', 'Erkenning', 'Leiderschap', 'Zelfrespect', 'Authenticiteit',
+      'Integriteit', 'Uitdaging', 'Prestatie', 'Verbondenheid', 'Dankbaarheid', 'Humor', 'Gemeenschap', 'Zekerheid', 'Innerlijke vrede', 'Vakmanschap', 'Ondernemerschap', 'Schoonheid'];
+    const valueChallenge = {
+      'Gezondheid': 'nosugar', 'Kracht': 'pushups', 'Discipline': 'early', 'Prestatie': 'early', 'Uitdaging': 'cold', 'Moed': 'cold',
+      'Rust': 'meditate', 'Innerlijke vrede': 'meditate', 'Spiritualiteit': 'meditate', 'Kennis': 'read', 'Wijsheid': 'read', 'Groei': 'read', 'Vakmanschap': 'read',
+      'Familie': 'message', 'Liefde': 'message', 'Vriendschap': 'message', 'Verbondenheid': 'message', 'Gemeenschap': 'message', 'Loyaliteit': 'message',
+      'Respect': 'compliment', 'Humor': 'compliment', 'Behulpzaamheid': 'gooddeed', 'Betekenis': 'gooddeed', 'Rechtvaardigheid': 'gooddeed',
+      'Financiële zekerheid': 'save5', 'Zekerheid': 'save5', 'Onafhankelijkheid': 'nospend', 'Ondernemerschap': 'nosocial', 'Succes': 'nosocial',
+      'Vrijheid': 'nosocial', 'Dankbaarheid': 'gratitude', 'Natuur': 'steps', 'Avontuur': 'steps', 'Zelfrespect': 'dopamine', 'Integriteit': 'journal',
+      'Eerlijkheid': 'journal', 'Authenticiteit': 'journal', 'Creativiteit': 'noscreen', 'Plezier': 'noscreen', 'Schoonheid': 'sun', 'Erkenning': 'journal', 'Leiderschap': 'early'
+    };
+    const VALUES_BONUS_XP = 100;
+
+    function valuesData() {
+      const s = state.bodySettings || {};
+      if (s.values_data && Array.isArray(s.values_data.rounds)) return s.values_data;
+      try { const v = JSON.parse(localStorage.getItem('pf_values') || 'null'); if (v && Array.isArray(v.rounds)) return v; } catch (e) {}
+      return { rounds: [] };
+    }
+    async function saveValuesData(data) {
+      state.bodySettings = { ...(state.bodySettings || {}), values_data: data };
+      try { localStorage.setItem('pf_values', JSON.stringify(data)); } catch (e) {}
+      if (!state.user) return;
+      const { error } = await supabaseClient.from('user_settings').upsert({ user_id: state.user.id, values_data: data }, { onConflict: 'user_id' });
+      state.valuesLocal = !!error;
+      if (error) console.warn('Waarden alleen lokaal opgeslagen (voer waarden-update.sql uit):', error.message);
+    }
+    function latestValues() {
+      const r = valuesData().rounds;
+      return r.length ? r[r.length - 1] : null;
+    }
+    function valuesBonusDate() {
+      const r = valuesData().rounds;
+      return r.length ? r[0].date : null;
+    }
+    // Laatste "leef ik ernaar"-cijfers: zondagcheck in de journal als die nieuwer is dan de laatste ronde
+    function valuesLiving() {
+      const round = latestValues();
+      if (!round) return null;
+      const out = {};
+      round.top.forEach(v => out[v] = { score: round.scores[v] || null, from: 'opdracht', date: round.date, trend: [] });
+      state.entries.filter(e => e.daily && e.daily.valuesCheck && e.date >= round.date)
+        .sort((a, b) => a.date.localeCompare(b.date))
+        .forEach(e => round.top.forEach(v => {
+          const sc = e.daily.valuesCheck[v];
+          if (sc) { out[v].score = sc; out[v].from = 'zondag'; out[v].date = e.date; out[v].trend.push(sc); }
+        }));
+      return out;
+    }
+    function valuesBiggestGap() {
+      const round = latestValues(); const liv = valuesLiving();
+      if (!round || !liv) return null;
+      let best = null;
+      round.top.forEach((v, i) => {
+        const sc = liv[v].score; if (!sc) return;
+        const gap = 10 - sc;
+        if (!best || gap > best.gap || (gap === best.gap && i < best.rank)) best = { v, gap, sc, rank: i };
+      });
+      return best && best.gap >= 3 ? best : null;
+    }
+    function valuesReminderDue() {
+      const r = latestValues();
+      return r && diffDays(r.date, todayStr()) >= 90;
+    }
+
+    // Opdracht invullen: stap 1 vragen, stap 2 top 5, stap 3 cijfers
+    function startValuesForm() {
+      const prev = latestValues();
+      state.vf = { step: 1, answers: valueQuestions.map(() => ''), top: prev ? [...prev.top] : [], scores: {}, custom: '' };
+      state.valuesView = 'form';
+      render(); window.scrollTo(0, 0);
+    }
+    function vfAnswer(i, v) { if (state.vf) state.vf.answers[i] = v; }
+    function vfStep(n) {
+      const f = state.vf;
+      if (n === 2 && f.answers.filter(a => a.trim()).length < 5) { alert('Beantwoord minstens 5 van de 10 vragen. Hoe eerlijker, hoe beter je top 5.'); return; }
+      if (n === 3 && f.top.length !== 5) { alert('Kies precies 5 waarden.'); return; }
+      f.step = n; render(); window.scrollTo(0, 0);
+    }
+    function vfToggle(v) {
+      const f = state.vf;
+      if (f.top.includes(v)) f.top = f.top.filter(x => x !== v);
+      else if (f.top.length < 5) f.top.push(v);
+      else { showToast('Je hebt er al 5. Haal er eerst één weg.'); return; }
+      render();
+    }
+    function vfCustom() {
+      const el = document.getElementById('vf-custom');
+      const v = (el ? el.value : '').trim();
+      if (!v) return;
+      const name = v.charAt(0).toUpperCase() + v.slice(1);
+      if (!state.vf.top.includes(name)) vfToggle(name);
+    }
+    function vfMove(i, d) {
+      const t = state.vf.top; const j = i + d;
+      if (j < 0 || j >= t.length) return;
+      [t[i], t[j]] = [t[j], t[i]]; render();
+    }
+    function vfScore(v, val) {
+      state.vf.scores[v] = parseInt(val);
+      const el = document.getElementById('vfs-' + valueSlug(v));
+      if (el) { el.textContent = val; el.style.color = getColor(parseInt(val)); }
+    }
+    const valueSlug = v => v.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    async function vfSave() {
+      const f = state.vf;
+      f.top.forEach(v => { if (!f.scores[v]) f.scores[v] = 5; });
+      const data = valuesData();
+      const first = !data.rounds.length;
+      data.rounds = [...data.rounds, { date: todayStr(), answers: f.answers, top: f.top, scores: f.scores }];
+      await saveValuesData(data);
+      state.vf = null; state.valuesView = 'overview';
+      render(); window.scrollTo(0, 0);
+      showToast(first ? '🧭 Je waarden staan · +' + VALUES_BONUS_XP + ' XP' : '🧭 Je waarden zijn bijgewerkt');
+    }
+    function openValueChallenge(id) {
+      state.activeSection = 'body'; state.bodyTab = 'challenges';
+      chGo('setup', id);
+    }
+
+    function renderValues() {
+      if (state.valuesView === 'form' && state.vf) return renderValuesForm();
+      const round = latestValues();
+      const intro = `
+        <div class="card v-intro">
+          <div class="v-big">Wat vind jij écht belangrijk in dit leven?</div>
+          <p>Veel mensen kennen zichzelf niet. Ze weten niet wat ze belangrijk vinden, en daardoor zijn ze zichzelf niet. Ze durven niet af te wijken en volgen hun dromen niet. Veel mensen waarderen zichzelf niet.</p>
+          <p>Het enige wat je hoeft te doen, is jezelf <b>toestemming geven</b> om naar je hoogste waarden te leven.</p>
+        </div>`;
+      const head = `
+        <div class="page-header"><div class="page-sub">Fundament</div><div class="page-title">Waarden</div></div>
+        <button class="entry-action" style="margin-bottom: 16px;" onclick="setSection('more')">← Meer</button>
+        ${state.valuesLocal ? `<div class="info-box"><div class="info-title">Nog één update</div><div class="info-text">Voer waarden-update.sql uit in Supabase, dan worden je waarden ook online bewaard.</div></div>` : ''}`;
+      if (!round) {
+        return `${head}${intro}
+          <div class="card">
+            <label class="label">De opdracht</label>
+            <div style="font-size: 13px; color: #d4d4d4; line-height: 1.7;">1. Beantwoord 10 vragen over hoe je nu leeft.<br>2. Kies je top 5 waarden en zet ze op volgorde.<br>3. Geef per waarde een cijfer: hoe goed leef je ernaar?</div>
+            <div style="font-size: 11px; color: #8a8a8a; margin-top: 10px;">±15 minuten · eenmalig +${VALUES_BONUS_XP} XP</div>
+          </div>
+          <button class="btn btn-primary" style="width: 100%; padding: 18px;" onclick="startValuesForm()">Start de opdracht</button>`;
+      }
+      const liv = valuesLiving();
+      const gap = valuesBiggestGap();
+      const rounds = valuesData().rounds;
+      const tid = gap ? (valueChallenge[gap.v] || 'journal') : null;
+      const tpl = tid ? chTemplate(tid) : null;
+      return `${head}
+        ${valuesReminderDue() ? `<div class="info-box"><div class="info-title">🧭 Kloppen je waarden nog?</div><div class="info-text">Je laatste keer was ${diffDays(round.date, todayStr())} dagen geleden. Waarden veranderen per levensfase.</div></div>` : ''}
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <label class="label" style="margin: 0;">Mijn top 5</label>
+            <span style="font-size: 10px; color: #8a8a8a;">${fmtDateShort(round.date)}</span>
+          </div>
+          <div style="font-size: 10px; color: #8a8a8a; letter-spacing: 0.1em; margin: 12px 0 4px; display: flex; justify-content: flex-end;">LEEF IK ERNAAR?</div>
+          ${round.top.map((v, i) => {
+            const l = liv[v] || {}; const sc = l.score;
+            return `
+              <div class="v-row">
+                <span class="v-rank">${i + 1}</span>
+                <span class="v-name">${esc(v)}</span>
+                <span class="v-bar"><span style="width: ${(sc || 0) * 10}%; background: ${sc ? getColor(sc) : '#262626'};"></span></span>
+                <span class="v-score" style="color: ${sc ? getColor(sc) : '#525252'};">${sc || '—'}</span>
+              </div>
+              ${l.trend && l.trend.length > 1 ? `<div class="v-trend">zondagen: ${l.trend.slice(-6).join(' → ')}</div>` : ''}`;
+          }).join('')}
+          <div class="hs-small" style="margin-top: 12px;">Elke zondag werk je deze cijfers bij in je journal, bij Terugblik.</div>
+        </div>
+        ${gap ? `
+          <div class="card" style="background: #120d04; border-color: #3a2c0c;">
+            <div style="font-size: 10px; color: #d9a441; letter-spacing: 0.15em; font-weight: 600;">GROOTSTE GAT</div>
+            <div style="font-size: 14px; margin-top: 6px; line-height: 1.5;"><b>${esc(gap.v)}</b> is je nummer ${gap.rank + 1}, maar scoort een <b>${gap.sc}</b>.</div>
+            ${tpl ? `<div style="font-size: 12px; color: #a3a3a3; margin-top: 6px; line-height: 1.5;">Een stap in de goede richting: de challenge <b style="color: #fafafa;">${esc(tpl.name)}</b>.</div>
+            <button class="btn btn-secondary btn-small" style="width: 100%; margin-top: 12px;" onclick="openValueChallenge('${tid}')">Bekijk challenge →</button>` : ''}
+          </div>` : ''}
+        <button class="btn btn-primary" style="width: 100%; margin-bottom: 8px;" onclick="startValuesForm()">Opdracht opnieuw invullen</button>
+        <div class="hs-small" style="text-align: center; margin-bottom: 20px;">💡 Je hoogste waarden veranderen per levensfase. Je eerdere antwoorden blijven bewaard.</div>
+        <label class="label">Eerdere keren · ${rounds.length}</label>
+        ${[...rounds].reverse().map((r, k) => `
+          <details class="j-opt">
+            <summary><span>${fmtDateShort(r.date)} · ${r.top.map(esc).join(', ')}</span><b aria-hidden="true"></b></summary>
+            <div style="padding: 0 18px 18px;">
+              ${valueQuestions.map((q, i) => r.answers[i] ? `<div class="j-h-lbl">${esc(q)}</div><div class="entry-content">${esc(r.answers[i])}</div>` : '').join('')}
+              <div class="j-h-lbl">Cijfers toen</div>
+              <div class="entry-content">${r.top.map(v => `${esc(v)}: ${r.scores[v] || '—'}`).join(' · ')}</div>
+            </div>
+          </details>`).join('')}
+      `;
+    }
+
+    function renderValuesForm() {
+      const f = state.vf;
+      const steps = `<div class="v-steps">${['Vragen', 'Top 5', 'Cijfers'].map((t, i) => `<span class="${f.step === i + 1 ? 'on' : f.step > i + 1 ? 'done' : ''}">${i + 1}. ${t}</span>`).join('')}</div>`;
+      const head = `
+        <div class="page-header"><div class="page-sub">Fundament</div><div class="page-title">Waarden</div></div>
+        <button class="entry-action" style="margin-bottom: 16px;" onclick="if (confirm('Stoppen? Je antwoorden worden niet bewaard.')) { state.vf = null; state.valuesView = 'overview'; render(); }">← Stoppen</button>
+        ${steps}`;
+      if (f.step === 1) {
+        return `${head}
+          <div class="card v-intro">
+            <div class="v-big">Wat vind jij écht belangrijk in dit leven?</div>
+            <p>Veel mensen kennen zichzelf niet. Ze weten niet wat ze belangrijk vinden, en daardoor zijn ze zichzelf niet. Ze durven niet af te wijken en volgen hun dromen niet. Veel mensen waarderen zichzelf niet.</p>
+            <p>Het enige wat je hoeft te doen, is jezelf <b>toestemming geven</b> om naar je hoogste waarden te leven.</p>
+            <p style="margin-bottom: 0;"><b>Opdracht:</b> beantwoord de vragen hieronder, voor meer inzicht in jouw waarden.</p>
+          </div>
+          ${valueQuestions.map((q, i) => `
+            <div class="card">
+              <label class="j-q" for="vq-${i}"><span style="color: #e5484d;">${i + 1}.</span> ${q}</label>
+              <textarea class="textarea" id="vq-${i}" style="min-height: 90px;" oninput="vfAnswer(${i}, this.value)">${esc(f.answers[i])}</textarea>
+            </div>`).join('')}
+          <div class="hs-small" style="margin-bottom: 16px;">💡 Handig om te weten: je hoogste waarden veranderen per levensfase. Vul de vragen daarom af en toe opnieuw in.</div>
+          <button class="btn btn-primary" style="width: 100%; padding: 18px;" onclick="vfStep(2)">Verder: kies je top 5 →</button>`;
+      }
+      if (f.step === 2) {
+        const opts = [...new Set([...valueOptions, ...f.top])];
+        return `${head}
+          <div class="card">
+            <label class="label">Kies je 5 belangrijkste waarden · ${f.top.length}/5</label>
+            <div class="hs-small" style="margin-bottom: 12px;">Kijk naar je antwoorden: welke woorden komen steeds terug? Kies wat je laat zien in hoe je leeft, niet wat je zou moeten vinden.</div>
+            <div class="chips" style="margin: 0;">
+              ${opts.map(v => `<button class="chip ${f.top.includes(v) ? 'active' : ''}" onclick="vfToggle(${esc(JSON.stringify(v))})">${esc(v)}</button>`).join('')}
+            </div>
+            <div class="goal-update" style="margin-top: 12px;">
+              <input type="text" class="input-sm" id="vf-custom" placeholder="Eigen waarde" onkeydown="if(event.key === 'Enter') vfCustom()">
+              <button class="btn btn-secondary btn-small" onclick="vfCustom()">+ Toevoegen</button>
+            </div>
+          </div>
+          ${f.top.length ? `
+            <div class="card">
+              <label class="label">Op volgorde: belangrijkste bovenaan</label>
+              ${f.top.map((v, i) => `
+                <div class="v-order">
+                  <span class="v-rank">${i + 1}</span><span style="flex: 1;">${esc(v)}</span>
+                  <button class="icon-btn" onclick="vfMove(${i}, -1)" aria-label="${esc(v)} omhoog">↑</button>
+                  <button class="icon-btn" onclick="vfMove(${i}, 1)" aria-label="${esc(v)} omlaag">↓</button>
+                </div>`).join('')}
+            </div>` : ''}
+          <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 8px;">
+            <button class="btn btn-secondary" onclick="vfStep(1)">← Vragen</button>
+            <button class="btn btn-primary" onclick="vfStep(3)">Verder: cijfers →</button>
+          </div>`;
+      }
+      return `${head}
+        <div class="card">
+          <label class="label">Hoe goed leef je hier nu naar?</label>
+          <div class="hs-small" style="margin-bottom: 8px;">1 = helemaal niet · 10 = volledig. Wees eerlijk: het gat laat zien waar je eerste stap ligt.</div>
+          ${f.top.map((v, i) => {
+            const val = f.scores[v] || 5;
+            return `
+              <div class="slider-group">
+                <div class="slider-header">
+                  <span class="slider-label">${i + 1}. ${esc(v)}</span>
+                  <span class="slider-value" id="vfs-${valueSlug(v)}" style="color: ${getColor(val)}">${val}</span>
+                </div>
+                <input type="range" class="slider" min="1" max="10" value="${val}" oninput="vfScore(${esc(JSON.stringify(v))}, this.value)" aria-label="${esc(v)}">
+              </div>`;
+          }).join('')}
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 8px;">
+          <button class="btn btn-secondary" onclick="vfStep(2)">← Top 5</button>
+          <button class="btn btn-primary" onclick="vfSave()">Opslaan</button>
+        </div>`;
+    }
+
     function renderMore() {
       const since = daysSinceBackup();
       const last = getLastBackup();
@@ -6864,6 +7201,17 @@
         <div class="page-header">
           <div class="page-sub">Extra</div>
           <div class="page-title">Meer</div>
+        </div>
+
+        <div class="card card-accent" style="cursor: pointer;" onclick="state.valuesView = 'overview'; setSection('values');">
+          <label class="label">🧭 Waarden</label>
+          ${latestValues() ? `
+            <div style="font-size: 13px; color: #d4d4d4; line-height: 1.6;">${latestValues().top.map((x, i) => (i + 1) + '. ' + esc(x)).join(' · ')}</div>
+            <div style="font-size: 11px; color: ${valuesReminderDue() ? '#eab308' : '#e5484d'}; margin-top: 10px;">${valuesReminderDue() ? 'Tijd om je waarden opnieuw te bekijken →' : 'Bekijk je waarden →'}</div>
+          ` : `
+            <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">Wat vind jij écht belangrijk in dit leven? Een opdracht van ±15 minuten die je meer inzicht geeft in je hoogste waarden.</div>
+            <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Start de opdracht · +${VALUES_BONUS_XP} XP →</div>
+          `}
         </div>
         
         <div class="card card-accent">
@@ -6952,6 +7300,7 @@
           ${state.activeSection === 'week' ? renderWeek() : ''}
           ${state.activeSection === 'retention' ? renderRetention() : ''}
           ${state.activeSection === 'more' ? renderMore() : ''}
+          ${state.activeSection === 'values' ? renderValues() : ''}
         </div>
         
         ${state.showRankUp ? renderRankUp() : ''}
