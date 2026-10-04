@@ -483,6 +483,35 @@
     .f-fav { width: 44px; height: 44px; background: transparent; border: 1px solid #262626; color: #d9a441; font-size: 18px; flex-shrink: 0; cursor: pointer; }
     .f-rows { border-top: 1px solid #1c1c1c; margin-top: 14px; padding-top: 10px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #a3a3a3; }
     .f-rows div { display: flex; justify-content: space-between; }
+    /* Slaap */
+    .sl-chart { position: relative; display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); gap: 4px; height: 130px; margin-top: 8px; padding-top: 6px; }
+    .sl-col { display: flex; flex-direction: column; min-width: 0; }
+    .sl-bar-wrap { flex: 1; display: flex; align-items: flex-end; }
+    .sl-bar { width: 100%; }
+    .sl-bar.sl-none { height: 2px; background: #1c1c1c; }
+    .sl-day { font-size: 8px; color: #737373; text-align: center; margin-top: 4px; height: 12px; }
+    .sl-goal { position: absolute; left: 0; right: 0; border-top: 1px dashed #d9a441; pointer-events: none; z-index: 1; }
+    .sl-goal span { position: absolute; right: 0; top: -14px; font-size: 9px; color: #d9a441; background: #0a0a0a; padding: 0 3px; }
+    .sl-legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 10px; color: #8a8a8a; margin-top: 10px; }
+    .sl-legend i { display: inline-block; width: 8px; height: 8px; margin-right: 5px; }
+    .sl-goal-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 10px; }
+    .sl-field { display: block; font-size: 10px; color: #8a8a8a; letter-spacing: 0.1em; text-transform: uppercase; }
+    .sl-field .form-input { margin-top: 6px; }
+    .sl-chips { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; margin-top: 6px; }
+    .sl-chips-wide { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .sl-chips button { background: transparent; border: 1px solid #262626; color: #a3a3a3; font-family: inherit; font-size: 12px; min-height: 44px; cursor: pointer; padding: 0 2px; }
+    .sl-chips button.on { background: #7f1d1d; border-color: #7f1d1d; color: #fff; }
+    .sl-bedtime { font-size: 13px; color: #a3a3a3; margin: 14px 0 6px; }
+    .sl-bedtime b { font-size: 22px; font-weight: 300; color: #fafafa; margin-left: 4px; }
+    .sl-timeline { border-left: 1px solid #262626; margin: 10px 0 0 6px; }
+    .sl-tl { display: flex; gap: 12px; padding: 8px 0 8px 14px; position: relative; }
+    .sl-tl::before { content: ''; position: absolute; left: -4px; top: 13px; width: 7px; height: 7px; background: #7f1d1d; }
+    .sl-tl-t { font-size: 13px; color: #fafafa; width: 44px; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+    .sl-tl-b { font-size: 12px; color: #a3a3a3; line-height: 1.5; min-width: 0; }
+    .sl-tl-b b { display: block; color: #fafafa; font-weight: 500; font-size: 13px; }
+    .sl-sub { display: block; font-size: 10px; color: #737373; margin-top: 2px; }
+    html.pf-night-on input[type=checkbox] { accent-color: #7f1d1d; filter: brightness(0.6); }
+    #pf-night { position: fixed; inset: 0; background: #b80000; mix-blend-mode: multiply; pointer-events: none; z-index: 2147483647; }
   </style>
 </head>
 <body>
@@ -1141,7 +1170,7 @@
             </div>
             ${check}
             ${body}
-            ${info.sideNote ? `<div class="hs-side"><div class="hs-side-t">${info.sideNote.title}</div><div>${habitSrcLinks(info.sideNote.html)}</div><div class="hs-small" style="margin-top: 8px;">Meer over slaap komt in het blok Slaap.</div></div>` : ''}
+            ${info.sideNote ? `<div class="hs-side"><div class="hs-side-t">${info.sideNote.title}</div><div>${habitSrcLinks(info.sideNote.html)}</div><div class="hs-small" style="margin-top: 8px;"><a href="#" onclick="state.showHabitModal = null; setSection('sleep'); return false;">Meer over slaap bij Slaap →</a></div></div>` : ''}
             <details class="hs-sec hs-src" id="hs-sources">
               <summary><span>Bronnen & meer lezen · ${info.sources.length}</span><span class="hs-pm" aria-hidden="true"></span></summary>
               <div class="hs-body">
@@ -1881,6 +1910,8 @@
 
         ${renderBackupReminder()}
         ${valuesReminderDue() ? `<div class="card" style="cursor: pointer; border-left: 3px solid #d9a441;" onclick="openValues();"><div style="font-size: 13px;">🧭 Kloppen je waarden nog?</div><div style="font-size: 11px; color: #a3a3a3; margin-top: 4px;">Al 3 maanden niet bekeken. Waarden veranderen per levensfase →</div></div>` : ''}
+
+        ${renderSleepDashCard()}
 
         ${renderDashboardChallenges()}
         
@@ -5955,11 +5986,12 @@
         </div>
 
         <div class="card">
-          <label class="label">Challenges & lichaam</label>
+          <label class="label">Challenges, lichaam & slaap</label>
           <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px;"><span style="color: #a3a3a3;">Challenge-dagen gehaald</span><span>${w.chTotal ? w.chDone + ' van ' + w.chTotal : '—'}</span></div>
           ${w.completed.length ? `<div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px;"><span style="color: #a3a3a3;">Voltooid</span><span style="color: #22c55e;">🏆 ${w.completed.map(esc).join(', ')}</span></div>` : ''}
           ${w.failed.length ? `<div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px;"><span style="color: #a3a3a3;">Gestopt of gemist</span><span>${w.failed.map(esc).join(', ')}</span></div>` : ''}
           <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px;"><span style="color: #a3a3a3;">Trainingstijd</span><span>${w.minutes ? w.minutes + ' min' : (w.workouts.length ? w.workouts.length + ' trainingen' : '—')}</span></div>
+          ${(() => { const sn = sleepNights(w.start, w.end); const r = sleepRegularity(sn); return `<div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px;"><span style="color: #a3a3a3;">Gem. slaap</span><span>${sn.length ? fmtSleepDur(sleepAvg(sn)) + ' (' + sn.length + ' nachten)' : '—'}</span></div><div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px;"><span style="color: #a3a3a3;">Slaapregelmaat</span><span style="color: ${r ? r.color : '#fafafa'};">${r ? r.score + ' · ' + r.label.toLowerCase() : '—'}</span></div>`; })()}
           <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px;"><span style="color: #a3a3a3;">Gewicht</span><span>${w.wNow ? fmtVal(w.wNow.value) + ' kg' + (w.weightDelta !== null ? ` (${w.weightDelta > 0 ? '+' : ''}${fmtVal(w.weightDelta)})` : '') : '—'}</span></div>
         </div>
 
@@ -7873,11 +7905,8 @@
         <div class="card">
           <label class="label">Komt binnenkort</label>
           <div style="color: #525252; font-size: 12px;">
-            <p style="margin-bottom: 12px;">• Voeding logboek</p>
             <p style="margin-bottom: 12px;">• Supplementen</p>
-            <p style="margin-bottom: 12px;">• Slaap analyse</p>
-            <p style="margin-bottom: 12px;">• Trainingsschema's</p>
-            <p>• Bloedwaarden</p>
+            <p style="margin-bottom: 12px;">• Bloedwaarden</p>
           </div>
         </div>
         
@@ -7917,6 +7946,7 @@
           ${state.activeSection === 'more' ? renderMore() : ''}
           ${state.activeSection === 'values' ? renderValues() : ''}
           ${state.activeSection === 'food' ? renderFood() : ''}
+          ${state.activeSection === 'sleep' ? renderSleep() : ''}
         </div>
         
         ${state.showRankUp ? renderRankUp() : ''}
@@ -7938,6 +7968,9 @@
           <button class="nav-item ${state.activeSection === 'food' ? 'active' : ''}" onclick="state.fView = 'day'; setSection('food')">
             <span class="nav-icon">🍽️</span>Voeding
           </button>
+          <button class="nav-item ${state.activeSection === 'sleep' ? 'active' : ''}" onclick="setSection('sleep')">
+            <span class="nav-icon">😴</span>Slaap
+          </button>
           <button class="nav-item ${state.activeSection === 'more' ? 'active' : ''}" onclick="setSection('more')">
             <span class="nav-icon">⚡</span>Meer
           </button>
@@ -7957,8 +7990,354 @@
         return;
       }
       app.innerHTML = renderApp();
+      applyNightMode();
       if (state.activeSection === 'body') setupBodyChart();
       if (!state.showRankUp) setTimeout(checkRankUp, 50);
+    }
+
+    // ============================================
+    // SLAAP
+    // ============================================
+    function sleepSettings() {
+      const s = state.bodySettings || {};
+      let v = s.sleep;
+      if (!v) { try { v = JSON.parse(localStorage.getItem('pf_sleep') || 'null'); } catch (e) {} }
+      v = v || {};
+      return { wake: v.wake || '07:00', hours: v.hours || 8, night: v.night || 'off', strength: v.strength || 100, routine: v.routine || {}, set: !!v.wake };
+    }
+    let sleepSaveTimer = null;
+    function saveSleepSettings(patch, quiet) {
+      const cur = sleepSettings();
+      delete cur.set;
+      const n = { ...cur, ...patch };
+      // routine-historie beperken tot 60 dagen
+      const cut = dateAdd(todayStr(), -60);
+      Object.keys(n.routine || {}).forEach(d => { if (d < cut) delete n.routine[d]; });
+      state.bodySettings = { ...(state.bodySettings || {}), sleep: n };
+      try { localStorage.setItem('pf_sleep', JSON.stringify(n)); } catch (e) {}
+      applyNightMode();
+      if (!state.user) return;
+      clearTimeout(sleepSaveTimer);
+      sleepSaveTimer = setTimeout(async () => {
+        const { error } = await supabaseClient.from('user_settings').upsert({ user_id: state.user.id, sleep: n }, { onConflict: 'user_id' });
+        if (error) console.warn('Slaapinstellingen alleen lokaal (voer slaap-update.sql uit):', error.message);
+      }, quiet ? 800 : 0);
+    }
+    function hm2min(t) { const [h, m] = String(t || '').split(':').map(Number); return isNaN(h) || isNaN(m) ? null : h * 60 + m; }
+    function min2hm(n) { n = ((Math.round(n) % 1440) + 1440) % 1440; return String(Math.floor(n / 60)).padStart(2, '0') + ':' + String(n % 60).padStart(2, '0'); }
+    function fmtSleepDur(min) { return min === null || min === undefined ? '—' : `${Math.floor(min / 60)}u${String(min % 60).padStart(2, '0')}`; }
+    function sleepBedMin() { const s = sleepSettings(); return hm2min(s.wake) - Math.round(s.hours * 60); }
+    // Na middernacht hoort de avondroutine nog bij gisteravond
+    function sleepEveningDate() { return new Date().getHours() < 5 ? dateAdd(todayStr(), -1) : todayStr(); }
+
+    // Nachten uit je journal (ochtend) of het Slaap-scherm: datum = de ochtend dat je opstond
+    function sleepNight(date) {
+      const e = state.entries.find(x => x.date === date && x.daily && x.daily.sleepMin);
+      if (!e) return null;
+      return { date, min: e.daily.sleepMin, bed: e.daily.bed, wake: e.daily.wake, q: e.sleep_quality || null };
+    }
+    function sleepNights(from, to) {
+      const out = [];
+      for (let d = from; d <= to; d = dateAdd(d, 1)) { const n = sleepNight(d); if (n) out.push(n); }
+      return out;
+    }
+    function sleepSd(arr) { const m = arr.reduce((a, b) => a + b, 0) / arr.length; return Math.sqrt(arr.reduce((a, b) => a + (b - m) ** 2, 0) / arr.length); }
+    // Eigen eenvoudige regelmaat-score: hoeveel je bed- en opstatijd schommelen (geen officiële SRI)
+    function sleepRegularity(nights) {
+      const ok = nights.filter(n => hm2min(n.bed) !== null && hm2min(n.wake) !== null);
+      if (ok.length < 3) return null;
+      const bed = ok.map(n => (hm2min(n.bed) - 720 + 1440) % 1440); // minuten sinds 12:00
+      const wake = ok.map(n => (hm2min(n.wake) + 720) % 1440 - 720);  // rond middernacht
+      const sdBed = Math.round(sleepSd(bed)), sdWake = Math.round(sleepSd(wake));
+      const avg = (sdBed + sdWake) / 2;
+      const score = Math.max(0, Math.min(100, Math.round(100 - avg * 1.2)));
+      const label = avg <= 20 ? 'Zeer regelmatig' : avg <= 45 ? 'Redelijk regelmatig' : 'Onregelmatig';
+      const color = avg <= 20 ? '#22c55e' : avg <= 45 ? '#eab308' : '#e5484d';
+      return { sdBed, sdWake, score, label, color, n: ok.length };
+    }
+    function sleepAvg(nights) { return nights.length ? Math.round(nights.reduce((a, n) => a + n.min, 0) / nights.length) : null; }
+
+    function sleepRoutineItems() {
+      const B = sleepBedMin();
+      return [
+        ['coffee', `Laatste koffie vóór ${min2hm(B - 540)}`, '9 uur voor bed'],
+        ['train', `Geen zware training na ${min2hm(B - 60)}`, 'laatste uur voor bed'],
+        ['shower', `Warme douche of bad rond ${min2hm(B - 90)}`, '1–2 uur voor bed'],
+        ['screen', `Scherm weg vanaf ${min2hm(B - 60)}`, '1–2 uur voor bed'],
+        ['light', 'Licht gedimd of rood', 'laatste uur'],
+        ['room', 'Slaapkamer donker, telefoon niet naast je bed', ''],
+        ['bed', `In bed rond ${min2hm(B)}`, 'binnen 30 min'],
+      ];
+    }
+    function sleepRoutineToggle(key, on) {
+      const s = sleepSettings();
+      const d = sleepEveningDate();
+      const cur = new Set(s.routine[d] || []);
+      on ? cur.add(key) : cur.delete(key);
+      saveSleepSettings({ routine: { ...s.routine, [d]: [...cur] } }, true);
+      const el = document.getElementById('sr-score'); if (el) el.textContent = `${cur.size} / ${sleepRoutineItems().length}`;
+      const row = document.getElementById('sr-' + key); if (row) row.classList.toggle('done', on);
+    }
+    function sleepSetGoal(field, value) {
+      if (field === 'wake' && hm2min(value) === null) return;
+      saveSleepSettings({ [field]: field === 'hours' ? Number(value) : value });
+      render();
+    }
+
+    async function saveSleepNight() {
+      if (!state.user) return;
+      const jd = jdInit();
+      if (!jd.bed || !jd.wake) { alert('Vul in hoe laat je naar bed ging en opstond.'); return; }
+      const sleepMin = jSleepCalc();
+      const existing = jd.id ? state.entries.find(e => e.id === jd.id) : null;
+      const daily = { ...((existing && existing.daily) || {}), bed: jd.bed, wake: jd.wake, sleepMin };
+      const btn = document.getElementById('sl-save');
+      if (btn) { btn.disabled = true; btn.textContent = 'Opslaan...'; }
+      let res;
+      if (jd.id) res = await supabaseClient.from('journal_entries').update({ daily, sleep_quality: jd.sleep }).eq('id', jd.id);
+      else {
+        res = await supabaseClient.from('journal_entries').insert([{ user_id: state.user.id, date: jd.date, daily, content: '', habits: { ...state.habits }, energy: jd.energy, sleep_quality: jd.sleep }]).select().single();
+        if (!res.error && res.data) jd.id = res.data.id;
+      }
+      if (res.error) {
+        if (btn) { btn.disabled = false; btn.textContent = 'Opslaan'; }
+        alert('Fout bij opslaan: ' + res.error.message);
+        return;
+      }
+      await loadEntries();
+      state.jd = null; jdInit();
+      render();
+      showToast('😴 Nacht opgeslagen');
+    }
+
+    // Rode nachtmodus: legt een rood filter over deze app (niet over je hele telefoon)
+    function nightModeActive() {
+      const s = sleepSettings();
+      if (s.night === 'on') return true;
+      if (s.night !== 'auto') return false;
+      const now = new Date(), m = now.getHours() * 60 + now.getMinutes();
+      const start = ((sleepBedMin() - 60) % 1440 + 1440) % 1440, end = hm2min(s.wake);
+      return start < end ? m >= start && m < end : m >= start || m < end;
+    }
+    function applyNightMode() {
+      let el = document.getElementById('pf-night');
+      const on = !!state.user && nightModeActive();
+      if (!on) { if (el) el.remove(); document.documentElement.classList.remove('pf-night-on'); return; }
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'pf-night';
+        el.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(el);
+      }
+      el.style.opacity = (sleepSettings().strength || 100) / 100;
+      document.documentElement.classList.add('pf-night-on');
+    }
+    function sleepSetStrength(v) {
+      const n = parseInt(v);
+      const el = document.getElementById('pf-night'); if (el) el.style.opacity = n / 100;
+      const t = document.getElementById('sl-str'); if (t) t.textContent = n + '%';
+      saveSleepSettings({ strength: n }, true);
+    }
+    setInterval(applyNightMode, 60000);
+
+    const sleepSources = [
+      ['Richtlijn', 'AASM & SRS: aanbevolen slaap voor volwassenen, 7+ uur (2015, Engels)', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC4434546/'],
+      ['Onderzoek', 'Regelmaat voorspelt sterfte beter dan slaapduur, 60.977 mensen (Sleep 2024)', 'https://doi.org/10.1093/sleep/zsad253'],
+      ['Onderzoek', 'Een week 5 uur slapen en testosteron bij jonge mannen (JAMA 2011)', 'https://jamanetwork.com/journals/jama/fullarticle/1029127'],
+      ['Onderzoek', 'Eén nacht niet slapen en spiereiwitopbouw (Physiological Reports 2021)', 'https://physoc.onlinelibrary.wiley.com/doi/10.14814/phy2.14660'],
+      ['Overzicht', 'Cafeïne en je slaap daarna: review van 24 onderzoeken (Sleep Medicine Reviews 2023)', 'https://www.sciencedirect.com/science/article/pii/S1087079223000205'],
+      ['Uitleg', 'Warm bad of douche 1–2 uur voor bed (review 2019, ScienceDaily, Engels)', 'https://www.sciencedaily.com/releases/2019/07/190719173554.htm'],
+      ['Overzicht', 'Effect van bewegen op slaap: meta-analyse (J Behav Med 2015)', 'https://link.springer.com/article/10.1007/s10865-015-9617-6'],
+      ['Overzicht', '’s Avonds trainen en slaap: meta-analyse (Sports Medicine 2019)', 'https://link.springer.com/article/10.1007/s40279-018-1015-0'],
+      ['Richtlijn', 'Thuisarts: ik wil beter slapen', 'https://www.thuisarts.nl/slaapproblemen/ik-wil-beter-slapen'],
+      ['Richtlijn', 'Thuisarts: ik blijf slecht slapen en kies een behandeling', 'https://www.thuisarts.nl/slecht-slapen/ik-blijf-slecht-slapen-en-kies-behandeling'],
+      ['Uitleg', 'Sleep Foundation: is rood licht goed voor je slaap? (Engels)', 'https://www.sleepfoundation.org/bedroom-environment/is-red-light-good-for-sleep']
+    ];
+    const sleepInfoSections = [
+      ['Hoeveel slaap?', '<p><b>Minstens 7 uur per nacht.</b> Dat is het advies van de Amerikaanse slaapartsen voor volwassenen. Structureel minder hangt samen met slechtere gezondheid, prestaties en stemming. [1]</p><p>Lig je lang wakker? Thuisarts raadt aan om dan maximaal 8 uur in bed te liggen. [9]</p>'],
+      ['Waarom: spieren & testosteron', '<p><b>Testosteron.</b> Jonge mannen die een week maar 5 uur per nacht sliepen, hadden overdag 10–15% minder testosteron. [3]</p><p><b>Spieropbouw.</b> Na één nacht zonder slaap was de spiereiwitopbouw 18% lager, cortisol hoger en testosteron lager. [4] Slaap is dus geen bijzaak naast je training: daar wordt het herstel gedaan.</p>'],
+      ['Regelmaat', '<p><b>Vaste tijden tellen mee.</b> Bij ruim 60.000 mensen hadden de regelmatigste slapers 20–48% minder kans om tijdens het onderzoek te overlijden dan de onregelmatigste. Regelmaat voorspelde dat beter dan het aantal uren. [2]</p><p>Ga elke dag rond dezelfde tijd naar bed en sta rond dezelfde tijd op, ook in het weekend. [9]</p><p class="hs-small">De regelmaat-score in deze app is een eigen, eenvoudige berekening: hoeveel je bed- en opstatijd van de afgelopen 7 nachten schommelen. Binnen ± 20 minuten is zeer regelmatig.</p>'],
+      ['Cafeïne', '<p><b>Cafeïne kost je gemiddeld 45 minuten slaap.</b> Een review van 24 onderzoeken adviseert: een kop koffie (±100 mg) minstens <b>8,8 uur</b> voor bed, een pre-workout (±220 mg) minstens <b>13,2 uur</b> voor bed. [5]</p><p>Thuisarts noemt minimaal 6 uur. [9] Deze app rekent met 9 uur voor koffie, dan zit je goed volgens beide.</p>'],
+      ['Warme douche of bad', '<p>Een warm bad of warme douche van <b>40–42,5 °C, 1–2 uur voor bed</b>, laat je gemiddeld ongeveer 10 minuten sneller in slaap vallen. [6]</p><p>Waarom: het warme water stuurt bloed naar je handen en voeten. Daardoor verlies je daarna sneller warmte, en die daling van je lichaamstemperatuur is een signaal om te gaan slapen.</p>'],
+      ['Training & slaap', '<p><b>Regelmatig bewegen verbetert je slaap.</b> [7]</p><p>’s Avonds trainen is prima. Alleen een <b>zware</b> training die in het laatste uur voor bed eindigt, kan het inslapen verstoren. [8]</p>'],
+      ['Scherm & licht', '<p>Leg je telefoon, tablet of laptop <b>1–2 uur voor bed weg</b>. [9]</p><p>Rood licht remt melatonine minder dan wit of blauw licht. Een zwak rood lampje is ’s avonds dus beter dan fel licht. Slaap wel in het donker. [11]</p><p>Overdag juist veel daglicht, vooral ’s ochtends: zie Zonlicht & roodlicht bij je gewoontes. [9]</p>'],
+      ['Liever niet', '<p>Thuisarts raadt <b>geen slaappillen, melatonine of valeriaan</b> aan om beter te slapen: ze verbeteren je slaap niet echt en kunnen het probleem erger maken. Melatonine is alleen nuttig bij een jetlag. [9]</p><p><b>Geen alcohol om in slaap te komen</b>: je slaapt er slechter door. [9]</p>', 'warn'],
+      ['Blijf je slecht slapen?', '<p>Werken de adviezen na een paar weken niet? Dan is een <b>slaapcursus</b> de beste behandeling: online, uit een boek of via de praktijkondersteuner. Daarin leer je ontspannen, anders denken over slaap en korter in bed liggen. [10]</p><p>Helpt dat niet genoeg, maak dan een afspraak bij je huisarts. [10]</p>']
+    ];
+
+    function renderSleepChart(nights14, goalMin) {
+      const days = [];
+      for (let i = 13; i >= 0; i--) days.push(dateAdd(todayStr(), -i));
+      const max = 600; // 10 uur
+      const goalPct = Math.min(100, goalMin / max * 100);
+      const wd = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
+      return `
+        <div class="sl-chart" role="img" aria-label="Slaapduur afgelopen 14 nachten">
+          <div class="sl-goal" style="bottom: calc(16px + (100% - 22px) * ${(goalPct / 100).toFixed(3)});"><span>${fmtSleepDur(goalMin)}</span></div>
+          ${days.map(d => {
+            const n = nights14.find(x => x.date === d);
+            const h = n ? Math.max(4, Math.min(100, n.min / max * 100)) : 0;
+            const c = !n ? '' : n.min >= goalMin - 15 ? '#22c55e' : n.min >= 420 ? '#525252' : '#7f1d1d';
+            return `<div class="sl-col" title="${d}: ${n ? fmtSleepDur(n.min) : 'niet ingevuld'}">
+              <div class="sl-bar-wrap">${n ? `<div class="sl-bar" style="height: ${h}%; background: ${c};"></div>` : '<div class="sl-bar sl-none"></div>'}</div>
+              <div class="sl-day">${wd[new Date(d + 'T12:00:00').getDay()]}</div>
+            </div>`;
+          }).join('')}
+        </div>
+        <div class="sl-legend"><span><i style="background: #22c55e;"></i>doel gehaald</span><span><i style="background: #525252;"></i>7+ uur</span><span><i style="background: #7f1d1d;"></i>onder 7 uur</span></div>`;
+    }
+
+    function renderSleep() {
+      const s = sleepSettings();
+      const jd = jdInit();
+      const sl = jSleepCalc();
+      const today = todayStr();
+      const n14 = sleepNights(dateAdd(today, -13), today);
+      const n7 = n14.filter(n => n.date > dateAdd(today, -7));
+      const avg7 = sleepAvg(n7);
+      const reg = sleepRegularity(n7);
+      const qs = n7.filter(n => n.q);
+      const avgQ = qs.length ? (qs.reduce((a, n) => a + n.q, 0) / qs.length).toFixed(1) : null;
+      const goalMin = Math.round(s.hours * 60);
+      const B = sleepBedMin(), W = hm2min(s.wake);
+      const evDate = sleepEveningDate();
+      const done = new Set(s.routine[evDate] || []);
+      const items = sleepRoutineItems();
+      const nightOn = nightModeActive();
+      const ref = n => `<a href="#hs-src-${n}" class="hs-ref" onclick="return habitSrcJump(${n})" aria-label="Bron ${n}">${n}</a>`;
+      const timeline = [
+        [B - 780, 'Laatste pre-workout', 'Cafeïne ±220 mg: 13 uur voor bed', 5],
+        [B - 540, 'Laatste koffie', '9 uur voor bed', 5],
+        [B - 90, 'Warme douche of bad', '40–42 °C, 1–2 uur voor bed', 6],
+        [B - 60, 'Scherm weg · licht dimmen', 'Zware training is dan klaar', 9],
+        [B, 'Naar bed', `${String(s.hours).replace('.', ',')} uur slaap`, 1],
+        [W, 'Opstaan · naar buiten', 'Daglicht in het eerste uur', 9]
+      ];
+      const typeCls = t => ({ Onderzoek: 'r', Overzicht: 'o', Uitleg: 'u', Richtlijn: 'g' }[t] || 'u');
+
+      return `
+        <div class="page-header">
+          <div class="page-sub">Herstel</div>
+          <div class="page-title">Slaap</div>
+        </div>
+
+        <div class="card">
+          <label class="label">Vannacht</label>
+          <div class="j-times">
+            <label>Naar bed<input type="time" class="form-input" value="${esc(jd.bed)}" oninput="jTime('bed', this.value)"></label>
+            <span aria-hidden="true">→</span>
+            <label>Opgestaan<input type="time" class="form-input" value="${esc(jd.wake)}" oninput="jTime('wake', this.value)"></label>
+          </div>
+          <div id="j-sleeptxt" style="font-size: 12px; margin: 10px 0 6px; color: ${sl !== null && sl >= 420 ? '#22c55e' : '#a3a3a3'};">${jSleepText()}</div>
+          ${jSliderHtml('sleep', '😴 Slaapkwaliteit')}
+          <button class="btn btn-primary" id="sl-save" style="width: 100%;" onclick="saveSleepNight()">Opslaan</button>
+          <div class="j-foot" style="margin-top: 8px;">Staat ook in je Journal bij Ochtend. Eén keer invullen is genoeg.</div>
+        </div>
+
+        <div class="card">
+          <label class="label">Overzicht · 14 nachten</label>
+          <div class="hs-stats">
+            <div><b>${avg7 !== null ? fmtSleepDur(avg7) : '—'}</b><span>Gem. 7 nachten</span></div>
+            <div><b style="color: ${reg ? reg.color : '#fafafa'};">${reg ? reg.score : '—'}</b><span>Regelmaat</span></div>
+            <div><b>${avgQ ? avgQ.replace('.', ',') : '—'}</b><span>Kwaliteit</span></div>
+          </div>
+          ${n14.length ? renderSleepChart(n14, goalMin) : '<div class="hs-small">Nog geen nachten ingevuld. Vul hierboven of in je Journal je tijden in.</div>'}
+          <div class="hs-small" style="margin-top: 10px;">${reg
+            ? `<b style="color: ${reg.color};">${reg.label}</b> · bedtijd schommelt ± ${reg.sdBed} min, opstaan ± ${reg.sdWake} min.`
+            : 'Regelmaat verschijnt na 3 ingevulde nachten.'}</div>
+        </div>
+
+        <div class="card">
+          <label class="label">Slaapdoel</label>
+          <div class="sl-goal-row">
+            <label class="sl-field">Opstaan<input type="time" class="form-input" value="${esc(s.wake)}" onchange="sleepSetGoal('wake', this.value)"></label>
+            <div class="sl-field">Slaap
+              <div class="sl-chips">${[7, 7.5, 8, 8.5, 9].map(h => `<button class="${s.hours === h ? 'on' : ''}" onclick="sleepSetGoal('hours', ${h})">${String(h).replace('.5', '½')}u</button>`).join('')}</div>
+            </div>
+          </div>
+          <div class="sl-bedtime">Naar bed om <b>${min2hm(B)}</b></div>
+          <div class="sl-timeline">
+            ${timeline.map(([t, title, sub, r]) => `
+              <div class="sl-tl"><span class="sl-tl-t">${min2hm(t)}</span><span class="sl-tl-b"><b>${title}</b><span>${sub} ${ref(r)}</span></span></div>`).join('')}
+          </div>
+        </div>
+
+        <div class="card" style="border-top: 3px solid #7f1d1d;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span class="label" style="margin: 0;">🌙 Avondroutine ${evDate === today ? 'vanavond' : 'gisteravond'}</span>
+            <span id="sr-score" style="font-size: 13px; color: #22c55e; font-weight: 500;">${done.size} / ${items.length}</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 12px;">
+            ${items.map(([k, t, sub]) => `
+              <label class="j-goal ${done.has(k) ? 'done' : ''}" id="sr-${k}">
+                <input type="checkbox" ${done.has(k) ? 'checked' : ''} onchange="sleepRoutineToggle('${k}', this.checked)">
+                <span>${t}${sub ? `<span class="sl-sub">${sub}</span>` : ''}</span>
+              </label>`).join('')}
+          </div>
+        </div>
+
+        <div class="card">
+          <label class="label">🔴 Rode nachtmodus</label>
+          <div class="sl-chips sl-chips-wide">
+            ${[['off', 'Uit'], ['auto', 'Automatisch'], ['on', 'Altijd aan']].map(([k, l]) => `<button class="${s.night === k ? 'on' : ''}" onclick="saveSleepSettings({ night: '${k}' }); render();">${l}</button>`).join('')}
+          </div>
+          <div class="hs-small" style="margin-top: 10px;">${s.night === 'auto'
+            ? `Aan van <b style="color: #fafafa;">${min2hm(B - 60)}</b> tot <b style="color: #fafafa;">${min2hm(W)}</b>: een uur voor je bedtijd tot je opstaat.${nightOn ? ' Nu actief.' : ''}`
+            : s.night === 'on' ? 'Staat nu de hele dag aan.' : 'Kleurt deze app rood, zodat je ’s avonds je journal kunt invullen zonder fel wit licht.'}</div>
+          ${s.night !== 'off' ? `
+            <div class="slider-group" style="margin-top: 12px;">
+              <div class="slider-header"><span class="slider-label">Sterkte</span><span class="slider-value" id="sl-str">${s.strength}%</span></div>
+              <input type="range" class="slider" min="40" max="100" step="5" value="${s.strength}" oninput="sleepSetStrength(this.value)" aria-label="Sterkte rode nachtmodus">
+            </div>` : ''}
+          <details class="hs-sec" style="margin-top: 10px; border-top: 1px solid #1c1c1c;">
+            <summary><span>Hele telefoon rood?</span><span class="hs-pm" aria-hidden="true"></span></summary>
+            <div class="hs-body">
+              <p>Deze modus werkt alleen in Primal Forged. Voor je hele scherm gebruik je de instelling van je telefoon:</p>
+              <p><b>iPhone</b>: Instellingen → Toegankelijkheid → Weergave en tekstgrootte → Kleurfilters → aan → <b>Kleurtint</b>. Zet tint en intensiteit helemaal naar rechts. Koppel het bij Toegankelijkheid → Toegankelijkheidsshortcut aan Kleurfilters: dan zet je het aan en uit met 3× de zijknop.</p>
+              <p><b>Android</b>: Nachtlicht (of Oogcomfort bij Samsung) op een schema en de sterkte op maximaal. Bedtijdmodus in Digitaal welzijn maakt je scherm grijs.</p>
+              <p class="hs-small">Een filter haalt blauw licht weg, maar je scherm blijft licht geven. Het scherm 1–2 uur voor bed wegleggen helpt meer. ${ref(9)}</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="card">
+          <label class="label">ⓘ Waarom slaap · uitleg & bronnen</label>
+          <div class="hs-secs">${renderHabitSections(sleepInfoSections)}</div>
+          <details class="hs-sec hs-src" id="hs-sources">
+            <summary><span>Bronnen & meer lezen · ${sleepSources.length}</span><span class="hs-pm" aria-hidden="true"></span></summary>
+            <div class="hs-body">
+              ${sleepSources.map(([type, title, url], i) => `
+                <a class="hs-source" id="hs-src-${i + 1}" href="${url}" target="_blank" rel="noopener noreferrer">
+                  <span class="hs-source-n">${i + 1}</span>
+                  <span style="min-width: 0;"><span class="hs-tag ${typeCls(type)}">${type}</span><span class="hs-source-t">${title} ↗</span></span>
+                </a>`).join('')}
+            </div>
+          </details>
+        </div>
+      `;
+    }
+
+    // Dashboardkaart: 's avonds je routine, overdag je laatste nacht
+    function renderSleepDashCard() {
+      const h = new Date().getHours();
+      const s = sleepSettings();
+      const evening = h >= 19 || h < 3;
+      const last = sleepNight(todayStr());
+      const n7 = sleepNights(dateAdd(todayStr(), -6), todayStr());
+      const reg = sleepRegularity(n7);
+      let main, sub;
+      if (evening) {
+        const done = (s.routine[sleepEveningDate()] || []).length;
+        main = `🌙 Avondroutine ${done}/${sleepRoutineItems().length} · naar bed ${min2hm(sleepBedMin())}`;
+        sub = 'Scherm weg om ' + min2hm(sleepBedMin() - 60) + ' →';
+      } else if (last) {
+        main = `😴 Vannacht ${fmtSleepDur(last.min)}${last.q ? ' · kwaliteit ' + last.q : ''}`;
+        sub = reg ? `Regelmaat ${reg.score} · ${reg.label.toLowerCase()} →` : 'Bekijk je slaap →';
+      } else {
+        main = '😴 Hoe heb je geslapen?';
+        sub = 'Vul je bed- en opstatijd in →';
+      }
+      return `<div class="card" style="cursor: pointer; border-left: 3px solid #3b4a8a;" onclick="setSection('sleep')"><div style="font-size: 13px;">${main}</div><div style="font-size: 11px; color: #a3a3a3; margin-top: 4px;">${sub}</div></div>`;
     }
 
     // ============================================
