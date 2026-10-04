@@ -316,6 +316,75 @@
     .tc-metric-l { font-size: 9px; color: #8a8a8a; letter-spacing: 0.1em; margin-top: 4px; }
     .trec-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; color: #a3a3a3; }
     .trec-row span:last-child { color: #f2cf7a; }
+
+    /* Gewoontes: info-knop en uitlegpaneel */
+    .habit-wrap { position: relative; }
+    .habit-wrap .habit { width: 100%; height: 100%; padding-top: 16px; }
+    .habit-info { position: absolute; top: 3px; right: 3px; width: 20px; height: 20px; padding: 0; border-radius: 50%; background: #050505; border: 1px solid #3a3a3a; color: #a3a3a3; font-family: Georgia, serif; font-style: italic; font-size: 11px; line-height: 18px; cursor: pointer; }
+    .habit-info.done { border-color: #166534; color: #22c55e; }
+    .habit-info::before { content: ''; position: absolute; inset: -8px; }
+    .habit-info-inline { display: inline-block; width: 14px; height: 14px; line-height: 13px; text-align: center; border: 1px solid #3a3a3a; border-radius: 50%; font-size: 9px; font-style: italic; font-family: Georgia, serif; color: #a3a3a3; }
+    .hs-wrap { align-items: flex-end; padding: 0; }
+    .hs-sheet { width: 100%; max-width: 600px; max-height: 92vh; overflow-y: auto; background: #0a0a0a; border-top: 1px solid #262626; padding: 12px 18px 24px; box-sizing: border-box; }
+    .hs-handle { width: 40px; height: 4px; background: #262626; border-radius: 2px; margin: 0 auto 14px; }
+    .hs-head { display: flex; gap: 14px; align-items: center; }
+    .hs-icon { width: 56px; height: 56px; flex-shrink: 0; border: 1px solid #7f1d1d; background: #1a0606; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+    .hs-title { font-size: 20px; font-weight: 300; letter-spacing: 0.06em; text-transform: uppercase; }
+    .hs-dur { font-size: 12px; color: #a3a3a3; margin-top: 4px; line-height: 1.4; }
+    .hs-x { margin-left: auto; align-self: flex-start; background: transparent; border: none; color: #737373; font-size: 16px; width: 44px; height: 44px; cursor: pointer; flex-shrink: 0; }
+    .hs-summary { font-size: 13px; color: #d4d4d4; line-height: 1.6; margin: 14px 0; }
+    .hs-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-bottom: 14px; }
+    .hs-stats div { border: 1px solid #1c1c1c; padding: 10px; text-align: center; }
+    .hs-stats b { display: block; font-size: 18px; font-weight: 300; }
+    .hs-stats span { display: block; font-size: 9px; color: #8a8a8a; letter-spacing: 0.1em; margin-top: 3px; text-transform: uppercase; }
+    .hs-check { background: #050505; border: 1px solid #1c1c1c; padding: 14px; font-size: 12px; color: #d4d4d4; line-height: 1.8; margin-bottom: 14px; }
+    .hs-check-t { font-size: 10px; color: #22c55e; letter-spacing: 0.15em; font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
+    .hs-secs { border-top: 1px solid #1c1c1c; }
+    .hs-sec { border-bottom: 1px solid #1c1c1c; }
+    .hs-sec summary { list-style: none; display: flex; justify-content: space-between; align-items: center; min-height: 48px; font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; color: #fafafa; }
+    .hs-sec summary::-webkit-details-marker { display: none; }
+    .hs-sec.warn summary { color: #eab308; }
+    .hs-src summary { color: #d9a441; }
+    .hs-pm::before { content: '+'; color: #8a8a8a; font-weight: 400; font-size: 14px; }
+    .hs-sec[open] > summary .hs-pm::before { content: '−'; }
+    .hs-body { padding: 2px 0 16px; font-size: 13px; color: #d4d4d4; line-height: 1.7; }
+    .hs-body p { margin: 0 0 8px; }
+    .hs-body b { color: #fafafa; font-weight: 600; }
+    .hs-list { margin: 0; padding-left: 20px; }
+    .hs-list li { margin-bottom: 8px; }
+    .hs-sub { font-size: 10px; color: #8a8a8a; letter-spacing: 0.15em; text-transform: uppercase; margin: 6px 0 6px !important; }
+    .hs-ref { display: inline-block; min-width: 16px; font-size: 10px; color: #d9a441; text-decoration: none; vertical-align: super; line-height: 1; padding: 2px 1px; text-align: center; }
+    .hs-part { display: flex; align-items: center; gap: 10px; margin: 18px 0 10px; font-size: 10px; color: #e5484d; letter-spacing: 0.2em; font-weight: 600; text-transform: uppercase; }
+    .hs-part i { flex: 1; height: 1px; background: #1c1c1c; }
+    .hs-badge { font-size: 9px; color: #8a8a8a; border: 1px solid #262626; padding: 2px 6px; letter-spacing: 0.1em; }
+    .hs-intro { font-size: 12px; color: #a3a3a3; line-height: 1.6; margin: 0 0 10px; }
+    .hs-side { background: #150707; border: 1px solid #3a1414; padding: 14px; margin-top: 16px; font-size: 12px; color: #d4d4d4; line-height: 1.6; }
+    .hs-side-t { font-size: 10px; color: #e5484d; letter-spacing: 0.15em; font-weight: 600; text-transform: uppercase; margin-bottom: 6px; }
+    .hs-src { margin-top: 16px; border-top: 1px solid #1c1c1c; }
+    .hs-source { display: flex; gap: 10px; align-items: flex-start; text-decoration: none; padding: 8px 4px; transition: background .3s; }
+    .hs-source.flash { background: #2a1f08; }
+    .hs-source-n { width: 18px; flex-shrink: 0; font-size: 11px; color: #d9a441; }
+    .hs-source-t { display: block; font-size: 12px; color: #d4d4d4; line-height: 1.5; margin-top: 4px; }
+    .hs-tag { display: inline-block; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 6px; border: 1px solid; }
+    .hs-tag.r { color: #60a5fa; } .hs-tag.o { color: #a78bfa; } .hs-tag.u { color: #22c55e; } .hs-tag.g { color: #d9a441; }
+    .hs-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 18px; }
+    .btn-done { background: rgba(34,197,94,0.1); border: 1px solid #22c55e; color: #22c55e; }
+    .hs-small { font-size: 11px; color: #8a8a8a; line-height: 1.6; }
+    .hs-note { background: #050505; border: 1px solid #1c1c1c; padding: 12px; font-size: 12px; line-height: 1.6; margin: 10px 0; }
+    .hs-prot-head { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; color: #a3a3a3; margin-bottom: 8px; }
+    .gold { color: #d9a441; }
+    .hs-prot-row { display: block; width: 100%; text-align: left; background: transparent; border: 1px solid transparent; color: inherit; font-family: inherit; padding: 8px 10px; margin: 0 -10px 4px; width: calc(100% + 20px); cursor: pointer; }
+    .hs-prot-row.mine { border-color: #d9a441; background: #120d04; }
+    .hs-prot-top { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; }
+    .hs-prot-goal { color: #d4d4d4; }
+    .hs-prot-row.mine .hs-prot-goal { color: #f2cf7a; font-weight: 500; }
+    .hs-prot-gkg { color: #a3a3a3; white-space: nowrap; }
+    .hs-prot-bar { display: block; position: relative; height: 8px; background: #1c1c1c; margin-top: 6px; }
+    .hs-prot-bar span { position: absolute; top: 0; bottom: 0; background: #7f1d1d; }
+    .hs-prot-row.mine .hs-prot-bar span { background: #d9a441; }
+    .hs-prot-g { display: block; font-size: 10px; color: #8a8a8a; margin-top: 4px; }
+    .hs-prot-row.mine .hs-prot-g { color: #d9a441; }
+    .hs-prot-scale { display: flex; justify-content: space-between; font-size: 9px; color: #525252; }
   </style>
 </head>
 <body>
@@ -433,8 +502,8 @@
       },
       sunlight: { 
         icon: '☀️', 
-        label: 'Zon',
-        title: 'Zonlicht',
+        label: 'Licht',
+        title: 'Zonlicht & roodlicht',
         what: 'Direct zonlicht in je ogen (niet staren!)',
         how: 'Ga binnen 30 min na opstaan naar buiten. Geen zonnebril, geen raam.',
         why: 'Reguleert je circadiaans ritme, boost cortisol ochtendpiek en testosteron.',
@@ -502,6 +571,7 @@
         positive: true
       },
       outside: { 
+        hidden: true,
         icon: '🚶', 
         label: 'Buiten',
         title: 'Buiten Geweest',
@@ -513,6 +583,7 @@
       },
       // NEGATIVE/SITUATION
       badSleep: { 
+        hidden: true,
         icon: '😴', 
         label: 'Slecht',
         title: 'Slecht Geslapen',
@@ -523,6 +594,7 @@
         positive: false
       },
       stressed: { 
+        hidden: true,
         icon: '😤', 
         label: 'Stress',
         title: 'Gestrest',
@@ -533,6 +605,7 @@
         positive: false
       },
       alcohol: { 
+        hidden: true,
         icon: '🍺', 
         label: 'Alcohol',
         title: 'Alcohol Gedronken',
@@ -543,6 +616,7 @@
         positive: false
       },
       unhealthy: { 
+        hidden: true,
         icon: '🍔', 
         label: 'Junk',
         title: 'Ongezond Gegeten',
@@ -553,6 +627,436 @@
         positive: false
       }
     };
+
+
+    // ============================================
+    // GEWOONTES: UITLEG, WETENSCHAP EN BRONNEN
+    // [n] in een tekst wordt een klikbaar bronnummer
+    // ============================================
+    const ulH = items => `<ul class="hs-list">${items.map(i => `<li>${i}</li>`).join('')}</ul>`;
+    const olH = items => `<ol class="hs-list">${items.map(i => `<li>${i}</li>`).join('')}</ol>`;
+    const habitInfo = {
+      coldShower: {
+        duration: '30–90 sec koud, aan het eind van je douche',
+        summary: 'Eindig je douche koud. Kort, maar het vraagt elke dag even doorzetten.',
+        sections: [
+          ['Hoe', olH(['Douche eerst gewoon warm.', 'Zet de kraan aan het eind op koud.', 'Adem rustig en lang uit. Hap niet naar lucht.', 'Eerst benen en armen, dan borst en rug.', 'Tel af en stop pas op het einde.'])],
+          ['Waarom', ulH([
+            'Ruim 3.000 Nederlanders die 30 dagen hun douche koud eindigden, meldden zich <b>29% minder ziek</b> op het werk. Ze waren niet minder vaak ziek, maar gingen vaker toch werken. [1]',
+            'Deelnemers noemden vooral <b>meer energie</b>, vaak vergeleken met koffie. Zelf gemeld, niet gemeten. [1]',
+            'Kou geeft direct een flinke piek in noradrenaline: je bent meteen wakker en alert. [3]'
+          ])],
+          ['Valkuilen & tips', ulH([
+            'Meteen helemaal koud beginnen houdt bijna niemand vol. Begin bij 30 sec.',
+            'Of het 30 of 90 seconden was, maakte in het onderzoek niet uit. Elke dag is belangrijker dan lang. [1]',
+            '<b>IJsbad en spiergroei:</b> geen ijsbad in de 6–8 uur ná je krachttraining, dat remt de spiergroei. Een koude douche kan wel. Wil je alleen herstellen, bijvoorbeeld tussen wedstrijden? Dan kan een ijsbad juist direct erna. [4] [5] [6]',
+            '<b>Meer is niet beter:</b> voor een ijsbad is ±11 minuten per week genoeg, verdeeld over 2–4 keer. [6]'
+          ])],
+          ['Let op', '<p>Heb je hart- of vaatproblemen of een hoge bloeddruk? Overleg eerst met je huisarts. De koudeschok laat je hartslag en bloeddruk even flink stijgen.</p>', 'warn']
+        ],
+        sources: [
+          ['Onderzoek', 'Koud douchen en ziekteverzuim, 3.018 deelnemers (PLOS ONE 2016)', 'https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0161749'],
+          ['Overzicht', 'Alle onderzoek naar koud water op een rij (PLOS ONE 2025)', 'https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0317615'],
+          ['Onderzoek', 'Een uur in water van 14 °C: noradrenaline en dopamine (Šrámek 2000)', 'https://www.researchgate.net/publication/12565492_Human_Physiological_responses_to_immersion_into_water_of_different_temperatures'],
+          ['Onderzoek', 'IJsbad na krachttraining remt spiergroei (Journal of Physiology 2015)', 'https://www.researchgate.net/publication/280123774_Post-exercise_cold_water_immersion_attenuates_acute_anabolic_signalling_and_long-term_adaptations_in_muscle_to_strength_training'],
+          ['Onderzoek', 'IJsbad remt groei spiervezels, niet de kracht (J Appl Physiol 2019)', 'https://journals.physiology.org/doi/full/10.1152/japplphysiol.00127.2019'],
+          ['Uitleg', 'Huberman Lab: koude als gereedschap, 11 minuten per week (Engels)', 'https://www.hubermanlab.com/newsletter/the-science-and-use-of-cold-exposure-for-health-and-performance']
+        ]
+      },
+      sunlight: {
+        duration: '5–10 min bij zon · 15–20 min bij bewolking',
+        summary: "Ga 's ochtends vroeg naar buiten, in het daglicht. Dat zet je biologische klok voor de hele dag.",
+        check: 'Ochtendlicht buiten gehad. Op een donkere winterochtend telt een daglichtlamp van 10.000 lux ook. Roodlicht alleen telt niet: het zet je klok niet.',
+        parts: [
+          { label: 'Deel 1 · Ochtendlicht', sections: [
+            ['Hoe', olH([
+              'Ga zo vroeg mogelijk naar buiten: binnen het eerste uur na zonsopgang, of binnen een uur na het opstaan als de zon later opkomt. In de Nederlandse winter komt de zon pas rond 8:30–8:45 op. [6]',
+              'Zonnebril af. Een gewone bril of lenzen mag wel. [5]',
+              'Kijk niet in de zon. Kijk rond en knipper gewoon. [5]',
+              'Achter een raam of in de auto telt niet: glas houdt een deel van het licht tegen. [5]',
+              'Koppel het aan iets wat je al doet: koffie buiten, de hond uitlaten, naar het werk lopen.'
+            ])],
+            ['Waarom', ulH([
+              '<b>Je klok gaat goed staan.</b> Mensen die een week kampeerden met alleen daglicht, kregen een klok die gelijkliep met zonsopgang en -ondergang en werden \'s avonds eerder moe. [1]',
+              '<b>Beter in je vel.</b> Bij bijna 87.000 mensen met een lichtmeter om de pols hadden mensen met meer licht overdag minder vaak een depressie, en mensen met veel licht \'s nachts juist vaker. Een verband, nog geen bewijs. [2]',
+              '<b>Je slaaphormoon.</b> Daglicht remt overdag melatonine: overdag wakker, \'s avonds op tijd moe. [3]',
+              '<b>Vitamine D.</b> Van maart t/m oktober maakt je huid vitamine D aan als je tussen 11 en 15 uur 15–30 minuten buiten bent met gezicht en handen bloot. In de winter staat de zon daar te laag voor. [4]'
+            ])],
+            ['Valkuilen & tips', ulH([
+              'Ochtendlicht is voor je klok, middaglicht voor vitamine D: twee verschillende momenten.',
+              'Nog donker als je opstaat? Doe fel licht aan binnen en ga naar buiten zodra het licht is. [5]',
+              '\'s Avonds minder licht helpt net zo goed: lampen dimmen en je scherm minder fel. [2]',
+              'Last van een winterdip? Een daglichtlamp van 10.000 lux, 30 minuten \'s ochtends, werkt vaak binnen 1–2 weken. [3]'
+            ])],
+            ['Let op', '<p>Kijk nooit recht in de zon en verbrand niet. Voor je klok heb je geen felle zon op je huid nodig.</p>', 'warn']
+          ]},
+          { label: 'Deel 2 · Roodlicht', badge: 'Extra', intro: 'Rood en bijna-infrarood licht uit een lamp of paneel. Iets anders dan daglicht: het zet je klok niet.', sections: [
+            ['Wat er aanwijzingen voor zijn', ulH([
+              '<b>Huid:</b> iets minder rimpels en roodheid, alleen als je het lang volhoudt. Verwacht geen wonderen. [7]',
+              '<b>Haar:</b> kan bij lichte haaruitval de groeifase wat verlengen. [7]',
+              '<b>Spieren:</b> vóór de training gebruikt iets minder spierpijn en iets betere prestaties de dag erna (19 kleine onderzoeken, lage zekerheid). [8]',
+              '<b>Ogen:</b> bij 20 mensen van 34–70 jaar gaf 3 minuten diep rood licht (670 nm) \'s ochtends ±17% beter kleurcontrast, een week lang. \'s Middags werkte het niet. Klein onderzoek. [9]'
+            ])],
+            ['Geen goed bewijs voor', '<p>Meer testosteron, vetverlies en "alles genezen". Dat zijn vooral marketingclaims.</p>'],
+            ['Let op · ogen', ulH([
+              'Kijk niet recht in een sterke lamp en zeker niet in een laser. Bij kinderen die met roodlichtlasers tegen bijziendheid werden behandeld, is netvliesschade gemeld. Draag het brilletje of doe je ogen dicht. [10]',
+              'Gevoelig voor licht, of medicijnen die je huid gevoeliger maken (zoals sommige antibiotica)? Vraag eerst je huisarts of dermatoloog. [7]'
+            ]), 'warn']
+          ]}
+        ],
+        sideNote: { title: "Side note · 's avonds rood licht", html: "Rood licht remt melatonine veel minder dan wit of blauw licht. Een zwak rood lampje in het laatste uur voor bed is dus een betere keus dan fel licht of een scherm. [11] In één klein onderzoek sliepen 20 basketbalspeelsters beter na 14 avonden 30 minuten roodlicht. [12] Doe het wel uit als je gaat slapen: slapen met licht aan, ook rood, maakt je slaap onrustiger. [11]" },
+        sources: [
+          ['Onderzoek', 'Kamperen zet je biologische klok terug (Current Biology 2013)', 'https://www.cell.com/current-biology/fulltext/S0960-9822(13)00764-1'],
+          ['Onderzoek', 'Licht overdag en \'s nachts bij 86.772 mensen (Nature Mental Health 2023)', 'https://www.nature.com/articles/s44220-023-00135-8'],
+          ['Uitleg', 'Thuisarts: daglicht, melatonine en lichttherapie', 'https://www.thuisarts.nl/winterdepressie/ik-heb-winterdepressie'],
+          ['Uitleg', 'Voedingscentrum: vitamine D en zonlicht', 'https://www.voedingscentrum.nl/encyclopedie/vitamine-d.aspx'],
+          ['Uitleg', 'Huberman Lab: licht gebruiken voor je gezondheid (Engels)', 'https://www.hubermanlab.com/newsletter/using-light-for-health'],
+          ['Onderzoek', 'Ochtendlicht zet je klok vooruit (Journal of Pineal Research 2026)', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC12989132/'],
+          ['Uitleg', 'Cleveland Clinic: wat roodlicht wel en niet kan voor huid en haar', 'https://newsroom.clevelandclinic.org/2026/09/02/can-red-light-therapy-improve-your-skin-and-hair'],
+          ['Overzicht', 'Roodlicht en spierherstel, 19 onderzoeken (2025)', 'https://pubmed.ncbi.nlm.nih.gov/40954632/'],
+          ['Onderzoek', '3 minuten rood licht \'s ochtends en zicht (UCL 2021)', 'https://www.sciencedaily.com/releases/2021/11/211124154118.htm'],
+          ['Onderzoek', 'Netvliesschade na roodlichtlaser (JAMA Ophthalmology 2023)', 'https://jamanetwork.com/journals/jamaophthalmology/article-abstract/2805391'],
+          ['Uitleg', 'Sleep Foundation: is rood licht goed voor je slaap? (Engels)', 'https://www.sleepfoundation.org/bedroom-environment/is-red-light-good-for-sleep'],
+          ['Onderzoek', 'Rood licht, slaap en uithoudingsvermogen bij basketbalspeelsters (2012)', 'https://pubmed.ncbi.nlm.nih.gov/23182016/']
+        ]
+      },
+      cleanEating: {
+        duration: 'De hele dag',
+        summary: 'Eet vooral echt eten: dingen die je grootmoeder als eten zou herkennen.',
+        check: ['geen ultrabewerkt eten (fastfood, chips, koek, snoep, kant-en-klaar)', 'geen frisdrank of drankjes met suiker', 'bij elke hoofdmaaltijd groente en een eiwitbron', 'geen zaadoliën'],
+        sections: [
+          ['Hoe', olH([
+            'Bouw je bord op uit een <b>eiwitbron</b> (vlees, vis, eieren, kwark, peulvruchten), <b>groente</b> en een <b>onbewerkte koolhydraatbron</b> (aardappel, rijst, havermout, volkoren brood).',
+            'Drink water, thee of koffie zonder suiker. [3]',
+            'Boodschappen vooral langs de buitenranden van de supermarkt: groente, vlees, zuivel. In de middenpaden staan de pakjes en zakjes.',
+            'Kijk naar de ingrediëntenlijst: hoe meer stoffen je niet herkent, hoe verder bewerkt.'
+          ])],
+          ['Vetten & oliën', ulH([
+            '<b>Geen zaadoliën</b> (zonnebloem-, soja-, maïs-, raapzaadolie). Ze worden meestal met hexaan uit het zaad gehaald en daarna verhit, gebleekt en ontgeurd: precies het soort sterk bewerkt eten waar clean eating om draait. [4]',
+            '<b>Eerste keus: extra vierge olijfolie</b>, het best onderzocht. Een mediterraan dieet met extra olijfolie gaf ±30% minder hart- en vaatziekten. [5]',
+            '<b>Ook goed:</b> avocado-olie (kies een betrouwbaar merk: veel flessen bleken ranzig of vermengd) [6], roomboter en ghee met mate [7].',
+            '<b>Met mate:</b> kokosolie, die verhoogt je LDL-cholesterol het meest. [8]'
+          ])],
+          ['Eiwit', '', 'protein'],
+          ['Waarom', ulH([
+            '<b>Je eet vanzelf minder te veel.</b> In een gecontroleerd onderzoek aten 20 mensen 2 weken ultrabewerkt en 2 weken onbewerkt, met evenveel suiker, vet en vezels. Met bewerkt eten aten ze ±500 kcal per dag meer en kwamen ze 0,9 kg aan; met onbewerkt vielen ze evenveel af. [1]',
+            '<b>Eiwit voor je training:</b> zie het blok Eiwit. [2]',
+            '<b>Minder suiker, stabielere energie:</b> zonder suikerdrankjes en snoep minder pieken en dalen.'
+          ])],
+          ['Valkuilen & tips', ulH([
+            '"Clean" is niet "zo weinig mogelijk eten". Te weinig eten kost spiermassa en energie, zeker als je hard traint.',
+            'Niet alles wat bewerkt is, is slecht: diepvriesgroente, kwark, volkoren brood en bonen uit blik zijn prima.',
+            'Een product met "healthy" erop, zoals proteïnerepen of granola, is vaak gewoon ultrabewerkt.',
+            'Het Voedingscentrum vindt ±15% buiten de Schijf van Vijf prima. Jij kiest hoe streng je bent: afvinken gaat om je eigen regels. [3]'
+          ])]
+        ],
+        sources: [
+          ['Onderzoek', 'Ultrabewerkt eten → 500 kcal per dag meer (Cell Metabolism 2019)', 'https://www.cell.com/cell-metabolism/fulltext/S1550-4131(19)30248-7'],
+          ['Overzicht', 'Hoeveel eiwit voor spiergroei: 49 onderzoeken (Morton 2018)', 'https://www.researchgate.net/publication/318368028_A_systematic_review_meta-analysis_and_meta-regression_of_the_effect_of_protein_supplementation_on_resistance_training-induced_gains_in_muscle_mass_and_strength_in_healthy_adults'],
+          ['Uitleg', 'Voedingscentrum: de Schijf van Vijf', 'https://www.voedingscentrum.nl/nl/gezond-eten-met-de-schijf-van-vijf.aspx'],
+          ['Uitleg', 'EUFIC: hexaan in voedsel (Engels)', 'https://www.eufic.org/en/misinformation/article/is-hexane-in-food-a-cause-for-concern'],
+          ['Onderzoek', 'PREDIMED: mediterraan dieet met extra vierge olijfolie (NEJM 2018)', 'https://www.nejm.org/doi/full/10.1056/NEJMoa1800389'],
+          ['Onderzoek', '82% van de avocado-olie ranzig of vermengd (UC Davis 2020)', 'https://www.ucdavis.edu/food/news/study-finds-82-percent-avocado-oil-rancid-or-mixed-other-oils'],
+          ['Onderzoek', 'Boter vs. plantaardige olie en sterfte, 221.000 mensen (Harvard 2025)', 'https://www.health.harvard.edu/blog/less-butter-more-plant-oils-longer-life-202504233096'],
+          ['Overzicht', 'Kokosolie en cholesterol, 16 onderzoeken (Circulation 2020)', 'https://www.tctmd.com/news/coconut-oil-ups-ldl-cholesterol-compared-other-fats-meta-analysis'],
+          ['Richtlijn', 'ISSN-standpunt over eiwit en sport (2017)', 'https://link.springer.com/article/10.1186/s12970-017-0177-8'],
+          ['Overzicht', 'Hoeveel eiwit per maaltijd? (Schoenfeld & Aragon 2018)', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC5828430/'],
+          ['Onderzoek', '100 g eiwit na de training: geen bovengrens (Maastricht 2023)', 'https://www.cell.com/cell-reports-medicine/fulltext/S2666-3791(23)00540-2']
+        ]
+      },
+      workout: {
+        duration: '45–60 minuten',
+        summary: 'Krachttraining of stevige cardio. Een training die je opslaat in het tabblad Training vinkt deze gewoonte automatisch af.',
+        sections: [
+          ['Hoe', olH([
+            'Volg je schema in het tabblad Training: Push / Pull / Legs, Boven / Onder of Full body.',
+            'Eerst een warming-up-set met een licht gewicht.',
+            'Werksets tot je nog 1 à 2 herhalingen over hebt.',
+            '<b>Progressieve overload:</b> elke week een beetje meer gewicht of één herhaling meer. Je gouden recordvakje laat zien wat je moet verslaan.',
+            'Geen krachttraining vandaag? 20–30 minuten cardio of HIIT telt ook.'
+          ])],
+          ['Waarom', ulH([
+            '<b>Je leeft langer.</b> In 16 grote onderzoeken hadden mensen die aan krachttraining deden 10–17% minder kans om vroeg te overlijden, en minder hart- en vaatziekten, kanker en diabetes. Het grootste voordeel lag rond 30–60 minuten krachttraining per week; samen met cardio zelfs 40% lager. Verbanden, geen bewijs. [1]',
+            '<b>Beter in je hoofd.</b> In 33 gecontroleerde onderzoeken met 1.877 mensen verminderde krachttraining depressieve klachten duidelijk, ook als iemand niet veel sterker werd. [2]',
+            '<b>Meer sets, meer spier.</b> Met 10 of meer sets per spiergroep per week groei je het meest. Je schema komt daar ruim op uit. [4]',
+            '<b>Het Nederlandse advies:</b> minstens 150 minuten per week matig intensief bewegen, plus 2× per week spier- en botversterkende oefeningen. [5]',
+            '<b>Over hormonen:</b> testosteron en groeihormoon stijgen even na een training, maar dat voorspelt je spiergroei niet. Wat telt is trainen, eten en rust. [3]'
+          ])],
+          ['Valkuilen & tips', ulH([
+            '<b>Je groeit in rust:</b> minimaal 2 rustdagen per week en elke spiergroep 48 uur rust.',
+            'Goede techniek gaat voor gewicht. Een record met slechte techniek is geen record.',
+            '<b>IJsbad:</b> geen ijsbad in de 6–8 uur na je krachttraining (zie Koude douche).',
+            '<b>Eiwit:</b> hoeveel je nodig hebt, staat bij Clean eating.'
+          ])]
+        ],
+        sources: [
+          ['Overzicht', 'Krachttraining en sterfte, 16 onderzoeken (BJSM 2022)', 'https://www.researchgate.net/publication/358938786_Muscle-strengthening_activities_are_associated_with_lower_risk_and_mortality_in_major_non-communicable_diseases_a_systematic_review_and_meta-analysis_of_cohort_studies'],
+          ['Overzicht', 'Krachttraining en depressieve klachten, 33 onderzoeken (JAMA Psychiatry 2018)', 'https://jamanetwork.com/journals/jamapsychiatry/fullarticle/2680311'],
+          ['Onderzoek', 'Hormonen na training voorspellen geen spiergroei (McMaster 2012)', 'https://www.sciencedaily.com/releases/2012/06/120614130946.htm'],
+          ['Overzicht', 'Aantal sets per week en spiergroei (Schoenfeld 2017)', 'https://www.researchgate.net/publication/305455324_Dose-response_relationship_between_weekly_resistance_training_volume_and_increases_in_muscle_mass_A_systematic_review_and_meta-analysis'],
+          ['Richtlijn', 'Kenniscentrum Sport & Bewegen: de beweegrichtlijnen', 'https://www.kenniscentrumsportenbewegen.nl/beweegrichtlijnen/']
+        ]
+      },
+      meditation: {
+        duration: '5–20 minuten',
+        summary: 'Elke dag even stil: meditatie of een ademhalingsoefening.',
+        check: 'Minstens 5 minuten gemediteerd óf een ademhalingsoefening gedaan.',
+        sections: [
+          ['Hoe', `<p class="hs-sub">A. Meditatie (10–20 min)</p>${olH(['Ga rechtop zitten, ogen dicht of blik naar beneden.', 'Let op je adem: voel het in- en uitademen bij je neus of buik.', 'Dwaal je af? Merk het op en ga zonder oordeel terug naar je adem. Dat terugkeren ís de oefening.'])}<p class="hs-sub">B. Cyclisch zuchten (5 min)</p>${olH(['Adem diep in door je neus.', 'Adem daar nog een korte, extra teug bovenop in, zodat je longen helemaal vol zijn.', 'Adem heel langzaam en lang uit door je mond, langer dan het inademen.', 'Herhaal dit 5 minuten.'])}`],
+          ['Waarom', ulH([
+            '<b>Minder angst en somberheid.</b> In 47 gecontroleerde onderzoeken met 3.515 mensen gaven meditatieprogramma\'s een kleine tot matige daling van angst, depressieve klachten en pijn, ongeveer even goed als sporten of therapie. [1]',
+            '<b>Ademhaling werkt snel.</b> 108 mensen deden een maand elke dag 5 minuten een ademhalingsoefening of meditatie. Met cyclisch zuchten werd de stemming het meest beter en zakte de rustademhaling. [2]',
+            '<b>Minder stress in je lichaam.</b> In een overzicht van 45 onderzoeken gingen cortisol, bloeddruk en hartslag iets omlaag bij mindfulness-meditatie. [4]',
+            '<b>Geen bewijs:</b> dat 8 weken mindfulness je hersenen van vorm verandert, bleek in een groot onderzoek niet te kloppen. [3]'
+          ])],
+          ['Valkuilen & tips', ulH([
+            'Afdwalen is geen falen. Het doel is niet je hoofd leeg maken, maar steeds terugkeren.',
+            'Liever 5 minuten elke dag dan een uur één keer per week.',
+            'Koppel het aan een vast moment: na het opstaan, na de koude douche of voor het slapen.',
+            'Op een stressvol moment doen 1 à 2 zuchten zoals bij B al iets.'
+          ])]
+        ],
+        sources: [
+          ['Overzicht', 'Meditatie bij stress, 47 onderzoeken (JAMA Internal Medicine 2014)', 'https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/1809754'],
+          ['Onderzoek', '5 minuten cyclisch zuchten vs. meditatie (Stanford 2023)', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC9873947'],
+          ['Onderzoek', 'Geen veranderingen in de hersenen na 8 weken mindfulness (Science Advances 2022)', 'https://www.sciencedaily.com/releases/2022/05/220520144651.htm'],
+          ['Overzicht', 'Mindfulness en lichamelijke stressmarkers, 45 onderzoeken (2017)', 'https://pubmed.ncbi.nlm.nih.gov/28863392/']
+        ]
+      },
+      noAlcohol: {
+        duration: 'De hele dag',
+        summary: 'Vandaag geen druppel alcohol.',
+        sections: [
+          ['Hoe', olH([
+            'Beslis het \'s ochtends al: "vandaag drink ik niet". Dan hoef je er \'s avonds niet meer over na te denken.',
+            'Heb een vaste vervanger klaar: bruiswater met citroen, 0.0-bier of kombucha.',
+            'Op een feestje: hou meteen iets in je hand. Dan krijg je minder vaak een drankje aangeboden.',
+            'Een simpel antwoord helpt: "Ik train morgen", of gewoon "Nee, dank je".'
+          ])],
+          ['Waarom', ulH([
+            '<b>Je slaapt minder herstellend.</b> Bij 4.098 mensen met een hartslagmeter was het herstel in de eerste uren slaap lager na alcohol: 9% bij 1–2 glazen, 24% bij 2–6 glazen en 39% bij meer dan 6. Zelfs één glas was meetbaar. [2]',
+            '<b>Je spieren herstellen slechter.</b> Mannen die na hun training veel dronken (±12 glazen), maakten 24% minder spiereiwit aan, ook met een eiwitshake erbij. [3]',
+            '<b>Geen veilige hoeveelheid.</b> Alcohol kan minstens 7 soorten kanker veroorzaken; ongeveer de helft daarvan in Europa komt voor bij mensen die "gewoon gemiddeld" drinken. [1]',
+            '<b>Testosteron:</b> na een avond flink drinken kan het tijdelijk dalen; bij langdurig veel drinken daalt het blijvend. [4]'
+          ])],
+          ['Valkuilen & tips', ulH([
+            '"Eentje kan geen kwaad" is precies hoe het er vaak meer worden. De eerste nee is het makkelijkst.',
+            '0.0 bevat in Nederland maximaal 0,1% alcohol. Dat telt hier als geen alcohol.',
+            'Lukt nee zeggen moeilijk, of drink je om je goed te voelen? Bij Thuisarts en ALCOHOLInfo van het Trimbos-instituut krijg je anoniem advies. [5] [6]'
+          ])]
+        ],
+        sources: [
+          ['Uitleg', 'WHO: geen enkele hoeveelheid alcohol is veilig (2023)', 'https://www.who.int/europe/news/item/04-01-2023-no-level-of-alcohol-consumption-is-safe-for-our-health'],
+          ['Onderzoek', 'Alcohol en herstel tijdens de slaap, 4.098 mensen (JMIR 2018)', 'https://mental.jmir.org/2018/1/e23/'],
+          ['Onderzoek', 'Alcohol na de training remt spieropbouw (PLOS ONE 2014)', 'https://research.bond.edu.au/en/publications/alcohol-ingestion-impairs-maximal-post-exercise-rates-of-myofibri/'],
+          ['Overzicht', 'Alcohol, hormonen en spiergroei (review 2014)', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC4056249/'],
+          ['Uitleg', 'Thuisarts: alcohol, advies en hulp', 'https://www.thuisarts.nl/alcohol'],
+          ['Uitleg', 'ALCOHOLInfo (Trimbos): anoniem bellen, chatten of mailen', 'https://www.alcoholinfo.nl/contact/']
+        ]
+      },
+      reading: {
+        duration: 'Minimaal 10 pagina\'s (±15–20 min)',
+        summary: 'Elke dag een stuk uit een non-fictieboek.',
+        check: 'Minstens 10 pagina\'s uit een non-fictieboek gelezen. Dezelfde regel als bij 75 Hard: luisterboeken tellen niet.',
+        sections: [
+          ['Hoe', olH([
+            'Kies een vast moment: \'s ochtends bij de koffie of \'s avonds in plaats van je telefoon.',
+            'Lees een papieren boek. Leg je telefoon in een andere kamer.',
+            'Houd een pen bij de hand: onderstreep of noteer wat je raakt.',
+            'Klap het boek dicht en vat in 1–2 zinnen samen wat je las, eventueel in je journal.'
+          ])],
+          ['Waarom', ulH([
+            '<b>Je onthoudt meer op papier.</b> In 54 onderzoeken met 170.000+ deelnemers begrepen mensen een tekst beter op papier dan op een scherm, vooral bij non-fictie en met weinig tijd. Jongeren die met schermen opgroeiden deden het niet beter. [2]',
+            '<b>Samenvatten maakt het blijvend.</b> Jezelf overhoren of navertellen in eigen woorden laat je veel meer onthouden dan nog eens lezen. [3]',
+            '<b>Lezers leven langer.</b> 3.635 mensen van 50+ werden 12 jaar gevolgd: boekenlezers leefden gemiddeld bijna 2 jaar langer. Boeken scoorden beter dan kranten of tijdschriften. Een verband, geen bewijs. [1]'
+          ])],
+          ['Valkuilen & tips', ulH([
+            'Het doel is niet "zo veel mogelijk boeken". Eén goed boek dat je toepast is meer waard dan tien die je vergeet.',
+            'Saai boek? Leg het weg. Doorworstelen kost je de gewoonte.',
+            '\'s Avonds liever niet in fel licht lezen (zie Zonlicht & roodlicht).'
+          ])]
+        ],
+        sources: [
+          ['Onderzoek', 'Lezen en een langer leven, 3.635 mensen (Social Science & Medicine 2016)', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC5105607/'],
+          ['Overzicht', 'Papier vs. scherm, 54 onderzoeken (Delgado 2018)', 'https://www.edtech.tum.de/dont-throw-away-your-printed-books-why-reading-performance-is-better-on-paper-than-on-screens/'],
+          ['Onderzoek', 'Overhoren maakt dat je het langer onthoudt (Psychological Science 2006)', 'https://www.researchgate.net/publication/7270829_Test-Enhanced_Learning_Taking_Memory_Tests_Improves_Long-Term_Retention']
+        ]
+      },
+      stretching: {
+        duration: '10–15 minuten',
+        summary: 'Een korte mobility-routine voor soepele heupen, hamstrings, schouders en bovenrug.',
+        check: 'Minstens 10 minuten gestretcht of een mobility-routine gedaan.',
+        sections: [
+          ['Hoe', olH([
+            'Kies 4 à 5 houdingen: heupen, hamstrings, borst/schouders en bovenrug.',
+            'Houd elke stretch 30–60 seconden vast. Adem rustig en ga iets verder als de spanning zakt.',
+            'Je voelt trek, geen pijn.',
+            'Beste moment: na de training of \'s avonds, niet vlak ervoor.'
+          ])],
+          ['Waarom', ulH([
+            '<b>Leniger worden.</b> Daarvoor is per spiergroep minstens 5 minuten per week nodig, verdeeld over 5 dagen. Kort maar vaak werkt het best: precies een dagelijkse gewoonte. [4]',
+            '<b>Krachttraining telt ook mee.</b> Krachttraining over je volledige bewegingsbereik maakt je net zo lenig als stretchen. Diepe squats en Romanian deadlifts zijn ook mobility. [3]',
+            '<b>Ontspanning.</b> Rustig stretchen met een lange uitademing helpt je lichaam naar de ruststand. Minder hard bewezen, wel prettig.'
+          ])],
+          ['Valkuilen & tips', ulH([
+            '<b>Niet lang statisch stretchen vlak voor kracht- of sprintwerk.</b> Meer dan 60 seconden per spier kan je kracht even een paar procent verminderen; korter maakt nauwelijks uit. Doe vooraf liever een dynamische warming-up. [2]',
+            '<b>Stretchen voorkomt geen blessures</b>, krachttraining wel: in 25 onderzoeken met 26.610 sporters bracht krachttraining blessures terug tot ongeveer een derde. Sla je training dus niet over voor stretchen. [1]',
+            'Koppel het aan iets vasts, zoals de avondserie of na het douchen.'
+          ])]
+        ],
+        sources: [
+          ['Overzicht', 'Wat voorkomt sportblessures? 25 onderzoeken (BJSM 2014)', 'https://www.ncbi.nlm.nih.gov/books/NBK169555/'],
+          ['Overzicht', 'Stretchen vlak voor het sporten: effect op prestatie (Behm 2016)', 'https://cdnsciencepub.com/doi/10.1139/apnm-2015-0235'],
+          ['Overzicht', 'Krachttraining maakt net zo lenig als stretchen (Afonso 2021)', 'https://www.researchgate.net/publication/348485756_Strength_training_is_as_effective_as_stretching_for_improving_range_of_motion_A_systematic_review_and_meta-analysis'],
+          ['Overzicht', 'Hoeveel stretchen per week voor lenigheid? (Thomas 2018)', 'https://pubmed.ncbi.nlm.nih.gov/29506306/']
+        ]
+      }
+    };
+
+    const proteinGoals = [
+      ['Minimale behoefte', 0.8, 0.8],
+      ['Gezondheid & onderhoud', 1.2, 1.4],
+      ['Regelmatig sporten', 1.4, 1.6],
+      ['Spieropbouw', 1.6, 2.2],
+      ['Vetverlies met behoud van spier', 1.8, 2.2],
+      ['Intensieve krachttraining', 1.8, 2.2]
+    ];
+
+    // Gewoontes die je nog ziet en kunt afvinken (verborgen gewoontes tellen in je geschiedenis nog wel mee)
+    const visibleHabitKeys = Object.keys(habitConfig).filter(k => habitConfig[k].positive && !habitConfig[k].hidden);
+
+    function habitStats(key) {
+      const today = todayStr();
+      const hist = { ...state.habitHistory, [today]: { ...state.habits } };
+      const done = d => !!(hist[d] && hist[d][key]);
+      let week = 0;
+      for (let d = weekKey(today); d <= today; d = dateAdd(d, 1)) if (done(d)) week++;
+      const daysSoFar = diffDays(weekKey(today), today) + 1;
+      let streak = 0, d = done(today) ? today : dateAdd(today, -1);
+      while (done(d)) { streak++; d = dateAdd(d, -1); }
+      const total = Object.keys(hist).filter(done).length;
+      return { week, daysSoFar, streak, total };
+    }
+
+    // [n] → klikbaar bronnummer dat naar de bronnenlijst springt
+    function habitSrcLinks(html) {
+      return html.replace(/\[(\d+)\]/g, (m, n) => `<a href="#hs-src-${n}" class="hs-ref" onclick="return habitSrcJump(${n})" aria-label="Bron ${n}">${n}</a>`);
+    }
+    function habitSrcJump(n) {
+      const box = document.getElementById('hs-sources');
+      if (box) box.open = true;
+      const el = document.getElementById('hs-src-' + n);
+      if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 1200); }
+      return false;
+    }
+
+    function proteinGoalIdx() {
+      try { const v = localStorage.getItem('pf_protein_goal'); return v === null ? 3 : Number(v); } catch (e) { return 3; }
+    }
+    function setProteinGoal(i) {
+      try { localStorage.setItem('pf_protein_goal', String(i)); } catch (e) {}
+      document.querySelectorAll('.hs-prot-row').forEach((el, j) => el.classList.toggle('mine', j === i));
+    }
+    function renderProteinTable() {
+      const kgVal = latestBodyValue('weight');
+      const kg = kgVal ? Number(kgVal) : null;
+      const max = 2.5, mine = proteinGoalIdx();
+      const f = n => String(n).replace('.', ',');
+      return `
+        <div class="hs-prot-head"><span>Gram eiwit per kg lichaamsgewicht per dag</span><span class="gold">${kg ? 'jij: ' + f(Math.round(kg * 10) / 10) + ' kg' : 'voorbeeld: 85 kg'}</span></div>
+        ${proteinGoals.map(([goal, lo, hi], i) => {
+          const w = kg || 85;
+          const left = lo === hi ? lo / max * 100 - 0.6 : lo / max * 100;
+          const width = lo === hi ? 1.2 : (hi - lo) / max * 100;
+          return `
+            <button class="hs-prot-row ${i === mine ? 'mine' : ''}" onclick="setProteinGoal(${i})" aria-label="Kies doel: ${goal}">
+              <span class="hs-prot-top"><span class="hs-prot-goal">${goal}</span><span class="hs-prot-gkg">${lo === hi ? f(lo) : f(lo) + ' – ' + f(hi)} g</span></span>
+              <span class="hs-prot-bar"><span style="left: ${left}%; width: ${width}%;"></span></span>
+              <span class="hs-prot-g">${lo === hi ? Math.round(lo * w) : Math.round(lo * w) + ' – ' + Math.round(hi * w)} g per dag</span>
+            </button>`;
+        }).join('')}
+        <div class="hs-prot-scale"><span>0</span><span>1,0</span><span>2,0</span><span>2,5 g/kg</span></div>
+        <div class="hs-note"><b>Verdeling:</b> 3–5 maaltijden met <b>35–50 g eiwit</b> per maaltijd. [10]</div>
+        <p class="hs-small">Tik op je doel om het te markeren. ${kg ? 'Je gewicht komt uit je laatste meting.' : 'Vul je gewicht in bij Lichaam, dan rekent de app met jouw gewicht.'} Boven ±1,6 g/kg levert extra eiwit gemiddeld weinig meer op; tot 2,2 g/kg kan het voor sommigen nog helpen. [2] [9] Zelfs 100 g in één keer wordt niet verspild. [11]</p>
+      `;
+    }
+
+    function renderHabitSections(sections) {
+      return sections.map(([title, html, kind], i) => `
+        <details class="hs-sec ${kind === 'warn' ? 'warn' : ''}" ${title === 'Hoe' ? 'open' : ''}>
+          <summary><span>${title}</span><span class="hs-pm" aria-hidden="true"></span></summary>
+          <div class="hs-body">${habitSrcLinks(kind === 'protein' ? renderProteinTable() : html)}</div>
+        </details>
+      `).join('');
+    }
+
+    function renderHabitModal() {
+      const key = state.showHabitModal;
+      const habit = habitConfig[key];
+      if (!habit) return '';
+      const info = habitInfo[key];
+      const close = `state.showHabitModal = null; render();`;
+      if (!info) {
+        return `
+          <div class="modal-overlay" onclick="if(event.target === this) { ${close} }">
+            <div class="modal"><div class="modal-title habit" style="text-align: center;">${habit.icon} ${habit.title}</div>
+            <div class="modal-step habit"><div class="modal-step-text">${habit.how}</div></div>
+            <button class="btn btn-secondary" style="width: 100%;" onclick="${close}">Sluiten</button></div>
+          </div>`;
+      }
+      const st = habitStats(key);
+      const check = info.check ? `
+        <div class="hs-check">
+          <div class="hs-check-t">Afvinken als je vandaag</div>
+          ${Array.isArray(info.check) ? info.check.map(c => `<div>✓ ${c}</div>`).join('') : `<div>${info.check}</div>`}
+        </div>` : '';
+      const body = info.parts
+        ? info.parts.map(p => `
+            <div class="hs-part"><span>${p.label}</span>${p.badge ? `<span class="hs-badge">${p.badge}</span>` : ''}<i></i></div>
+            ${p.intro ? `<p class="hs-intro">${p.intro}</p>` : ''}
+            <div class="hs-secs">${renderHabitSections(p.sections)}</div>
+          `).join('')
+        : `<div class="hs-secs">${renderHabitSections(info.sections)}</div>`;
+      const typeCls = t => ({ Onderzoek: 'r', Overzicht: 'o', Uitleg: 'u', Richtlijn: 'g' }[t] || 'u');
+      return `
+        <div class="modal-overlay hs-wrap" onclick="if(event.target === this) { ${close} }">
+          <div class="hs-sheet" role="dialog" aria-modal="true" aria-label="${esc(habit.title)}: uitleg">
+            <div class="hs-handle"></div>
+            <div class="hs-head">
+              <div class="hs-icon">${habit.icon}</div>
+              <div style="min-width: 0;">
+                <div class="hs-title">${esc(habit.title)}</div>
+                <div class="hs-dur">⏱ ${info.duration}</div>
+              </div>
+              <button class="hs-x" onclick="${close}" aria-label="Sluiten">✕</button>
+            </div>
+            <p class="hs-summary">${info.summary}</p>
+            <div class="hs-stats">
+              <div><b>${st.week}/${st.daysSoFar}</b><span>Deze week</span></div>
+              <div><b>${st.streak}</b><span>${st.streak === 1 ? 'Dag' : 'Dagen'} reeks</span></div>
+              <div><b>${st.total}</b><span>Totaal</span></div>
+            </div>
+            ${check}
+            ${body}
+            ${info.sideNote ? `<div class="hs-side"><div class="hs-side-t">${info.sideNote.title}</div><div>${habitSrcLinks(info.sideNote.html)}</div><div class="hs-small" style="margin-top: 8px;">Meer over slaap komt in het blok Slaap.</div></div>` : ''}
+            <details class="hs-sec hs-src" id="hs-sources">
+              <summary><span>Bronnen & meer lezen · ${info.sources.length}</span><span class="hs-pm" aria-hidden="true"></span></summary>
+              <div class="hs-body">
+                ${info.sources.map(([type, title, url], i) => `
+                  <a class="hs-source" id="hs-src-${i + 1}" href="${url}" target="_blank" rel="noopener noreferrer">
+                    <span class="hs-source-n">${i + 1}</span>
+                    <span style="min-width: 0;"><span class="hs-tag ${typeCls(type)}">${type}</span><span class="hs-source-t">${title} ↗</span></span>
+                  </a>`).join('')}
+              </div>
+            </details>
+            <div class="hs-actions">
+              <button class="btn btn-secondary" onclick="${close}">Sluiten</button>
+              <button class="btn ${state.habits[key] ? 'btn-done' : 'btn-primary'}" onclick="toggleHabit('${key}'); state.showHabitModal = null; render();">${state.habits[key] ? '✓ Gedaan · ongedaan maken' : 'Afvinken'}</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
 
     const retentionPhases = [
       { days: 0, name: 'Opstarten', color: '#525252' },
@@ -681,8 +1185,7 @@
     }
 
     function getPositiveHabitsCount() {
-      const positiveKeys = Object.entries(habitConfig).filter(([k, c]) => c.positive).map(([k]) => k);
-      return positiveKeys.filter(k => state.habits[k]).length;
+      return visibleHabitKeys.filter(k => state.habits[k]).length;
     }
 
     function getRetentionDays() {
@@ -757,7 +1260,7 @@
       const insights = [];
       
       // Analyze each habit's correlation with mood and energy
-      Object.entries(habitConfig).forEach(([habitKey, habitCfg]) => {
+      Object.entries(habitConfig).filter(([k, c]) => !c.hidden).forEach(([habitKey, habitCfg]) => {
         const withHabit = entriesWithHabits.filter(e => e.habits && e.habits[habitKey]);
         const withoutHabit = entriesWithHabits.filter(e => e.habits && !e.habits[habitKey]);
         
@@ -1262,7 +1765,7 @@
             <div class="stat-label">Challenges</div>
           </div>
           <div class="stat">
-            <div class="stat-value">${getPositiveHabitsCount()}/9</div>
+            <div class="stat-value">${getPositiveHabitsCount()}/${visibleHabitKeys.length}</div>
             <div class="stat-label">Habits</div>
           </div>
           <div class="stat">
@@ -1276,10 +1779,10 @@
         ${renderDashboardChallenges()}
         
         <div class="card">
-          <label class="label">✅ Positieve Gewoontes <span style="color: #525252; font-weight: 400;">(lang drukken = info)</span></label>
+          <div style="display: flex; justify-content: space-between; align-items: baseline;"><label class="label">✅ Positieve Gewoontes</label><span style="font-size: 10px; color: #525252;">${getPositiveHabitsCount()} / ${visibleHabitKeys.length}</span></div>
           <div class="habit-grid">
-            ${Object.entries(habitConfig).filter(([k, c]) => c.positive).map(([key, cfg]) => `
-              <button class="habit ${state.habits[key] ? 'done' : ''}" 
+            ${visibleHabitKeys.map(key => [key, habitConfig[key]]).map(([key, cfg]) => `
+              <div class="habit-wrap"><button class="habit ${state.habits[key] ? 'done' : ''}" aria-label="${esc(cfg.title)}${state.habits[key] ? ' – gedaan' : ' – afvinken'}" 
                 onmousedown="startHabitPress('${key}')" 
                 onmouseup="endHabitPress('${key}')" 
                 onmouseleave="cancelHabitPress()"
@@ -1289,29 +1792,12 @@
                 <span class="habit-icon">${cfg.icon}</span>
                 <span class="habit-label">${cfg.label}</span>
                 ${habitChallengeLabel(key)}
-              </button>
+              </button><button class="habit-info ${state.habits[key] ? 'done' : ''}" onclick="state.showHabitModal = '${key}'; render();" aria-label="Uitleg over ${esc(cfg.title)}">i</button></div>
             `).join('')}
           </div>
+          <div style="font-size: 10px; color: #525252; margin-top: 10px;">Tik om af te vinken · tik op <span class="habit-info-inline">i</span> voor uitleg en bronnen</div>
         </div>
         
-        <div class="card">
-          <label class="label">⚠️ Vandaag Gebeurd</label>
-          <div class="habit-grid">
-            ${Object.entries(habitConfig).filter(([k, c]) => !c.positive).map(([key, cfg]) => `
-              <button class="habit ${state.habits[key] ? 'done negative' : ''}" 
-                onmousedown="startHabitPress('${key}')" 
-                onmouseup="endHabitPress('${key}')" 
-                onmouseleave="cancelHabitPress()"
-                ontouchstart="startHabitPress('${key}')" 
-                ontouchend="endHabitPress('${key}')"
-                ontouchcancel="cancelHabitPress()">
-                <span class="habit-icon">${cfg.icon}</span>
-                <span class="habit-label">${cfg.label}</span>
-                ${habitChallengeLabel(key)}
-              </button>
-            `).join('')}
-          </div>
-        </div>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
           <button class="btn btn-secondary btn-small" onclick="setSection('journal')">+ Journal</button>
@@ -1345,43 +1831,6 @@
     }
 
     
-    function renderHabitModal() {
-      const habit = habitConfig[state.showHabitModal];
-      if (!habit) return '';
-      
-      return `
-        <div class="modal-overlay" onclick="if(event.target === this) { state.showHabitModal = null; render(); }">
-          <div class="modal">
-            <div class="habit-modal-icon">${habit.icon}</div>
-            <div class="modal-title habit" style="text-align: center;">${habit.title}</div>
-            
-            <div class="habit-modal-duration">⏱️ ${habit.duration}</div>
-            
-            <div class="modal-step habit">
-              <div class="modal-step-title">WAT</div>
-              <div class="modal-step-text">${habit.what}</div>
-            </div>
-            
-            <div class="modal-step habit">
-              <div class="modal-step-title">HOE</div>
-              <div class="modal-step-text">${habit.how}</div>
-            </div>
-            
-            <div class="modal-step habit">
-              <div class="modal-step-title">WAAROM</div>
-              <div class="modal-step-text">${habit.why}</div>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px;">
-              <button class="btn btn-secondary" onclick="state.showHabitModal = null; render();">Sluiten</button>
-              <button class="btn btn-primary" onclick="toggleHabit('${state.showHabitModal}'); state.showHabitModal = null; render();">
-                ${state.habits[state.showHabitModal] ? '✓ Gedaan' : 'Afvinken'}
-              </button>
-            </div>
-          </div>
-        </div>
-      `;
-    }
 
     // ============================================
     // LICHAAM: CONFIG + HELPERS
@@ -1978,6 +2427,13 @@
       const t = chTemplate(c.template_id) || {};
       const hk = chLinkedHabit(c);
       if (hk && habitConfig[hk]) {
+        const hi = habitInfo[hk];
+        if (hi) {
+          const strip = h => String(h || '').replace(/<[^>]+>/g, ' ').replace(/\[\d+\]/g, '').replace(/\s+/g, ' ').trim();
+          const hoe = (hi.sections || (hi.parts && hi.parts[0].sections) || []).find(x => x[0] === 'Hoe');
+          const steps = hoe ? (hoe[1].match(/<li>(.*?)<\/li>/g) || []).slice(0, 3).map(strip).join(' ') : '';
+          return { what: hi.summary, how: steps, why: 'Tik op ⓘ bij de gewoonte op je dashboard voor het waarom en de bronnen.' };
+        }
         return { what: habitConfig[hk].what, how: habitConfig[hk].how, why: habitConfig[hk].why };
       }
       return { what: t.what || c.description || '', how: t.how || '', why: t.why || '' };
@@ -5013,7 +5469,7 @@
 
       // Habits: hoe vaak per habit
       const hist = { ...state.habitHistory, [today]: { ...state.habits } };
-      const habitCounts = positiveHabitKeys.map(k => ({ k, n: past.filter(d => hist[d.date] && hist[d.date][k]).length }))
+      const habitCounts = visibleHabitKeys.map(k => ({ k, n: past.filter(d => hist[d.date] && hist[d.date][k]).length }))
         .sort((a, b) => b.n - a.n);
       const negCount = negativeHabitKeys.reduce((a, k) => a + past.filter(d => hist[d.date] && hist[d.date][k]).length, 0);
 
@@ -5121,7 +5577,7 @@
               <span style="width: 28px; text-align: right; font-size: 12px;">${h.n}/${w.past.length}</span>
             </div>
           `).join('')}
-          ${w.negCount ? `<div style="font-size: 11px; color: #eab308; margin-top: 10px;">⚠️ ${w.negCount}× een negatieve dag (slecht geslapen, stress, alcohol of junk)</div>` : ''}
+
         </div>
 
         <div class="card">
@@ -5365,7 +5821,7 @@
             <div class="info-text">💡 Habits worden automatisch gekoppeld aan je journal entry</div>
           </div>
           <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-            ${Object.entries(habitConfig).map(([key, cfg]) => `
+            ${visibleHabitKeys.map(key => [key, habitConfig[key]]).map(([key, cfg]) => `
               <span style="padding: 6px 10px; font-size: 11px; background: ${state.habits[key] ? (cfg.positive ? 'rgba(34,197,94,0.1)' : 'rgba(234,179,8,0.1)') : '#0a0a0a'}; border: 1px solid ${state.habits[key] ? (cfg.positive ? '#22c55e' : '#eab308') : '#1c1c1c'}; color: ${state.habits[key] ? (cfg.positive ? '#22c55e' : '#eab308') : '#525252'};">
                 ${cfg.icon} ${cfg.label}
               </span>
