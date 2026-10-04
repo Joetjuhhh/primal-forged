@@ -447,6 +447,42 @@
     .v-trend { font-size: 10px; color: #8a8a8a; padding: 4px 0 0 32px; }
     .v-order { display: flex; gap: 10px; align-items: center; min-height: 44px; border-bottom: 1px solid #1c1c1c; font-size: 14px; }
     .j-values { display: flex; gap: 8px; align-items: center; width: 100%; text-align: left; background: #0a0a0a; border: 1px solid #1c1c1c; color: #d4d4d4; font-family: inherit; font-size: 12px; padding: 10px 12px; margin-bottom: 12px; cursor: pointer; line-height: 1.5; }
+
+    /* Voeding */
+    .f-datebar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .f-nav { width: 44px; height: 44px; background: transparent; border: 1px solid #1c1c1c; color: #a3a3a3; font-size: 16px; cursor: pointer; }
+    .f-nav:disabled { color: #262626; cursor: default; }
+    .f-top { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); text-align: center; gap: 4px; }
+    .f-top b { display: block; font-size: 20px; font-weight: 300; }
+    .f-top span { display: block; font-size: 9px; color: #8a8a8a; letter-spacing: 0.1em; margin-top: 3px; text-transform: uppercase; }
+    .f-bar { display: block; height: 6px; background: #1c1c1c; position: relative; }
+    .f-bar span { position: absolute; left: 0; top: 0; bottom: 0; }
+    .f-meal { background: #0a0a0a; border: 1px solid #1c1c1c; margin-bottom: 12px; }
+    .f-meal-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid #1c1c1c; font-size: 11px; letter-spacing: 0.15em; font-weight: 600; }
+    .f-meal-head span:last-child { font-size: 12px; color: #a3a3a3; letter-spacing: 0; font-weight: 400; }
+    .f-item { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; background: transparent; border: none; border-bottom: 1px solid #141414; color: #fafafa; font-family: inherit; padding: 10px 16px; cursor: pointer; min-height: 48px; }
+    .f-item-n { display: block; font-size: 13px; }
+    .f-item-d { display: block; font-size: 10px; color: #8a8a8a; margin-top: 2px; }
+    .f-item-k { font-size: 12px; color: #d4d4d4; white-space: nowrap; }
+    .f-meal-foot { display: flex; justify-content: space-between; }
+    .f-meal-foot button { background: transparent; border: none; color: #e5484d; font-family: inherit; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; padding: 14px 16px; cursor: pointer; }
+    .f-meal-foot button.sub { color: #8a8a8a; text-transform: none; letter-spacing: 0; }
+    .f-source { font-size: 10px; color: #525252; line-height: 1.5; text-align: center; margin-top: 16px; }
+    .f-meals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+    .f-meals button { background: transparent; border: 1px solid #262626; color: #a3a3a3; font-family: inherit; font-size: 11px; padding: 11px 0; cursor: pointer; min-height: 44px; }
+    .f-meals button.on { background: #7f1d1d; border-color: #7f1d1d; color: #fff; }
+    .f-meals button small { font-size: 9px; color: #8a8a8a; }
+    .f-meals button.on small { color: #fecaca; }
+    .f-search { display: grid; grid-template-columns: 1fr 56px; gap: 8px; margin-top: 14px; }
+    .f-scan { background: #7f1d1d; border: none; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .f-scanbox { background: #0a0a0a; border: 1px solid #262626; padding: 12px; margin-top: 10px; }
+    .f-res { display: flex; gap: 12px; align-items: center; width: 100%; background: #0a0a0a; border: 1px solid #1c1c1c; color: #fafafa; font-family: inherit; padding: 12px 14px; cursor: pointer; min-height: 48px; }
+    .f-tag { font-size: 9px; letter-spacing: 0.08em; border: 1px solid; padding: 3px 6px; white-space: nowrap; }
+    .f-tag.nevo { color: #22c55e; } .f-tag.off { color: #60a5fa; } .f-tag.own { color: #d9a441; }
+    .f-offbox { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+    .f-fav { width: 44px; height: 44px; background: transparent; border: 1px solid #262626; color: #d9a441; font-size: 18px; flex-shrink: 0; cursor: pointer; }
+    .f-rows { border-top: 1px solid #1c1c1c; margin-top: 14px; padding-top: 10px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #a3a3a3; }
+    .f-rows div { display: flex; justify-content: space-between; }
   </style>
 </head>
 <body>
@@ -483,7 +519,7 @@
       stress: 4,
       sleep: 7,
       editingId: null,
-      jd: null, jMode: null, vf: null, valuesView: 'overview',
+      jd: null, jMode: null, foodLogs: [], fView: 'day', fDate: null, fMeal: null, fQuery: '', fOff: null, fTab: 'search', fProduct: null, fScan: false, vf: null, valuesView: 'overview',
       
       // Retention
       retentionStreak: null,
@@ -1420,7 +1456,7 @@
       state.workouts = [];
       state.workoutSets = [];
       state.trainForm = null;
-      Object.assign(state, { tcali: null, ts: null, tpick: {}, tswap: null, tsetup: null, tc: null, tday: null, trainView: 'list', jd: null, jMode: null });
+      Object.assign(state, { foodLogs: [], fView: 'day', fDate: null, fProduct: null, tcali: null, ts: null, tpick: {}, tswap: null, tsetup: null, tc: null, tday: null, trainView: 'list', jd: null, jMode: null });
       render();
     }
 
@@ -1639,7 +1675,7 @@
     // ============================================
     // BACK-UP
     // ============================================
-    const backupTables = ['journal_entries', 'retention', 'daily_habits', 'goals', 'goal_subtasks', 'body_stats', 'challenges', 'challenge_logs', 'user_settings', 'workouts', 'workout_sets'];
+    const backupTables = ['journal_entries', 'retention', 'daily_habits', 'goals', 'goal_subtasks', 'body_stats', 'challenges', 'challenge_logs', 'user_settings', 'workouts', 'workout_sets', 'food_logs'];
 
     function getLastBackup() {
       try { return localStorage.getItem('pf_last_backup'); } catch (e) { return null; }
@@ -1840,7 +1876,7 @@
         </div>
 
         ${renderBackupReminder()}
-        ${valuesReminderDue() ? `<div class="card" style="cursor: pointer; border-left: 3px solid #d9a441;" onclick="state.valuesView = 'overview'; setSection('values');"><div style="font-size: 13px;">🧭 Kloppen je waarden nog?</div><div style="font-size: 11px; color: #a3a3a3; margin-top: 4px;">Al 3 maanden niet bekeken. Waarden veranderen per levensfase →</div></div>` : ''}
+        ${valuesReminderDue() ? `<div class="card" style="cursor: pointer; border-left: 3px solid #d9a441;" onclick="openValues();"><div style="font-size: 13px;">🧭 Kloppen je waarden nog?</div><div style="font-size: 11px; color: #a3a3a3; margin-top: 4px;">Al 3 maanden niet bekeken. Waarden veranderen per levensfase →</div></div>` : ''}
 
         ${renderDashboardChallenges()}
         
@@ -4066,7 +4102,8 @@
       { table: 'challenge_logs', key: 'challenge_id,date', dropId: true },
       { table: 'user_settings', key: 'user_id' },
       { table: 'workouts', key: 'id' },
-      { table: 'workout_sets', key: 'id' }
+      { table: 'workout_sets', key: 'id' },
+      { table: 'food_logs', key: 'id' }
     ];
 
     let pendingRestore = null;
@@ -4104,7 +4141,7 @@
       const labels = {
         journal_entries: 'Journal-entries', retention: 'Retention-streaks', daily_habits: 'Habit-dagen', goals: 'Missies (oud)',
         goal_subtasks: 'Missie-stappen (oud)', body_stats: 'Metingen', challenges: 'Challenges', challenge_logs: 'Challenge-dagen',
-        user_settings: 'Instellingen', workouts: 'Trainingen', workout_sets: 'Training-sets'
+        user_settings: 'Instellingen', workouts: 'Trainingen', workout_sets: 'Training-sets', food_logs: 'Voeding'
       };
       return `
         <div class="modal-overlay" onclick="if(event.target === this) closeRestore();">
@@ -6592,7 +6629,7 @@
       const dateLabel = new Date().toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' });
       const vtop = latestValues();
       const tabs = `
-        ${vtop ? `<button class="j-values" onclick="state.valuesView = 'overview'; setSection('values');" aria-label="Mijn waarden bekijken"><span>🧭</span>${vtop.top.map(esc).join(' · ')}</button>` : ''}
+        ${vtop ? `<button class="j-values" onclick="openValues();" aria-label="Mijn waarden bekijken"><span>🧭</span>${vtop.top.map(esc).join(' · ')}</button>` : ''}
         <div class="j-mode">
           <button class="${mode === 'ochtend' ? 'on' : ''}" onclick="setJMode('ochtend')">☀ Ochtend${jd.morningAt ? ' ✓' : ''}</button>
           <button class="${mode === 'avond' ? 'on' : ''}" onclick="setJMode('avond')">☾ Avond${jd.eveningAt ? ' ✓' : ''}</button>
@@ -6768,11 +6805,13 @@
           <button class="tab ${state.journalTab === 'new' ? 'active' : ''}" onclick="setJournalTab('new')">Vandaag</button>
           <button class="tab ${state.journalTab === 'history' ? 'active' : ''}" onclick="setJournalTab('history')">Geschiedenis</button>
           <button class="tab ${state.journalTab === 'patterns' ? 'active' : ''}" onclick="setJournalTab('patterns')">Patronen</button>
+          <button class="tab ${state.journalTab === 'values' ? 'active' : ''}" onclick="state.valuesView = 'overview'; setJournalTab('values')">Waarden</button>
         </div>
         
         ${state.journalTab === 'new' ? (state.editingId ? renderNewEntry() : renderJournalToday()) : ''}
         ${state.journalTab === 'history' ? renderHistory() : ''}
         ${state.journalTab === 'patterns' ? renderPatterns() : ''}
+        ${state.journalTab === 'values' ? renderValues() : ''}
       `;
     }
 
@@ -7055,9 +7094,9 @@
           <p>Veel mensen kennen zichzelf niet. Ze weten niet wat ze belangrijk vinden, en daardoor zijn ze zichzelf niet. Ze durven niet af te wijken en volgen hun dromen niet. Veel mensen waarderen zichzelf niet.</p>
           <p>Het enige wat je hoeft te doen, is jezelf <b>toestemming geven</b> om naar je hoogste waarden te leven.</p>
         </div>`;
+      const emb = state.activeSection === 'journal';
       const head = `
-        <div class="page-header"><div class="page-sub">Fundament</div><div class="page-title">Waarden</div></div>
-        <button class="entry-action" style="margin-bottom: 16px;" onclick="setSection('more')">← Meer</button>
+        ${emb ? '' : `<div class="page-header"><div class="page-sub">Fundament</div><div class="page-title">Waarden</div></div>`}
         ${state.valuesLocal ? `<div class="info-box"><div class="info-title">Nog één update</div><div class="info-text">Voer waarden-update.sql uit in Supabase, dan worden je waarden ook online bewaard.</div></div>` : ''}`;
       if (!round) {
         return `${head}${intro}
@@ -7120,7 +7159,7 @@
       const f = state.vf;
       const steps = `<div class="v-steps">${['Vragen', 'Top 5', 'Cijfers'].map((t, i) => `<span class="${f.step === i + 1 ? 'on' : f.step > i + 1 ? 'done' : ''}">${i + 1}. ${t}</span>`).join('')}</div>`;
       const head = `
-        <div class="page-header"><div class="page-sub">Fundament</div><div class="page-title">Waarden</div></div>
+        ${state.activeSection === 'journal' ? '' : `<div class="page-header"><div class="page-sub">Fundament</div><div class="page-title">Waarden</div></div>`}
         <button class="entry-action" style="margin-bottom: 16px;" onclick="if (confirm('Stoppen? Je antwoorden worden niet bewaard.')) { state.vf = null; state.valuesView = 'overview'; render(); }">← Stoppen</button>
         ${steps}`;
       if (f.step === 1) {
@@ -7190,6 +7229,580 @@
         </div>`;
     }
 
+
+    // ============================================
+    // VOEDING
+    // Bronnen: NEVO-online 2025/9.0 (RIVM) als nevo.json, Open Food Facts live, eigen producten
+    // ============================================
+    const foodMeals = [['ontbijt', 'Ontbijt'], ['lunch', 'Lunch'], ['diner', 'Diner'], ['snacks', 'Snacks']];
+    const foodNutr = ['kcal', 'prot', 'carb', 'fat', 'fib', 'sugar', 'sat', 'salt'];
+    const NEVO_SOURCE = 'Gebaseerd op gegevens van NEVO-online versie 2025/9.0, RIVM, Bilthoven en andere gegevens (Open Food Facts)';
+    let nevoData = null, nevoLoading = null;
+
+    function loadNevo() {
+      if (nevoData) return Promise.resolve(nevoData);
+      if (!nevoLoading) {
+        nevoLoading = fetch('nevo.json').then(r => r.json()).then(d => {
+          d.items = d.items.map(it => {
+            const [code, name, group, ml, kcal, prot, carb, fat, fib, sugar, sat, na, syn] = it;
+            return { key: 'nevo:' + code, src: 'NEVO', code, name, syn, group: d.groups[group], ml: !!ml,
+              per100: { kcal, prot, carb, fat, fib, sugar, sat, salt: na === null || na === undefined ? null : Math.round(na * 2.5) / 1000 },
+              search: (name + ' ' + (syn || '')).toLowerCase() };
+          });
+          nevoData = d;
+          return d;
+        }).catch(e => { nevoLoading = null; throw e; });
+      }
+      return nevoLoading;
+    }
+
+    function nutritionSettings() {
+      const s = state.bodySettings || {};
+      if (s.nutrition) return s.nutrition;
+      try { const v = JSON.parse(localStorage.getItem('pf_nutrition') || 'null'); if (v) return v; } catch (e) {}
+      return {};
+    }
+    async function saveNutritionSettings(patch) {
+      const n = { ...nutritionSettings(), ...patch };
+      state.bodySettings = { ...(state.bodySettings || {}), nutrition: n };
+      try { localStorage.setItem('pf_nutrition', JSON.stringify(n)); } catch (e) {}
+      if (!state.user) return;
+      const { error } = await supabaseClient.from('user_settings').upsert({ user_id: state.user.id, nutrition: n }, { onConflict: 'user_id' });
+      if (error) console.warn('Voedingsinstellingen alleen lokaal (voer voeding-update.sql uit):', error.message);
+    }
+
+    async function loadFood() {
+      if (!state.user) return;
+      const since = dateAdd(todayStr(), -120);
+      const res = await supabaseClient.from('food_logs').select('*').eq('user_id', state.user.id).gte('date', since);
+      if (res.error) { state.foodError = true; state.foodLogs = []; return; }
+      state.foodError = false;
+      state.foodLogs = res.data || [];
+    }
+
+    // Doelen: Mifflin-St Jeor × activiteit ± doel; eiwit uit het eiwitschema; vet 30%; rest koolhydraten
+    const activityLevels = [['Weinig actief', 'Zittend werk, weinig sport', 1.2], ['Licht actief', '1–3 trainingen per week', 1.375], ['Actief', '4–5 trainingen per week', 1.55], ['Zeer actief', '6+ trainingen of zwaar lichamelijk werk', 1.725]];
+    const foodGoalTypes = [['cut', 'Afvallen', -500], ['keep', 'Onderhouden', 0], ['bulk', 'Spieropbouw', 250]];
+    function foodTargets() {
+      const g = nutritionSettings().goals || {};
+      const w = Number(latestBodyValue('weight')) || Number(g.weight) || null;
+      const h = Number((state.bodySettings || {}).height_cm) || Number(g.height) || null;
+      const age = g.birthYear ? new Date().getFullYear() - Number(g.birthYear) : null;
+      if (g.manual && g.kcal) return { kcal: +g.kcal, prot: +g.prot || 0, carb: +g.carb || 0, fat: +g.fat || 0, manual: true, w };
+      if (!w || !h || !age) return null;
+      const bmr = 10 * w + 6.25 * h - 5 * age + (g.sex === 'v' ? -161 : 5);
+      const act = (activityLevels[g.activity ?? 2] || activityLevels[2])[2];
+      const adj = (foodGoalTypes.find(x => x[0] === (g.type || 'keep')) || foodGoalTypes[1])[2];
+      const kcal = Math.round((bmr * act + adj) / 10) * 10;
+      const pg = proteinGoals[proteinGoalIdx()] || proteinGoals[3];
+      const prot = Math.round(w * (pg[1] + pg[2]) / 2);
+      const fat = Math.round(kcal * 0.3 / 9);
+      const carb = Math.max(0, Math.round((kcal - prot * 4 - fat * 9) / 4));
+      return { kcal, prot, carb, fat, w, bmr: Math.round(bmr), act, adj, pgLabel: pg[0] };
+    }
+
+    function foodScale(per100, grams) {
+      const out = {};
+      foodNutr.forEach(k => { const v = per100[k]; out[k] = v === null || v === undefined ? null : Math.round(v * grams / 100 * 10) / 10; });
+      return out;
+    }
+    function foodDayLogs(date) { return (state.foodLogs || []).filter(l => l.date === date); }
+    function foodSum(logs) {
+      const s = { kcal: 0, prot: 0, carb: 0, fat: 0, fib: 0, sugar: 0, sat: 0, salt: 0 };
+      logs.forEach(l => foodNutr.forEach(k => { s[k] += Number(l[k]) || 0; }));
+      return s;
+    }
+    const f1 = n => String(Math.round((Number(n) || 0) * 10) / 10).replace('.', ',');
+    const f0 = n => fmtInt(Math.round(Number(n) || 0));
+
+    // Zoeken
+    function foodCustomItems() {
+      return (nutritionSettings().customFoods || []).map(c => ({ key: 'custom:' + c.id, src: 'EIGEN', name: c.name, per100: c.per100, portion: c.portion || null, ml: false, search: c.name.toLowerCase() }));
+    }
+    function foodLocalSearch(q) {
+      const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+      if (!terms.length || !nevoData) return [];
+      const pool = [...foodCustomItems(), ...nevoData.items];
+      return pool.filter(it => terms.every(t => it.search.includes(t)))
+        .map(it => ({ it, score: (it.search.startsWith(terms[0]) ? 0 : 1) + (it.src === 'EIGEN' ? -1 : 0) + it.name.length / 100 }))
+        .sort((a, b) => a.score - b.score).slice(0, 40).map(x => x.it);
+    }
+    function offToItem(p) {
+      const n = p.nutriments || {};
+      const kcal = n['energy-kcal_100g'] ?? (n.energy_100g ? n.energy_100g / 4.184 : null);
+      if (kcal === null || kcal === undefined) return null;
+      const name = [p.brands ? String(p.brands).split(',')[0].trim() : '', p.product_name || p.product_name_nl || ''].filter(Boolean).join(' ') || 'Onbekend product';
+      return { key: 'off:' + p.code, src: 'OFF', code: p.code, name, ml: false,
+        per100: { kcal: Math.round(kcal), prot: n.proteins_100g ?? null, carb: n.carbohydrates_100g ?? null, fat: n.fat_100g ?? null, fib: n.fiber_100g ?? null, sugar: n.sugars_100g ?? null, sat: n['saturated-fat_100g'] ?? null, salt: n.salt_100g ?? null },
+        portion: Number(p.serving_quantity) ? { g: Number(p.serving_quantity), label: p.serving_size || '1 portie' } : null };
+    }
+    const offFields = 'code,product_name,product_name_nl,brands,nutriments,serving_quantity,serving_size';
+    async function foodOffSearch() {
+      const q = (state.fQuery || '').trim();
+      if (q.length < 2) return;
+      state.fOff = { loading: true, items: [] }; render();
+      try {
+        const url = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=24&tagtype_0=countries&tag_contains_0=contains&tag_0=netherlands&fields=${offFields}`;
+        const r = await fetch(url);
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const d = await r.json();
+        state.fOff = { loading: false, items: (d.products || []).map(offToItem).filter(Boolean) };
+      } catch (e) {
+        state.fOff = { loading: false, items: [], error: 'Open Food Facts is nu niet bereikbaar. Probeer het zo nog eens.' };
+      }
+      render();
+    }
+    async function foodBarcode(code) {
+      code = String(code || '').replace(/\D/g, '');
+      if (code.length < 6) { alert('Dat is geen geldige barcode.'); return; }
+      showToast('Product opzoeken…');
+      try {
+        const r = await fetch(`https://world.openfoodfacts.org/api/v2/product/${code}.json?fields=${offFields}`);
+        const d = await r.json();
+        const it = d && d.product ? offToItem({ ...d.product, code }) : null;
+        if (!it) { alert('Dit product staat (nog) niet in Open Food Facts, of zonder voedingswaarden. Zoek het op naam of voeg het toe als eigen product.'); return; }
+        openFoodProduct(it);
+      } catch (e) { alert('Open Food Facts is nu niet bereikbaar. Probeer het zo nog eens.'); }
+    }
+
+    // Barcode scannen met de camera (html5-qrcode wordt pas geladen als je hem nodig hebt)
+    let foodScanner = null;
+    function loadScript(src) {
+      return new Promise((ok, fail) => { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = fail; document.head.appendChild(s); });
+    }
+    async function startFoodScan() {
+      state.fScan = true; render();
+      try {
+        if (!window.Html5Qrcode) await loadScript('https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js');
+        const formats = window.Html5QrcodeSupportedFormats;
+        foodScanner = new Html5Qrcode('food-scan', formats ? { formatsToSupport: [formats.EAN_13, formats.EAN_8, formats.UPC_A, formats.UPC_E] } : undefined);
+        await foodScanner.start({ facingMode: 'environment' }, { fps: 10, qrbox: { width: 260, height: 140 } }, text => { stopFoodScan(); foodBarcode(text); }, () => {});
+      } catch (e) {
+        stopFoodScan();
+        alert('De camera kon niet starten. Geef de app toestemming voor je camera, of typ de barcode in.');
+      }
+    }
+    function stopFoodScan() {
+      const s = foodScanner; foodScanner = null;
+      if (s) { try { s.stop().catch(() => {}).finally(() => { try { s.clear(); } catch (e) {} }); } catch (e) {} }
+      state.fScan = false; render();
+    }
+
+    // Navigatie binnen Voeding
+    function setFoodDate(n) { state.fDate = dateAdd(state.fDate || todayStr(), n); if (state.fDate > todayStr()) state.fDate = todayStr(); render(); }
+    function openFoodAdd(meal) {
+      state.fMeal = meal || state.fMeal || defaultFoodMeal();
+      state.fView = 'add'; state.fQuery = ''; state.fOff = null; state.fTab = 'search';
+      render(); window.scrollTo(0, 0);
+      loadNevo().then(() => { if (state.fView === 'add') render(); }).catch(() => { state.nevoError = true; render(); });
+    }
+    function defaultFoodMeal() { const h = new Date().getHours(); return h < 11 ? 'ontbijt' : h < 15 ? 'lunch' : h < 21 ? 'diner' : 'snacks'; }
+    function foodQueryInput(v) {
+      state.fQuery = v; state.fOff = null;
+      const box = document.getElementById('food-results');
+      if (box) box.innerHTML = renderFoodResults();
+    }
+    function foodItemFromLog(l) {
+      const per100 = {};
+      foodNutr.forEach(k => per100[k] = l.grams ? (Number(l[k]) || 0) * 100 / Number(l.grams) : null);
+      return { key: l.ref || ('log:' + l.id), src: l.source === 'nevo' ? 'NEVO' : l.source === 'off' ? 'OFF' : l.source === 'quick' ? 'SNEL' : 'EIGEN', name: l.name, per100, ml: false };
+    }
+    function openFoodProduct(item, logId) {
+      const last = (state.foodLogs || []).filter(l => l.ref === item.key && l.id !== logId).sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)))[0];
+      const log = logId ? (state.foodLogs || []).find(l => l.id === logId) : null;
+      state.fProduct = { item, grams: log ? String(Number(log.grams)) : (last ? String(Number(last.grams)) : (item.portion ? String(item.portion.g) : '100')), last: last ? Number(last.grams) : null, logId: logId || null, meal: log ? log.meal : state.fMeal };
+      state.fView = 'product'; render(); window.scrollTo(0, 0);
+    }
+    function foodPick(key) {
+      const it = (state.fPickMap || {})[key];
+      if (it) openFoodProduct(it);
+    }
+    function foodGrams(v) {
+      state.fProduct.grams = v;
+      const g = pnum(v) || 0;
+      const n = foodScale(state.fProduct.item.per100, g);
+      foodNutr.forEach(k => { const el = document.getElementById('fp-' + k); if (el) el.textContent = n[k] === null ? '–' : (k === 'kcal' ? f0(n[k]) : f1(n[k])); });
+      const hint = document.getElementById('fp-hint'); if (hint) hint.innerHTML = foodProteinHint(n.prot);
+      document.querySelectorAll('.fp-chip').forEach(b => b.classList.toggle('on', Number(b.dataset.g) === g));
+    }
+    function foodProteinHint(addProt) {
+      const t = foodTargets(); if (!t || !t.prot) return '';
+      const p = state.fProduct;
+      const day = foodSum(foodDayLogs(state.fDate || todayStr()).filter(l => l.id !== p.logId)).prot + (Number(addProt) || 0);
+      return `Hiermee kom je op <b style="color: #f2cf7a;">${f0(day)} / ${t.prot} g eiwit</b> vandaag${day >= t.prot ? ' ✓' : ''}`;
+    }
+    async function saveFoodLog() {
+      const p = state.fProduct; const g = pnum(p.grams);
+      if (!g || g <= 0) { alert('Vul de hoeveelheid in grammen in.'); return; }
+      const n = foodScale(p.item.per100, g);
+      const row = { user_id: state.user.id, date: state.fDate || todayStr(), meal: p.meal || state.fMeal || 'snacks', name: p.item.name,
+        source: p.item.src === 'NEVO' ? 'nevo' : p.item.src === 'OFF' ? 'off' : p.item.src === 'SNEL' ? 'quick' : 'custom', ref: p.item.key, grams: g, ...n };
+      const res = p.logId ? await supabaseClient.from('food_logs').update(row).eq('id', p.logId) : await supabaseClient.from('food_logs').insert([row]);
+      if (res.error) { alert('Fout bij opslaan: ' + res.error.message + (/food_logs/.test(res.error.message) ? '\n\nVoer eerst voeding-update.sql uit in Supabase.' : '')); return; }
+      await loadFood();
+      state.fView = 'day'; state.fProduct = null;
+      render(); window.scrollTo(0, 0);
+      showToast(p.logId ? '✓ Bijgewerkt' : '✓ ' + p.item.name + ' toegevoegd');
+    }
+    async function deleteFoodLog(id) {
+      if (!confirm('Verwijderen?')) return;
+      await supabaseClient.from('food_logs').delete().eq('id', id);
+      await loadFood(); state.fView = 'day'; state.fProduct = null; render();
+    }
+    function toggleFoodFav(key) {
+      const favs = nutritionSettings().favorites || [];
+      const items = { ...(nutritionSettings().favItems || {}) };
+      const on = favs.includes(key);
+      if (!on && state.fProduct) items[key] = { name: state.fProduct.item.name, src: state.fProduct.item.src, per100: state.fProduct.item.per100, portion: state.fProduct.item.portion || null };
+      if (on) delete items[key];
+      saveNutritionSettings({ favorites: on ? favs.filter(k => k !== key) : [...favs, key], favItems: items });
+      const b = document.getElementById('fp-fav'); if (b) { b.textContent = on ? '☆' : '★'; b.setAttribute('aria-pressed', on ? 'false' : 'true'); }
+    }
+
+    // Snel invoeren & eigen product & maaltijden
+    async function saveQuickFood() {
+      const v = id => pnum((document.getElementById(id) || {}).value);
+      const name = ((document.getElementById('fq-name') || {}).value || '').trim() || 'Snel ingevoerd';
+      const kcal = v('fq-kcal');
+      if (!kcal) { alert('Vul minstens de calorieën in.'); return; }
+      const row = { user_id: state.user.id, date: state.fDate || todayStr(), meal: state.fMeal, name, source: 'quick', ref: null, grams: 100,
+        kcal, prot: v('fq-prot') || 0, carb: v('fq-carb') || 0, fat: v('fq-fat') || 0, fib: null, sugar: null, sat: null, salt: null };
+      const res = await supabaseClient.from('food_logs').insert([row]);
+      if (res.error) { alert('Fout bij opslaan: ' + res.error.message); return; }
+      await loadFood(); state.fView = 'day'; render(); showToast('✓ Toegevoegd');
+    }
+    async function saveCustomFood() {
+      const v = id => pnum((document.getElementById(id) || {}).value);
+      const name = ((document.getElementById('fc-name') || {}).value || '').trim();
+      if (!name || v('fc-kcal') === null) { alert('Vul minstens de naam en de calorieën per 100 g in.'); return; }
+      const per100 = { kcal: v('fc-kcal'), prot: v('fc-prot') || 0, carb: v('fc-carb') || 0, fat: v('fc-fat') || 0, fib: v('fc-fib'), sugar: v('fc-sugar'), sat: v('fc-sat'), salt: v('fc-salt') };
+      const portion = v('fc-portion') ? { g: v('fc-portion'), label: '1 portie' } : null;
+      const c = { id: Date.now().toString(36), name, per100, portion };
+      await saveNutritionSettings({ customFoods: [...(nutritionSettings().customFoods || []), c] });
+      openFoodProduct({ key: 'custom:' + c.id, src: 'EIGEN', name, per100, portion });
+    }
+    async function saveMealPreset(meal) {
+      const logs = foodDayLogs(state.fDate || todayStr()).filter(l => l.meal === meal);
+      if (!logs.length) return;
+      const name = prompt('Naam van deze maaltijd:', foodMeals.find(m => m[0] === meal)[1] + ' standaard');
+      if (!name) return;
+      const items = logs.map(l => ({ name: l.name, source: l.source, ref: l.ref, grams: Number(l.grams), per100: foodItemFromLog(l).per100 }));
+      await saveNutritionSettings({ mealPresets: [...(nutritionSettings().mealPresets || []), { id: Date.now().toString(36), name: name.trim(), items }] });
+      showToast('⭐ Maaltijd bewaard');
+      render();
+    }
+    async function addMealPreset(id) {
+      const m = (nutritionSettings().mealPresets || []).find(x => x.id === id);
+      if (!m) return;
+      const rows = m.items.map(it => ({ user_id: state.user.id, date: state.fDate || todayStr(), meal: state.fMeal, name: it.name, source: it.source, ref: it.ref, grams: it.grams, ...foodScale(it.per100, it.grams) }));
+      const res = await supabaseClient.from('food_logs').insert(rows);
+      if (res.error) { alert('Fout bij opslaan: ' + res.error.message); return; }
+      await loadFood(); state.fView = 'day'; render(); showToast('✓ ' + m.name + ' toegevoegd');
+    }
+    async function deleteMealPreset(id) {
+      if (!confirm('Maaltijd verwijderen?')) return;
+      await saveNutritionSettings({ mealPresets: (nutritionSettings().mealPresets || []).filter(x => x.id !== id) });
+      render();
+    }
+
+    // ---------- Render ----------
+    function renderFood() {
+      if (!state.fDate) state.fDate = todayStr();
+      if (state.fView === 'add') return renderFoodAdd();
+      if (state.fView === 'product' && state.fProduct) return renderFoodProduct();
+      if (state.fView === 'goals') return renderFoodGoals();
+      if (state.fView === 'quick') return renderFoodQuick();
+      if (state.fView === 'custom') return renderFoodCustom();
+      const date = state.fDate;
+      const logs = foodDayLogs(date);
+      const sum = foodSum(logs);
+      const t = foodTargets();
+      const label = date === todayStr() ? 'Vandaag' : date === dateAdd(todayStr(), -1) ? 'Gisteren' : '';
+      const dl = new Date(date + 'T12:00:00').toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'short' });
+      const pct = t ? Math.min(100, Math.round(sum.kcal / t.kcal * 100)) : 0;
+      const over = t ? t.kcal - Math.round(sum.kcal) : null;
+      const mac = (n, k, color) => {
+        const goal = t ? t[k] : 0;
+        return `<div>
+          <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;"><span style="color: ${color};">${n}</span><span style="color: #a3a3a3;">${f0(sum[k])}${goal ? ' / ' + goal : ''} g</span></div>
+          <div class="f-bar"><span style="width: ${goal ? Math.min(100, sum[k] / goal * 100) : 0}%; background: ${color};"></span></div></div>`;
+      };
+      return `
+        <div class="page-header" style="margin-bottom: 16px;"><div class="page-sub">Fysiek</div><div class="page-title">Voeding</div></div>
+        ${state.foodError ? `<div class="info-box"><div class="info-title">⚠️ Nog één update</div><div class="info-text">Voer voeding-update.sql uit in Supabase om je eten op te slaan.</div></div>` : ''}
+        <div class="f-datebar">
+          <button class="f-nav" onclick="setFoodDate(-1)" aria-label="Vorige dag">‹</button>
+          <div style="font-size: 13px;">${label ? label + ' · ' : ''}${dl}</div>
+          <button class="f-nav" onclick="setFoodDate(1)" aria-label="Volgende dag" ${date >= todayStr() ? 'disabled' : ''}>›</button>
+        </div>
+        <div class="card">
+          ${t ? `
+            <div class="f-top">
+              <div><b>${f0(t.kcal)}</b><span>Doel</span></div>
+              <div><b>${f0(sum.kcal)}</b><span>Gegeten</span></div>
+              <div><b style="color: ${over >= 0 ? '#22c55e' : '#e5484d'}; font-weight: 500;">${f0(Math.abs(over))}</b><span>${over >= 0 ? 'Over' : 'Te veel'}</span></div>
+            </div>
+            <div class="f-bar" style="height: 8px; margin-top: 14px;"><span style="width: ${pct}%; background: ${over >= 0 ? '#7f1d1d' : '#e5484d'};"></span></div>
+            <div style="font-size: 10px; color: #8a8a8a; margin-top: 6px; text-align: right;">kcal · ${pct}%</div>
+          ` : `
+            <div style="font-size: 13px; color: #d4d4d4;">Gegeten: <b>${f0(sum.kcal)} kcal</b></div>
+            <button class="btn btn-secondary btn-small" style="width: 100%; margin-top: 12px;" onclick="state.fView = 'goals'; render();">Stel je dagdoel in →</button>
+          `}
+          <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+            ${mac('Eiwit', 'prot', '#d9a441')}${mac('Koolhydraten', 'carb', '#60a5fa')}${mac('Vet', 'fat', '#a78bfa')}
+          </div>
+          ${t && !t.manual ? `<div style="font-size: 10px; color: #8a8a8a; margin-top: 12px;">Eiwitdoel uit je eiwitschema: ${esc(t.pgLabel)} · ${f1(t.w)} kg</div>` : ''}
+          ${sum.fib || sum.salt ? `<div style="font-size: 10px; color: #8a8a8a; margin-top: 6px;">Vezels ${f1(sum.fib)} g · suikers ${f1(sum.sugar)} g · zout ${f1(sum.salt)} g</div>` : ''}
+        </div>
+        ${foodMeals.map(([k, name]) => {
+          const ml = logs.filter(l => l.meal === k).sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)));
+          const ms = foodSum(ml);
+          return `
+            <div class="f-meal">
+              <div class="f-meal-head"><span>${name.toUpperCase()}</span><span>${f0(ms.kcal)} kcal${ms.prot ? ' · ' + f0(ms.prot) + ' g eiwit' : ''}</span></div>
+              ${ml.map(l => `
+                <button class="f-item" onclick="openFoodProduct(foodItemFromLog(state.foodLogs.find(x => x.id === '${l.id}')), '${l.id}')">
+                  <span style="min-width: 0; text-align: left;"><span class="f-item-n">${esc(l.name)}</span><span class="f-item-d">${l.source === 'quick' ? 'snel ingevoerd' : f0(l.grams) + ' g'} · ${{ nevo: 'NEVO', off: 'Open Food Facts', custom: 'eigen product', quick: 'snel' }[l.source] || ''}</span></span>
+                  <span class="f-item-k">${f0(l.kcal)} kcal</span>
+                </button>`).join('')}
+              <div class="f-meal-foot">
+                <button onclick="openFoodAdd('${k}')">+ Toevoegen</button>
+                ${ml.length ? `<button class="sub" onclick="saveMealPreset('${k}')">⭐ Bewaar als maaltijd</button>` : ''}
+              </div>
+            </div>`;
+        }).join('')}
+        <button class="btn btn-secondary btn-small" style="width: 100%; margin-top: 4px;" onclick="state.fView = 'goals'; render(); window.scrollTo(0, 0);">Doelen aanpassen</button>
+        <div class="f-source">${NEVO_SOURCE}</div>
+      `;
+    }
+
+    function renderFoodResults() {
+      if (state.nevoError) return `<div class="empty">De voedingstabel kon niet laden. Controleer of nevo.json op GitHub staat.</div>`;
+      const q = (state.fQuery || '').trim();
+      state.fPickMap = {};
+      const row = it => { state.fPickMap[it.key] = it; const p = it.per100;
+        return `<button class="f-res" onclick="foodPick(${esc(JSON.stringify(it.key))})">
+          <span style="flex: 1; min-width: 0; text-align: left;"><span class="f-item-n">${esc(it.name)}</span><span class="f-item-d">${f0(p.kcal)} kcal${p.prot !== null && p.prot !== undefined ? ' · ' + f1(p.prot) + ' g eiwit' : ''} per 100 ${it.ml ? 'ml' : 'g'}</span></span>
+          <span class="f-tag ${it.src === 'NEVO' ? 'nevo' : it.src === 'OFF' ? 'off' : 'own'}">${it.src}</span></button>`; };
+      if (state.fTab === 'recent' || state.fTab === 'fav' || state.fTab === 'meals') {
+        if (state.fTab === 'meals') {
+          const ms = nutritionSettings().mealPresets || [];
+          if (!ms.length) return `<div class="empty">Nog geen maaltijden.<br><br>Tik bij een maaltijd op je dag op "⭐ Bewaar als maaltijd".</div>`;
+          return ms.map(m => { const s = foodSum(m.items.map(it => foodScale(it.per100, it.grams)));
+            return `<div class="f-res" style="cursor: default;"><span style="flex: 1; min-width: 0;"><span class="f-item-n">${esc(m.name)}</span><span class="f-item-d">${m.items.length} producten · ${f0(s.kcal)} kcal · ${f0(s.prot)} g eiwit</span></span>
+              <button class="btn btn-primary btn-small" onclick="addMealPreset('${m.id}')">+</button><button class="icon-btn" onclick="deleteMealPreset('${m.id}')" aria-label="Maaltijd verwijderen">✕</button></div>`; }).join('');
+        }
+        let items = [];
+        if (state.fTab === 'recent') {
+          const seen = new Set();
+          [...(state.foodLogs || [])].sort((a, b) => String(b.created_at).localeCompare(String(a.created_at))).forEach(l => {
+            const k = l.ref || ('quick:' + l.name); if (seen.has(k) || l.source === 'quick') return; seen.add(k); items.push(foodItemFromLog(l));
+          });
+          items = items.slice(0, 30);
+        } else {
+          const fi = nutritionSettings().favItems || {};
+          items = (nutritionSettings().favorites || []).map(k => fi[k] ? { key: k, ...fi[k] } : null).filter(Boolean);
+        }
+        if (!items.length) return `<div class="empty">${state.fTab === 'recent' ? 'Nog niks gegeten in de app.' : 'Nog geen favorieten. Tik op ☆ bij een product.'}</div>`;
+        return items.map(row).join('');
+      }
+      if (q.length < 2) return `<div class="hs-small" style="padding: 8px 0;">Typ minstens 2 letters, of scan een barcode.</div>`;
+      if (!nevoData) return `<div class="hs-small">Voedingstabel laden…</div>`;
+      const local = foodLocalSearch(q);
+      return `
+        ${local.length ? local.map(row).join('') : `<div class="hs-small" style="padding: 8px 0;">Niets gevonden in de RIVM-tabel.</div>`}
+        <div class="f-offbox">
+          ${!state.fOff ? `<button class="btn btn-secondary btn-small" style="width: 100%;" onclick="foodOffSearch()">🔍 Zoek "${esc(q)}" in winkelproducten (Open Food Facts)</button>`
+            : state.fOff.loading ? `<div class="hs-small">Zoeken in Open Food Facts…</div>`
+            : state.fOff.error ? `<div class="hs-small" style="color: #eab308;">${state.fOff.error}</div>`
+            : state.fOff.items.length ? state.fOff.items.map(row).join('') : `<div class="hs-small">Geen winkelproducten gevonden.</div>`}
+        </div>`;
+    }
+
+    function renderFoodAdd() {
+      const tab = state.fTab || 'search';
+      return `
+        <div class="page-header" style="margin-bottom: 12px;"><div class="page-sub">Voeding</div><div class="page-title">Toevoegen</div></div>
+        <button class="entry-action" style="margin-bottom: 14px;" onclick="state.fView = 'day'; render();">← Terug</button>
+        <div class="f-meals">${foodMeals.map(([k, n]) => `<button class="${state.fMeal === k ? 'on' : ''}" onclick="state.fMeal = '${k}'; render();">${n}</button>`).join('')}</div>
+        <div class="f-search">
+          <input type="search" class="form-input" id="food-q" placeholder="Zoek product, bijv. kipfilet" value="${esc(state.fQuery || '')}" oninput="foodQueryInput(this.value)" onkeydown="if(event.key === 'Enter') foodOffSearch()" onfocus="state.fTab = 'search'" aria-label="Zoek product">
+          <button class="f-scan" onclick="startFoodScan()" aria-label="Barcode scannen"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7V4h3M21 7V4h-3M3 17v3h3M21 17v3h-3M7 8v8M10 8v8M13 8v8M16 8v8"></path></svg></button>
+        </div>
+        ${state.fScan ? `
+          <div class="f-scanbox">
+            <div id="food-scan" style="width: 100%;"></div>
+            <div style="display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 10px;">
+              <input type="text" inputmode="numeric" class="input-sm" id="food-code" placeholder="Of typ de barcode">
+              <button class="btn btn-secondary btn-small" onclick="const c = document.getElementById('food-code').value; stopFoodScan(); foodBarcode(c);">Zoek</button>
+            </div>
+            <button class="btn btn-secondary btn-small" style="width: 100%; margin-top: 8px;" onclick="stopFoodScan()">Stoppen</button>
+          </div>` : ''}
+        <div class="tabs" style="margin: 14px 0 10px;">
+          ${[['search', 'Zoeken'], ['recent', 'Recent'], ['fav', 'Favorieten'], ['meals', 'Maaltijden']].map(([k, n]) => `<button class="tab ${tab === k ? 'active' : ''}" onclick="state.fTab = '${k}'; render();">${n}</button>`).join('')}
+        </div>
+        <div id="food-results" style="display: flex; flex-direction: column; gap: 6px;">${renderFoodResults()}</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px;">
+          <button class="btn btn-secondary btn-small" onclick="state.fView = 'quick'; render();">✏️ Snel invoeren</button>
+          <button class="btn btn-secondary btn-small" onclick="state.fView = 'custom'; render();">+ Eigen product</button>
+        </div>
+        <div class="f-source">${NEVO_SOURCE}</div>
+      `;
+    }
+
+    function renderFoodProduct() {
+      const p = state.fProduct; const it = p.item; const g = pnum(p.grams) || 0;
+      const n = foodScale(it.per100, g);
+      const fav = (nutritionSettings().favorites || []).includes(it.key);
+      const chips = [...new Set([it.portion ? it.portion.g : null, 50, 100, 150, 200, p.last].filter(Boolean))];
+      const srcTxt = it.src === 'NEVO' ? `RIVM · NEVO-code ${it.code}` : it.src === 'OFF' ? `Open Food Facts · barcode ${it.code}` : it.src === 'SNEL' ? 'Snel ingevoerd' : 'Eigen product';
+      const v = (k, d) => n[k] === null || n[k] === undefined ? '–' : (d ? f0(n[k]) : f1(n[k]));
+      return `
+        <button class="entry-action" style="margin: 64px 0 16px;" onclick="state.fView = '${p.logId ? 'day' : 'add'}'; render();">← Terug</button>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
+          <div><div style="font-size: 22px; font-weight: 300;">${esc(it.name)}</div><div style="font-size: 11px; color: #8a8a8a; margin-top: 4px;">${srcTxt} · per 100 ${it.ml ? 'ml' : 'g'}: ${f0(it.per100.kcal)} kcal</div></div>
+          ${it.src !== 'SNEL' && !String(it.key).startsWith('log:') ? `<button class="f-fav" id="fp-fav" aria-pressed="${fav}" aria-label="Favoriet" onclick="toggleFoodFav(${esc(JSON.stringify(it.key))})">${fav ? '★' : '☆'}</button>` : ''}
+        </div>
+        <div class="card">
+          <label class="label" for="fp-g">Hoeveelheid</label>
+          <div style="display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;">
+            <input type="text" inputmode="decimal" id="fp-g" class="form-input" style="font-size: 26px; font-weight: 300;" value="${esc(p.grams)}" oninput="foodGrams(this.value)">
+            <span style="color: #a3a3a3;">${it.ml ? 'ml' : 'gram'}</span>
+          </div>
+          <div class="chips" style="margin: 12px 0 0;">
+            ${chips.map(c => `<button class="chip fp-chip ${g === c ? 'on active' : ''}" data-g="${c}" onclick="document.getElementById('fp-g').value = '${c}'; foodGrams('${c}'); this.parentNode.querySelectorAll('.chip').forEach(b => b.classList.remove('active')); this.classList.add('active');">${it.portion && c === it.portion.g ? esc(it.portion.label) + ' (' + c + ' g)' : c === p.last ? 'Vorige keer: ' + c + ' g' : c + ' g'}</button>`).join('')}
+          </div>
+          <label class="label" style="margin-top: 16px;">Maaltijd</label>
+          <div class="f-meals">${foodMeals.map(([k, nm]) => `<button class="${p.meal === k ? 'on' : ''}" onclick="state.fProduct.meal = '${k}'; state.fProduct.grams = document.getElementById('fp-g').value; render();">${nm}</button>`).join('')}</div>
+        </div>
+        <div class="card">
+          <div class="f-top">
+            <div><b id="fp-kcal">${v('kcal', 1)}</b><span>kcal</span></div>
+            <div><b id="fp-prot" style="color: #d9a441;">${v('prot')}</b><span>Eiwit</span></div>
+            <div><b id="fp-carb" style="color: #60a5fa;">${v('carb')}</b><span>Koolh.</span></div>
+            <div><b id="fp-fat" style="color: #a78bfa;">${v('fat')}</b><span>Vet</span></div>
+          </div>
+          <div class="f-rows">
+            <div><span>waarvan suikers</span><span><span id="fp-sugar">${v('sugar')}</span> g</span></div>
+            <div><span>waarvan verzadigd vet</span><span><span id="fp-sat">${v('sat')}</span> g</span></div>
+            <div><span>Vezels</span><span><span id="fp-fib">${v('fib')}</span> g</span></div>
+            <div><span>Zout</span><span><span id="fp-salt">${v('salt')}</span> g</span></div>
+          </div>
+        </div>
+        <div class="j-tip" id="fp-hint" style="font-size: 12px;">${foodProteinHint(n.prot)}</div>
+        <button class="btn btn-primary" style="width: 100%; padding: 18px;" onclick="saveFoodLog()">${p.logId ? 'Bijwerken' : 'Toevoegen aan ' + (foodMeals.find(m => m[0] === p.meal) || ['', 'maaltijd'])[1].toLowerCase()}</button>
+        ${p.logId ? `<button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" onclick="deleteFoodLog('${p.logId}')">Verwijderen</button>` : ''}
+        <div class="hs-small" style="text-align: center; margin-top: 10px;">Tip: weeg je eten. Op het oog zit je er al snel 20–30% naast.</div>
+      `;
+    }
+
+    function renderFoodQuick() {
+      return `
+        <button class="entry-action" style="margin: 64px 0 16px;" onclick="state.fView = 'add'; render();">← Terug</button>
+        <div class="card">
+          <label class="label">Snel invoeren · ${(foodMeals.find(m => m[0] === state.fMeal) || ['', ''])[1]}</label>
+          <div class="hs-small" style="margin-bottom: 12px;">Voor als je uit eten bent of het product niet kunt vinden.</div>
+          <label class="form-label" for="fq-name">Omschrijving</label><input class="form-input" id="fq-name" placeholder="Bijv. pizza bij vrienden">
+          <div class="form-row">
+            <div><label class="form-label" for="fq-kcal">Kcal *</label><input class="form-input" id="fq-kcal" inputmode="decimal"></div>
+            <div><label class="form-label" for="fq-prot">Eiwit (g)</label><input class="form-input" id="fq-prot" inputmode="decimal"></div>
+          </div>
+          <div class="form-row">
+            <div><label class="form-label" for="fq-carb">Koolh. (g)</label><input class="form-input" id="fq-carb" inputmode="decimal"></div>
+            <div><label class="form-label" for="fq-fat">Vet (g)</label><input class="form-input" id="fq-fat" inputmode="decimal"></div>
+          </div>
+        </div>
+        <button class="btn btn-primary" style="width: 100%; padding: 18px;" onclick="saveQuickFood()">Toevoegen</button>`;
+    }
+
+    function renderFoodCustom() {
+      const fld = (id, l) => `<div><label class="form-label" for="${id}">${l}</label><input class="form-input" id="${id}" inputmode="decimal"></div>`;
+      return `
+        <button class="entry-action" style="margin: 64px 0 16px;" onclick="state.fView = 'add'; render();">← Terug</button>
+        <div class="card">
+          <label class="label">Eigen product</label>
+          <div class="hs-small" style="margin-bottom: 12px;">Neem de waarden per 100 g over van de verpakking. Je product blijft bewaard en is daarna gewoon te zoeken.</div>
+          <label class="form-label" for="fc-name">Naam *</label><input class="form-input" id="fc-name" placeholder="Bijv. Whey proteïne vanille">
+          <div class="form-row">${fld('fc-kcal', 'Kcal per 100 g *')}${fld('fc-prot', 'Eiwit (g)')}</div>
+          <div class="form-row">${fld('fc-carb', 'Koolh. (g)')}${fld('fc-fat', 'Vet (g)')}</div>
+          <div class="form-row">${fld('fc-sugar', 'Suikers (g)')}${fld('fc-sat', 'Verz. vet (g)')}</div>
+          <div class="form-row">${fld('fc-fib', 'Vezels (g)')}${fld('fc-salt', 'Zout (g)')}</div>
+          <div class="form-row">${fld('fc-portion', 'Portie (g), optioneel')}<div></div></div>
+        </div>
+        <button class="btn btn-primary" style="width: 100%; padding: 18px;" onclick="saveCustomFood()">Opslaan en toevoegen</button>`;
+    }
+
+    function setFoodGoal(field, value) {
+      saveNutritionSettings({ goals: { ...(nutritionSettings().goals || {}), [field]: value } });
+      render();
+    }
+    function renderFoodGoals() {
+      const g = nutritionSettings().goals || {};
+      const t = foodTargets();
+      const w = latestBodyValue('weight');
+      const h = (state.bodySettings || {}).height_cm || g.height || '';
+      return `
+        <div class="page-header" style="margin-bottom: 12px;"><div class="page-sub">Voeding</div><div class="page-title">Doelen</div></div>
+        <button class="entry-action" style="margin-bottom: 16px;" onclick="state.fView = 'day'; render();">← Terug</button>
+        <div class="card">
+          <div class="tq">1 · OVER JOU</div>
+          <div class="form-row">
+            <div><label class="form-label" for="fg-w">Gewicht (kg)</label><input class="form-input" id="fg-w" inputmode="decimal" value="${esc(w || g.weight || '')}" ${w ? 'disabled' : ''} onchange="setFoodGoal('weight', this.value)"></div>
+            <div><label class="form-label" for="fg-h">Lengte (cm)</label><input class="form-input" id="fg-h" inputmode="numeric" value="${esc(h)}" ${(state.bodySettings || {}).height_cm ? 'disabled' : ''} onchange="setFoodGoal('height', this.value)"></div>
+          </div>
+          <div class="form-row">
+            <div><label class="form-label" for="fg-y">Geboortejaar</label><input class="form-input" id="fg-y" inputmode="numeric" placeholder="bijv. 1990" value="${esc(g.birthYear || '')}" onchange="setFoodGoal('birthYear', this.value)"></div>
+            <div><span class="form-label">Geslacht</span><div class="f-meals" style="grid-template-columns: 1fr 1fr;"><button class="${g.sex !== 'v' ? 'on' : ''}" onclick="setFoodGoal('sex', 'm')">Man</button><button class="${g.sex === 'v' ? 'on' : ''}" onclick="setFoodGoal('sex', 'v')">Vrouw</button></div></div>
+          </div>
+          ${w ? `<div class="hs-small" style="margin-top: 8px;">Gewicht komt uit je laatste meting bij Lichaam.</div>` : ''}
+        </div>
+        <div class="card">
+          <div class="tq">2 · HOE ACTIEF BEN JE?</div>
+          ${activityLevels.map(([n, d], i) => `<button class="topt ${(g.activity ?? 2) === i ? 'on' : ''}" onclick="setFoodGoal('activity', ${i})"><span class="topt-t">${n}</span><span class="topt-s">${d}</span></button>`).join('')}
+        </div>
+        <div class="card">
+          <div class="tq">3 · WAT IS JE DOEL?</div>
+          <div class="f-meals" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+            ${foodGoalTypes.map(([k, n, a]) => `<button class="${(g.type || 'keep') === k ? 'on' : ''}" onclick="setFoodGoal('type', '${k}')">${n}<br><small>${a > 0 ? '+' : a < 0 ? '−' : '±'}${Math.abs(a)} kcal</small></button>`).join('')}
+          </div>
+          <div class="hs-small" style="margin-top: 10px;">Je eiwitdoel volgt je keuze in het eiwitschema bij Clean eating (tik op ⓘ bij die gewoonte).</div>
+        </div>
+        <div class="card" style="background: #120d04; border-color: #d9a441;">
+          <div style="font-size: 10px; color: #d9a441; letter-spacing: 0.15em; font-weight: 600;">JOUW DAGDOEL</div>
+          ${t ? `
+            <div style="font-size: 30px; font-weight: 300; margin-top: 6px;">${f0(t.kcal)} <span style="font-size: 14px; color: #a3a3a3;">kcal</span></div>
+            <div class="f-top" style="margin-top: 12px;">
+              <div><b style="color: #f2cf7a;">${t.prot} g</b><span>Eiwit</span></div><div><b style="color: #93c5fd;">${t.carb} g</b><span>Koolh.</span></div><div><b style="color: #c4b5fd;">${t.fat} g</b><span>Vet</span></div>
+            </div>
+            ${t.manual ? `<div class="hs-small" style="margin-top: 10px;">Handmatig ingesteld.</div>` : `<div class="hs-small" style="margin-top: 10px; line-height: 1.6;">Berekend met de Mifflin-St Jeor-formule: rustverbruik ${f0(t.bmr)} kcal × ${t.act} (activiteit) ${t.adj ? (t.adj > 0 ? '+ ' : '− ') + Math.abs(t.adj) + ' kcal' : ''}. Eiwit: ${esc(t.pgLabel)}. Vet ±30% van je calorieën, de rest koolhydraten.</div>`}
+          ` : `<div class="hs-small" style="margin-top: 8px;">Vul je gewicht, lengte en geboortejaar in, dan rekent de app je doel uit.</div>`}
+          <details class="j-opt" style="margin: 14px 0 0; background: transparent;" ${g.manual ? 'open' : ''}>
+            <summary><span>Zelf instellen</span><b aria-hidden="true"></b></summary>
+            <div style="padding: 0 18px 18px;">
+              <div class="form-row">
+                <div><label class="form-label" for="fm-kcal">Kcal</label><input class="form-input" id="fm-kcal" inputmode="numeric" value="${esc(g.manual ? g.kcal : '')}"></div>
+                <div><label class="form-label" for="fm-prot">Eiwit (g)</label><input class="form-input" id="fm-prot" inputmode="numeric" value="${esc(g.manual ? g.prot : '')}"></div>
+              </div>
+              <div class="form-row">
+                <div><label class="form-label" for="fm-carb">Koolh. (g)</label><input class="form-input" id="fm-carb" inputmode="numeric" value="${esc(g.manual ? g.carb : '')}"></div>
+                <div><label class="form-label" for="fm-fat">Vet (g)</label><input class="form-input" id="fm-fat" inputmode="numeric" value="${esc(g.manual ? g.fat : '')}"></div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px;">
+                <button class="btn btn-secondary btn-small" onclick="saveNutritionSettings({ goals: { ...(nutritionSettings().goals || {}), manual: false } }).then(render)">Automatisch</button>
+                <button class="btn btn-primary btn-small" onclick="const v = id => document.getElementById(id).value; saveNutritionSettings({ goals: { ...(nutritionSettings().goals || {}), manual: true, kcal: v('fm-kcal'), prot: v('fm-prot'), carb: v('fm-carb'), fat: v('fm-fat') } }).then(render)">Opslaan</button>
+              </div>
+            </div>
+          </details>
+        </div>
+        <button class="btn btn-primary" style="width: 100%; padding: 18px;" onclick="state.fView = 'day'; render(); window.scrollTo(0, 0);">Klaar</button>
+      `;
+    }
+
+    function openValues() {
+      state.activeSection = 'journal'; state.journalTab = 'values'; state.valuesView = 'overview';
+      render(); window.scrollTo(0, 0);
+    }
+
     function renderMore() {
       const since = daysSinceBackup();
       const last = getLastBackup();
@@ -7203,15 +7816,10 @@
           <div class="page-title">Meer</div>
         </div>
 
-        <div class="card card-accent" style="cursor: pointer;" onclick="state.valuesView = 'overview'; setSection('values');">
-          <label class="label">🧭 Waarden</label>
-          ${latestValues() ? `
-            <div style="font-size: 13px; color: #d4d4d4; line-height: 1.6;">${latestValues().top.map((x, i) => (i + 1) + '. ' + esc(x)).join(' · ')}</div>
-            <div style="font-size: 11px; color: ${valuesReminderDue() ? '#eab308' : '#e5484d'}; margin-top: 10px;">${valuesReminderDue() ? 'Tijd om je waarden opnieuw te bekijken →' : 'Bekijk je waarden →'}</div>
-          ` : `
-            <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">Wat vind jij écht belangrijk in dit leven? Een opdracht van ±15 minuten die je meer inzicht geeft in je hoogste waarden.</div>
-            <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Start de opdracht · +${VALUES_BONUS_XP} XP →</div>
-          `}
+        <div class="card card-accent" style="cursor: pointer;" onclick="setSection('retention')">
+          <label class="label">🔥 Retention</label>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">${state.retentionStreak ? 'Huidige reeks: <b style="color: #fafafa;">' + getRetentionDays() + ' dagen</b>' : 'Nog geen actieve reeks.'}</div>
+          <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Open retention →</div>
         </div>
         
         <div class="card card-accent">
@@ -7301,6 +7909,7 @@
           ${state.activeSection === 'retention' ? renderRetention() : ''}
           ${state.activeSection === 'more' ? renderMore() : ''}
           ${state.activeSection === 'values' ? renderValues() : ''}
+          ${state.activeSection === 'food' ? renderFood() : ''}
         </div>
         
         ${state.showRankUp ? renderRankUp() : ''}
@@ -7319,8 +7928,8 @@
           <button class="nav-item ${state.activeSection === 'training' ? 'active' : ''}" onclick="setSection('training')">
             <span class="nav-icon">🏋️</span>Training
           </button>
-          <button class="nav-item ${state.activeSection === 'retention' ? 'active' : ''}" onclick="setSection('retention')">
-            <span class="nav-icon">🔥</span>Retention
+          <button class="nav-item ${state.activeSection === 'food' ? 'active' : ''}" onclick="state.fView = 'day'; setSection('food')">
+            <span class="nav-icon">🍽️</span>Voeding
           </button>
           <button class="nav-item ${state.activeSection === 'more' ? 'active' : ''}" onclick="setSection('more')">
             <span class="nav-icon">⚡</span>Meer
@@ -7403,7 +8012,7 @@
     // INIT
     // ============================================
     async function loadAll() {
-      await Promise.all([loadEntries(), loadRetention(), loadHabits(), loadBody(), loadTraining()]);
+      await Promise.all([loadEntries(), loadRetention(), loadHabits(), loadBody(), loadTraining(), loadFood()]);
       // Eén onderdeel dat faalt mag de rest van de app niet blokkeren
       try {
         await loadChallenges();
