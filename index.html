@@ -513,6 +513,19 @@
     .sl-tl-b b { display: block; color: #fafafa; font-weight: 500; font-size: 13px; }
     .sl-sub { display: block; font-size: 10px; color: #737373; margin-top: 2px; }
     html.pf-night-on input[type=checkbox] { accent-color: #7f1d1d; filter: brightness(0.6); }
+    .su-card { padding: 18px; }
+    .su-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .su-icon { width: 36px; height: 36px; border: 1px solid #7f1d1d; background: #1a0606; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .su-name { font-size: 15px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 300; }
+    .su-txt { font-size: 12px; color: #d4d4d4; line-height: 1.6; }
+    .su-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 6px; margin-top: 12px; }
+    .su-grid div { border: 1px solid #1c1c1c; background: #050505; padding: 10px; font-size: 13px; color: #fafafa; line-height: 1.4; }
+    .su-grid span { display: block; font-size: 9px; color: #8a8a8a; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+    .su-warn { font-size: 11px; color: #eab308; margin-top: 10px; line-height: 1.5; }
+    .su-low { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid #1c1c1c; font-size: 13px; }
+    .su-low:last-child { border-bottom: none; }
+    .su-n { width: 22px; height: 22px; flex-shrink: 0; border: 1px solid #d9a441; color: #d9a441; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+    .su-when { font-size: 11px; color: #8a8a8a; }
     #pf-night { position: fixed; inset: 0; background: #b80000; mix-blend-mode: multiply; pointer-events: none; z-index: 2147483647; }
   </style>
 </head>
@@ -7864,6 +7877,12 @@
           <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Open retention →</div>
         </div>
         
+        <div class="card card-accent" style="cursor: pointer;" onclick="setSection('supps')">
+          <label class="label">💊 Supplementen</label>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">Welke vitamines je testosteron steunen, wat mannen vaak tekortkomen en wanneer je wat inneemt.</div>
+          <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Bekijk de lijst →</div>
+        </div>
+
         <div class="card card-accent">
           <label class="label">💾 Back-up</label>
           <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-bottom: 12px;">
@@ -7908,8 +7927,7 @@
         <div class="card">
           <label class="label">Komt binnenkort</label>
           <div style="color: #525252; font-size: 12px;">
-            <p style="margin-bottom: 12px;">• Supplementen</p>
-            <p style="margin-bottom: 12px;">• Bloedwaarden</p>
+            <p>• Bloedwaarden</p>
           </div>
         </div>
         
@@ -7950,6 +7968,7 @@
           ${state.activeSection === 'values' ? renderValues() : ''}
           ${state.activeSection === 'food' ? renderFood() : ''}
           ${state.activeSection === 'sleep' ? renderSleep() : ''}
+          ${state.activeSection === 'supps' ? renderSupps() : ''}
         </div>
         
         ${state.showRankUp ? renderRankUp() : ''}
@@ -8341,6 +8360,95 @@
         sub = 'Vul je bed- en opstatijd in →';
       }
       return `<div class="card" style="cursor: pointer; border-left: 3px solid #3b4a8a;" onclick="setSection('sleep')"><div style="font-size: 13px;">${main}</div><div style="font-size: 11px; color: #a3a3a3; margin-top: 4px;">${sub}</div></div>`;
+    }
+
+    // ============================================
+    // SUPPLEMENTEN (onder Meer)
+    // ============================================
+    const suppSources = [
+      ['Onderzoek', 'Zinkstatus en testosteron bij gezonde volwassenen (Prasad 1996)', 'https://pubmed.ncbi.nlm.nih.gov/8875519/'],
+      ['Onderzoek', 'Hoge dosis zink (ZMA) bij mannen met genoeg zink: geen effect (Koehler 2009)', 'https://www.nature.com/articles/1602899'],
+      ['Onderzoek', 'Magnesium en testosteron bij sporters en niet-sporters (Cinar 2011)', 'https://www.semanticscholar.org/paper/Effects-of-Magnesium-Supplementation-on-Levels-of-%C3%87inar-Polat/190a8c93a7c8a94ad2f59d88a2223cf89da47529'],
+      ['Onderzoek', 'Magnesium en hormonen bij oudere mannen (Maggio 2011)', 'https://pubmed.ncbi.nlm.nih.gov/21675994/'],
+      ['Overzicht', 'Vitamine D en testosteron: meta-analyse van 11 onderzoeken (2026)', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC13363579/'],
+      ['Onderzoek', 'Vitamine D-tekort in Europa (Cashman 2016)', 'https://pubmed.ncbi.nlm.nih.gov/26864360/'],
+      ['Uitleg', 'Vitamine D-aanmaak in de winter (Oregon State University, Engels)', 'https://lpi.oregonstate.edu/mic/health-disease/skin-health/vitamin-D'],
+      ['Onderzoek', 'Vet in je maaltijd verhoogt de opname van vitamine D3 (Dawson-Hughes 2015)', 'https://pubmed.ncbi.nlm.nih.gov/25441954/'],
+      ['Uitleg', 'Magnesiumsupplementen vaak te hoog gedoseerd (Consumentenbond)', 'https://www.consumentenbond.nl/voedingstests/magnesiumsupplementen-ongezond-hoog-gedoseerd'],
+      ['Uitleg', 'Vervuilde supplementen en het NZVT-keurmerk (Dopingautoriteit)', 'https://www.dopingautoriteit.nl/magdit/voedingssupplementen']
+    ];
+    const suppTesto = [
+      ['🔩', 'Zink', 'Mannen die te weinig zink kregen, zakten flink in testosteron. Oudere mannen met een licht tekort gingen omhoog na aanvullen. [1] Kreeg je al genoeg zink binnen, dan deed een hoge dosis niets. [2]', '10–25 mg per dag', 'Max. 25 mg in totaal. Niet tegelijk met ijzer.', 'Avondeten'],
+      ['🌿', 'Magnesium', 'In een klein onderzoek (30 mannen, 4 weken) steeg het testosteron bij sporters én niet-sporters. [3] Bij oudere mannen hangt meer magnesium samen met meer testosteron. [4]', 'Max. 250 mg uit een supplement', 'Meer geeft kans op diarree. [9]', 'Voor het slapen'],
+      ['☀️', 'Vitamine D', 'Een laag vitamine D gaat vaak samen met een laag testosteron. Maar extra vitamine D gaf in 11 onderzoeken samen gemiddeld géén hoger testosteron. [5] Wel nuttig tegen het wintertekort hieronder.', '10–25 µg per dag', 'Max. 100 µg. Stapelt op in je lichaam.', 'Ontbijt, met vet [8]']
+    ];
+    const suppLow = [
+      ['Vitamine D', 'vooral in de winter', 'Van oktober tot april staat de zon in Nederland te laag: je huid maakt dan geen vitamine D aan. [7] In Europa zit ±40% van de mensen te laag, 13% heeft een echt tekort. [6]'],
+      ['Omega-3', 'als je weinig vette vis eet', 'Minder dan 1–2× per week vette vis? Neem 250–500 mg EPA+DHA per dag bij een maaltijd. Geen vis: algenolie.'],
+      ['Magnesium', 'als je weinig noten, groen en volkoren eet', 'Noten, zaden, groene groente en volkoren zijn de grote bronnen.'],
+      ['Zink', 'als je weinig vlees, vis of schaaldieren eet', 'Vlees, schaaldieren en eieren zijn de grote bronnen.']
+    ];
+    function renderSupps() {
+      const ref = s => s.replace(/\[(\d+)\]/g, (m, n) => `<a href="#hs-src-${n}" class="hs-ref" onclick="return habitSrcJump(${n})" aria-label="Bron ${n}">${n}</a>`);
+      const typeCls = t => ({ Onderzoek: 'r', Overzicht: 'o', Uitleg: 'u', Richtlijn: 'g' }[t] || 'u');
+      return `
+        <div class="page-header">
+          <div class="page-sub">Meer</div>
+          <div class="page-title">Supplementen</div>
+        </div>
+
+        <div class="hs-side" style="margin: 0 0 16px;">
+          <div class="hs-side-t">Eerst je eten op orde</div>
+          Supplementen vullen een tekort aan, ze vervangen geen goed eten. Vitamines en mineralen verhogen je testosteron alleen als je een tekort hebt. Slaap, training en een gezond vetpercentage maken meer verschil.
+        </div>
+
+        <label class="label" style="margin-bottom: 10px;">Voor je testosteron</label>
+        ${suppTesto.map(([icon, name, txt, dose, warn, when]) => `
+          <div class="card su-card">
+            <div class="su-head"><span class="su-icon">${icon}</span><span class="su-name">${name}</span></div>
+            <div class="su-txt">${ref(txt)}</div>
+            <div class="su-grid">
+              <div><span>Dosis</span>${dose}</div>
+              <div><span>Wanneer</span>${ref(when)}</div>
+            </div>
+            <div class="su-warn">⚠ ${ref(warn)}</div>
+          </div>`).join('')}
+
+        <label class="label" style="margin: 22px 0 10px;">Wat mannen waarschijnlijk tekortkomen</label>
+        <div class="card">
+          ${suppLow.map(([name, when, txt], i) => `
+            <div class="su-low">
+              <span class="su-n">${i + 1}</span>
+              <div><b>${name}</b> <span class="su-when">· ${when}</span><div class="su-txt" style="margin-top: 4px;">${ref(txt)}</div></div>
+            </div>`).join('')}
+        </div>
+
+        <label class="label" style="margin: 22px 0 10px;">Wanneer neem je wat?</label>
+        <div class="card">
+          <div class="sl-timeline" style="margin-top: 0;">
+            ${[['Ontbijt', 'Vitamine D en omega-3', 'allebei met wat vet erbij'], ['Avondeten', 'Zink', 'niet samen met ijzer'], ['Voor het slapen', 'Magnesium', 'max. 250 mg']].map(([t, w, s]) => `
+              <div class="sl-tl"><span class="sl-tl-t" style="width: 92px;">${t}</span><span class="sl-tl-b"><b>${w}</b><span>${s}</span></span></div>`).join('')}
+          </div>
+        </div>
+
+        <div class="card" style="border-left: 3px solid #eab308;">
+          <label class="label" style="color: #eab308;">Liever niet: testosteronboosters</label>
+          <div class="su-txt">Voor tribulus en andere "T-boosters" is er geen goed bewijs. In een onderzoek naar 66 sportsupplementen met een hoog risico zat in 38% een verboden dopingstof. Koop je toch iets, kies dan een product met het <b>NZVT</b>-keurmerk: dat wordt per productiepartij getest. ${ref('[10]')}</div>
+        </div>
+
+        <details class="hs-sec hs-src" id="hs-sources" style="margin-top: 8px;">
+          <summary><span>Bronnen & meer lezen · ${suppSources.length}</span><span class="hs-pm" aria-hidden="true"></span></summary>
+          <div class="hs-body">
+            ${suppSources.map(([type, title, url], i) => `
+              <a class="hs-source" id="hs-src-${i + 1}" href="${url}" target="_blank" rel="noopener noreferrer">
+                <span class="hs-source-n">${i + 1}</span>
+                <span style="min-width: 0;"><span class="hs-tag ${typeCls(type)}">${type}</span><span class="hs-source-t">${title} ↗</span></span>
+              </a>`).join('')}
+          </div>
+        </details>
+
+        <button class="btn btn-secondary" style="width: 100%; margin-top: 16px;" onclick="setSection('more')">← Terug naar Meer</button>
+      `;
     }
 
     // ============================================
