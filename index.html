@@ -673,6 +673,25 @@
     .bl-fgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
     .bl-fgrid label { font-size: 9px; color: #8a8a8a; letter-spacing: 0.06em; text-transform: uppercase; min-width: 0; }
     .bl-fgrid .form-input { margin-top: 4px; padding: 10px 6px; font-size: 14px; width: 100%; box-sizing: border-box; min-width: 0; }
+    .st-goal { background: transparent; border: none; color: #8a8a8a; font-family: inherit; font-size: 11px; cursor: pointer; min-height: 32px; padding: 0 0 0 8px; }
+    .st-top { display: flex; justify-content: space-between; align-items: center; margin: 8px 0 8px; gap: 10px; }
+    .st-big { font-size: 34px; font-weight: 300; font-variant-numeric: tabular-nums; }
+    .st-day { display: flex; gap: 4px; }
+    .st-day button { min-height: 36px; padding: 0 10px; background: transparent; border: 1px solid #262626; color: #8a8a8a; font-family: inherit; font-size: 11px; cursor: pointer; }
+    .st-day button.on { border-color: #7f1d1d; color: #fafafa; background: #1a0606; }
+    .st-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; margin-top: 12px; }
+    .st-form .form-input { margin: 0; min-width: 0; font-size: 16px; }
+    .st-form .btn { padding: 0 18px; }
+    .st-week { position: relative; height: 90px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; margin-top: 16px; }
+    .st-col { position: relative; height: 100%; padding-bottom: 14px; box-sizing: border-box; display: flex; align-items: flex-end; }
+    .st-bar { display: block; width: 100%; }
+    .st-wd { position: absolute; left: 0; right: 0; bottom: 0; text-align: center; font-size: 9px; color: #737373; }
+    .st-goalline { position: absolute; left: 0; right: 0; border-top: 1px dashed #d9a441; pointer-events: none; z-index: 1; }
+    .h75-head { display: flex; justify-content: space-between; align-items: center; width: 100%; min-height: 36px; background: transparent; border: none; padding: 0; font-family: inherit; cursor: pointer; text-align: left; }
+    .h75-chev { font-size: 14px; color: #a3a3a3; width: 20px; text-align: center; }
+    .rm-time { width: 104px; flex-shrink: 0; background: #050505; border: 1px solid #262626; color: #fafafa; font-family: inherit; font-size: 14px; padding: 8px 6px; text-align: center; }
+    .rm-time:disabled { color: #525252; }
+    .rm-time.auto { display: inline-block; box-sizing: border-box; color: #a3a3a3; border-style: dashed; }
     #pf-night { position: fixed; inset: 0; background: #b80000; mix-blend-mode: multiply; pointer-events: none; z-index: 2147483647; }
   </style>
 </head>
@@ -2168,6 +2187,7 @@
         todo: () => renderTodoCard(),
         habits: () => renderHabitsCard(),
         foodtrain: () => renderFoodTrainCard(),
+        steps: () => renderStepsCard(),
         challenges: () => renderDashboardChallenges(),
         sleep: () => renderSleepDashCard(),
         year: () => renderYearCard(),
@@ -2729,6 +2749,8 @@
         done: d => { const n = sleepNight(d); const w = n ? hm2min(n.wake) : null; return w !== null && w <= 390; } },
       'auto:screen': { via: 'Avondroutine', btn: 'Afvinken →', go: "setSection('sleep')", info: 'Telt automatisch als je bij Slaap → Avondroutine "Scherm weg" afvinkt.',
         done: d => ((sleepSettings().routine || {})[d] || []).includes('screen') },
+      'auto:steps': { via: 'Stappen', btn: 'Invullen →', go: "setSection('dashboard'); setTimeout(() => { const e = document.getElementById('dash-steps'); if (e) e.scrollIntoView({ block: 'center' }); }, 50)", info: 'Telt automatisch als je je stappen op het dashboard invult en je het doel van de challenge haalt.',
+        done: (d, c) => { const t = c ? chTargetFor(c, diffDays(c.start_date, d) + 1) : 10000; const v = stepsOn(d); const log = c ? chLog(c, d) : null; return (v !== null && v >= t) || (!!log && hasValue(log.value) && Number(log.value) >= t); } },
       'auto:gratitude': { via: 'Journal', btn: 'Schrijven →', go: "state.jMode = 'avond'; setSection('journal')", info: 'Telt automatisch als je \'s avonds in je Journal 3 dingen opschrijft waar je dankbaar voor bent.',
         done: d => state.entries.some(e => e.date === d && e.daily && jGoalList(e.daily.gratitude).length >= 3) }
     };
@@ -2736,9 +2758,9 @@
       { id: 'cold', domain: 'physical', name: 'Koud douchen', kind: 'check', link: 'habit:coldShower', durations: [7, 30, 90], rule: 'jokers' },
       { id: 'sun', domain: 'physical', name: 'Ochtendzon', kind: 'check', link: 'habit:sunlight', durations: [14, 30], rule: 'jokers' },
       { id: 'stretch', domain: 'physical', name: 'Dagelijks stretchen', kind: 'check', link: 'habit:stretching', durations: [14, 30], rule: 'jokers' },
-      { id: 'steps', domain: 'physical', name: '10.000 stappen', kind: 'number', target: 10000, unit: 'stappen', durations: [14, 30], rule: 'jokers',
+      { id: 'steps', domain: 'physical', name: '10.000 stappen', kind: 'number', link: 'auto:steps', target: 10000, unit: 'stappen', durations: [14, 30], rule: 'jokers',
         what: 'Elke dag minimaal 10.000 stappen.',
-        how: 'Wandel 10-15 minuten na elke maaltijd en neem de trap. Vul \'s avonds je totaal in van je telefoon of horloge.',
+        how: 'Wandel 10-15 minuten na elke maaltijd en neem de trap. Vul \'s avonds je stappen in op het dashboard (uit je telefoon of horloge): de challenge telt automatisch mee.',
         why: 'Dagelijks bewegen verbetert je conditie, bloedsuiker en stemming, en helpt bij vetverlies zonder extra training.' },
       { id: 'water', domain: 'physical', name: '2 liter water', kind: 'number', target: 2, unit: 'liter', durations: [14, 30], rule: 'jokers',
         what: 'Elke dag minimaal 2 liter water.',
@@ -2901,7 +2923,7 @@
       let done = false;
       const hk = chLinkedHabit(c);
       if (hk) done = habitDoneOn(hk, date);
-      else if (autoLinks[c.link]) done = autoLinks[c.link].done(date);
+      else if (autoLinks[c.link]) done = autoLinks[c.link].done(date, c);
       else if (c.kind === 'number') done = !!log && hasValue(log.value) && Number(log.value) >= chTargetFor(c, diffDays(c.start_date, date) + 1);
       else done = !!(log && log.done);
 
@@ -3901,13 +3923,37 @@
       const yesterday = dateAdd(today, -1);
       const yPending = ev.yesterdayDay && ev.yesterdayDay.st === 'pending';
       const pct = Math.round(((ev.dayNum - (allDone ? 0 : 1)) / 75) * 100);
+      const collapsed = !!userPrefs().h75Collapsed;
+      const yAlert = yPending ? `
+            <div style="background: #1a0606; border: 1px solid #7f1d1d; padding: 14px; margin-top: 16px;">
+              <div style="font-size: 13px; line-height: 1.5;">Gisteren (dag ${ev.dayNum - 1}) is niet volledig afgevinkt. Heb je alle regels gehaald?</div>
+              <div style="font-size: 11px; color: #8a8a8a; margin-top: 4px;">${hard75DoneCount(c, yesterday)} van 7 staan aangevinkt.</div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px;">
+                <button class="btn btn-secondary btn-small" onclick="hard75Confirm('${c.id}', '${yesterday}', false)">Nee</button>
+                <button class="btn btn-primary btn-small" onclick="hard75Confirm('${c.id}', '${yesterday}', true)">Ja, alles gedaan</button>
+              </div>
+            </div>` : '';
+      const head = `
+          <button class="h75-head" onclick="saveUserPrefs({ h75Collapsed: ${!collapsed} }); render();" aria-expanded="${!collapsed}" aria-label="75 Hard ${collapsed ? 'uitklappen' : 'inklappen'}">
+            <span style="font-size: 10px; color: #e5484d; letter-spacing: 0.2em; font-weight: 600;">75 HARD · HOOFDFOCUS</span>
+            <span style="display: flex; align-items: center; gap: 10px; font-size: 10px; color: #8a8a8a;">${Number(c.attempt) > 1 ? 'poging ' + c.attempt : ''}<span class="h75-chev">${collapsed ? '▾' : '▴'}</span></span>
+          </button>`;
+      if (collapsed) {
+        return `
+        <div class="card" style="border-color: #7f1d1d; border-top: 3px solid #e5484d;">
+          ${head}
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 10px;">
+            <span style="font-size: 22px; font-weight: 300;">Dag ${ev.dayNum} <span style="font-size: 13px; color: #8a8a8a;">/ 75</span></span>
+            <span style="font-size: 12px; color: ${allDone ? '#22c55e' : '#eab308'};">${allDone ? '✓ vandaag klaar' : doneN + ' van ' + hard75Tasks.length + ' vandaag'}</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width: ${pct}%; background: #e5484d;"></div></div>
+          ${yAlert}
+        </div>`;
+      }
 
       return `
         <div class="card" style="border-color: #7f1d1d; border-top: 3px solid #e5484d;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div style="font-size: 10px; color: #e5484d; letter-spacing: 0.2em; font-weight: 600;">75 HARD · HOOFDFOCUS</div>
-            <div style="font-size: 10px; color: #8a8a8a;">${Number(c.attempt) > 1 ? 'poging ' + c.attempt : ''}</div>
-          </div>
+          ${head}
           <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 12px; cursor: pointer;" onclick="state.bodyTab = 'challenges'; state.chView = 'detail'; state.chDetailId = '${c.id}'; setSection('body');">
             <div style="font-size: 64px; font-weight: 200; line-height: 1;">${ev.dayNum}</div>
             <div style="font-size: 18px; font-weight: 300; color: #8a8a8a;">/ 75</div>
@@ -3917,16 +3963,7 @@
             <span>Gestart ${fmtDateShort(c.start_date)}</span><span>Klaar op ${fmtDateShort(dateAdd(c.start_date, 74))}</span>
           </div>
 
-          ${yPending ? `
-            <div style="background: #1a0606; border: 1px solid #7f1d1d; padding: 14px; margin-top: 16px;">
-              <div style="font-size: 13px; line-height: 1.5;">Gisteren (dag ${ev.dayNum - 1}) is niet volledig afgevinkt. Heb je alle regels gehaald?</div>
-              <div style="font-size: 11px; color: #8a8a8a; margin-top: 4px;">${hard75DoneCount(c, yesterday)} van 7 staan aangevinkt.</div>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px;">
-                <button class="btn btn-secondary btn-small" onclick="hard75Confirm('${c.id}', '${yesterday}', false)">Nee</button>
-                <button class="btn btn-primary btn-small" onclick="hard75Confirm('${c.id}', '${yesterday}', true)">Ja, alles gedaan</button>
-              </div>
-            </div>
-          ` : ''}
+          ${yAlert}
 
           <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 20px;">
             <label class="label" style="margin-bottom: 0;">Vandaag</label>
@@ -3967,7 +4004,7 @@
         let right;
         if (c.link === 'retention') right = `<span style="color: #a3a3a3;">${getRetentionDays()} dagen</span>`;
         else if (c.kind === 'abstain') right = `<span style="color: #a3a3a3;">${ev.streak} schoon</span>`;
-        else if (c.kind === 'number') {
+        else if (c.kind === 'number' && !autoLinks[c.link]) {
           const log = chLog(c, today);
           const val = log && hasValue(log.value) ? Number(log.value) : 0;
           right = `<span style="color: ${done ? '#22c55e' : '#a3a3a3'};">${fmtInt(val)}/${fmtInt(chTargetFor(c, ev.dayNum))}</span>`;
@@ -3999,7 +4036,7 @@
     // ============================================
     // MOTIVATIE: XP, DAGSCORE, RANGEN
     // ============================================
-    const APP_VERSION = '5 okt · 07:15';
+    const APP_VERSION = '5 okt · 10:00';
     const XP = {
       habit: 5,
       journal: 15,
@@ -4012,7 +4049,8 @@
       training: 10,      // dag met minstens één training
       sleepLog: 10,      // nacht ingevuld bij Slaap of Journal-ochtend
       sleepRoutine: 10,  // avondroutine: 5 of meer van de 7 afgevinkt
-      foodDay: 10        // dagboek: 3 of meer dingen gelogd
+      foodDay: 10,       // dagboek: 3 of meer dingen gelogd
+      steps: 10          // stappendoel gehaald
     };
 
     const ranks = [
@@ -4128,6 +4166,7 @@
       (state.workouts || []).forEach(w => starts.push(w.date));
       Object.keys(state.foodDayCounts || {}).forEach(d => starts.push(d));
       Object.keys(sleepSettings().routine || {}).forEach(d => starts.push(d));
+      Object.keys(stepsData().log).forEach(d => starts.push(d));
       const first = starts.filter(Boolean).filter(d => d <= today).sort()[0] || today;
 
       const retentionOn = (date) => retentions.some(r => r.start_date && r.start_date <= date && (r.is_active ? date <= today : (r.end_date ? date < r.end_date : false)));
@@ -4140,6 +4179,22 @@
       const valuesDate = valuesBonusDate();
       const trainDates = new Set((state.workouts || []).map(w => w.date));
       const routine = sleepSettings().routine || {};
+      const stepsLog = stepsData().log, stepsGoal = stepsData().goal;
+      // Wanneer ben je elk onderdeel gaan gebruiken?
+      const firstOf = arr => arr.filter(Boolean).sort()[0] || null;
+      const sleepSince = firstOf(state.entries.filter(e => e.daily && e.daily.sleepMin).map(e => e.date));
+      const moveSince = firstOf([...trainDates, ...Object.keys(stepsLog)]);
+      const foodT = (() => { try { const t = foodTargets(); return t && t.prot ? t : null; } catch (e) { return null; } })();
+      const foodSince = firstOf((state.foodLogs || []).map(l => l.date));
+      const foodWindow = dateAdd(today, -120); // eiwit per dag hebben we voor de laatste 120 dagen
+      const jIdx = {};
+      journaledEntries().forEach(e => {
+        const j = jIdx[e.date] = jIdx[e.date] || { old: false, m: false, ev: false };
+        if (!e.daily) j.old = true; else { if (e.daily.morningAt) j.m = true; if (e.daily.eveningAt) j.ev = true; }
+      });
+      const journalPart = (date) => { const j = jIdx[date]; if (!j) return 0; if (j.old) return 1; return (j.m ? 0.5 : 0) + (j.ev ? 0.5 : 0); };
+      const protByDate = {};
+      (state.foodLogs || []).forEach(l => { protByDate[l.date] = (protByDate[l.date] || 0) + (Number(l.prot) || 0); });
       for (let date = first; date <= today; date = dateAdd(date, 1)) {
         const h = hist[date] || {};
         const pos = positiveHabitKeys.filter(k => h[k]).length;
@@ -4149,9 +4204,13 @@
         const ret = retentionOn(date);
 
         // Dagscore 0-100
-        const parts = [{ w: 40, v: Math.min(pos, 6) / 6 }, { w: 15, v: journal ? 1 : 0 }];
-        if (chs.length) parts.push({ w: 30, v: chs.filter(x => x.done).length / chs.length });
-        if (retentionUsedBy(date)) parts.push({ w: 15, v: ret ? 1 : 0 });
+        // Onderdelen tellen pas mee vanaf de dag dat je ze bent gaan gebruiken
+        const parts = [{ w: 30, v: Math.min(pos, 6) / 6 }, { w: 15, v: journalPart(date) }];
+        if (sleepSince && date >= sleepSince) { const n = sleepNight(date); parts.push({ w: 15, v: n ? (n.min >= 420 ? 1 : 0.5) : 0 }); }
+        if (moveSince && date >= moveSince) parts.push({ w: 15, v: trainDates.has(date) || (stepsLog[date] !== undefined && Number(stepsLog[date]) >= stepsGoal) ? 1 : 0 });
+        if (foodT && foodSince && date >= foodSince && date >= foodWindow) parts.push({ w: 10, v: (protByDate[date] || 0) >= foodT.prot ? 1 : 0 });
+        if (chs.length) parts.push({ w: 15, v: chs.filter(x => x.done).length / chs.length });
+        if (ret) parts.push({ w: 10, v: 1 });
         const wSum = parts.reduce((a, p) => a + p.w, 0);
         let score = Math.round(parts.reduce((a, p) => a + p.w * p.v, 0) / wSum * 100) - neg * 5;
         score = Math.max(0, Math.min(100, score));
@@ -4164,6 +4223,7 @@
         if (sleepNight(date)) xp += XP.sleepLog;
         if ((routine[date] || []).length >= 5) xp += XP.sleepRoutine;
         if ((state.foodDayCounts || {})[date] >= 3) xp += XP.foodDay;
+        if (stepsLog[date] !== undefined && Number(stepsLog[date]) >= stepsGoal) xp += XP.steps;
         const measured = state.bodyStats.some(b => b.entry_date === date);
         if (measured && !measuredWeeks.has(weekKey(date))) { xp += XP.measurement; measuredWeeks.add(weekKey(date)); }
 
@@ -4346,6 +4406,7 @@
         ['Nacht ingevuld (Slaap)', `+${XP.sleepLog} per nacht`],
         ['Avondroutine 5/7 of meer', `+${XP.sleepRoutine} per avond`],
         ['Voeding: 3+ dingen gelogd', `+${XP.foodDay} per dag`],
+        ['Stappendoel gehaald', `+${XP.steps} per dag`],
         ['Lichaamsmeting', `+${XP.measurement} (1x per week)`],
         ['Waarden-opdracht', `+${VALUES_BONUS_XP} (eenmalig)`],
         ['75 Hard-dag volledig', `+${XP.hard75Day}`],
@@ -4406,9 +4467,9 @@
         <div class="card">
           <label class="label">Dagscore</label>
           <div style="font-size: 12px; color: #a3a3a3; line-height: 1.7;">
-            Habits 40 (6 of meer = vol) · Challenges 30 · Journal 15 · Retention 15.<br>
-            Geen challenges of retention actief? Dan worden die punten over de rest verdeeld.<br>
-            Elke negatieve habit (slecht geslapen, stress, alcohol, junk): −5.
+            Gewoontes 30 (6 van 8 = vol) · Journal 15 (ochtend + avond) · Slaap 15 (7+ uur = vol, korter = half) · Beweging 15 (training óf stappendoel) · Voeding 10 (eiwitdoel) · Challenges 15 · Retention 10 (alleen zolang je streak loopt).<br>
+            Onderdelen die je (nog) niet gebruikt, tellen niet mee: de punten worden over de rest verdeeld.<br>
+            Een dagscore van 50 of meer telt als goede dag voor je reeks.
           </div>
         </div>
 
@@ -8173,6 +8234,12 @@
           <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Open retention →</div>
         </div>
         
+        <div class="card card-accent" style="cursor: pointer;" onclick="setSection('reminders')">
+          <label class="label">🔔 Herinneringen</label>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">Meldingen voor je journal, training, scherm weg en je avond. Slim: niet als je het al gedaan hebt.</div>
+          <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Instellen →</div>
+        </div>
+
         <div class="card card-accent">
           <label class="label">💾 Back-up</label>
           <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-bottom: 12px;">
@@ -8255,6 +8322,7 @@
           ${state.activeSection === 'values' ? renderValues() : ''}
           ${state.activeSection === 'food' ? renderFood() : ''}
           ${state.activeSection === 'sleep' ? renderSleep() : ''}
+          ${state.activeSection === 'reminders' ? renderReminders() : ''}
         </div>
         
         ${state.showRankUp ? renderRankUp() : ''}
@@ -8965,6 +9033,7 @@
       ['todo', 'Vandaag te doen', 'Wat er vandaag nog openstaat'],
       ['habits', 'Positieve gewoontes', 'Afvinken met één tik'],
       ['foodtrain', 'Voeding & training', 'Calorieën, eiwit en je training van vandaag'],
+      ['steps', 'Stappen', 'Invullen en je laatste 7 dagen'],
       ['challenges', 'Challenges vandaag', 'Alleen als je challenges hebt'],
       ['sleep', 'Slaap', 'Vannacht of je avondroutine'],
       ['year', 'Jaaroverzicht', 'Elke dag een vakje, kleur = dagscore'],
@@ -9013,6 +9082,9 @@
         items.push({ n: `Challenges ${doneN} / ${chs.length}`, sub: open.length ? 'Open: ' + open.slice(0, 2).join(', ') + (open.length > 2 ? '…' : '') : 'Alles gehaald', done: !open.length,
           go: "state.bodyTab = 'challenges'; state.chView = 'list'; setSection('body')" });
       }
+      const sd = stepsData(), st = stepsOn(today);
+      items.push({ n: `Stappen ${st !== null ? fmtInt(st) : 0} / ${fmtInt(sd.goal)}`, sub: st !== null ? (st >= sd.goal ? 'Doel gehaald' : `Nog ${fmtInt(sd.goal - st)} te gaan`) : 'Vul je stappen in', done: st !== null && st >= sd.goal,
+        go: "state.stepsYesterday = false; document.getElementById('dash-steps') ? (document.getElementById('dash-steps').scrollIntoView({ behavior: 'smooth', block: 'center' }), setTimeout(() => { const i = document.getElementById('steps-in'); if (i) i.focus(); }, 400)) : null" });
       const pos = getPositiveHabitsCount();
       const openH = visibleHabitKeys.filter(k => habitConfig[k].positive && !state.habits[k]).map(k => habitConfig[k].label.charAt(0) + habitConfig[k].label.slice(1).toLowerCase());
       items.push({ n: `Gewoontes ${pos} / ${visibleHabitKeys.length}`, sub: openH.length ? 'Open: ' + openH.slice(0, 3).join(', ') + (openH.length > 3 ? '…' : '') : 'Alles afgevinkt', done: pos >= 6,
@@ -9601,6 +9673,210 @@
     }
 
     // ============================================
+    // STAPPEN (handmatig, bewaard in je voorkeuren)
+    // ============================================
+    function stepsData() { const s = userPrefs().steps || {}; return { goal: Number(s.goal) || 10000, log: s.log || {} }; }
+    function stepsOn(date) { const v = stepsData().log[date]; return v === undefined || v === null || v === '' ? null : Number(v); }
+    function saveSteps(date, value) {
+      const d = stepsData();
+      const n = parseInt(String(value).replace(/[^\d]/g, ''), 10);
+      const log = { ...d.log };
+      if (isNaN(n)) delete log[date]; else log[date] = Math.min(n, 200000);
+      saveUserPrefs({ steps: { goal: d.goal, log } });
+    }
+    function stepsSubmit() {
+      const el = document.getElementById('steps-in'); if (!el) return;
+      const date = state.stepsYesterday ? dateAdd(todayStr(), -1) : todayStr();
+      saveSteps(date, el.value);
+      const n = stepsOn(date);
+      render();
+      if (n !== null) showToast(n >= stepsData().goal ? `👟 ${fmtInt(n)} stappen · doel gehaald!` : `👟 ${fmtInt(n)} stappen opgeslagen`);
+    }
+    function stepsSetGoal() {
+      const d = stepsData();
+      const v = prompt('Je dagdoel in stappen:', d.goal);
+      if (v === null) return;
+      const n = parseInt(String(v).replace(/[^\d]/g, ''), 10);
+      if (!n || n < 1000) { alert('Kies een doel van minimaal 1.000 stappen.'); return; }
+      saveUserPrefs({ steps: { goal: n, log: d.log } }); render();
+    }
+    function renderStepsCard() {
+      const { goal } = stepsData();
+      const yest = !!state.stepsYesterday;
+      const date = yest ? dateAdd(todayStr(), -1) : todayStr();
+      const cur = stepsOn(date);
+      const pct = cur ? Math.min(100, cur / goal * 100) : 0;
+      const days = [];
+      for (let i = 6; i >= 0; i--) days.push(dateAdd(todayStr(), -i));
+      const max = Math.max(goal, ...days.map(d => stepsOn(d) || 0));
+      const wd = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
+      return `
+        <div class="card" id="dash-steps">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <label class="label" style="margin: 0;">👟 Stappen</label>
+            <button class="st-goal" onclick="stepsSetGoal()">Doel ${fmtInt(goal)} ✎</button>
+          </div>
+          <div class="st-top">
+            <div class="st-big" style="color: ${cur !== null && cur >= goal ? '#22c55e' : '#fafafa'};">${cur !== null ? fmtInt(cur) : '—'}</div>
+            <div class="st-day">
+              <button class="${!yest ? 'on' : ''}" onclick="state.stepsYesterday = false; render();">Vandaag</button>
+              <button class="${yest ? 'on' : ''}" onclick="state.stepsYesterday = true; render();">Gisteren</button>
+            </div>
+          </div>
+          <div class="dft-bar" style="height: 6px;"><span style="height: 6px; width: ${pct}%; background: ${cur !== null && cur >= goal ? '#22c55e' : '#7f1d1d'};"></span></div>
+          <form class="st-form" onsubmit="event.preventDefault(); stepsSubmit();">
+            <label class="sr-only" for="steps-in">Aantal stappen ${yest ? 'gisteren' : 'vandaag'}</label>
+            <input id="steps-in" class="form-input" type="text" inputmode="numeric" autocomplete="off" placeholder="Stappen ${yest ? 'gisteren' : 'vandaag'}" value="${cur !== null ? cur : ''}">
+            <button type="submit" class="btn btn-primary">Opslaan</button>
+          </form>
+          <div class="st-week" role="img" aria-label="Stappen afgelopen 7 dagen">
+            <div class="st-goalline" style="bottom: calc(14px + (100% - 14px) * ${(goal / max).toFixed(3)});"></div>
+            ${days.map(d => { const v = stepsOn(d); return `<div class="st-col" title="${d}: ${v !== null ? fmtInt(v) : 'niet ingevuld'}"><span class="st-bar" style="height: ${v ? Math.max(4, v / max * 100) : 0}%; background: ${v !== null && v >= goal ? '#22c55e' : '#525252'};"></span><span class="st-wd">${wd[new Date(d + 'T12:00:00').getDay()]}</span></div>`; }).join('')}
+          </div>
+          <div class="hs-small" style="margin-top: 8px;">Neem het getal over uit Samsung Health of je horloge. Doel gehaald = +${XP.steps} XP.</div>
+        </div>`;
+    }
+
+    // ============================================
+    // HERINNERINGEN (pushmeldingen via Supabase Edge Function "send-reminders")
+    // ============================================
+    const VAPID_PUBLIC = 'BFVrf-QjhZJ-XWJBnp6jB9dBUM2ROfcaqgMzdEvYldMg2956WCJ-7elXxYc9ic3dyYUAmRc7Ak8_tVtQQ3jYrYg';
+    const reminderDefs = [
+      ['morning', 'Ochtend-journal', 'Slaap en 3 doelen · niet als je hem al hebt ingevuld', true, '07:30'],
+      ['training', 'Training', 'Alleen op trainingsdagen in je schema, als je nog niet getraind hebt', true, '17:30'],
+      ['protein', 'Eiwit-check', 'Alleen als je onder 60% van je eiwitdoel zit', false, '15:00'],
+      ['screen', 'Scherm weg', 'Een uur voor je bedtijd (uit je slaapdoel)', true, null],
+      ['evening', 'Dag afsluiten', 'Avond-journal en routine · niet als je al hebt afgesloten', true, '21:30'],
+      ['weekly', 'Weekrapport', 'Op zondag', false, '19:00']
+    ];
+    function reminderPrefs() {
+      const r = userPrefs().reminders || {};
+      const out = {};
+      reminderDefs.forEach(([k, , , on, time]) => { out[k] = { on: r[k] ? !!r[k].on : on, time: (r[k] && r[k].time) || time }; });
+      return out;
+    }
+    function reminderSet(k, field, v) {
+      const r = reminderPrefs(); r[k][field] = v;
+      saveUserPrefs({ reminders: r }); render();
+    }
+    function pushSupported() { return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window; }
+    function isIOS() { return /iPhone|iPad|iPod/.test(navigator.userAgent); }
+    function isStandalone() { return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; }
+    function b64uToBytes(s) {
+      const pad = '='.repeat((4 - s.length % 4) % 4);
+      const raw = atob((s + pad).replace(/-/g, '+').replace(/_/g, '/'));
+      return Uint8Array.from(raw, c => c.charCodeAt(0));
+    }
+    async function pushCheck() {
+      if (!pushSupported()) { state.pushOn = false; return; }
+      try { const reg = await navigator.serviceWorker.ready; const sub = await reg.pushManager.getSubscription(); state.pushOn = !!sub; }
+      catch (e) { state.pushOn = false; }
+      state.pushChecked = true;
+      if (state.activeSection === 'reminders') render();
+    }
+    async function pushEnable() {
+      if (!pushSupported()) { alert('Dit apparaat of deze browser ondersteunt geen meldingen.'); return; }
+      if (isIOS() && !isStandalone()) { alert('Op iPhone werken meldingen alleen als Primal Forged op je beginscherm staat. Tik in Safari op Deel → "Zet op beginscherm" en open de app vanaf daar.'); return; }
+      state.pushBusy = true; render();
+      try {
+        const perm = await Notification.requestPermission();
+        if (perm !== 'granted') throw new Error('Je hebt meldingen niet toegestaan. Zet ze aan in de instellingen van je telefoon of browser.');
+        const reg = await navigator.serviceWorker.ready;
+        const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64uToBytes(VAPID_PUBLIC) });
+        const j = sub.toJSON();
+        const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'Europe/Amsterdam';
+        const { error } = await supabaseClient.from('push_subscriptions').upsert({ user_id: state.user.id, endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth, tz }, { onConflict: 'endpoint' });
+        if (error) throw new Error(error.message + '\n\nHeb je herinneringen-update.sql al uitgevoerd in Supabase?');
+        saveUserPrefs({ remindersOff: false });
+        state.pushOn = true;
+        showToast('🔔 Meldingen staan aan op dit apparaat');
+      } catch (e) {
+        alert('Meldingen aanzetten lukte niet: ' + (e.message || e));
+      }
+      state.pushBusy = false; render();
+    }
+    async function pushDisable() {
+      state.pushBusy = true; render();
+      try {
+        const reg = await navigator.serviceWorker.ready;
+        const sub = await reg.pushManager.getSubscription();
+        if (sub) { await supabaseClient.from('push_subscriptions').delete().eq('endpoint', sub.endpoint); await sub.unsubscribe(); }
+        state.pushOn = false;
+        showToast('Meldingen staan uit op dit apparaat');
+      } catch (e) { alert('Uitzetten lukte niet: ' + (e.message || e)); }
+      state.pushBusy = false; render();
+    }
+    async function pushTest() {
+      try {
+        const reg = await navigator.serviceWorker.ready;
+        await reg.showNotification('🔔 Testmelding', { body: 'Zo zien je herinneringen eruit.', icon: 'icon-192.png', tag: 'pf-test' });
+      } catch (e) { alert('Testmelding lukte niet: ' + (e.message || e)); }
+    }
+    function renderReminders() {
+      if (!state.pushChecked) pushCheck();
+      const r = reminderPrefs();
+      const s = sleepSettings();
+      const screenAt = min2hm(sleepBedMin() - 60);
+      const sup = pushSupported();
+      const iosNeedsHome = isIOS() && !isStandalone();
+      return `
+        <button class="entry-action" style="margin-bottom: 14px;" onclick="setSection('more')">← Terug</button>
+        <div class="page-header" style="margin-bottom: 12px;"><div class="page-sub">Meer</div><div class="page-title">Herinneringen</div></div>
+        <div class="card">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="flex: 1; font-size: 14px;">Meldingen op dit apparaat</span>
+            <button class="de-sw ${state.pushOn ? 'on' : ''}" role="switch" aria-checked="${!!state.pushOn}" aria-label="Meldingen op dit apparaat" ${!sup || state.pushBusy ? 'disabled' : ''} onclick="${state.pushOn ? 'pushDisable()' : 'pushEnable()'}"><i></i></button>
+          </div>
+          <div class="hs-small" style="margin-top: 8px;">${!sup ? 'Deze browser ondersteunt geen meldingen.' : state.pushBusy ? 'Even geduld…' : state.pushOn ? 'Aan. Je kunt dit per apparaat apart instellen.' : 'Uit. Zet aan om herinneringen te krijgen, ook als de app dicht is.'}</div>
+          ${state.pushOn ? `<button class="btn btn-secondary btn-small" style="width: 100%; margin-top: 12px;" onclick="pushTest()">Stuur een testmelding</button>` : ''}
+        </div>
+        <div class="card" style="padding: 0;">
+          ${reminderDefs.map(([k, label, sub]) => {
+            const on = r[k].on;
+            return `
+            <div class="de-row">
+              <span class="de-txt"><span style="color: ${on ? '#fafafa' : '#737373'};">${label}</span><small>${sub}</small></span>
+              ${k === 'screen' ? `<span class="rm-time auto">${screenAt}</span>`
+                : `<input type="time" class="rm-time" value="${esc(r[k].time)}" aria-label="Tijd ${esc(label)}" onchange="reminderSet('${k}', 'time', this.value)" ${on ? '' : 'disabled'}>`}
+              <button class="de-sw ${on ? 'on' : ''}" role="switch" aria-checked="${on}" aria-label="${esc(label)}" onclick="reminderSet('${k}', 'on', ${!on})"><i></i></button>
+            </div>`;
+          }).join('')}
+        </div>
+        <div class="hs-side" style="margin: 0 0 14px;">
+          <div class="hs-side-t">Slim</div>
+          Heb je iets al gedaan (journal ingevuld, getraind, dag afgesloten), dan krijg je die melding niet. "Scherm weg" volgt je slaapdoel (nu ${screenAt}).
+        </div>
+        ${iosNeedsHome ? `<div class="info-box"><div class="info-title">iPhone</div><div class="info-text">Meldingen werken alleen als Primal Forged op je beginscherm staat: tik in Safari op Deel → "Zet op beginscherm" en open de app vanaf daar.</div></div>` : ''}
+        <div class="hs-small" style="margin-bottom: 16px;">Meldingen komen binnen 5 minuten na het ingestelde tijdstip.</div>`;
+    }
+    // Eiwitdoel meegeven aan de server (voor de eiwit-check)
+    function syncProtTarget() {
+      try {
+        const t = foodTargets();
+        const prot = t && t.prot ? t.prot : null;
+        if (prot !== (userPrefs().protTarget || null)) saveUserPrefs({ protTarget: prot });
+      } catch (e) {}
+    }
+    // Melding aangetikt of link met #onderdeel: naar dat onderdeel
+    const navSections = ['dashboard', 'journal', 'body', 'training', 'food', 'sleep', 'more', 'week', 'reminders'];
+    function gotoFromHash() {
+      const h = (location.hash || '').replace('#', '');
+      if (state.user && navSections.includes(h)) {
+        if (h === 'journal') state.jMode = new Date().getHours() >= 15 ? 'avond' : 'ochtend';
+        setSection(h);
+        try { history.replaceState(history.state, '', location.pathname + location.search); } catch (e) {}
+      }
+    }
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('message', (e) => {
+        if (e.data && e.data.type === 'goto' && state.user && navSections.includes(e.data.section)) {
+          if (e.data.section === 'journal') state.jMode = new Date().getHours() >= 15 ? 'avond' : 'ochtend';
+          setSection(e.data.section);
+        }
+      });
+    }
+
+    // ============================================
     // EVENT HANDLERS
     // ============================================
     function setSection(section, fromBack) {
@@ -9742,6 +10018,7 @@
     // ============================================
     async function loadAll() {
       await Promise.all([loadEntries(), loadRetention(), loadHabits(), loadBody(), loadTraining(), loadFood(), loadPhotosAndBlood()]);
+      syncProtTarget();
       // Eén onderdeel dat faalt mag de rest van de app niet blokkeren
       try {
         await loadChallenges();
@@ -9764,6 +10041,8 @@
       
       state.loading = false;
       render();
+      if (state.user && !state.recovery) gotoFromHash();
+      window.addEventListener('hashchange', gotoFromHash);
       
       supabaseClient.auth.onAuthStateChange(async (event, session) => {
         if (event === 'TOKEN_REFRESHED') return;
