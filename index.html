@@ -34,14 +34,25 @@
     .auth-container { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
     .auth-box { width: 100%; max-width: 360px; }
     .auth-title { font-size: 24px; font-weight: 300; text-align: center; margin-bottom: 8px; letter-spacing: 0.1em; }
-    .auth-subtitle { font-size: 11px; color: #525252; text-align: center; margin-bottom: 32px; }
+    .auth-subtitle { font-size: 12px; color: #8a8a8a; text-align: center; margin-bottom: 28px; line-height: 1.5; }
     .auth-input { width: 100%; padding: 14px 16px; background: #0a0a0a; border: 1px solid #1c1c1c; color: #fafafa; font-size: 14px; font-family: inherit; margin-bottom: 12px; }
     .auth-input:focus { outline: none; border-color: #7f1d1d; }
     .auth-btn { width: 100%; padding: 14px; background: #7f1d1d; border: none; color: #fff; font-size: 11px; font-weight: 500; cursor: pointer; font-family: inherit; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 8px; }
     .auth-btn:hover { background: #991b1b; }
     .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .auth-switch { text-align: center; margin-top: 24px; font-size: 12px; color: #525252; }
-    .auth-switch a { color: #7f1d1d; cursor: pointer; text-decoration: none; }
+    .auth-switch a { color: #e5484d; cursor: pointer; text-decoration: none; }
+    .auth-forgot { text-align: right; margin: -4px 0 14px; font-size: 12px; }
+    .auth-forgot a { color: #a3a3a3; text-decoration: none; }
+    .auth-forgot a:hover { color: #fafafa; }
+    .pw-wrap { position: relative; }
+    .pw-wrap .auth-input { padding-right: 72px; }
+    .pw-eye { position: absolute; right: 4px; top: 4px; height: 42px; min-width: 60px; background: transparent; border: none; color: #8a8a8a; font-family: inherit; font-size: 11px; letter-spacing: 0.08em; cursor: pointer; }
+    .pw-rules { list-style: none; padding: 0; margin: -2px 0 16px; font-size: 12px; color: #737373; display: flex; flex-direction: column; gap: 4px; }
+    .pw-rules li::before { content: '○'; display: inline-block; width: 18px; }
+    .pw-rules li.ok { color: #22c55e; }
+    .pw-rules li.ok::before { content: '✓'; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
     .auth-error { background: rgba(220,38,38,0.1); border: 1px solid #dc2626; color: #dc2626; padding: 12px; font-size: 12px; margin-bottom: 16px; }
     .auth-success { background: rgba(34,197,94,0.1); border: 1px solid #22c55e; color: #22c55e; padding: 12px; font-size: 12px; margin-bottom: 16px; }
     
@@ -678,6 +689,8 @@
     // ============================================
     const SUPABASE_URL = 'https://dgqfvyjgtkoeiyswgngs.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_rDP5Kvq0wBsObLeiXJ98OA_aa0q-ipz';
+    // Kwam je binnen via de "wachtwoord vergeten"-mail? (vastleggen vóórdat Supabase de link verwerkt)
+    const recoveryFromLink = /type=recovery/.test(location.hash) || /type=recovery/.test(location.search);
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     // ============================================
@@ -1976,66 +1989,169 @@
     // ============================================
     let authMode = 'login';
 
+    // Wachtwoord-eisen: minimaal 8 tekens, met een letter en een cijfer
+    const pwRules = [
+      ['len', 'Minimaal 8 tekens', p => p.length >= 8],
+      ['let', 'Minimaal één letter', p => /[A-Za-zÀ-ÿ]/.test(p)],
+      ['dig', 'Minimaal één cijfer', p => /\d/.test(p)]
+    ];
+    function pwValid(p) { return pwRules.every(r => r[2](p || '')); }
+    function pwCheck(inputId, listId) {
+      const p = (document.getElementById(inputId) || {}).value || '';
+      pwRules.forEach(([k, , f]) => { const el = document.getElementById(listId + '-' + k); if (el) el.classList.toggle('ok', f(p)); });
+    }
+    function pwRulesHtml(listId) {
+      return `<ul class="pw-rules" aria-label="Wachtwoord-eisen">${pwRules.map(([k, l]) => `<li id="${listId}-${k}">${l}</li>`).join('')}</ul>`;
+    }
+    function pwToggle(btn, id) {
+      const el = document.getElementById(id); if (!el) return;
+      el.type = el.type === 'password' ? 'text' : 'password';
+      btn.textContent = el.type === 'password' ? 'Toon' : 'Verberg';
+      btn.setAttribute('aria-label', el.type === 'password' ? 'Wachtwoord tonen' : 'Wachtwoord verbergen');
+    }
+    // Supabase-meldingen in het Nederlands
+    function authErrorNl(err) {
+      const m = String((err && err.message) || err || '');
+      if (/invalid login credentials/i.test(m)) return 'E-mail of wachtwoord klopt niet.';
+      if (/email not confirmed/i.test(m)) return 'Je e-mailadres is nog niet bevestigd. Klik op de link in de mail die je kreeg bij het registreren.';
+      if (/already registered|already exists/i.test(m)) return 'Er bestaat al een account met dit e-mailadres. Log in, of kies "Wachtwoord vergeten?".';
+      if (/only request this after|rate limit|too many/i.test(m)) return 'Te veel pogingen achter elkaar. Wacht even en probeer het dan opnieuw.';
+      if (/password should|weak password|password is/i.test(m)) return 'Dit wachtwoord is te zwak. Gebruik minimaal 8 tekens met een letter en een cijfer.';
+      if (/same.*password|different from the old/i.test(m)) return 'Kies een ander wachtwoord dan je huidige.';
+      if (/network|fetch/i.test(m)) return 'Geen verbinding. Controleer je internet en probeer het opnieuw.';
+      return m;
+    }
+    function setAuthMode(m) {
+      const em = document.getElementById('auth-email');
+      if (em) state.authEmail = em.value;
+      authMode = m; render();
+    }
+
     function renderAuth() {
+      const titles = { login: ['Welkom', 'Log in op je account'], signup: ['Account maken', 'Begin vandaag met smeden'], forgot: ['Wachtwoord vergeten', 'Vul je e-mail in. Je krijgt een link om een nieuw wachtwoord te kiezen.'] };
+      const [title, sub] = titles[authMode] || titles.login;
+      const btn = { login: 'Inloggen', signup: 'Registreren', forgot: 'Stuur resetlink' }[authMode];
       return `
         <div class="auth-container">
           <div class="auth-box">
             <div style="text-align: center; margin-bottom: 32px;">
               <span class="logo">PRIMAL</span><span class="logo logo-accent">FORGED</span>
             </div>
-            <div class="auth-title">Welkom</div>
-            <div class="auth-subtitle">Login of maak een account aan</div>
-            <div id="auth-error" class="auth-error" style="display: none;"></div>
-            <div id="auth-success" class="auth-success" style="display: none;"></div>
-            <form id="auth-form" onsubmit="handleAuth(event)">
-              <input type="email" id="auth-email" class="auth-input" placeholder="Email" required>
-              <input type="password" id="auth-password" class="auth-input" placeholder="Wachtwoord" required minlength="6">
-              <button type="submit" class="auth-btn" id="auth-submit">Inloggen</button>
+            <div class="auth-title">${title}</div>
+            <div class="auth-subtitle">${sub}</div>
+            <div id="auth-error" class="auth-error" role="alert" style="display: none;"></div>
+            <div id="auth-success" class="auth-success" role="status" style="display: none;"></div>
+            <form id="auth-form" onsubmit="handleAuth(event)" novalidate>
+              <label class="sr-only" for="auth-email">E-mail</label>
+              <input type="email" id="auth-email" class="auth-input" placeholder="E-mail" autocomplete="email" value="${esc(state.authEmail || '')}" required>
+              ${authMode !== 'forgot' ? `
+                <div class="pw-wrap">
+                  <label class="sr-only" for="auth-password">Wachtwoord</label>
+                  <input type="password" id="auth-password" class="auth-input" placeholder="Wachtwoord" autocomplete="${authMode === 'signup' ? 'new-password' : 'current-password'}" required ${authMode === 'signup' ? `oninput="pwCheck('auth-password', 'pr')"` : ''}>
+                  <button type="button" class="pw-eye" onclick="pwToggle(this, 'auth-password')" aria-label="Wachtwoord tonen">Toon</button>
+                </div>` : ''}
+              ${authMode === 'signup' ? `
+                <label class="sr-only" for="auth-password2">Herhaal wachtwoord</label>
+                <input type="password" id="auth-password2" class="auth-input" placeholder="Herhaal wachtwoord" autocomplete="new-password" required>
+                ${pwRulesHtml('pr')}` : ''}
+              ${authMode === 'login' ? `<div class="auth-forgot"><a href="#" onclick="setAuthMode('forgot'); return false;">Wachtwoord vergeten?</a></div>` : ''}
+              <button type="submit" class="auth-btn" id="auth-submit">${btn}</button>
             </form>
             <div class="auth-switch">
-              <span id="auth-switch-text">Nog geen account?</span>
-              <a id="auth-switch-link" onclick="toggleAuthMode()">Registreren</a>
+              ${authMode === 'login' ? `<span>Nog geen account?</span> <a href="#" onclick="setAuthMode('signup'); return false;">Registreren</a>`
+                : authMode === 'signup' ? `<span>Al een account?</span> <a href="#" onclick="setAuthMode('login'); return false;">Inloggen</a>`
+                : `<a href="#" onclick="setAuthMode('login'); return false;">← Terug naar inloggen</a>`}
             </div>
           </div>
         </div>
       `;
     }
 
-    function toggleAuthMode() {
-      authMode = authMode === 'login' ? 'signup' : 'login';
-      document.getElementById('auth-submit').textContent = authMode === 'login' ? 'Inloggen' : 'Registreren';
-      document.getElementById('auth-switch-text').textContent = authMode === 'login' ? 'Nog geen account?' : 'Al een account?';
-      document.getElementById('auth-switch-link').textContent = authMode === 'login' ? 'Registreren' : 'Inloggen';
-    }
+    function toggleAuthMode() { setAuthMode(authMode === 'login' ? 'signup' : 'login'); }
 
     async function handleAuth(e) {
       e.preventDefault();
-      const email = document.getElementById('auth-email').value;
-      const password = document.getElementById('auth-password').value;
+      const email = document.getElementById('auth-email').value.trim();
+      const pwEl = document.getElementById('auth-password');
+      const password = pwEl ? pwEl.value : '';
       const errorEl = document.getElementById('auth-error');
       const successEl = document.getElementById('auth-success');
       const submitBtn = document.getElementById('auth-submit');
-      
+      const label = submitBtn.textContent;
+      const fail = (msg) => { errorEl.textContent = msg; errorEl.style.display = 'block'; };
       errorEl.style.display = 'none';
       successEl.style.display = 'none';
+      state.authEmail = email;
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail('Vul een geldig e-mailadres in.');
+      if (authMode !== 'forgot' && !password) return fail('Vul je wachtwoord in.');
+      if (authMode === 'signup') {
+        if (!pwValid(password)) { pwCheck('auth-password', 'pr'); return fail('Je wachtwoord voldoet nog niet aan de eisen hieronder.'); }
+        if (password !== document.getElementById('auth-password2').value) return fail('De twee wachtwoorden zijn niet hetzelfde.');
+      }
       submitBtn.disabled = true;
       submitBtn.textContent = 'Even geduld...';
-      
       try {
         if (authMode === 'signup') {
           await signUp(email, password);
-          successEl.textContent = 'Check je email om je account te bevestigen!';
+          successEl.textContent = 'Check je e-mail om je account te bevestigen!';
+          successEl.style.display = 'block';
+        } else if (authMode === 'forgot') {
+          const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
+          if (error) throw error;
+          successEl.textContent = 'Als er een account met dit e-mailadres is, krijg je binnen een paar minuten een mail met een link. Kijk ook in je spam.';
           successEl.style.display = 'block';
         } else {
           await signIn(email, password);
         }
       } catch (error) {
-        errorEl.textContent = error.message;
-        errorEl.style.display = 'block';
+        fail(authErrorNl(error));
       }
-      
       submitBtn.disabled = false;
-      submitBtn.textContent = authMode === 'login' ? 'Inloggen' : 'Registreren';
+      submitBtn.textContent = label;
+    }
+
+    // Nieuw wachtwoord kiezen na de link uit de mail
+    function renderRecovery() {
+      return `
+        <div class="auth-container">
+          <div class="auth-box">
+            <div style="text-align: center; margin-bottom: 32px;">
+              <span class="logo">PRIMAL</span><span class="logo logo-accent">FORGED</span>
+            </div>
+            <div class="auth-title">Nieuw wachtwoord</div>
+            <div class="auth-subtitle">Kies een nieuw wachtwoord voor ${esc((state.user && state.user.email) || 'je account')}.</div>
+            <div id="rec-error" class="auth-error" role="alert" style="display: none;"></div>
+            <form onsubmit="saveNewPassword(event)" novalidate>
+              <div class="pw-wrap">
+                <label class="sr-only" for="rec-pw">Nieuw wachtwoord</label>
+                <input type="password" id="rec-pw" class="auth-input" placeholder="Nieuw wachtwoord" autocomplete="new-password" oninput="pwCheck('rec-pw', 'rr')" required>
+                <button type="button" class="pw-eye" onclick="pwToggle(this, 'rec-pw')" aria-label="Wachtwoord tonen">Toon</button>
+              </div>
+              <label class="sr-only" for="rec-pw2">Herhaal wachtwoord</label>
+              <input type="password" id="rec-pw2" class="auth-input" placeholder="Herhaal wachtwoord" autocomplete="new-password" required>
+              ${pwRulesHtml('rr')}
+              <button type="submit" class="auth-btn" id="rec-submit">Opslaan</button>
+            </form>
+            <div class="auth-switch"><a href="#" onclick="state.recovery = false; signOut(); return false;">Annuleren</a></div>
+          </div>
+        </div>`;
+    }
+    async function saveNewPassword(e) {
+      e.preventDefault();
+      const pw = document.getElementById('rec-pw').value, pw2 = document.getElementById('rec-pw2').value;
+      const err = document.getElementById('rec-error'), btn = document.getElementById('rec-submit');
+      const fail = (m) => { err.textContent = m; err.style.display = 'block'; };
+      err.style.display = 'none';
+      if (!pwValid(pw)) { pwCheck('rec-pw', 'rr'); return fail('Je wachtwoord voldoet nog niet aan de eisen hieronder.'); }
+      if (pw !== pw2) return fail('De twee wachtwoorden zijn niet hetzelfde.');
+      btn.disabled = true; btn.textContent = 'Opslaan...';
+      const { error } = await supabaseClient.auth.updateUser({ password: pw });
+      if (error) { btn.disabled = false; btn.textContent = 'Opslaan'; return fail(authErrorNl(error)); }
+      state.recovery = false;
+      try { history.replaceState(null, '', location.pathname); } catch (x) {}
+      if (state.user) await loadAll();
+      render();
+      showToast('🔒 Nieuw wachtwoord opgeslagen');
     }
 
     // ============================================
@@ -3883,7 +3999,7 @@
     // ============================================
     // MOTIVATIE: XP, DAGSCORE, RANGEN
     // ============================================
-    const APP_VERSION = '5 okt · 06:30';
+    const APP_VERSION = '5 okt · 07:15';
     const XP = {
       habit: 5,
       journal: 15,
@@ -8177,6 +8293,10 @@
         app.innerHTML = '<div class="loading"><span class="loading-text">Laden...</span></div>';
         return;
       }
+      if (state.recovery) {
+        app.innerHTML = renderRecovery();
+        return;
+      }
       if (!state.user) {
         app.innerHTML = renderAuth();
         return;
@@ -9638,7 +9758,8 @@
       
       if (session) {
         state.user = session.user;
-        await loadAll();
+        if (recoveryFromLink) state.recovery = true;
+        else await loadAll();
       }
       
       state.loading = false;
@@ -9646,6 +9767,7 @@
       
       supabaseClient.auth.onAuthStateChange(async (event, session) => {
         if (event === 'TOKEN_REFRESHED') return;
+        if (event === 'PASSWORD_RECOVERY') { state.user = session ? session.user : state.user; state.recovery = true; render(); return; }
         if (session) {
           state.user = session.user;
           await loadAll();
