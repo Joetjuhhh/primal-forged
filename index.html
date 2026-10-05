@@ -163,7 +163,7 @@
     .streak-label { font-size: 11px; color: #525252; text-transform: uppercase; letter-spacing: 0.15em; margin-top: 8px; }
     
     .habit-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    .habit { padding: 12px 8px; background: transparent; border: 1px solid #1c1c1c; color: #525252; cursor: pointer; font-family: inherit; text-align: center; }
+    .habit { padding: 12px 8px; background: transparent; border: 1px solid #1c1c1c; color: #525252; cursor: pointer; font-family: inherit; text-align: center; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
     .habit.done { background: rgba(34,197,94,0.1); border-color: #22c55e; color: #22c55e; }
     .habit.done.negative { background: rgba(234,179,8,0.1); border-color: #eab308; color: #eab308; }
     .habit-icon { font-size: 18px; display: block; margin-bottom: 4px; }
@@ -1976,13 +1976,7 @@
           <div style="display: flex; justify-content: space-between; align-items: baseline;"><label class="label">✅ Positieve Gewoontes</label><span style="font-size: 10px; color: #525252;">${getPositiveHabitsCount()} / ${visibleHabitKeys.length}</span></div>
           <div class="habit-grid">
             ${visibleHabitKeys.map(key => [key, habitConfig[key]]).map(([key, cfg]) => `
-              <div class="habit-wrap"><button class="habit ${state.habits[key] ? 'done' : ''}" aria-label="${esc(cfg.title)}${state.habits[key] ? ' – gedaan' : ' – afvinken'}" 
-                onmousedown="startHabitPress('${key}')" 
-                onmouseup="endHabitPress('${key}')" 
-                onmouseleave="cancelHabitPress()"
-                ontouchstart="startHabitPress('${key}')" 
-                ontouchend="endHabitPress('${key}')"
-                ontouchcancel="cancelHabitPress()">
+              <div class="habit-wrap"><button class="habit ${state.habits[key] ? 'done' : ''}" aria-label="${esc(cfg.title)}${state.habits[key] ? ' – gedaan' : ' – afvinken'}" onclick="toggleHabit('${key}')">
                 <span class="habit-icon">${cfg.icon}</span>
                 <span class="habit-label">${cfg.label}</span>
                 ${habitChallengeLabel(key)}
@@ -3792,7 +3786,7 @@
     // ============================================
     // MOTIVATIE: XP, DAGSCORE, RANGEN
     // ============================================
-    const APP_VERSION = '4 okt · 20:25';
+    const APP_VERSION = '5 okt · 04:55';
     const XP = {
       habit: 5,
       journal: 15,
