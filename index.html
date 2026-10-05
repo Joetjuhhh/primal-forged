@@ -821,6 +821,91 @@
     .bk-lessons-t { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #22c55e; }
     .bk-lessons input { width: 100%; box-sizing: border-box; font-size: 13px; }
     .quote-card.own { border-left: 3px solid #22c55e; }
+    .sl-supps { border-left: 3px solid #3b4a8a; }
+    .sl-sup + .sl-sup { margin-top: 14px; padding-top: 14px; border-top: 1px solid #1f1f1f; }
+    .sl-sup-h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+    .sl-sup-h b { font-size: 14px; color: #fafafa; font-weight: 600; }
+    .sl-sup-h span { font-size: 12px; color: #93a3e6; font-weight: 500; }
+    .sl-sup-tip { font-size: 12px; color: #a3a3a3; line-height: 1.6; margin-top: 8px; padding-left: 10px; border-left: 2px solid #3b4a8a; }
+    .sl-sup-tip b { color: #e5e5e5; font-weight: 600; }
+    .hm-sub { font-size: 13px; color: #a3a3a3; margin: -2px 0 16px; }
+    .hm-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; }
+    .hm-item + .hm-item { border-top: 1px solid #1a1a1a; }
+    .hm-check { flex: none; width: 28px; height: 28px; margin-top: 2px; border-radius: 6px; border: 1.5px solid #404040; background: transparent; color: #fafafa; font-size: 15px; font-weight: 700; cursor: pointer; touch-action: manipulation; display: grid; place-items: center; padding: 0; }
+    .hm-item.have .hm-check { background: #15803d; border-color: #15803d; }
+    .hm-item.want .hm-check { border-color: #a16207; }
+    .hm-item.na .hm-check { border-style: dashed; border-color: #333; }
+    .hm-item.na .hm-t { color: #737373; }
+    .hm-det { flex: 1; min-width: 0; }
+    .hm-det summary, .hm-group > summary, .hm-why > summary, .hm-rec > summary { list-style: none; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .hm-det summary::-webkit-details-marker, .hm-group > summary::-webkit-details-marker, .hm-why > summary::-webkit-details-marker, .hm-rec > summary::-webkit-details-marker { display: none; }
+    .hm-det summary { min-height: 32px; }
+    .hm-tw { flex: 1; min-width: 0; }
+    .hm-t { display: block; font-size: 14px; color: #fafafa; line-height: 1.35; }
+    .hm-flag { display: inline-block; font-size: 10px; letter-spacing: 0.04em; border-radius: 999px; padding: 1px 8px; margin-top: 4px; margin-right: 4px; }
+    .hm-flag.want { color: #fde68a; background: rgba(161,98,7,0.2); }
+    .hm-flag.na { color: #8a8a8a; background: #1a1a1a; }
+    .hm-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+    .hm-chip { font-size: 10px; color: #a3a3a3; border: 1px solid #262626; border-radius: 999px; padding: 1px 7px; line-height: 1.5; }
+    .hm-chip.imp3 { color: #fca5a5; border-color: rgba(185,28,28,0.5); }
+    .hm-chip.imp2 { color: #d4d4d4; }
+    .hm-chip.horm { color: #c4b5fd; border-color: rgba(139,92,246,0.4); }
+    .hm-chip.good { color: #86efac; border-color: rgba(21,128,61,0.5); }
+    .hm-pm { flex: none; width: 10px; height: 10px; position: relative; opacity: 0.6; }
+    .hm-pm::before, .hm-pm::after { content: ''; position: absolute; left: 0; top: 4px; width: 10px; height: 2px; background: #a3a3a3; transition: transform 0.2s; }
+    .hm-pm::after { transform: rotate(90deg); }
+    details[open] > summary .hm-pm::after { transform: rotate(0deg); }
+    .hm-txt { font-size: 13px; color: #c4c4c4; line-height: 1.6; margin-top: 8px; }
+    .hm-save { font-size: 12px; color: #a3a3a3; line-height: 1.55; margin-top: 8px; }
+    .hm-save b { color: #d4d4d4; font-weight: 600; }
+    .hm-warn { font-size: 12px; color: #eab308; line-height: 1.55; margin-top: 8px; }
+    .hm-src { display: block; font-size: 11px; color: #8a8a8a; margin-top: 6px; text-decoration: none; }
+    .hm-go { display: inline-block; background: none; border: none; padding: 6px 0 0; color: #e5484d; font-family: inherit; font-size: 12px; cursor: pointer; min-height: 32px; }
+    .hm-seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 12px; }
+    .hm-seg button { background: #141414; border: 1px solid #262626; color: #a3a3a3; border-radius: 8px; min-height: 38px; font-family: inherit; font-size: 11px; cursor: pointer; touch-action: manipulation; padding: 0 2px; }
+    .hm-seg button.on.have { border-color: #15803d; color: #bbf7d0; background: rgba(21,128,61,0.2); }
+    .hm-seg button.on.want { border-color: #a16207; color: #fde68a; background: rgba(161,98,7,0.18); }
+    .hm-seg button.on.na { border-color: #525252; color: #e5e5e5; background: #262626; }
+    .hm-note { width: 100%; box-sizing: border-box; font-size: 12px; margin-top: 8px; }
+    .hm-score-top { display: flex; justify-content: space-between; align-items: flex-end; }
+    .hm-score-n { font-size: 44px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
+    .hm-score-n span { font-size: 16px; color: #737373; font-weight: 400; margin-left: 2px; }
+    .hm-score-l { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #8a8a8a; margin-top: 6px; }
+    .hm-badges { text-align: right; font-size: 18px; font-weight: 600; color: #fafafa; }
+    .hm-badges span { display: block; font-size: 11px; color: #8a8a8a; font-weight: 400; }
+    .hm-rooms { margin-top: 16px; display: grid; gap: 2px; }
+    .hm-room { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) 40px; align-items: center; gap: 10px; background: none; border: none; padding: 6px 0; color: inherit; font-family: inherit; cursor: pointer; text-align: left; min-height: 32px; }
+    .hm-room-n { font-size: 13px; color: #d4d4d4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hm-room-bar { height: 6px; background: #1f1f1f; border-radius: 3px; overflow: hidden; }
+    .hm-room-bar span { display: block; height: 100%; border-radius: 3px; }
+    .hm-room-p { font-size: 12px; color: #a3a3a3; text-align: right; font-variant-numeric: tabular-nums; }
+    .hm-up { border-left: 3px solid #b91c1c; }
+    .hm-up-sub { font-size: 13px; color: #a3a3a3; margin-bottom: 4px; }
+    .hm-up-sub b { color: #fafafa; font-weight: 600; }
+    .hm-week { border-left: 3px solid #15803d; }
+    .hm-mt { display: flex; align-items: center; gap: 12px; padding: 10px 0; }
+    .hm-mt + .hm-mt { border-top: 1px solid #1a1a1a; }
+    .hm-mt-t { flex: 1; font-size: 14px; color: #fafafa; }
+    .hm-mt-t small { display: block; font-size: 11px; color: #8a8a8a; margin-top: 3px; }
+    .hm-mt.late .hm-mt-t small { color: #e5484d; }
+    .hm-why .hm-gn, .hm-group .hm-gn { flex: 1; font-size: 15px; font-weight: 600; color: #fafafa; }
+    .hm-pr { display: grid; gap: 2px; margin-top: 10px; padding-left: 10px; border-left: 2px solid #7f1d1d; }
+    .hm-pr b { font-size: 13px; color: #fafafa; font-weight: 600; }
+    .hm-pr span { font-size: 12px; color: #a3a3a3; }
+    .hm-horm { border-left: 3px solid rgba(139,92,246,0.6); }
+    .hm-gc { font-size: 12px; font-variant-numeric: tabular-nums; }
+    .hm-list { margin-top: 8px; }
+    .hm-rec-use { display: block; font-size: 12px; color: #8a8a8a; margin-top: 3px; }
+    .hm-rec-h { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #e5484d; margin: 14px 0 6px; }
+    .hm-rec-ul { margin: 0; padding-left: 18px; }
+    .hm-rec-ul li { font-size: 13px; color: #d4d4d4; line-height: 1.6; }
+    .hi-item { padding: 12px 0; }
+    .hi-item + .hi-item { border-top: 1px solid #1a1a1a; }
+    .hi-n { font-size: 14px; color: #fafafa; font-weight: 500; line-height: 1.4; }
+    .hm-dash-due { display: flex; align-items: center; gap: 10px; justify-content: space-between; margin-top: 12px; padding: 10px 12px; background: rgba(185,28,28,0.12); border: 1px solid rgba(185,28,28,0.35); border-radius: 8px; font-size: 13px; }
+    .hm-dash-ws { margin-top: 12px; }
+    .hm-dash-l { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #22c55e; }
+    .hm-dash-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
   </style>
 </head>
 <body>
@@ -2465,6 +2550,7 @@
         steps: () => renderStepsCard(),
         book: () => renderBookDashCard(),
         fast: () => renderFastDashCard(),
+        home: () => renderHomeDashCard(),
         challenges: () => renderDashboardChallenges(),
         sleep: () => renderSleepDashCard(),
         year: () => renderYearCard(),
@@ -4313,7 +4399,7 @@
     // ============================================
     // MOTIVATIE: XP, DAGSCORE, RANGEN
     // ============================================
-    const APP_VERSION = '5 okt · 14:00';
+    const APP_VERSION = '5 okt · 16:00';
     const XP = {
       habit: 5,
       journal: 15,
@@ -4329,7 +4415,10 @@
       foodDay: 10,       // dagboek: 3 of meer dingen gelogd
       steps: 10,         // stappendoel gehaald
       bookRead: 50,      // boek uitgelezen (Boeken)
-      fast: 10           // vastendoel gehaald (1x per dag)
+      fast: 10,          // vastendoel gehaald (1x per dag)
+      homeItem: 20,      // stap in Primal Home (eenmalig)
+      homeMaint: 10,     // onderhoud in Primal Home gedaan
+      homeRoom: 50       // ruimte in Primal Home compleet (eenmalig)
     };
 
     const ranks = [
@@ -4447,6 +4536,7 @@
       Object.keys(sleepSettings().routine || {}).forEach(d => starts.push(d));
       Object.keys(stepsData().log).forEach(d => starts.push(d));
       Object.values(bookStatus()).forEach(b => b && b.s === 'read' && starts.push(b.at));
+      Object.values(homeSt()).forEach(v => v && v.s === 'have' && starts.push(v.at));
       const first = starts.filter(Boolean).filter(d => d <= today).sort()[0] || today;
 
       const retentionOn = (date) => retentions.some(r => r.start_date && r.start_date <= date && (r.is_active ? date <= today : (r.end_date ? date < r.end_date : false)));
@@ -4475,6 +4565,12 @@
       const journalPart = (date) => { const j = jIdx[date]; if (!j) return 0; if (j.old) return 1; return (j.m ? 0.5 : 0) + (j.ev ? 0.5 : 0); };
       const bookXpOn = {};
       Object.values(bookStatus()).forEach(b => { if (b && b.s === 'read' && b.at) bookXpOn[b.at] = (bookXpOn[b.at] || 0) + XP.bookRead; });
+      const homeXpOn = {};
+      const addH = (dt, n) => { if (dt) homeXpOn[dt] = (homeXpOn[dt] || 0) + n; };
+      const homeIds = new Set(homeAll().map(x => x.id));
+      Object.entries(homeSt()).forEach(([id, v]) => { if (v && v.s === 'have' && homeIds.has(id)) addH(v.at, XP.homeItem); });
+      Object.values(homeMaintLog()).forEach(arr => (arr || []).forEach(dt => addH(dt, XP.homeMaint)));
+      Object.values(homeBadges()).forEach(dt => addH(dt, XP.homeRoom));
       const fastXpOn = {};
       fastData().log.forEach(x => { if (x && x.e && (new Date(x.e) - new Date(x.s)) >= (Number(x.goal) || 16) * 3600e3) fastXpOn[localDateStr(new Date(x.e))] = XP.fast; });
       const protByDate = {};
@@ -4517,6 +4613,7 @@
         xp += bonusOn[date] || 0;
         xp += bookXpOn[date] || 0;
         xp += fastXpOn[date] || 0;
+        xp += homeXpOn[date] || 0;
         if (date === valuesDate) xp += VALUES_BONUS_XP;
         if (xp > 0) hadActivity = true;
         if ((score < 20 && hadActivity && date < today) || failDates.has(date)) comeback = true;
@@ -4695,6 +4792,9 @@
         ['Stappendoel gehaald', `+${XP.steps} per dag`],
         ['Boek uitgelezen', `+${XP.bookRead} per boek`],
         ['Vastendoel gehaald', `+${XP.fast} per dag`],
+        ['Primal Home: stap gedaan', `+${XP.homeItem} (eenmalig per stap)`],
+        ['Primal Home: onderhoud gedaan', `+${XP.homeMaint}`],
+        ['Primal Home: ruimte compleet', `+${XP.homeRoom} (eenmalig)`],
         ['Lichaamsmeting', `+${XP.measurement} (1x per week)`],
         ['Waarden-opdracht', `+${VALUES_BONUS_XP} (eenmalig)`],
         ['75 Hard-dag volledig', `+${XP.hard75Day}`],
@@ -8591,6 +8691,12 @@
           <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Bekijk de lijst →</div>
         </div>
 
+        <div class="card card-accent" style="cursor: pointer;" onclick="setSection('home')">
+          <label class="label">Primal Home</label>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">Gezonder wonen, stap voor stap: keuken, water, lucht, verzorging en slaapkamer.${(() => { const n = Object.keys(homeSt()).length; return n ? ` <b style="color: #fafafa;">Score ${homeScore()}/100</b>` : ''; })()}</div>
+          <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Bekijk de lijst →</div>
+        </div>
+
         <div class="card card-accent" style="cursor: pointer;" onclick="setSection('reminders')">
           <label class="label">🔔 Herinneringen</label>
           <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">Meldingen voor je journal, training, scherm weg en je avond. Slim: niet als je het al gedaan hebt.</div>
@@ -8681,6 +8787,7 @@
           ${state.activeSection === 'reminders' ? renderReminders() : ''}
           ${state.activeSection === 'books' ? renderBooks() : ''}
           ${state.activeSection === 'privacy' ? renderPrivacy() : ''}
+          ${state.activeSection === 'home' ? renderHome() : ''}
         </div>
         
         ${state.showRankUp ? renderRankUp() : ''}
@@ -8889,7 +8996,11 @@
       ['Overzicht', '’s Avonds trainen en slaap: meta-analyse (Sports Medicine 2019)', 'https://link.springer.com/article/10.1007/s40279-018-1015-0'],
       ['Richtlijn', 'Thuisarts: ik wil beter slapen', 'https://www.thuisarts.nl/slaapproblemen/ik-wil-beter-slapen'],
       ['Richtlijn', 'Thuisarts: ik blijf slecht slapen en kies een behandeling', 'https://www.thuisarts.nl/slecht-slapen/ik-blijf-slecht-slapen-en-kies-behandeling'],
-      ['Uitleg', 'Sleep Foundation: is rood licht goed voor je slaap? (Engels)', 'https://www.sleepfoundation.org/bedroom-environment/is-red-light-good-for-sleep']
+      ['Uitleg', 'Sleep Foundation: is rood licht goed voor je slaap? (Engels)', 'https://www.sleepfoundation.org/bedroom-environment/is-red-light-good-for-sleep'],
+      ['Onderzoek', 'Magnesium bisglycinaat en slaap, 155 volwassenen, 4 weken (Nature and Science of Sleep 2025)', 'https://www.dovepress.com/article/download/106355'],
+      ['Richtlijn', 'BfR: maximaal 250 mg magnesium per dag uit supplementen (Engels)', 'https://www.bfr.bund.de/en/press-release/bfr-assesses-maximum-daily-level-for-magnesium-in-food-supplements/'],
+      ['Onderzoek', 'Glycine 3 g en slaapkwaliteit (Yamadera, Sleep and Biological Rhythms 2007)', 'https://www.researchgate.net/publication/230167843_Glycine_ingestion_improves_subjective_sleep_quality_in_human_volunteers_correlating_with_polysomnographic_changes'],
+      ['Onderzoek', 'Glycine 3 g bij te kort slapen: minder moe, scherper (Frontiers in Neurology 2012)', 'https://www.frontiersin.org/articles/10.3389/fneur.2012.00061/full']
     ];
     const sleepInfoSections = [
       ['Hoeveel slaap?', '<p><b>Minstens 7 uur per nacht.</b> Dat is het advies van de Amerikaanse slaapartsen voor volwassenen. Structureel minder hangt samen met slechtere gezondheid, prestaties en stemming. [1]</p><p>Lig je lang wakker? Thuisarts raadt aan om dan maximaal 8 uur in bed te liggen. [9]</p>'],
@@ -9036,6 +9147,22 @@
               <p class="hs-small">Een filter haalt blauw licht weg, maar je scherm blijft licht geven. Het scherm 1–2 uur voor bed wegleggen helpt meer. ${ref(9)}</p>
             </div>
           </details>
+        </div>
+
+        <div class="card sl-supps" id="sleep-supps">
+          <label class="label">💊 Slaapsupplementen · wat is onderbouwd</label>
+          <div class="su-txt" style="margin-bottom: 12px;">Eerst de basis: vaste tijden, scherm weg, geen late cafeïne. Supplementen geven daar hooguit een klein extra zetje bovenop.</div>
+          <div class="sl-sup">
+            <div class="sl-sup-h"><b>🌿 Magnesium</b><span>200–250 mg · 's avonds</span></div>
+            <div class="su-txt">In het beste onderzoek tot nu toe (155 volwassenen die slecht sliepen) ging de slapeloosheid-score met 250 mg magnesium als bisglycinaat iets meer omlaag dan met een nepmiddel. Klein maar echt effect. ${ref(12)}</div>
+            <div class="sl-sup-tip"><b>Kijk op het etiket naar "waarvan magnesium".</b> In bisglycinaat zit maar ±14% magnesium: 600 mg bisglycinaat is ±85 mg magnesium. Neem niet meer dan 250 mg magnesium per dag uit supplementen, liefst verdeeld over 2 momenten. Meer geeft kans op diarree. ${ref(13)}</div>
+          </div>
+          <div class="sl-sup">
+            <div class="sl-sup-h"><b>⚪ Glycine</b><span>3 g · 30–60 min voor bed</span></div>
+            <div class="su-txt">Mensen die 3 g voor het slapen namen, sliepen beter en waren de volgende dag minder moe en scherper, ook na te kort slapen. Wel kleine onderzoeken. ${ref(14)} ${ref(15)} Los het op in water: het smaakt licht zoet.</div>
+            <div class="sl-sup-tip"><b>Meer is niet beter.</b> Hogere doses (zoals 10 g) zijn niet onderzocht voor slaap en geven meer kans op maagklachten. Gebruik je antipsychotica (vooral clozapine)? Overleg dan eerst met je arts.</div>
+          </div>
+          <div class="hs-small" style="margin-top: 10px;">Magnesium bisglycinaat is magnesium gebonden aan glycine: je krijgt er dus al een beetje glycine mee.</div>
         </div>
 
         <div class="card">
@@ -9204,6 +9331,11 @@
             ${[['Ontbijt', 'Vitamine D en omega-3', 'allebei met wat vet erbij'], ['Avondeten', 'Zink', 'niet samen met ijzer'], ['Voor het slapen', 'Magnesium', 'max. 250 mg']].map(([t, w, s]) => `
               <div class="sl-tl"><span class="sl-tl-t" style="width: 92px;">${t}</span><span class="sl-tl-b"><b>${w}</b><span>${s}</span></span></div>`).join('')}
           </div>
+        </div>
+
+        <div class="card" style="cursor: pointer;" onclick="setSection('sleep'); setTimeout(() => { const el = document.getElementById('sleep-supps'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);">
+          <label class="label">😴 Voor je slaap</label>
+          <div class="su-txt">Magnesium (200–250 mg) en glycine (3 g): doses, timing en wat het onderzoek zegt staan bij Slaap →</div>
         </div>
 
         <div class="card" style="border-left: 3px solid #eab308;">
@@ -9459,6 +9591,7 @@
       ['foodtrain', 'Voeding & training', 'Calorieën, eiwit en je training van vandaag'],
       ['steps', 'Stappen', 'Invullen en je laatste 7 dagen'],
       ['book', 'Aan het lezen', 'Alleen als je een boek leest'],
+      ['home', 'Primal Home', 'Score, stap van de week en onderhoud'],
       ['challenges', 'Challenges vandaag', 'Alleen als je challenges hebt'],
       ['sleep', 'Slaap', 'Vannacht of je avondroutine'],
       ['year', 'Jaaroverzicht', 'Elke dag een vakje, kleur = dagscore'],
@@ -9516,6 +9649,10 @@
       const sd = stepsData(), st = stepsOn(today);
       items.push({ n: `Stappen ${st !== null ? fmtInt(st) : 0} / ${fmtInt(sd.goal)}`, sub: st !== null ? (st >= sd.goal ? 'Doel gehaald' : `Nog ${fmtInt(sd.goal - st)} te gaan`) : 'Vul je stappen in', done: st !== null && st >= sd.goal,
         go: "state.stepsYesterday = false; document.getElementById('dash-steps') ? (document.getElementById('dash-steps').scrollIntoView({ behavior: 'smooth', block: 'center' }), setTimeout(() => { const i = document.getElementById('steps-in'); if (i) i.focus(); }, 400)) : null" });
+      try {
+        const due = homeMaintTasks().filter(t => t.late);
+        if (due.length) items.push({ n: 'Onderhoud: ' + due[0].label + (due.length > 1 ? ` (+${due.length - 1})` : ''), sub: 'Primal Home', done: false, go: "state.homeTab = 'overzicht'; setSection('home')" });
+      } catch (e) {}
       const pos = getPositiveHabitsCount();
       const openH = visibleHabitKeys.filter(k => habitConfig[k].positive && !state.habits[k]).map(k => habitConfig[k].label.charAt(0) + habitConfig[k].label.slice(1).toLowerCase());
       items.push({ n: `Gewoontes ${pos} / ${visibleHabitKeys.length}`, sub: openH.length ? 'Open: ' + openH.slice(0, 3).join(', ') + (openH.length > 3 ? '…' : '') : 'Alles afgevinkt', done: pos >= 6,
@@ -10373,7 +10510,7 @@
           ${h('Welke gegevens')}
           <ul>
             <li><b>Account:</b> je e-mailadres en een versleuteld wachtwoord.</li>
-            <li><b>Wat je zelf invult:</b> journal, gewoontes, challenges, retention, slaap, stappen, training, voeding, lichaamsmetingen, voortgangsfoto's, bloedwaarden, boeken en je instellingen.</li>
+            <li><b>Wat je zelf invult:</b> journal, gewoontes, challenges, retention, slaap, stappen, training, voeding, vasten, lichaamsmetingen, voortgangsfoto's, bloedwaarden, boeken, je leefomgeving-lijst en je instellingen.</li>
             <li><b>Meldingen:</b> als je herinneringen aanzet, het adres van je toestel voor pushmeldingen en je tijdzone.</li>
             <li><b>Locatie:</b> alleen als je bij Vitamine D je locatie deelt. Die blijft op je eigen toestel en wordt niet verstuurd.</li>
           </ul>
@@ -10718,6 +10855,432 @@
     }, 20000);
 
     // ============================================
+    // PRIMAL HOME (onder Meer): gezonder wonen, stap voor stap
+    // ============================================
+    const homeSrc = {
+      microwave: ['Plastic bakjes in de magnetron: miljarden nanodeeltjes (University of Nebraska 2023)', 'https://news.unl.edu/newsrooms/today/article/nebraska-study-finds-billions-of-nanoplastics-released-when-microwaving'],
+      boards: ['Snijplanken als bron van microplastics (Environmental Science & Technology 2023)', 'https://www.sciencedaily.com/releases/2023/06/230601155739.htm'],
+      soda: ['Zuiveringszout haalt bestrijdingsmiddelen van appels (J Agric Food Chem 2017)', 'https://www.sciencedaily.com/releases/2017/10/171025090237.htm'],
+      bpa: ['EU-verbod op BPA in verpakkingen en keukenspullen (Europese Commissie)', 'https://food.ec.europa.eu/food-safety-news/commission-adopts-ban-bisphenol-food-contact-materials-2024-12-19_en'],
+      oils: ['Aldehyden bij bakken: zonnebloemolie vs. olijfolie, boter en dierlijk vet (De Montfort University)', 'https://www.dmu.ac.uk/about-dmu/news/2015/july/dmu-research-on-healthiest-cooking-oils-revealed-on-bbcs-trust-me,-im-a-doctor.aspx'],
+      bottled: ['Nanoplastics in flessenwater: ±240.000 deeltjes per liter (NIH, PNAS 2024)', 'https://www.nih.gov/news-events/nih-research-matters/plastic-particles-bottled-water'],
+      sprays: ['Schoonmaken met sprays en achteruitgang van de longfunctie (AJRCCM 2018)', 'https://pubmed.ncbi.nlm.nih.gov/29451393/'],
+      hap: ['Hydroxyapatiet-tandpasta vs. fluoride: 189 volwassenen, 18 maanden (Frontiers in Public Health 2023)', 'https://www.frontiersin.org/articles/10.3389/fpubh.2023.1199728/full'],
+      ntp: ['NTP: fluoride en de ontwikkeling van het brein bij kinderen (2024)', 'https://ntp.niehs.nih.gov/research/assessments/noncancer/completed/fluoride']
+    };
+    // i = impact (3 groot, 2 middel, 1 detail) · c = kosten (0 gratis … 3 €€€) · h = hormoonvriendelijk
+    // m = onderhoud [dagen, taak] · save = besparing · go = koppeling naar een tab of onderdeel
+    const homeGroups = [
+      ['keuken', 'Keuken & eten', [
+        { id: 'k1', t: 'Niet opwarmen in plastic', i: 3, c: 0, h: 1, src: ['microwave'], x: 'Verwarm eten in glas of keramiek, niet in plastic bakjes. Ook niet heet afwassen in de vaatwasser. Bij verhitten komen veel meer micro- en nanoplastics vrij.' },
+        { id: 'k13', t: 'Niet verkoold vlees', i: 3, c: 0, x: "Zwartgeblakerd vlees van de barbecue of grill bevat kankerverwekkende stoffen (HCA's en PAK's). Snijd verbrande stukjes eraf en grill op lager vuur." },
+        { id: 'k7', t: 'Groente en fruit wassen met zuiveringszout', i: 2, c: 0, src: ['soda'], go: ['recepten', 'Recept: groentebad'], x: '1 theelepel zuiveringszout op een halve liter water, 12–15 minuten laten weken en afspoelen. In onderzoek haalde dit 80–96% van de bestrijdingsmiddelen van de schil, veel meer dan alleen water.' },
+        { id: 'k8', t: 'Vers in plaats van blik en plastic', i: 2, c: 0, h: 1, src: ['bpa'], x: 'Koop zoveel mogelijk vers of in glas. BPA mag sinds juli 2026 niet meer in nieuwe verpakkingen in de EU, maar oude voorraad en vervangers zoals BPS zijn er nog.' },
+        { id: 'k15', t: 'Kleine vette vis', i: 2, c: 0, x: 'Haring, makreel en sardines in plaats van grote roofvis zoals zwaardvis en tonijn: evenveel omega-3, veel minder kwik.' },
+        { id: 'k12', t: 'Bakken en frituren in stabiel vet', i: 2, c: 1, src: ['oils'], x: 'Gebruik olijfolie, roomboter, ghee of rund- of ganzenvet. Geen zonnebloem- of maisolie: die vormen bij verhitten veel meer schadelijke aldehyden. Gebruik frituurvet niet eindeloos opnieuw.' },
+        { id: 'k9', t: 'Geen hete drank in plastic bekers', i: 2, c: 1, h: 1, x: 'Koffie en soep niet uit plastic bekers of to-go-bekers met een plastic laagje. Neem je eigen RVS-beker mee.' },
+        { id: 'k2', t: 'Glazen of RVS bewaarbakjes', i: 2, c: 2, h: 1, x: 'Bewaar restjes en je lunch in glas of RVS, zeker warm en vet eten: vet neemt stoffen uit plastic makkelijk op.' },
+        { id: 'k3', t: 'Pannen van RVS, gietijzer of carbonstaal', i: 2, c: 3, x: 'Gaan mee voor het leven en geven niets af. Heb je nog anti-aanbakpannen: niet oververhitten (boven ±260 °C komen er dampen vrij) en weg ermee zodra de laag gekrast is.' },
+        { id: 'k11', t: 'Losse thee', i: 1, c: 0, h: 1, x: 'Veel theezakjes bevatten plastic om ze dicht te sealen. Losse thee in een RVS-zeefje is plasticvrij en lekkerder.' },
+        { id: 'k14', t: 'Kauwgom laten liggen', i: 1, c: 0, save: 'Een pakje per week laten liggen scheelt ±€75 per jaar.', x: 'De kauwbasis van de meeste kauwgom is plastic.' },
+        { id: 'k5', t: 'Houten snijplank', i: 1, c: 1, src: ['boards'], m: [30, 'Snijplank inoliën'], x: 'Plastic snijplanken laten bij het snijden tientallen miljoenen microplastics per jaar los, die in je eten terechtkomen. Kies hout (eik, beuken, olijf) en olie hem elke maand in met een beetje spijsolie of lijnzaadolie.' },
+        { id: 'k6', t: 'Keukengerei van hout of RVS', i: 1, c: 1, x: 'Pollepels, spatels en scheppen van hout of RVS in plaats van (zwart) plastic, vooral in hete pannen.' },
+        { id: 'k4', t: 'Waterkoker van RVS of glas', i: 1, c: 2, x: 'Kokend water in een plastic waterkoker laat deeltjes los. RVS of glas niet.' },
+        { id: 'k10', t: 'Koffie zonder plastic cups', i: 1, c: 2, save: 'Cups kosten ±€0,35 per kop, bonen ±€0,10: bij 2 koppen per dag scheelt dat ±€180 per jaar.', x: 'Heet water onder druk door plastic: kies liever een moka, filter, french press of bonenmachine.' },
+        { id: 'k16', t: 'Biologisch waar het telt', i: 1, c: 2, x: 'Kies vooral biologisch voor producten met veel bestrijdingsmiddelen: aardbeien, spinazie, druiven, appels en paprika.' }
+      ]],
+      ['water', 'Water', [
+        { id: 'w3', t: 'Oud huis? Kraan even laten lopen', i: 3, c: 0, x: "Is je huis van vóór 1960, dan kunnen er nog loden leidingen zijn. Laat 's ochtends en na een vakantie de kraan even lopen tot het water koud is. Twijfel je: je waterbedrijf kan het water testen." },
+        { id: 'w1', t: 'Een goed waterfilter', i: 2, c: 2, h: 1, src: ['bottled'], m: [60, 'Waterfilter vervangen'], save: 'Kraanwater met filter kost een paar cent per liter. Flessenwater ±€0,40: bij 1 liter per dag scheelt dat €100–150 per jaar.', x: 'In kraanwater zitten sporen van PFAS, medicijnresten, hormoonverstorende stoffen (xeno-oestrogenen) en bestrijdingsmiddelen. De gemeten hoeveelheden zijn laag, maar je drinkt het elke dag, en van de effecten van al die stoffen samen op lange termijn weet niemand veel. Met een goed filter haal je het grootste deel eruit. Flessenwater is géén oplossing: daar zitten honderdduizenden nanoplastics per liter in.' },
+        { id: 'w2', t: 'Het juiste filter kiezen', i: 2, c: 2, x: 'Omgekeerde osmose haalt het meest weg (ook PFAS, medicijnresten en hormoonverstorende stoffen), maar ook mineralen: kies er een met remineralisatie. Actieve kool (kan of onder het aanrecht) haalt chloor, smaak en een deel van de PFAS weg. Vervang het filter op tijd, anders groeien er juist bacteriën in.' },
+        { id: 'w4', t: 'Drinkfles van RVS of glas', i: 1, c: 1, h: 1, x: 'Een fles van RVS of glas geeft niets af, ook niet in de zon of met warme thee.' }
+      ]],
+      ['lucht', 'Lucht in huis', [
+        { id: 'l9', t: 'Niet roken binnen', i: 3, c: 0, x: 'Roken binnen (ook door bezoek) is verreweg de grootste bron van vervuilde binnenlucht. De stoffen blijven hangen in meubels, gordijnen en muren. Roken, dan buiten en uit de buurt van open ramen.' },
+        { id: 'l1', t: 'Dagelijks ventileren', i: 3, c: 0, m: [90, 'Ventilatieroosters schoonmaken'], x: 'Zet elke dag 10–15 minuten de ramen tegen elkaar open en houd de roosters altijd open. Binnenlucht is vaak vuiler dan buitenlucht: CO₂, vocht, fijnstof en dampen uit meubels.' },
+        { id: 'l2', t: 'Afzuigkap aan bij het koken', i: 3, c: 0, m: [90, 'Filter afzuigkap schoonmaken'], x: 'Zeker op gas: koken geeft fijnstof en (op gas) stikstofdioxide. Afzuigkap aan, en nog 10 minuten laten draaien.' },
+        { id: 'l4', t: 'Houtkachel of open haard beperken', i: 3, c: 0, x: 'Een van de grootste bronnen van fijnstof in en om je huis. Stook zo min mogelijk, en alleen droog hout.' },
+        { id: 'l5', t: 'Koolmonoxidemelder', i: 3, c: 1, m: [180, 'CO-melder testen'], x: 'Heb je gas, een cv-ketel of een kachel: hang een CO-melder op. Koolmonoxide ruik je niet. Test hem twee keer per jaar met de testknop.' },
+        { id: 'l3', t: 'Geen geurkaarsen, wierook of luchtverfrissers', i: 2, c: 0, h: 1, go: ['recepten', 'Recept: natuurlijke frisse geur'], save: 'Geen geurkaarsen en luchtverfrissers meer: al snel €50+ per jaar.', x: 'Ze geven fijnstof en vluchtige stoffen af. Wil je een frisse geur: ventileren, of een pannetje met citroenschil en rozemarijn laten pruttelen.' },
+        { id: 'l6', t: 'Schoenen uit in huis', i: 2, c: 0, x: 'Zo loop je geen lood, bestrijdingsmiddelen en straatvuil naar binnen.' },
+        { id: 'l8', t: 'Luchtvochtigheid 40–60%', i: 2, c: 1, x: 'Te droog geeft droge slijmvliezen, te vochtig geeft schimmel en huisstofmijt. Een hygrometer kost een paar euro.' },
+        { id: 'l7', t: 'Stofzuigen met HEPA-filter, nat afstoffen', i: 2, c: 2, h: 1, x: 'Huisstof bevat vlamvertragers en weekmakers uit meubels en elektronica. Een HEPA-filter houdt het fijne stof vast; nat afstoffen voorkomt dat je het opwaait.' }
+      ]],
+      ['schoon', 'Schoonmaken', [
+        { id: 's3', t: 'Nooit bleek mengen', i: 3, c: 0, x: 'Bleek samen met ammoniak of zuur (azijn, ontkalker, wc-reiniger) geeft giftige gassen. Gebruik bleek liever helemaal niet.' },
+        { id: 's6', t: 'Schimmel direct aanpakken', i: 3, c: 1, m: [30, 'Badkamer en kozijnen op schimmel checken'], x: 'Schimmel in de badkamer of bij kozijnen: weghalen én de oorzaak oplossen, meestal vocht en te weinig ventilatie. Na het douchen de tegels aftrekken en het raam open.' },
+        { id: 's1', t: 'Natuurlijke schoonmaakmiddelen', i: 2, c: 0, go: ['recepten', 'Bekijk de recepten'], save: 'Azijn, soda en zuiveringszout zijn veel goedkoper dan losse middelen: tientallen euro\'s per jaar.', x: 'Azijn tegen kalk, soda tegen vet, groene zeep voor vloeren, zuiveringszout als schuurmiddel, en microvezeldoeken. Daarmee kun je bijna alles schoonmaken.' },
+        { id: 's2', t: 'Minder sprays', i: 2, c: 0, src: ['sprays'], x: 'Bij mensen die vaak met sprays schoonmaakten ging de longfunctie over de jaren meetbaar sneller achteruit. Spuit op je doek in plaats van in de lucht, of kies een fles zonder spray.' },
+        { id: 's4', t: 'Parfumvrij wasmiddel, geen wasverzachter', i: 2, c: 0, h: 1, save: 'Geen wasverzachter meer: ±€30 per jaar.', x: 'Parfum en wasverzachter blijven in je kleding en beddengoed zitten, dag en nacht tegen je huid. Een scheutje azijn in het wasverzachterbakje maakt je was ook zacht.' },
+        { id: 's5', t: 'Nieuwe kleding eerst wassen', i: 1, c: 0, x: 'Was nieuwe kleding en beddengoed voor je het gebruikt: zo gaan restjes van kleurstoffen en finish eruit.' }
+      ]],
+      ['verzorging', 'Verzorging', [
+        { id: 'v6', t: 'Zon slim: schaduw eerst', i: 3, c: 0, x: 'Schaduw is je beste bescherming: zoek die op tussen 12 en 15 uur in de zomer. Bouw je zon rustig op in het voorjaar, dan went je huid en maak je vitamine D aan. Bedek je met pet, shirt en zonnebril. Kun je niet uit de zon (strand, festival, lange wandeling), smeer dan toch, met een minerale crème zonder parfum: verbranden is altijd erger dan smeren.' },
+        { id: 'v1', t: 'Parfumvrije verzorging', i: 2, c: 0, h: 1, go: ['etiket', 'Check een etiket'], x: "Kijk of er 'parfum' of 'fragrance' op het etiket staat. Parfum is de grootste bron van allergieën en kan ftalaten bevatten: weekmakers die in onderzoek samengaan met een lager testosteron." },
+        { id: 'v4', t: 'Natuurlijke deodorant', i: 2, c: 1, h: 1, go: ['recepten', 'Recept: zelf deodorant maken'], x: 'Laat gewone deodorant en antitranspirant, zeker spuitbussen, staan. Je brengt het elke dag aan op een gevoelige plek met veel lymfeklieren, en een spuitbus adem je ook in. Kies een natuurlijke deodorant zonder aluminium, parfum en alcohol, bijvoorbeeld op basis van zuiveringszout, magnesium of kokosolie.' },
+        { id: 'v5', t: 'Fluoridevrije tandpasta', i: 2, c: 1, src: ['hap', 'ntp'], x: 'Kies tandpasta zonder fluoride, mét hydroxyapatiet: hetzelfde mineraal waar je tandglazuur van gemaakt is. In een onderzoek van 18 maanden met 189 volwassenen beschermde het even goed tegen gaatjes als fluoridetandpasta. Fluoride is ook niet zonder zorgen: bij hoge blootstelling vond het Amerikaanse NTP een verband met een lager IQ bij kinderen.' },
+        { id: 'v3', t: 'Weinig ingrediënten, check het etiket', i: 1, c: 0, h: 1, go: ['etiket', 'Naar de etiket-checker'], x: 'Hoe korter de ingrediëntenlijst, hoe beter. Met de etiket-checker in deze app zie je wat een stof is. Apps als Yuka of INCI Beauty scannen een product in één keer.' },
+        { id: 'v7', t: 'Chloorvrij wc-papier', i: 1, c: 0, x: 'Ongebleekt of chloorvrij gebleekt wc-papier, zonder parfum, lotion of kleurtjes.' },
+        { id: 'v2', t: 'Zonder paraffine of minerale olie', i: 1, c: 1, x: "Kies verzorging op basis van plantaardige oliën en boters (olijf, kokos, jojoba, sheaboter) in plaats van paraffine, vaseline of 'paraffinum liquidum'. Zeker voor je lippen: lippenbalsem slik je deels in." }
+      ]],
+      ['slaap', 'Slaapkamer & licht', [
+        { id: 'b2', t: 'Koel slapen: 16–19 °C', i: 3, c: 0, go: ['sleep', 'Naar Slaap'], x: 'Je lichaamstemperatuur moet zakken om goed te slapen. Verwarming in de slaapkamer uit, raam op een kier.' },
+        { id: 'b6', t: "'s Ochtends daglicht", i: 3, c: 0, x: "Binnen een uur na opstaan 10–20 minuten naar buiten. Dat zet je biologische klok, zodat je 's avonds makkelijker in slaap valt." },
+        { id: 'b1', t: 'Donker slapen', i: 3, c: 1, x: 'Verduisteringsgordijnen of een slaapmasker. Ook een klein lampje of standby-lichtje kan je slaap verstoren.' },
+        { id: 'b3', t: 'Telefoon uit de slaapkamer', i: 2, c: 0, x: 'Laad je telefoon buiten de slaapkamer op en gebruik een gewone wekker. Geen scrollen in bed, geen meldingen in de nacht.' },
+        { id: 'b4', t: "'s Avonds rood en gedimd licht", i: 2, c: 1, x: "Na zonsondergang gedimde, warme lampen, en een rode lamp voor de avond en voor 's nachts naar het toilet. Rood licht remt je melatonine het minst." },
+        { id: 'b5', t: 'Blauwlichtfilter op je schermen', i: 1, c: 0, x: "Zet 's avonds de nachtmodus aan op je telefoon en laptop, of draag een oranje bril. Het scherm helemaal wegleggen werkt nog beter." }
+      ]],
+      ['overig', 'Overig', [
+        { id: 'o1', t: 'Kassabonnetjes weigeren', i: 2, c: 0, h: 1, x: 'Thermisch papier bevat bisfenolen (sinds 2020 geen BPA meer, maar vaak de vervanger BPS) die via je huid worden opgenomen, zeker met ingesmeerde handen. Vraag om een digitaal bonnetje of laat hem liggen.' },
+        { id: 'o3', t: 'Geen bestrijdingsmiddelen in huis en tuin', i: 2, c: 0, h: 1, x: 'Geen gif tegen onkruid, mieren of insecten. Heet water, azijn, of met de hand werkt meestal ook.' },
+        { id: 'o2', t: 'Katoen en linnen', i: 1, c: 2, x: 'Beddengoed, ondergoed en handdoeken van katoen of linnen in plaats van synthetisch: ademt beter en geeft geen plastic vezels af.' }
+      ]]
+    ];
+    const homeCost = ['Gratis', '€', '€€', '€€€'];
+    const homeImpact = { 3: 'Grote impact', 2: 'Impact', 1: 'Detail' };
+    const homeBuiltIn = homeGroups.flatMap(([gid, , items]) => items.map(it => ({ ...it, g: gid })));
+    const homeById = id => homeAll().find(x => x.id === id);
+    function homeCustom() { const c = userPrefs().homeCustom; return Array.isArray(c) ? c : []; }
+    function homeAll() { return homeBuiltIn.concat(homeCustom().map(c => ({ id: c.id, t: c.t, x: c.x || '', i: 1, c: 0, g: c.g, own: true }))); }
+    function homeGroupItems(gid) { return homeAll().filter(x => x.g === gid).sort((a, b) => (b.i - a.i) || (a.c - b.c)); }
+    // Status per stap: { s: 'have' | 'want' | 'na', at: datum }
+    function homeSt() {
+      const h = userPrefs().home; if (!h || typeof h !== 'object') return {};
+      const out = {}; Object.keys(h).forEach(k => { const v = h[k]; out[k] = typeof v === 'string' ? { s: 'have', at: v } : v; });
+      return out;
+    }
+    function homeHave(id) { const s = homeSt()[id]; return !!(s && s.s === 'have'); }
+    function homeScore(gid) {
+      const st = homeSt();
+      const items = (gid ? homeGroupItems(gid) : homeAll()).filter(x => !(st[x.id] && st[x.id].s === 'na'));
+      const tot = items.reduce((a, x) => a + x.i, 0);
+      const got = items.filter(x => st[x.id] && st[x.id].s === 'have').reduce((a, x) => a + x.i, 0);
+      return tot ? Math.round(got / tot * 100) : 100;
+    }
+    function homeOpenItems() { const st = homeSt(); return homeAll().filter(x => !st[x.id] || st[x.id].s === 'want'); }
+    // Je volgende upgrade: de ruimte met de meeste winst, en daar de grootste en goedkoopste stappen
+    function homeUpgrade() {
+      const st = homeSt();
+      let best = null;
+      homeGroups.forEach(([gid, name]) => {
+        const open = homeGroupItems(gid).filter(x => !st[x.id] || st[x.id].s === 'want');
+        const gain = open.reduce((a, x) => a + x.i, 0);
+        if (open.length && (!best || gain > best.gain)) best = { gid, name, gain, items: open.sort((a, b) => (b.i - a.i) || (a.c - b.c) || ((st[b.id] && st[b.id].s === 'want') - (st[a.id] && st[a.id].s === 'want'))).slice(0, 3) };
+      });
+      return best;
+    }
+    // Stap van de week: wordt maandag gekozen en blijft de hele week staan
+    function homeWeekStep() {
+      const wk = weekKey(todayStr());
+      const p = userPrefs().homeWeek;
+      if (p && p.week === wk && homeById(p.id)) return homeById(p.id);
+      const st = homeSt();
+      const pick = homeAll().filter(x => !st[x.id] || st[x.id].s === 'want').sort((a, b) => (b.i - a.i) || (a.c - b.c))[0];
+      if (!pick) return null;
+      saveUserPrefs({ homeWeek: { week: wk, id: pick.id } });
+      return pick;
+    }
+    // Onderhoud: taken van stappen die je hebt, met wanneer ze weer aan de beurt zijn
+    function homeMaintLog() { const m = userPrefs().homeMaint; return m && typeof m === 'object' ? m : {}; }
+    function homeMaintTasks() {
+      const st = homeSt(), log = homeMaintLog(), today = todayStr();
+      return homeBuiltIn.filter(x => x.m && st[x.id] && st[x.id].s === 'have').map(x => {
+        const done = (log[x.id] || []).slice().sort();
+        const last = done[done.length - 1] || st[x.id].at || today;
+        const due = dateAdd(last, x.m[0]);
+        return { id: x.id, label: x.m[1], every: x.m[0], last, due, late: due <= today, days: Math.round((new Date(due + 'T12:00:00') - new Date(today + 'T12:00:00')) / 864e5) };
+      }).sort((a, b) => a.due.localeCompare(b.due));
+    }
+    function homeMaintDone(id) {
+      const log = { ...homeMaintLog() };
+      log[id] = (log[id] || []).concat(todayStr()).slice(-24);
+      saveUserPrefs({ homeMaint: log });
+      homeSyncServer(); progressCache = null; render();
+      showToast(`🔧 Onderhoud gedaan · +${XP.homeMaint} XP`);
+    }
+    // Server-meldingen: eerstvolgende onderhoud en de stap van de week meegeven
+    function homeSyncServer() {
+      try {
+        const t = homeMaintTasks()[0];
+        const ws = homeWeekStep();
+        const patch = { homeDue: t ? t.due : null, homeDueLabel: t ? t.label : null, homeWeekTitle: ws && !homeHave(ws.id) ? ws.t : null };
+        const p = userPrefs();
+        if (p.homeDue !== patch.homeDue || p.homeDueLabel !== patch.homeDueLabel || p.homeWeekTitle !== patch.homeWeekTitle) saveUserPrefs(patch);
+      } catch (e) {}
+    }
+    // Mijlpalen: een ruimte helemaal klaar = badge + bonus-XP (blijft staan)
+    function homeBadges() { const b = userPrefs().homeBadges; return b && typeof b === 'object' ? b : {}; }
+    function homeCheckBadges() {
+      const b = { ...homeBadges() }; let fresh = null;
+      homeGroups.forEach(([gid, name]) => { if (!b[gid] && homeGroupItems(gid).some(x => homeHave(x.id)) && homeScore(gid) === 100) { b[gid] = todayStr(); fresh = name; } });
+      if (fresh) { saveUserPrefs({ homeBadges: b }); setTimeout(() => showToast(`🏅 ${fresh} compleet! +${XP.homeRoom} XP`), 900); }
+    }
+    function homeSet(id, s) {
+      if (!homeById(id)) return;
+      const st = { ...homeSt() };
+      const cur = st[id];
+      if (cur && cur.s === s) delete st[id];
+      else st[id] = { s, at: s === 'have' && cur && cur.s === 'have' ? cur.at : todayStr() };
+      saveUserPrefs({ home: st });
+      if (st[id]) homeCheckBadges();
+      homeSyncServer();
+      progressCache = null;
+      render();
+      if (st[id] && st[id].s === 'have') showToast(`✓ Gedaan · +${XP.homeItem} XP`);
+    }
+    function homeNote(id, v) {
+      const n = { ...(userPrefs().homeNotes || {}) };
+      v = String(v || '').trim().slice(0, 300);
+      if (v) n[id] = v; else delete n[id];
+      saveUserPrefs({ homeNotes: n });
+      const el = document.getElementById('hn-saved-' + id); if (el) el.textContent = '✓ Opgeslagen';
+    }
+    function homeAddCustom() {
+      const t = (document.getElementById('hc-t') || {}).value || '';
+      const g = (document.getElementById('hc-g') || {}).value || 'overig';
+      const x = (document.getElementById('hc-x') || {}).value || '';
+      if (!t.trim()) { alert('Geef je stap een naam.'); return; }
+      const list = homeCustom().concat({ id: 'c_' + Date.now().toString(36), t: t.trim().slice(0, 80), x: x.trim().slice(0, 300), g });
+      saveUserPrefs({ homeCustom: list });
+      state.homeAdd = false; state.homeOpen = g; render();
+      showToast('Eigen stap toegevoegd');
+    }
+    function homeDelCustom(id) {
+      if (!confirm('Deze eigen stap verwijderen?')) return;
+      const st = { ...homeSt() }; delete st[id];
+      saveUserPrefs({ homeCustom: homeCustom().filter(c => c.id !== id), home: st });
+      progressCache = null; render();
+    }
+    function homeGo(where) {
+      if (where === 'sleep') { setSection('sleep'); return; }
+      state.homeTab = where; render(); window.scrollTo(0, 0);
+    }
+
+    // ---------- Recepten ----------
+    const homeRecipes = [
+      { id: 'r1', t: 'Allesreiniger', use: 'Aanrecht, tafel, tegels, kranen', ing: ['1 deel schoonmaakazijn', '1 deel water', 'optioneel: een paar druppels etherische olie (citroen, tea tree)'], how: 'Mengen in een fles of plantenspuit. Op je doek spuiten, niet in de lucht.', keep: 'Onbeperkt houdbaar.', warn: 'Niet op marmer, natuursteen of gewaxt hout: azijn tast dat aan.' },
+      { id: 'r2', t: 'Ontvetter', use: 'Kookplaat, afzuigkap, oven, pannen', ing: ['1 eetlepel soda (natriumcarbonaat)', '1 liter warm water'], how: 'Soda oplossen in het warme water, aanbrengen met een doek of spons, even laten inwerken en naspoelen.', keep: 'Elke keer vers maken.', warn: 'Draag handschoenen: soda irriteert je huid. Niet op aluminium.' },
+      { id: 'r3', t: 'Schuurpasta', use: 'Gootsteen, bad, pannen, aangekoekt vuil', ing: ['3 eetlepels zuiveringszout', '1 eetlepel water of vloeibare groene zeep'], how: 'Mengen tot een pasta, opbrengen met een spons, schrobben en naspoelen.', keep: 'Vers maken.', warn: '' },
+      { id: 'r4', t: 'Glas & spiegels', use: 'Ramen, spiegels, douchewand', ing: ['1 deel schoonmaakazijn', '4 delen water'], how: 'In een plantenspuit, op je microvezeldoek spuiten en droog nawrijven.', keep: 'Onbeperkt houdbaar.', warn: '' },
+      { id: 'r5', t: 'Wc-reiniger', use: 'Toiletpot', ing: ['3 eetlepels zuiveringszout', '1 kopje schoonmaakazijn'], how: 'Zuiveringszout in de pot strooien, azijn erover, 10–15 minuten laten bruisen, borstelen en doortrekken.', keep: 'Vers gebruiken.', warn: 'Nooit samen met bleek of een gewone wc-reiniger gebruiken.' },
+      { id: 'r6', t: 'Wasverzachter', use: 'Wasmachine', ing: ['Scheutje (±50 ml) schoonmaakazijn'], how: 'In het wasverzachterbakje. De azijngeur verdwijnt bij het drogen.', keep: 'Onbeperkt houdbaar.', warn: '' },
+      { id: 'r7', t: 'Groentebad', use: 'Groente en fruit', ing: ['1 theelepel zuiveringszout', '½ liter water'], how: 'Groente of fruit 12–15 minuten laten weken, daarna afspoelen met kraanwater.', keep: 'Elke keer vers maken.', warn: '' },
+      { id: 'r8', t: 'Deodorant', use: 'Onder je oksels', ing: ['3 eetlepels kokosolie', '2 eetlepels pijlwortel of maizena', '1 eetlepel zuiveringszout (begin met 1 theelepel als je gevoelige huid hebt)', 'optioneel: 5 druppels etherische olie (lavendel, tea tree)'], how: 'Kokosolie zacht laten worden (au bain-marie), alles goed mengen en in een glazen potje laten opstijven. Een erwtgroot beetje met je vingers aanbrengen.', keep: '3 maanden. Boven 24 °C wordt het zacht: koel bewaren.', warn: 'Roodheid of jeuk? Minder zuiveringszout, of een deodorant op basis van magnesium.' },
+      { id: 'r9', t: 'Natuurlijke frisse geur', use: 'Woonkamer, keuken', ing: ['Schillen van 1 citroen of sinaasappel', '2 takjes rozemarijn', 'optioneel: een kaneelstokje', 'pannetje water'], how: 'Zacht laten pruttelen op het vuur. Water bijvullen, nooit droog laten koken.', keep: 'Eén middag.', warn: '' }
+    ];
+    // ---------- Etiket-checker ----------
+    const homeIngr = [
+      { n: 'Parfum / Fragrance / Aroma', k: 'Geurstof', x: 'Een verzamelnaam: één woord kan tientallen stoffen verbergen. De grootste oorzaak van huidallergieën door verzorging, en het kan ftalaten (zoals DEP) bevatten.', h: 1 },
+      { n: 'Ftalaten: DEP, DBP, DEHP (diethyl/dibutyl phthalate)', k: 'Weekmaker', x: 'Weekmakers die in onderzoek samengaan met een lager testosteron. DBP en DEHP zijn in de EU verboden in cosmetica. DEP is nog toegestaan en zit vaak verstopt in "parfum".', h: 1 },
+      { n: 'Parabenen: methylparaben, ethylparaben, propylparaben, butylparaben', k: 'Conserveermiddel', x: 'Hebben een zwakke oestrogeenachtige werking. Methyl- en ethylparaben zijn het zwakst. Propyl- en butylparaben zijn in de EU beperkt, isopropyl- en isobutylparaben verboden.', h: 1 },
+      { n: 'Triclosan, triclocarban', k: 'Antibacterieel', x: 'Antibacteriële stof die de hormoonhuishouding kan verstoren en bijdraagt aan resistente bacteriën. In de EU sterk beperkt. Gewone zeep werkt net zo goed.', h: 1 },
+      { n: 'BHA (butylated hydroxyanisole), BHT', k: 'Conserveermiddel', x: 'Antioxidanten die producten houdbaar maken. BHA wordt in de EU onderzocht als mogelijk hormoonverstorend. BHT is minder zorgwekkend.', h: 1 },
+      { n: 'Benzophenone-3 / Oxybenzone', k: 'UV-filter', x: 'Chemisch zonnefilter dat via je huid in je lichaam komt en hormoonachtig werkt. De EU heeft de toegestane hoeveelheid fors verlaagd. Kies een minerale zonnebrand (zinkoxide).', h: 1 },
+      { n: 'Octocrylene, homosalate, octinoxate (ethylhexyl methoxycinnamate)', k: 'UV-filter', x: 'Chemische zonnefilters die in het lichaam worden opgenomen; voor sommige heeft de EU de maximale hoeveelheid verlaagd. Mineraal (zinkoxide, titaandioxide) is het alternatief.', h: 1 },
+      { n: 'Cyclotetrasiloxane (D4), cyclopentasiloxane (D5), cyclohexasiloxane (D6)', k: 'Siliconen', x: 'Siliconen die je huid en haar glad laten voelen. De EU beperkt ze, ook omdat D4 mogelijk hormoonverstorend is en ze zich ophopen in het milieu.', h: 1 },
+      { n: 'Paraffinum liquidum, mineral oil, petrolatum (vaseline)', k: 'Minerale olie', x: 'Vet uit aardolie. Je huid neemt er weinig van op, maar lippenbalsem slik je deels in. Plantaardige oliën en boters zijn het alternatief.' },
+      { n: 'Aluminium chlorohydrate, aluminium zirconium', k: 'Antitranspirant', x: 'Sluit je zweetklieren af zodat je minder zweet. Zit in antitranspirant, niet in gewone deodorant. Wil je het vermijden: kies "deodorant zonder aluminium".' },
+      { n: 'Sodium lauryl sulfate (SLS)', k: 'Schuimmiddel', x: 'Sterk reinigend schuimmiddel in shampoo, douchegel en tandpasta. Kan je huid uitdrogen en bij gevoelige mensen aften in je mond geven.' },
+      { n: 'Sodium laureth sulfate (SLES), PEG-…, ceteareth-…', k: 'Schuim- en hulpstof', x: 'Milder dan SLS, maar bij de productie kunnen sporen van 1,4-dioxaan achterblijven. Hoe minder, hoe beter.' },
+      { n: 'DMDM hydantoin, imidazolidinyl urea, diazolidinyl urea, quaternium-15', k: 'Formaldehyde-afgever', x: 'Conserveermiddelen die langzaam formaldehyde afgeven. Formaldehyde is een bekend allergeen en kankerverwekkend bij inademing.' },
+      { n: 'Methylisothiazolinone (MIT), methylchloroisothiazolinone (MCI)', k: 'Conserveermiddel', x: 'Veroorzaakte een golf van allergieën. In de EU verboden in producten die op je huid blijven, nog toegestaan in afspoelproducten.' },
+      { n: 'Polyethylene, nylon-12, acrylates copolymer', k: 'Microplastic', x: 'Plastic deeltjes of -films in scrubs, make-up en glitter. De EU verbiedt ze stap voor stap sinds 2023.' },
+      { n: 'Sodium fluoride, sodium monofluorophosphate, stannous fluoride', k: 'Fluoride', x: 'De vormen van fluoride in tandpasta. Zoek je fluoridevrij: let op deze namen.' },
+      { n: 'Hydroxyapatite', k: 'Mineraal', x: 'Het mineraal waar je tandglazuur van gemaakt is. In tandpasta een fluoridevrij alternatief tegen gaatjes.', good: 1 },
+      { n: 'Zinc oxide', k: 'Mineraal UV-filter', x: 'Mineraal zonnefilter dat op je huid blijft liggen en UV terugkaatst. Het beste alternatief voor chemische filters.', good: 1 },
+      { n: 'Butyrospermum parkii (sheaboter), Cocos nucifera oil, Simmondsia chinensis (jojoba)', k: 'Plantaardig vet', x: 'Plantaardige boters en oliën: voeden je huid zonder aardolie.', good: 1 }
+    ];
+    function homeIngrSearch(v) {
+      state.homeQ = v;
+      const el = document.getElementById('hi-list'); if (el) el.innerHTML = homeIngrList();
+    }
+    function homeIngrList() {
+      const q = (state.homeQ || '').trim().toLowerCase();
+      const list = homeIngr.filter(x => !q || (x.n + ' ' + x.k + ' ' + x.x).toLowerCase().includes(q));
+      if (!list.length) return `<div class="empty" style="padding: 20px 0;">Niets gevonden voor "${esc(state.homeQ.trim())}". Probeer een deel van de naam, bijv. "paraben" of "siloxane".</div>`;
+      return list.map(x => `
+        <div class="hi-item ${x.good ? 'good' : ''}">
+          <div class="hi-n">${esc(x.n)}</div>
+          <div class="hm-chips"><span class="hm-chip">${esc(x.k)}</span>${x.h ? '<span class="hm-chip horm">Mogelijk hormoonverstorend</span>' : ''}${x.good ? '<span class="hm-chip good">Prima keuze</span>' : ''}</div>
+          <div class="hm-txt">${esc(x.x)}</div>
+        </div>`).join('');
+    }
+
+    // ---------- Weergave ----------
+    function homeChips(it) {
+      return `<span class="hm-chips"><span class="hm-chip imp${it.i}">${homeImpact[it.i]}</span><span class="hm-chip">${homeCost[it.c]}</span>${it.h ? '<span class="hm-chip horm">Hormoonvriendelijk</span>' : ''}${it.own ? '<span class="hm-chip">Eigen stap</span>' : ''}</span>`;
+    }
+    function homeItemHtml(it, opts) {
+      const st = homeSt()[it.id];
+      const s = st ? st.s : null;
+      const note = (userPrefs().homeNotes || {})[it.id] || '';
+      const srcs = (it.src || []).filter(k => homeSrc[k]);
+      const seg = (v, l) => `<button class="${s === v ? 'on ' + v : ''}" aria-pressed="${s === v}" onclick="homeSet('${it.id}', '${v}')">${l}</button>`;
+      return `
+        <div class="hm-item ${s || ''}">
+          <button class="hm-check" role="checkbox" aria-checked="${s === 'have'}" aria-label="${esc(it.t)}: ${s === 'have' ? 'heb ik al' : 'nog niet'}" onclick="homeSet('${it.id}', 'have')">${s === 'have' ? '✓' : ''}</button>
+          <details class="hm-det">
+            <summary><span class="hm-tw"><span class="hm-t">${esc(it.t)}</span>${s === 'want' ? '<span class="hm-flag want">Wil ik doen</span>' : s === 'na' ? '<span class="hm-flag na">Niet voor mij</span>' : ''}${opts && opts.noChips ? '' : homeChips(it)}</span><span class="hm-pm" aria-hidden="true"></span></summary>
+            ${it.x ? `<div class="hm-txt">${esc(it.x)}</div>` : ''}
+            ${it.save ? `<div class="hm-save"><b>Bespaart:</b> ${esc(it.save)}</div>` : ''}
+            ${it.m ? `<div class="hm-save"><b>Onderhoud:</b> ${esc(it.m[1])}, elke ${it.m[0] >= 60 ? Math.round(it.m[0] / 30) + ' maanden' : it.m[0] + ' dagen'}. Vink je deze stap af, dan krijg je hier een herinnering voor.</div>` : ''}
+            ${it.go ? `<button class="hm-go" onclick="homeGo('${it.go[0]}')">${esc(it.go[1])} →</button>` : ''}
+            ${srcs.map(k => `<a class="hm-src" href="${homeSrc[k][1]}" target="_blank" rel="noopener noreferrer">Bron: ${esc(homeSrc[k][0])} ↗</a>`).join('')}
+            <div class="hm-seg">${seg('have', 'Heb ik al')}${seg('want', 'Wil ik doen')}${seg('na', 'Niet voor mij')}</div>
+            <label class="sr-only" for="hn-${it.id}">Notitie bij ${esc(it.t)}</label>
+            <input id="hn-${it.id}" class="form-input hm-note" maxlength="300" placeholder="Notitie, bijv. welk merk of wanneer gekocht" value="${esc(note)}" onchange="homeNote('${it.id}', this.value)">
+            <div class="hs-small" id="hn-saved-${it.id}"></div>
+            ${it.own ? `<button class="hm-go" style="color: #a3a3a3;" onclick="homeDelCustom('${it.id}')">Eigen stap verwijderen</button>` : ''}
+          </details>
+        </div>`;
+    }
+    function homeScoreColor(n) { return n >= 80 ? '#22c55e' : n >= 50 ? '#d9a441' : '#e5484d'; }
+    function renderHomeOverview() {
+      const total = homeScore();
+      const st = homeSt();
+      const anyAnswer = Object.keys(st).length > 0;
+      const up = homeUpgrade();
+      const ws = homeWeekStep();
+      const tasks = homeMaintTasks();
+      const want = homeAll().filter(x => st[x.id] && st[x.id].s === 'want');
+      const badges = homeBadges();
+      return `
+        <div class="card hm-score">
+          <div class="hm-score-top">
+            <div><div class="hm-score-n" style="color: ${anyAnswer ? homeScoreColor(total) : '#fafafa'};">${total}<span>/100</span></div><div class="hm-score-l">Primal Home-score</div></div>
+            <div class="hm-badges">${Object.keys(badges).length} / ${homeGroups.length}<span>ruimtes compleet</span></div>
+          </div>
+          <div class="hm-rooms">${homeGroups.map(([gid, name]) => { const n = homeScore(gid); return `
+            <button class="hm-room" onclick="state.homeTab = 'stappen'; state.homeOpen = '${gid}'; render(); setTimeout(() => { const el = document.getElementById('hg-${gid}'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);">
+              <span class="hm-room-n">${badges[gid] ? '🏅 ' : ''}${esc(name)}</span><span class="hm-room-bar"><span style="width: ${n}%; background: ${homeScoreColor(n)};"></span></span><span class="hm-room-p">${n}%</span>
+            </button>`; }).join('')}</div>
+          ${!anyAnswer ? `<div class="hs-small" style="margin-top: 10px;">Loop de stappen door en geef per stap aan: heb ik al, wil ik doen of niet voor mij. Grote stappen tellen zwaarder mee.</div>` : ''}
+        </div>
+        ${up ? `
+        <div class="card hm-up">
+          <label class="label">Je volgende upgrade</label>
+          <div class="hm-up-sub">Je grootste winst zit nu in <b>${esc(up.name.toLowerCase())}</b>. Begin met:</div>
+          ${up.items.map(it => homeItemHtml(it)).join('')}
+        </div>` : `<div class="card hm-up"><label class="label">Alles gedaan</label><div class="su-txt">Elke stap staat op "heb ik al" of "niet voor mij". Je huis werkt nu voor je. Houd het onderhoud bij.</div></div>`}
+        ${ws && !homeHave(ws.id) ? `
+        <div class="card hm-week">
+          <label class="label">Stap van de week</label>
+          ${homeItemHtml(ws)}
+        </div>` : ''}
+        ${tasks.length ? `
+        <div class="card">
+          <label class="label">Onderhoud</label>
+          ${tasks.map(t => `
+            <div class="hm-mt ${t.late ? 'late' : ''}">
+              <span class="hm-mt-t">${esc(t.label)}<small>${t.late ? (t.days === 0 ? 'Vandaag' : `${-t.days} ${-t.days === 1 ? 'dag' : 'dagen'} te laat`) : `Over ${t.days} ${t.days === 1 ? 'dag' : 'dagen'}`} · elke ${t.every >= 60 ? Math.round(t.every / 30) + ' mnd' : t.every + ' dagen'}</small></span>
+              <button class="btn ${t.late ? 'btn-primary' : 'btn-secondary'} btn-small" onclick="homeMaintDone('${t.id}')">Gedaan</button>
+            </div>`).join('')}
+          <div class="hs-small" style="margin-top: 8px;">Onderhoud gedaan = +${XP.homeMaint} XP. Je krijgt een melding als iets aan de beurt is (Meer → Herinneringen).</div>
+        </div>` : ''}
+        ${want.length ? `
+        <div class="card">
+          <label class="label">Mijn lijst · wil ik doen (${want.length})</label>
+          <div class="hs-small" style="margin-bottom: 6px;">Je vervang- en boodschappenlijst.</div>
+          ${want.map(it => homeItemHtml(it)).join('')}
+        </div>` : ''}
+        <details class="card hm-why">
+          <summary><span class="hm-gn">Het principe</span><span class="hm-pm" aria-hidden="true"></span></summary>
+          <div class="hm-txt" style="margin-top: 10px;">Je omgeving vormt je gedrag. Maak van je huis een plek die je sterker maakt. Eerst de grote dingen, daarna de details.</div>
+          <div class="hm-pr"><b>01 · Weg ermee</b><span>Haal weg wat je gezondheid onnodig belast.</span></div>
+          <div class="hm-pr"><b>02 · Verbeter</b><span>Licht, lucht, slaap en eten.</span></div>
+          <div class="hm-pr"><b>03 · Vereenvoudig</b><span>Minder producten, minder rommel, minder onnodige stoffen.</span></div>
+          <div class="hm-pr"><b>04 · Bouw</b><span>Een huis waarin gezonde keuzes vanzelf gaan.</span></div>
+        </details>
+        <div class="card hm-horm" style="cursor: pointer;" onclick="state.fMain = 'tvoed'; setSection('food');">
+          <label class="label">Hormoonvriendelijk</label>
+          <div class="su-txt">Stappen met dit label gaan over stoffen die je hormonen kunnen verstoren: plastic, BPA, ftalaten en parfum. Samen met je voeding bepalen ze mee hoe goed je testosteron op peil blijft. Bekijk T-voeding → of lees <i>Count Down</i> bij Boeken.</div>
+        </div>`;
+    }
+    function renderHomeSteps() {
+      const st = homeSt();
+      return `
+        ${homeGroups.map(([gid, name]) => {
+          const items = homeGroupItems(gid);
+          const n = homeScore(gid);
+          const has = items.filter(x => st[x.id] && st[x.id].s === 'have').length;
+          const badge = homeBadges()[gid];
+          return `
+          <details class="card hm-group" id="hg-${gid}" ${state.homeOpen === gid ? 'open' : ''} ontoggle="if (this.open) state.homeOpen = '${gid}'; else if (state.homeOpen === '${gid}') state.homeOpen = null;">
+            <summary><span class="hm-gn">${badge ? '🏅 ' : ''}${esc(name)}</span><span class="hm-gc" style="color: ${has ? homeScoreColor(n) : '#8a8a8a'};">${has}/${items.length} · ${n}%</span><span class="hm-pm" aria-hidden="true"></span></summary>
+            <div class="hm-list">${items.map(it => homeItemHtml(it)).join('')}</div>
+          </details>`;
+        }).join('')}
+        ${state.homeAdd ? `
+        <div class="card">
+          <label class="label">Eigen stap toevoegen</label>
+          <label class="sr-only" for="hc-t">Naam</label>
+          <input id="hc-t" class="form-input" maxlength="80" placeholder="Bijv. Luchtreiniger in de slaapkamer" style="width: 100%; box-sizing: border-box;">
+          <label class="sr-only" for="hc-g">Ruimte</label>
+          <select id="hc-g" class="form-input" style="width: 100%; box-sizing: border-box; margin-top: 8px;">${homeGroups.map(([gid, name]) => `<option value="${gid}" ${state.homeOpen === gid ? 'selected' : ''}>${esc(name)}</option>`).join('')}</select>
+          <label class="sr-only" for="hc-x">Uitleg</label>
+          <input id="hc-x" class="form-input" maxlength="300" placeholder="Uitleg (optioneel)" style="width: 100%; box-sizing: border-box; margin-top: 8px;">
+          <div style="display: flex; gap: 8px; margin-top: 10px;"><button class="btn btn-secondary" style="flex: 1;" onclick="state.homeAdd = false; render();">Annuleren</button><button class="btn btn-primary" style="flex: 1;" onclick="homeAddCustom()">Toevoegen</button></div>
+        </div>` : `<button class="dash-edit-btn" style="margin-top: 0;" onclick="state.homeAdd = true; render();">+ Eigen stap toevoegen</button>`}`;
+    }
+    function renderHomeRecipes() {
+      return `
+        <div class="hs-small" style="margin: 0 0 12px;">Met azijn, soda, zuiveringszout en groene zeep maak je bijna alles schoon. Goedkoper, en zonder parfum of sprays.</div>
+        ${homeRecipes.map(r => `
+          <details class="card hm-rec">
+            <summary><span class="hm-tw"><span class="hm-t">${esc(r.t)}</span><span class="hm-rec-use">${esc(r.use)}</span></span><span class="hm-pm" aria-hidden="true"></span></summary>
+            <div class="hm-rec-h">Nodig</div>
+            <ul class="hm-rec-ul">${r.ing.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
+            <div class="hm-rec-h">Zo doe je het</div>
+            <div class="hm-txt" style="margin-top: 0;">${esc(r.how)}</div>
+            <div class="hm-save"><b>Houdbaar:</b> ${esc(r.keep)}</div>
+            ${r.warn ? `<div class="hm-warn">⚠ ${esc(r.warn)}</div>` : ''}
+          </details>`).join('')}
+        <div class="card" style="border-left: 3px solid #eab308;"><div class="su-txt"><b style="color: #fafafa;">Altijd:</b> nooit bleek mengen met azijn, ammoniak of een andere wc-reiniger, en bewaar zelfgemaakte middelen in een duidelijk gelabelde fles, buiten bereik van kinderen.</div></div>`;
+    }
+    function renderHomeLabel() {
+      return `
+        <div class="hs-small" style="margin: 0 0 12px;">Typ een naam die je op een etiket ziet (ook een deel, zoals "paraben" of "siloxane"). Etiketten gebruiken internationale namen (INCI), vaak Engels of Latijn.</div>
+        <div class="j-search">
+          <label class="sr-only" for="hi-in">Zoek een stof</label>
+          <input id="hi-in" type="search" class="form-input" placeholder="🔍 Zoek een stof op het etiket" value="${esc(state.homeQ || '')}" oninput="homeIngrSearch(this.value)" autocomplete="off">
+        </div>
+        <div class="card" id="hi-list">${homeIngrList()}</div>
+        <div class="hs-small" style="margin: 0 0 16px;">Voor een heel product in één keer: scan het met Yuka of INCI Beauty.</div>`;
+    }
+    function renderHome() {
+      homeSyncServer();
+      const tab = state.homeTab || 'overzicht';
+      const tabs = [['overzicht', 'Overzicht'], ['stappen', 'Stappen'], ['recepten', 'Recepten'], ['etiket', 'Etiket']];
+      return `
+        <button class="entry-action" style="margin-bottom: 14px;" onclick="setSection('more')">← Terug</button>
+        <div class="page-header" style="margin-bottom: 8px;"><div class="page-sub">Meer</div><div class="page-title">Primal Home</div></div>
+        <div class="hm-sub">Gezonder wonen, stap voor stap.</div>
+        <div class="tabs" role="tablist">${tabs.map(([k, l]) => `<button class="tab ${tab === k ? 'active' : ''}" role="tab" aria-selected="${tab === k}" onclick="state.homeTab = '${k}'; render(); window.scrollTo(0, 0);">${l}</button>`).join('')}</div>
+        ${tab === 'overzicht' ? renderHomeOverview() : tab === 'stappen' ? renderHomeSteps() : tab === 'recepten' ? renderHomeRecipes() : renderHomeLabel()}
+        <div class="hs-small" style="margin: 4px 0 16px;">Je hoeft niet alles tegelijk. Elke stap die je zet, blijft staan.</div>`;
+    }
+    function renderHomeDashCard() {
+      const total = homeScore();
+      const ws = homeWeekStep();
+      const due = homeMaintTasks().filter(t => t.late);
+      return `
+        <div class="card hm-dash">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <label class="label" style="margin: 0;">Primal Home</label>
+            <button class="st-goal" onclick="state.homeTab = 'overzicht'; setSection('home')">${total}/100 ›</button>
+          </div>
+          ${due.length ? `<div class="hm-dash-due"><span>🔧 ${esc(due[0].label)}${due.length > 1 ? ` (+${due.length - 1})` : ''}</span><button class="btn btn-primary btn-small" onclick="homeMaintDone('${due[0].id}')">Gedaan</button></div>` : ''}
+          ${ws && !homeHave(ws.id) ? `
+            <div class="hm-dash-ws">
+              <span class="hm-dash-l">Stap van de week</span>
+              <div class="hm-dash-row"><span class="hm-t" style="flex: 1;">${esc(ws.t)}</span><button class="btn btn-secondary btn-small" onclick="homeSet('${ws.id}', 'have')">Gedaan ✓</button></div>
+              <button class="hm-go" onclick="state.homeTab = 'overzicht'; setSection('home')">Waarom en hoe →</button>
+            </div>` : (() => { const up = homeUpgrade(); const nx = up && up.items[0]; return `<div class="su-txt" style="margin-top: 8px;"><span style="color: #22c55e;">✓ Stap van de week gedaan.</span>${nx ? ` Zin in meer? Volgende upgrade: <b style="color: #fafafa;">${esc(nx.t)}</b>.` : ''}</div>${nx ? `<button class="hm-go" onclick="state.homeTab = 'overzicht'; setSection('home')">Bekijken →</button>` : ''}`; })()}
+        </div>`;
+    }
+
+    // ============================================
     // HERINNERINGEN (pushmeldingen via Supabase Edge Function "send-reminders")
     // ============================================
     const VAPID_PUBLIC = 'BFVrf-QjhZJ-XWJBnp6jB9dBUM2ROfcaqgMzdEvYldMg2956WCJ-7elXxYc9ic3dyYUAmRc7Ak8_tVtQQ3jYrYg';
@@ -10727,7 +11290,8 @@
       ['protein', 'Eiwit-check', 'Alleen als je onder 60% van je eiwitdoel zit', false, '15:00'],
       ['screen', 'Scherm weg', 'Een uur voor je bedtijd (uit je slaapdoel)', true, null],
       ['evening', 'Dag afsluiten', 'Avond-journal en routine · niet als je al hebt afgesloten', true, '21:30'],
-      ['weekly', 'Weekrapport', 'Op zondag', false, '19:00']
+      ['weekly', 'Weekrapport', 'Op zondag', false, '19:00'],
+      ['home', 'Primal Home', 'Onderhoud dat aan de beurt is, en op zaterdag je stap van de week', true, '10:00']
     ];
     function reminderPrefs() {
       const r = userPrefs().reminders || {};
@@ -10838,7 +11402,7 @@
       } catch (e) {}
     }
     // Melding aangetikt of link met #onderdeel: naar dat onderdeel
-    const navSections = ['dashboard', 'journal', 'body', 'training', 'food', 'sleep', 'more', 'week', 'reminders', 'books', 'privacy'];
+    const navSections = ['dashboard', 'journal', 'body', 'training', 'food', 'sleep', 'more', 'week', 'reminders', 'books', 'privacy', 'home'];
     function gotoFromHash() {
       const h = (location.hash || '').replace('#', '');
       if (state.user && navSections.includes(h)) {
@@ -10999,6 +11563,7 @@
     async function loadAll() {
       await Promise.all([loadEntries(), loadRetention(), loadHabits(), loadBody(), loadTraining(), loadFood(), loadPhotosAndBlood()]);
       syncProtTarget();
+      try { homeSyncServer(); } catch (e) {}
       // Eén onderdeel dat faalt mag de rest van de app niet blokkeren
       try {
         await loadChallenges();
