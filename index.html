@@ -545,6 +545,123 @@
     .sd-app { background: #050505; border: 1px solid #1c1c1c; padding: 12px; font-size: 12px; line-height: 1.6; margin-top: 12px; }
     .sd-links { display: flex; gap: 8px; margin-top: 8px; }
     .sd-links a { flex: 1; text-align: center; border: 1px solid #262626; padding: 10px; text-decoration: none; color: #e5484d; font-size: 12px; }
+    .dash-todo { border-top: 3px solid #7f1d1d; }
+    .dt-row { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 48px; padding: 8px 0; background: transparent; border: none; border-bottom: 1px solid #141414; color: #fafafa; font-family: inherit; text-align: left; cursor: pointer; }
+    .dt-row:last-child { border-bottom: none; }
+    .dt-box { width: 22px; height: 22px; flex-shrink: 0; border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+    .dt-row.done .dt-box { background: #14532d; border-color: #22c55e; color: #22c55e; }
+    .dt-txt { flex: 1; min-width: 0; }
+    .dt-n { display: block; font-size: 13px; }
+    .dt-row.done .dt-n { color: #737373; text-decoration: line-through; }
+    .dt-sub { display: block; font-size: 10px; color: #737373; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dt-go { color: #525252; font-size: 16px; }
+    .dft { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 16px; }
+    .dft-box { display: flex; flex-direction: column; background: #0a0a0a; border: 1px solid #1c1c1c; padding: 14px; color: #fafafa; font-family: inherit; text-align: left; cursor: pointer; min-width: 0; }
+    div.dft-box { cursor: default; }
+    .dft-l { font-size: 10px; color: #8a8a8a; letter-spacing: 0.15em; text-transform: uppercase; }
+    .dft-big { font-size: 19px; font-weight: 300; margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dft-big small { font-size: 11px; color: #8a8a8a; }
+    .dft-sub { font-size: 11px; color: #8a8a8a; margin-top: 6px; }
+    .dft-bar { height: 4px; background: #1c1c1c; margin-top: 5px; }
+    .dft-bar span { display: block; height: 4px; }
+    .dft-start { margin-top: auto; padding: 11px 0; background: #7f1d1d; border: none; color: #fff; font-family: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; }
+    .dft-box .dft-start { margin-top: 10px; }
+    .yr { display: flex; flex-direction: column; gap: 2px; margin-top: 12px; }
+    .yr-row { display: flex; align-items: center; gap: 6px; }
+    .yr-row > span { width: 22px; flex-shrink: 0; font-size: 9px; color: #737373; }
+    .yr-cells { flex: 1; display: grid; grid-template-columns: repeat(31, minmax(0, 1fr)); gap: 2px; }
+    .yr-cells i { display: block; aspect-ratio: 1; }
+    .yr-cells i.yr-x { background: transparent; }
+    .yr-leg { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; font-size: 9px; color: #8a8a8a; margin-top: 10px; }
+    .yr-leg i { width: 8px; height: 8px; display: inline-block; }
+    .yr-leg span { margin: 0 4px; }
+    .dash-edit-btn { width: 100%; margin: 8px 0 16px; padding: 14px; background: transparent; border: 1px dashed #262626; color: #8a8a8a; font-family: inherit; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; }
+    .de-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #141414; min-height: 48px; }
+    .de-row:last-child { border-bottom: none; }
+    .de-arrows { display: flex; flex-direction: column; gap: 2px; }
+    .de-arrows button { width: 32px; height: 22px; background: transparent; border: 1px solid #262626; color: #8a8a8a; font-size: 9px; padding: 0; cursor: pointer; }
+    .de-arrows button:disabled { opacity: 0.25; }
+    .de-txt { flex: 1; min-width: 0; font-size: 13px; }
+    .de-txt small { display: block; font-size: 10px; color: #737373; margin-top: 2px; }
+    .de-sw { width: 44px; height: 26px; flex-shrink: 0; position: relative; background: #1c1c1c; border: none; cursor: pointer; padding: 0; }
+    .de-sw i { position: absolute; top: 4px; left: 4px; width: 18px; height: 18px; background: #fafafa; transition: left .15s; }
+    .de-sw.on { background: #7f1d1d; }
+    .de-sw.on i { left: 22px; }
+    #pf-rest { position: fixed; left: 0; right: 0; bottom: calc(64px + env(safe-area-inset-bottom, 0px)); z-index: 150; background: #120d04; border-top: 2px solid #d9a441; padding: 12px 16px 14px; font-family: inherit; }
+    #pf-rest .rt-top { display: flex; align-items: center; gap: 8px; max-width: 600px; margin: 0 auto; }
+    #pf-rest .rt-l { font-size: 10px; color: #d9a441; letter-spacing: 0.15em; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #pf-rest .rt-t { font-size: 32px; font-weight: 300; line-height: 1.1; color: #fafafa; font-variant-numeric: tabular-nums; }
+    #pf-rest button { min-width: 48px; height: 44px; background: transparent; border: 1px solid #3a2c0c; color: #f2cf7a; font-family: inherit; font-size: 13px; cursor: pointer; }
+    body.rest-on .container { padding-bottom: 240px; }
+    #pf-rest button, #pf-htimer button { -webkit-tap-highlight-color: transparent; }
+    #pf-rest button:focus:not(:focus-visible) { background: transparent; }
+    #pf-rest .rt-skip:focus:not(:focus-visible) { background: #d9a441; }
+    #pf-rest .rt-skip { background: #d9a441; border-color: #d9a441; color: #120d04; font-weight: 600; padding: 0 12px; }
+    #pf-rest .rt-bar { height: 4px; background: #3a2c0c; margin: 10px auto 0; max-width: 600px; }
+    #pf-rest .rt-bar span { display: block; height: 4px; background: #d9a441; transition: width .25s linear; }
+    #pf-rest.done { background: #052e16; border-top-color: #22c55e; }
+    #pf-rest.done .rt-l { color: #22c55e; }
+    #pf-htimer { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.92); display: flex; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box; }
+    #pf-htimer .ht-card { position: relative; width: 100%; max-width: 420px; background: #0a0a0a; border: 1px solid #1c1c1c; padding: 24px 18px 20px; text-align: center; color: #fafafa; }
+    #pf-htimer .ht-x { position: absolute; top: 6px; right: 6px; width: 44px; height: 44px; background: transparent; border: none; color: #737373; font-size: 16px; cursor: pointer; }
+    #pf-htimer .ht-title { font-size: 10px; letter-spacing: 0.25em; font-weight: 600; text-transform: uppercase; color: #e5484d; }
+    #pf-htimer.cold .ht-title { color: #60a5fa; }
+    #pf-htimer .ht-opts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin-top: 14px; }
+    #pf-htimer .ht-opts button { min-height: 44px; background: transparent; border: 1px solid #262626; color: #a3a3a3; font-family: inherit; font-size: 12px; cursor: pointer; }
+    #pf-htimer .ht-opts button.on { background: #7f1d1d; border-color: #7f1d1d; color: #fff; }
+    #pf-htimer.cold .ht-opts button.on { background: #1e3a5f; border-color: #3b82f6; }
+    #pf-htimer .ht-box { position: relative; width: 190px; height: 190px; margin: 26px auto 0; border: 2px solid #262626; display: flex; align-items: center; justify-content: center; }
+    #pf-htimer .ht-sq { position: absolute; inset: 16px; background: #1a0606; border: 1px solid #7f1d1d; transition: transform .2s linear; }
+    #pf-htimer .ht-in { position: relative; }
+    #pf-htimer .ht-ph { font-size: 20px; font-weight: 300; }
+    #pf-htimer .ht-n { font-size: 40px; font-weight: 200; line-height: 1.1; }
+    #pf-htimer .ht-steps { display: flex; justify-content: center; gap: 14px; font-size: 10px; letter-spacing: 0.1em; margin-top: 16px; }
+    #pf-htimer .ht-clock { font-size: 64px; font-weight: 200; margin-top: 22px; color: #93c5fd; font-variant-numeric: tabular-nums; }
+    #pf-htimer .ht-bar { height: 6px; background: #1c1c1c; margin-top: 10px; }
+    #pf-htimer .ht-bar span { display: block; height: 6px; background: #3b82f6; transition: width .2s linear; }
+    #pf-htimer .ht-sub { font-size: 12px; color: #a3a3a3; margin-top: 12px; line-height: 1.6; }
+    #pf-htimer .ht-done { font-size: 56px; color: #22c55e; margin-top: 20px; }
+    #pf-htimer .ht-msg { font-size: 18px; font-weight: 300; margin-top: 6px; }
+    #pf-htimer .ht-main, #pf-htimer .ht-sec { width: 100%; margin-top: 18px; padding: 16px; font-family: inherit; font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; }
+    #pf-htimer .ht-main { background: #7f1d1d; border: none; color: #fff; }
+    #pf-htimer.cold .ht-main { background: #1e3a5f; }
+    #pf-htimer .ht-sec { background: transparent; border: 1px solid #262626; color: #a3a3a3; }
+    .ph-poses { display: flex; gap: 4px; margin-bottom: 14px; overflow-x: auto; }
+    .ph-poses button { flex: 1 0 auto; min-height: 44px; padding: 0 14px; background: transparent; border: 1px solid #262626; color: #a3a3a3; font-family: inherit; font-size: 12px; cursor: pointer; }
+    .ph-poses button.on { background: #7f1d1d; border-color: #7f1d1d; color: #fff; }
+    .ph-cmp { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+    .ph-img { display: flex; align-items: center; justify-content: center; aspect-ratio: 3 / 4; background: #141414; border: 1px solid #262626; overflow: hidden; font-size: 11px; color: #525252; }
+    .ph-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .ph-img.big { aspect-ratio: auto; max-height: 70vh; }
+    .ph-img.big img { object-fit: contain; height: auto; max-height: 70vh; }
+    .ph-cap { font-size: 11px; color: #a3a3a3; margin-top: 6px; }
+    .ph-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin-bottom: 8px; }
+    .ph-th { background: transparent; border: 1px solid transparent; padding: 0; text-align: left; cursor: pointer; font-family: inherit; }
+    .ph-th.sel { border-color: #e5484d; }
+    .ph-d { display: block; font-size: 9px; color: #737373; margin: 3px 0 0 2px; }
+    .bl-chips button { flex: 0 0 auto; font-size: 11px; }
+    .bl-chart { position: relative; height: 140px; display: flex; align-items: flex-end; gap: 10px; margin-top: 18px; border-bottom: 1px solid #262626; }
+    .bl-col { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; max-width: 60px; }
+    .bl-v { font-size: 11px; color: #fafafa; }
+    .bl-bar { width: 100%; background: #7f1d1d; display: block; }
+    .bl-ref { position: absolute; left: 0; right: 0; border-top: 1px dashed #d9a441; pointer-events: none; }
+    .bl-ref span { position: absolute; right: 0; top: -13px; font-size: 9px; color: #d9a441; background: #0a0a0a; padding: 0 3px; }
+    .bl-dates { display: flex; gap: 10px; margin-top: 4px; }
+    .bl-dates span { flex: 1; max-width: 60px; text-align: center; font-size: 9px; color: #737373; }
+    .bl-st { font-size: 10px; padding: 1px 6px; border: 1px solid; white-space: nowrap; }
+    .bl-st.ok { color: #22c55e; } .bl-st.low, .bl-st.high { color: #eab308; }
+    .bl-row { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid #141414; font-size: 13px; }
+    .bl-row:last-child { border-bottom: none; }
+    .bl-row span:last-child { text-align: right; color: #d4d4d4; line-height: 1.7; }
+    .bl-test { display: flex; justify-content: space-between; width: 100%; min-height: 44px; align-items: center; background: transparent; border: none; border-bottom: 1px solid #141414; color: #fafafa; font-family: inherit; font-size: 13px; cursor: pointer; padding: 0; }
+    .bl-test:last-child { border-bottom: none; }
+    .bl-test span:last-child { color: #8a8a8a; font-size: 12px; }
+    .bl-frow { padding: 12px 0; border-bottom: 1px solid #141414; }
+    .bl-frow:last-of-type { border-bottom: none; }
+    .bl-fname { font-size: 13px; margin-bottom: 8px; }
+    .bl-fgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+    .bl-fgrid label { font-size: 9px; color: #8a8a8a; letter-spacing: 0.06em; text-transform: uppercase; min-width: 0; }
+    .bl-fgrid .form-input { margin-top: 4px; padding: 10px 6px; font-size: 14px; width: 100%; box-sizing: border-box; min-width: 0; }
     #pf-night { position: fixed; inset: 0; background: #b80000; mix-blend-mode: multiply; pointer-events: none; z-index: 2147483647; }
   </style>
 </head>
@@ -1215,6 +1332,7 @@
                   </a>`).join('')}
               </div>
             </details>
+            ${key === 'meditation' || key === 'coldShower' ? `<button class="btn btn-primary" style="width: 100%; margin-top: 18px; padding: 16px;" onclick="openHabitTimer('${key === 'meditation' ? 'breath' : 'cold'}')">⏱ Start ${key === 'meditation' ? 'ademhalingstimer' : 'koude-douche-timer'}</button>` : ''}
             <div class="hs-actions">
               <button class="btn btn-secondary" onclick="${close}">Sluiten</button>
               <button class="btn ${state.habits[key] ? 'btn-done' : 'btn-primary'}" onclick="toggleHabit('${key}'); state.showHabitModal = null; render();">${state.habits[key] ? '✓ Gedaan · ongedaan maken' : 'Afvinken'}</button>
@@ -1765,7 +1883,7 @@
     // ============================================
     // BACK-UP
     // ============================================
-    const backupTables = ['journal_entries', 'retention', 'daily_habits', 'goals', 'goal_subtasks', 'body_stats', 'challenges', 'challenge_logs', 'user_settings', 'workouts', 'workout_sets', 'food_logs'];
+    const backupTables = ['journal_entries', 'retention', 'daily_habits', 'goals', 'goal_subtasks', 'body_stats', 'challenges', 'challenge_logs', 'user_settings', 'workouts', 'workout_sets', 'food_logs', 'progress_photos', 'blood_tests'];
 
     function getLastBackup() {
       try { return localStorage.getItem('pf_last_backup'); } catch (e) { return null; }
@@ -1924,70 +2042,44 @@
     // RENDER: DASHBOARD
     // ============================================
     function renderDashboard() {
+      if (state.dashEdit) return renderDashEditor();
       const quote = getDailyQuote();
-      const retDays = getRetentionDays();
-      const phase = getRetentionPhase(retDays);
-      const habitsCount = getHabitsCompleted();
-      
+      const { order, off } = dashLayout();
+      const cards = {
+        rank: () => renderRankCard(),
+        week: () => renderWeekTeaser(),
+        hard75: () => hard75Active() ? renderHard75Hero(hard75Active()) : '',
+        todo: () => renderTodoCard(),
+        habits: () => renderHabitsCard(),
+        foodtrain: () => renderFoodTrainCard(),
+        challenges: () => renderDashboardChallenges(),
+        sleep: () => renderSleepDashCard(),
+        year: () => renderYearCard(),
+        stats: () => renderStatsCard(),
+        quote: () => `
+        <div class="quote-card">
+          <div class="quote-text">"${quote.text}"</div>
+          <div class="quote-author">— ${quote.author}</div>
+        </div>`
+      };
+      const body = order.filter(k => !off.includes(k)).map((k, i) => {
+        let html = '';
+        try { html = cards[k](); } catch (e) { console.error('Dashboardkaart ' + k + ' mislukt:', e); }
+        // meldingen (back-up, waarden) direct na de eerste kaart
+        if (i === 0) html += renderBackupReminder() + (valuesReminderDue() ? `<div class="card" style="cursor: pointer; border-left: 3px solid #d9a441;" onclick="openValues();"><div style="font-size: 13px;">🧭 Kloppen je waarden nog?</div><div style="font-size: 11px; color: #a3a3a3; margin-top: 4px;">Al 3 maanden niet bekeken. Waarden veranderen per levensfase →</div></div>` : '');
+        return html;
+      }).join('\n');
+
       return `
         <div class="page-header">
           <div class="greeting">${getGreeting()}, Strijder</div>
           <div class="greeting-sub">${hard75Active() ? '75 Hard is je hoofdfocus' : 'Dag ' + Math.max(1, getJournalStreak()) + ' van je transformatie'}</div>
         </div>
 
-        ${renderRankCard()}
+        ${body}
 
-        ${renderWeekTeaser()}
+        <button class="dash-edit-btn" onclick="state.dashEdit = true; render(); window.scrollTo(0, 0);">Dashboard aanpassen</button>
 
-        ${hard75Active() ? renderHard75Hero(hard75Active()) : ''}
-        
-        <div class="quote-card">
-          <div class="quote-text">"${quote.text}"</div>
-          <div class="quote-author">— ${quote.author}</div>
-        </div>
-        
-        <div class="stats">
-          <div class="stat" style="cursor: pointer;" onclick="setSection('sleep')">
-            <div class="stat-value">${(() => { const a = sleepAvg(sleepNights(dateAdd(todayStr(), -6), todayStr())); return a !== null ? fmtSleepDur(a) : '—'; })()}</div>
-            <div class="stat-label">Slaap</div>
-          </div>
-          <div class="stat">
-            <div class="stat-value">${activeChallenges().length}</div>
-            <div class="stat-label">Challenges</div>
-          </div>
-          <div class="stat">
-            <div class="stat-value">${getPositiveHabitsCount()}/${visibleHabitKeys.length}</div>
-            <div class="stat-label">Habits</div>
-          </div>
-          <div class="stat">
-            <div class="stat-value" style="color: ${getColor(parseFloat(getAverageMood()) || 5)}">${getAverageMood()}</div>
-            <div class="stat-label">Mood</div>
-          </div>
-        </div>
-
-        ${renderBackupReminder()}
-        ${valuesReminderDue() ? `<div class="card" style="cursor: pointer; border-left: 3px solid #d9a441;" onclick="openValues();"><div style="font-size: 13px;">🧭 Kloppen je waarden nog?</div><div style="font-size: 11px; color: #a3a3a3; margin-top: 4px;">Al 3 maanden niet bekeken. Waarden veranderen per levensfase →</div></div>` : ''}
-
-        ${renderSleepDashCard()}
-
-        ${renderDashboardChallenges()}
-        
-        <div class="card">
-          <div style="display: flex; justify-content: space-between; align-items: baseline;"><label class="label">✅ Positieve Gewoontes</label><span style="font-size: 10px; color: #525252;">${getPositiveHabitsCount()} / ${visibleHabitKeys.length}</span></div>
-          <div class="habit-grid">
-            ${visibleHabitKeys.map(key => [key, habitConfig[key]]).map(([key, cfg]) => `
-              <div class="habit-wrap"><button class="habit ${state.habits[key] ? 'done' : ''}" aria-label="${esc(cfg.title)}${state.habits[key] ? ' – gedaan' : ' – afvinken'}" onclick="toggleHabit('${key}')">
-                <span class="habit-icon">${cfg.icon}</span>
-                <span class="habit-label">${cfg.label}</span>
-                ${habitChallengeLabel(key)}
-              </button><button class="habit-info ${state.habits[key] ? 'done' : ''}" onclick="state.showHabitModal = '${key}'; render();" aria-label="Uitleg over ${esc(cfg.title)}">i</button></div>
-            `).join('')}
-          </div>
-          <div style="font-size: 10px; color: #525252; margin-top: 10px;">Tik om af te vinken · tik op <span class="habit-info-inline">i</span> voor uitleg en bronnen</div>
-        </div>
-        
-        
-        
         ${state.showHabitModal ? renderHabitModal() : ''}
       `;
     }
@@ -2221,6 +2313,8 @@
     // ============================================
     function renderBody() {
       if (state.bodyTab === 'challenges') return renderChallenges();
+      if (state.bodyTab === 'fotos') return renderPhotos();
+      if (state.bodyTab === 'bloed') return renderBlood();
       const start = getBodyStartDate();
       const w = latestBodyValue('weight');
       const wList = bodyEntriesFor('weight');
@@ -3007,6 +3101,7 @@
     function setBodyTab(tab) {
       state.bodyTab = tab;
       state.chView = 'list';
+      state.bloodForm = null; state.photoView = null;
       render();
       window.scrollTo(0, 0);
     }
@@ -3034,7 +3129,9 @@
           <div class="page-title">Lichaam</div>
         </div>
         <div class="tabs">
-          <button class="tab ${state.bodyTab !== 'challenges' ? 'active' : ''}" onclick="setBodyTab('metingen')">Metingen</button>
+          <button class="tab ${!['challenges', 'fotos', 'bloed'].includes(state.bodyTab) ? 'active' : ''}" onclick="setBodyTab('metingen')">Metingen</button>
+          <button class="tab ${state.bodyTab === 'fotos' ? 'active' : ''}" onclick="setBodyTab('fotos')">Foto's</button>
+          <button class="tab ${state.bodyTab === 'bloed' ? 'active' : ''}" onclick="setBodyTab('bloed')">Bloed</button>
           <button class="tab ${state.bodyTab === 'challenges' ? 'active' : ''}" onclick="setBodyTab('challenges')">Challenges${activeChallenges().length ? ' (' + activeChallenges().length + ')' : ''}</button>
         </div>
       `;
@@ -3786,7 +3883,7 @@
     // ============================================
     // MOTIVATIE: XP, DAGSCORE, RANGEN
     // ============================================
-    const APP_VERSION = '5 okt · 04:55';
+    const APP_VERSION = '5 okt · 06:30';
     const XP = {
       habit: 5,
       journal: 15,
@@ -4219,7 +4316,9 @@
       { table: 'user_settings', key: 'user_id' },
       { table: 'workouts', key: 'id' },
       { table: 'workout_sets', key: 'id' },
-      { table: 'food_logs', key: 'id' }
+      { table: 'food_logs', key: 'id' },
+      { table: 'progress_photos', key: 'id' },
+      { table: 'blood_tests', key: 'id' }
     ];
 
     let pendingRestore = null;
@@ -4257,7 +4356,7 @@
       const labels = {
         journal_entries: 'Journal-entries', retention: 'Retention-streaks', daily_habits: 'Habit-dagen', goals: 'Missies (oud)',
         goal_subtasks: 'Missie-stappen (oud)', body_stats: 'Metingen', challenges: 'Challenges', challenge_logs: 'Challenge-dagen',
-        user_settings: 'Instellingen', workouts: 'Trainingen', workout_sets: 'Training-sets', food_logs: 'Voeding'
+        user_settings: 'Instellingen', workouts: 'Trainingen', workout_sets: 'Training-sets', food_logs: 'Voeding', progress_photos: "Foto's (alleen de lijst)", blood_tests: 'Bloedwaarden'
       };
       return `
         <div class="modal-overlay" onclick="if(event.target === this) closeRestore();">
@@ -5219,6 +5318,7 @@
 
     // Opslaan van de krachttraining
     async function saveSession() {
+      stopRest();
       const ts = state.ts; if (!ts) return;
       if (ts.date > todayStr()) { alert('Deze dag is nog niet geweest. Je kunt de training op ' + weekdayLong[ts.idx].toLowerCase() + ' invullen.'); return; }
       const def = sessionDefs[ts.session];
@@ -5551,7 +5651,7 @@
                 ${ex.sets.map((s, si) => `
                   <div class="tcell${si === 0 ? ' warm' : ''}">
                     <input type="text" inputmode="decimal" value="${esc(s.w)}" placeholder="${ph[0]}" aria-label="${esc(ex.name)} ${si === 0 ? 'warm-up' : 'set ' + si} gewicht" oninput="tcSet(${ei}, ${si}, 'w', this.value)">
-                    <input type="text" inputmode="numeric" class="reps" value="${esc(s.r)}" placeholder="${ph[1]}" aria-label="${esc(ex.name)} ${si === 0 ? 'warm-up' : 'set ' + si} reps" oninput="tcSet(${ei}, ${si}, 'r', this.value)">
+                    <input type="text" inputmode="numeric" class="reps" value="${esc(s.r)}" placeholder="${ph[1]}" aria-label="${esc(ex.name)} ${si === 0 ? 'warm-up' : 'set ' + si} reps" oninput="tcSet(${ei}, ${si}, 'r', this.value)" onchange="tcRepsDone(${ei}, ${si}, this.value)">
                   </div>
                 `).join('')}
                 <div class="tcell tcell-rec${ex.hit ? ' hit' : ''}" id="trb-${ei}">
@@ -8714,13 +8814,763 @@
     }
 
     // ============================================
+    // VOORKEUREN (dashboard-indeling, rusttimer, timers) · user_settings.prefs
+    // ============================================
+    function userPrefs() {
+      const s = state.bodySettings || {};
+      if (s.prefs) return s.prefs;
+      try { const v = JSON.parse(localStorage.getItem('pf_prefs') || 'null'); if (v) return v; } catch (e) {}
+      return {};
+    }
+    let prefsSaveTimer = null;
+    function saveUserPrefs(patch) {
+      const p = { ...userPrefs(), ...patch };
+      state.bodySettings = { ...(state.bodySettings || {}), prefs: p };
+      try { localStorage.setItem('pf_prefs', JSON.stringify(p)); } catch (e) {}
+      if (!state.user) return;
+      clearTimeout(prefsSaveTimer);
+      prefsSaveTimer = setTimeout(async () => {
+        const { error } = await supabaseClient.from('user_settings').upsert({ user_id: state.user.id, prefs: p }, { onConflict: 'user_id' });
+        if (error) console.warn('Voorkeuren alleen lokaal (voer update-okt.sql uit):', error.message);
+      }, 600);
+    }
+
+    // ============================================
+    // DASHBOARD: KAARTEN
+    // ============================================
+    const dashCards = [
+      ['rank', 'Rang & dagscore', 'XP, rang en je week'],
+      ['week', 'Weekrapport', 'Zondag en maandag'],
+      ['hard75', '75 Hard', 'Alleen als je hem doet'],
+      ['todo', 'Vandaag te doen', 'Wat er vandaag nog openstaat'],
+      ['habits', 'Positieve gewoontes', 'Afvinken met één tik'],
+      ['foodtrain', 'Voeding & training', 'Calorieën, eiwit en je training van vandaag'],
+      ['challenges', 'Challenges vandaag', 'Alleen als je challenges hebt'],
+      ['sleep', 'Slaap', 'Vannacht of je avondroutine'],
+      ['year', 'Jaaroverzicht', 'Elke dag een vakje, kleur = dagscore'],
+      ['stats', 'Cijfers', 'Slaap, challenges, habits, mood'],
+      ['quote', 'Quote van de dag', '']
+    ];
+    function dashLayout() {
+      const d = userPrefs().dash || {};
+      const known = dashCards.map(c => c[0]);
+      const order = (d.order || []).filter(k => known.includes(k));
+      known.forEach(k => { if (!order.includes(k)) order.push(k); });
+      return { order, off: (d.off || []).filter(k => known.includes(k)) };
+    }
+
+    // "Vandaag te doen": wat er vandaag nog openstaat, uit alle onderdelen
+    function todayTodo() {
+      const today = todayStr();
+      const items = [];
+      const je = todayJournalEntry();
+      const daily = (je && je.daily) || {};
+      const go = (js) => js;
+      items.push({ n: 'Ochtend-journal', sub: daily.morningAt ? 'Doelen gezet' : 'Slaap, energie en 3 doelen', done: !!daily.morningAt,
+        go: go("state.jMode = 'ochtend'; state.journalTab = 'today'; setSection('journal')") });
+      const night = sleepNight(today);
+      items.push({ n: 'Nacht ingevuld', sub: night ? fmtSleepDur(night.min) + (night.q ? ' · kwaliteit ' + night.q : '') : 'Hoe laat naar bed en op?', done: !!night, go: "setSection('sleep')" });
+      const plan = trainingPlan();
+      if (plan) {
+        const idx = (new Date().getDay() + 6) % 7;
+        const key = sessionKeyFor(plan, idx);
+        const trained = (state.workouts || []).some(w => w.date === today);
+        if (key || trained) items.push({ n: key ? sessionDefs[key].label + '-training' : 'Training', sub: trained ? 'Gedaan' : 'Volgens je schema', done: trained,
+          go: `state.tday = ${idx}; state.trainView = 'list'; setSection('training')` });
+      }
+      const t = foodTargets();
+      if (t && t.prot) {
+        const sum = foodSum(foodDayLogs(today));
+        const left = Math.max(0, Math.round(t.prot - sum.prot));
+        items.push({ n: `Eiwit ${Math.round(sum.prot)} / ${t.prot} g`, sub: left ? `Nog ${left} g te gaan` : 'Doel gehaald', done: !left,
+          go: "state.fView = 'day'; state.fMain = 'dagboek'; state.fDate = todayStr(); setSection('food')" });
+      }
+      const chs = activeChallenges().filter(c => c.kind !== 'hard75' && c.start_date <= today);
+      if (chs.length) {
+        const st = chs.map(c => { const ev = evalChallenge(c); return [c.name, ev.todayDay ? ev.todayDay.st : 'pending']; });
+        const doneN = st.filter(x => x[1] === 'done').length;
+        const open = st.filter(x => x[1] !== 'done').map(x => x[0]);
+        items.push({ n: `Challenges ${doneN} / ${chs.length}`, sub: open.length ? 'Open: ' + open.slice(0, 2).join(', ') + (open.length > 2 ? '…' : '') : 'Alles gehaald', done: !open.length,
+          go: "state.bodyTab = 'challenges'; state.chView = 'list'; setSection('body')" });
+      }
+      const pos = getPositiveHabitsCount();
+      const openH = visibleHabitKeys.filter(k => habitConfig[k].positive && !state.habits[k]).map(k => habitConfig[k].label.charAt(0) + habitConfig[k].label.slice(1).toLowerCase());
+      items.push({ n: `Gewoontes ${pos} / ${visibleHabitKeys.length}`, sub: openH.length ? 'Open: ' + openH.slice(0, 3).join(', ') + (openH.length > 3 ? '…' : '') : 'Alles afgevinkt', done: pos >= 6,
+        go: "document.getElementById('dash-habits') && document.getElementById('dash-habits').scrollIntoView({ behavior: 'smooth', block: 'center' })" });
+      const s = sleepSettings();
+      const routineN = ((s.routine || {})[sleepEveningDate()] || []).length;
+      items.push({ n: 'Avondroutine & avond-journal', sub: daily.eveningAt ? `Dag afgesloten · routine ${routineN}/7` : `Scherm weg om ${min2hm(sleepBedMin() - 60)} · routine ${routineN}/7`,
+        done: !!daily.eveningAt && routineN >= 5, go: daily.eveningAt ? "setSection('sleep')" : "state.jMode = 'avond'; state.journalTab = 'today'; setSection('journal')" });
+      return items;
+    }
+    function renderTodoCard() {
+      const items = todayTodo();
+      const done = items.filter(i => i.done).length;
+      return `
+        <div class="card dash-todo">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <label class="label" style="margin: 0;">Vandaag te doen</label>
+            <span style="font-size: 13px; color: ${done === items.length ? '#22c55e' : '#a3a3a3'}; font-weight: 500;">${done} / ${items.length}</span>
+          </div>
+          <div style="margin-top: 8px;">
+            ${items.map(i => `
+              <button class="dt-row ${i.done ? 'done' : ''}" onclick="${i.go}">
+                <span class="dt-box" aria-hidden="true">${i.done ? '✓' : ''}</span>
+                <span class="dt-txt"><span class="dt-n">${esc(i.n)}</span><span class="dt-sub">${esc(i.sub)}</span></span>
+                <span class="dt-go" aria-hidden="true">›</span>
+              </button>`).join('')}
+          </div>
+        </div>`;
+    }
+
+    function renderFoodTrainCard() {
+      const today = todayStr();
+      const t = foodTargets();
+      const sum = foodSum(foodDayLogs(today));
+      const plan = trainingPlan();
+      const idx = (new Date().getDay() + 6) % 7;
+      const key = plan ? sessionKeyFor(plan, idx) : null;
+      const trained = (state.workouts || []).some(w => w.date === today);
+      const bar = (v, max, c) => `<div class="dft-bar"><span style="width: ${max ? Math.min(100, v / max * 100) : 0}%; background: ${c};"></span></div>`;
+      return `
+        <div class="dft">
+          <button class="dft-box" onclick="state.fView = 'day'; state.fMain = 'dagboek'; state.fDate = todayStr(); setSection('food')">
+            <span class="dft-l">Voeding</span>
+            ${t ? `
+              <span class="dft-big">${fmtInt(Math.round(sum.kcal))} <small>/ ${fmtInt(t.kcal)}</small></span>
+              ${bar(sum.kcal, t.kcal, '#7f1d1d')}
+              <span class="dft-sub" style="color: #d9a441;">Eiwit ${Math.round(sum.prot)} / ${t.prot} g</span>
+              ${bar(sum.prot, t.prot, '#d9a441')}` : `
+              <span class="dft-big">${fmtInt(Math.round(sum.kcal))} <small>kcal</small></span>
+              <span class="dft-sub">Stel je dagdoel in →</span>`}
+          </button>
+          <div class="dft-box">
+            <span class="dft-l">Training</span>
+            <span class="dft-big">${trained ? 'Gedaan ✓' : key ? esc(sessionDefs[key].label) : plan ? 'Rustdag' : 'Geen schema'}</span>
+            <span class="dft-sub">${trained ? 'Goed bezig' : key ? 'Volgens je schema' : plan ? 'Herstel telt ook' : 'Stel je schema in'}</span>
+            ${!trained && (key || !plan) ? `<button class="dft-start" onclick="state.tday = ${idx}; state.trainView = 'list'; setSection('training')">${key ? 'Start' : 'Instellen'}</button>` : ''}
+          </div>
+        </div>`;
+    }
+
+    function renderYearCard() {
+      const p = getProgress();
+      const year = new Date().getFullYear();
+      const today = todayStr();
+      const byDate = {};
+      p.days.forEach(d => { byDate[d.date] = d.score; });
+      // reeks: dagen met dagscore 50+ achter elkaar (vandaag telt mee als hij al 50+ is)
+      let cur = 0, best = 0, run = 0;
+      p.days.forEach(d => { if (d.score >= 50) { run++; best = Math.max(best, run); } else if (d.date !== today) run = 0; });
+      for (let i = p.days.length - 1; i >= 0; i--) {
+        const d = p.days[i];
+        if (d.score >= 50) cur++;
+        else if (d.date === today) continue;
+        else break;
+      }
+      const months = ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
+      const color = s => s === undefined ? '#0d0d0d' : s >= 60 ? '#e5484d' : s >= 35 ? '#7f1d1d' : s > 0 ? '#3a1414' : '#141414';
+      const rows = months.map((m, mi) => {
+        const len = new Date(year, mi + 1, 0).getDate();
+        let cells = '';
+        for (let d = 1; d <= 31; d++) {
+          if (d > len) { cells += '<i class="yr-x"></i>'; continue; }
+          const ds = `${year}-${String(mi + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+          cells += `<i style="background: ${color(byDate[ds])};${ds === today ? ' outline: 1px solid #fafafa;' : ''}" title="${d} ${m}${byDate[ds] !== undefined ? ': dagscore ' + byDate[ds] : ''}"></i>`;
+        }
+        return `<div class="yr-row"><span>${m}</span><div class="yr-cells">${cells}</div></div>`;
+      }).join('');
+      return `
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <label class="label" style="margin: 0;">${year} in dagen</label>
+            <span style="font-size: 11px; color: #8a8a8a;">reeks <b style="color: #fafafa;">${cur}</b> · beste <b style="color: #fafafa;">${best}</b></span>
+          </div>
+          <div class="yr" role="img" aria-label="Dagscore per dag in ${year}">${rows}</div>
+          <div class="yr-leg"><span>Dagscore</span><i style="background: #141414;"></i><i style="background: #3a1414;"></i><i style="background: #7f1d1d;"></i><i style="background: #e5484d;"></i><span>laag → hoog · reeks = dagen met 50+</span></div>
+        </div>`;
+    }
+
+    function renderStatsCard() {
+      return `
+        <div class="stats">
+          <div class="stat" style="cursor: pointer;" onclick="setSection('sleep')">
+            <div class="stat-value">${(() => { const a = sleepAvg(sleepNights(dateAdd(todayStr(), -6), todayStr())); return a !== null ? fmtSleepDur(a) : '—'; })()}</div>
+            <div class="stat-label">Slaap</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">${activeChallenges().length}</div>
+            <div class="stat-label">Challenges</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">${getPositiveHabitsCount()}/${visibleHabitKeys.length}</div>
+            <div class="stat-label">Habits</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value" style="color: ${getColor(parseFloat(getAverageMood()) || 5)}">${getAverageMood()}</div>
+            <div class="stat-label">Mood</div>
+          </div>
+        </div>`;
+    }
+
+    function renderHabitsCard() {
+      return `
+        <div class="card" id="dash-habits">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;"><label class="label">✅ Positieve Gewoontes</label><span style="font-size: 10px; color: #525252;">${getPositiveHabitsCount()} / ${visibleHabitKeys.length}</span></div>
+          <div class="habit-grid">
+            ${visibleHabitKeys.map(key => [key, habitConfig[key]]).map(([key, cfg]) => `
+              <div class="habit-wrap"><button class="habit ${state.habits[key] ? 'done' : ''}" aria-label="${esc(cfg.title)}${state.habits[key] ? ' – gedaan' : ' – afvinken'}" onclick="toggleHabit('${key}')">
+                <span class="habit-icon">${cfg.icon}</span>
+                <span class="habit-label">${cfg.label}</span>
+                ${habitChallengeLabel(key)}
+              </button><button class="habit-info ${state.habits[key] ? 'done' : ''}" onclick="state.showHabitModal = '${key}'; render();" aria-label="Uitleg over ${esc(cfg.title)}">i</button></div>
+            `).join('')}
+          </div>
+          <div style="font-size: 10px; color: #525252; margin-top: 10px;">Tik om af te vinken · tik op <span class="habit-info-inline">i</span> voor uitleg en bronnen</div>
+        </div>`;
+    }
+
+    function renderDashEditor() {
+      const { order, off } = dashLayout();
+      const name = k => dashCards.find(c => c[0] === k);
+      return `
+        <button class="entry-action" style="margin-bottom: 14px;" onclick="state.dashEdit = false; render(); window.scrollTo(0, 0);">← Terug</button>
+        <div class="page-header" style="margin-bottom: 12px;"><div class="page-sub">Dashboard</div><div class="page-title">Aanpassen</div></div>
+        <div style="font-size: 12px; color: #a3a3a3; margin-bottom: 14px; line-height: 1.5;">Zet kaarten aan of uit. Verschuif met de pijltjes. Wordt bewaard bij je account.</div>
+        <div class="card" style="padding: 0;">
+          ${order.map((k, i) => {
+            const c = name(k); const on = !off.includes(k);
+            return `
+            <div class="de-row">
+              <span class="de-arrows">
+                <button aria-label="${esc(c[1])} omhoog" ${i === 0 ? 'disabled' : ''} onclick="dashMove('${k}', -1)">▲</button>
+                <button aria-label="${esc(c[1])} omlaag" ${i === order.length - 1 ? 'disabled' : ''} onclick="dashMove('${k}', 1)">▼</button>
+              </span>
+              <span class="de-txt"><span style="color: ${on ? '#fafafa' : '#737373'};">${esc(c[1])}</span>${c[2] ? `<small>${esc(c[2])}</small>` : ''}</span>
+              <button class="de-sw ${on ? 'on' : ''}" role="switch" aria-checked="${on}" aria-label="${esc(c[1])} tonen" onclick="dashToggle('${k}')"><i></i></button>
+            </div>`;
+          }).join('')}
+        </div>
+        <button class="btn btn-primary" style="width: 100%; padding: 16px;" onclick="state.dashEdit = false; render(); window.scrollTo(0, 0); showToast('✓ Dashboard opgeslagen');">Klaar</button>
+        <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" onclick="saveUserPrefs({ dash: null }); render();">Standaard herstellen</button>`;
+    }
+    function dashMove(k, dir) {
+      const { order, off } = dashLayout();
+      const i = order.indexOf(k), j = i + dir;
+      if (i < 0 || j < 0 || j >= order.length) return;
+      [order[i], order[j]] = [order[j], order[i]];
+      saveUserPrefs({ dash: { order, off } }); render();
+    }
+    function dashToggle(k) {
+      const { order, off } = dashLayout();
+      const nOff = off.includes(k) ? off.filter(x => x !== k) : [...off, k];
+      saveUserPrefs({ dash: { order, off: nOff } }); render();
+    }
+
+    // ============================================
+    // TIMERS: rust (training), ademhaling (Rust), koude douche (Koud)
+    // De timers staan buiten de app-weergave, zodat ze blijven lopen als de pagina opnieuw tekent.
+    // ============================================
+    let audioCtx = null;
+    function timerBeep(times) {
+      try {
+        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        for (let i = 0; i < (times || 1); i++) {
+          const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+          o.frequency.value = 880; o.connect(g); g.connect(audioCtx.destination);
+          const t = audioCtx.currentTime + i * 0.3;
+          g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.3, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+          o.start(t); o.stop(t + 0.22);
+        }
+      } catch (e) {}
+      try { if (navigator.vibrate) navigator.vibrate([200, 100, 200]); } catch (e) {}
+    }
+    function timerUnlockAudio() { try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); } catch (e) {} }
+    const fmtClock = s => { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+
+    // ---- Rusttimer (training) ----
+    let restTick = null;
+    function startRest(label) {
+      timerUnlockAudio();
+      const sec = Number(userPrefs().rest) || 90;
+      state.rest = { end: Date.now() + sec * 1000, total: sec, label: label || '' };
+      drawRest();
+      clearInterval(restTick);
+      restTick = setInterval(drawRest, 250);
+    }
+    function restAdjust(d) {
+      const r = state.rest; if (!r) return;
+      r.end += d * 1000; r.total = Math.max(15, r.total + d);
+      saveUserPrefs({ rest: Math.max(15, Math.min(600, (Number(userPrefs().rest) || 90) + d)) });
+      drawRest();
+    }
+    function stopRest() {
+      clearInterval(restTick); restTick = null; state.rest = null;
+      document.body.classList.remove('rest-on');
+      const el = document.getElementById('pf-rest'); if (el) el.remove();
+    }
+    function drawRest() {
+      const r = state.rest; if (!r) return;
+      let el = document.getElementById('pf-rest');
+      if (!el) {
+        el = document.createElement('div'); el.id = 'pf-rest'; el.setAttribute('role', 'timer');
+        document.body.classList.add('rest-on');
+        el.innerHTML = `<div class="rt-top"><div style="flex: 1; min-width: 0;"><div class="rt-l" id="rt-l"></div><div class="rt-t" id="rt-t"></div></div>
+          <button onclick="restAdjust(-15)" aria-label="15 seconden minder">−15</button><button onclick="restAdjust(15)" aria-label="15 seconden meer">+15</button><button class="rt-skip" onclick="stopRest()">Skip</button></div>
+          <div class="rt-bar"><span id="rt-b"></span></div>`;
+        document.body.appendChild(el);
+      }
+      const left = (r.end - Date.now()) / 1000;
+      if (left <= 0) {
+        if (!r.doneAt) { r.doneAt = Date.now(); timerBeep(2); }
+        el.classList.add('done');
+        document.getElementById('rt-l').textContent = 'RUST VOORBIJ';
+        document.getElementById('rt-t').textContent = 'Volgende set!';
+        document.getElementById('rt-b').style.width = '100%';
+        if (Date.now() - r.doneAt > 4000) stopRest();
+        return;
+      }
+      el.classList.remove('done');
+      document.getElementById('rt-l').textContent = 'RUST' + (r.label ? ' · ' + r.label : '');
+      document.getElementById('rt-t').textContent = fmtClock(left);
+      document.getElementById('rt-b').style.width = Math.min(100, (1 - left / r.total) * 100) + '%';
+    }
+    // Na het invullen van de reps van een werkset start de rust vanzelf
+    function tcRepsDone(ei, si, value) {
+      if (si < 1 || !String(value).trim()) return;
+      const ex = state.ts && state.ts.exercises && state.ts.exercises[ei];
+      startRest(ex ? ex.name + ' · set ' + si : 'set ' + si);
+    }
+
+    // ---- Ademhaling & koude douche ----
+    let htTick = null;
+    const breathPhases = [['Adem in', 4], ['Vasthouden', 4], ['Adem uit', 4], ['Vasthouden', 4]];
+    function openHabitTimer(kind) {
+      timerUnlockAudio();
+      state.showHabitModal = null; render();
+      const p = userPrefs();
+      state.htimer = { kind, dur: kind === 'breath' ? (p.breathDur || 300) : (p.coldDur || 60), running: false, start: 0, pausedAt: 0, done: false };
+      drawHabitTimer();
+    }
+    function htSetDur(sec) { const t = state.htimer; if (!t || t.running) return; t.dur = sec; drawHabitTimer(); }
+    function htStart() {
+      const t = state.htimer; if (!t) return;
+      timerUnlockAudio();
+      if (t.pausedAt) { t.start += Date.now() - t.pausedAt; t.pausedAt = 0; }
+      else { t.start = Date.now(); saveUserPrefs(t.kind === 'breath' ? { breathDur: t.dur } : { coldDur: t.dur }); }
+      t.running = true;
+      clearInterval(htTick); htTick = setInterval(drawHabitTimer, 200);
+      drawHabitTimer();
+    }
+    function htPause() { const t = state.htimer; if (!t || !t.running) return; t.running = false; t.pausedAt = Date.now(); clearInterval(htTick); drawHabitTimer(); }
+    function closeHabitTimer() {
+      clearInterval(htTick); htTick = null;
+      const t = state.htimer;
+      // koude douche: ook een onvoltooide poging telt mee als "vorige keer"
+      if (t && t.kind === 'cold' && t.start && !t.done) {
+        const el = Math.round(((t.pausedAt || Date.now()) - t.start) / 1000);
+        if (el >= 10) { const c = userPrefs().cold || {}; saveUserPrefs({ cold: { last: el, best: Math.max(c.best || 0, el) } }); }
+      }
+      state.htimer = null;
+      const el = document.getElementById('pf-htimer'); if (el) el.remove();
+    }
+    async function htFinish() {
+      const t = state.htimer; if (!t || t.done) return;
+      t.done = true; t.running = false; clearInterval(htTick);
+      timerBeep(3);
+      const key = t.kind === 'breath' ? 'meditation' : 'coldShower';
+      if (t.kind === 'cold') { const c = userPrefs().cold || {}; saveUserPrefs({ cold: { last: t.dur, best: Math.max(c.best || 0, t.dur) } }); }
+      if (!state.habits[key]) await toggleHabit(key);
+      drawHabitTimer();
+    }
+    function drawHabitTimer() {
+      const t = state.htimer; if (!t) return;
+      let el = document.getElementById('pf-htimer');
+      if (!el) { el = document.createElement('div'); el.id = 'pf-htimer'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); document.body.appendChild(el); }
+      const elapsed = t.start ? ((t.pausedAt || Date.now()) - t.start) / 1000 : 0;
+      const left = Math.max(0, t.dur - elapsed);
+      if (t.running && left <= 0) { htFinish(); return; }
+      const cold = t.kind === 'cold';
+      const opts = cold ? [[30, '30 sec'], [60, '1 min'], [120, '2 min'], [180, '3 min']] : [[180, '3 min'], [300, '5 min'], [600, '10 min'], [900, '15 min']];
+      const c = userPrefs().cold || {};
+      let middle;
+      if (t.done) {
+        middle = `<div class="ht-done">✓</div><div class="ht-msg">${cold ? 'Klaar! Goed gedaan.' : 'Klaar. Merk hoe je je nu voelt.'}</div><div class="ht-sub">${cold ? 'Koud' : 'Rust'} is afgevinkt bij je gewoontes.</div>`;
+      } else if (!cold) {
+        const cyc = breathPhases.reduce((a, p) => a + p[1], 0);
+        const inCyc = elapsed % cyc;
+        let acc = 0, ph = breathPhases[0], phLeft = 4, phIdx = 0;
+        for (let i = 0; i < breathPhases.length; i++) { if (inCyc < acc + breathPhases[i][1]) { ph = breathPhases[i]; phIdx = i; phLeft = acc + breathPhases[i][1] - inCyc; break; } acc += breathPhases[i][1]; }
+        const prog = 1 - phLeft / ph[1];
+        const scale = !t.start ? 0.6 : phIdx === 0 ? 0.6 + 0.4 * prog : phIdx === 1 ? 1 : phIdx === 2 ? 1 - 0.4 * prog : 0.6;
+        middle = `
+          <div class="ht-box"><div class="ht-sq" style="transform: scale(${scale.toFixed(3)});"></div>
+            <div class="ht-in"><div class="ht-ph">${t.start ? ph[0] : 'Klaar?'}</div><div class="ht-n">${t.start ? Math.ceil(phLeft) : '4·4·4·4'}</div></div></div>
+          <div class="ht-steps">${['IN 4', 'VAST 4', 'UIT 4', 'VAST 4'].map((s, i) => `<span style="color: ${t.start && i === phIdx ? '#fafafa' : '#525252'};">${s}</span>`).join('')}</div>
+          <div class="ht-sub">${fmtClock(left)} over${t.start ? ' · ronde ' + (Math.floor(elapsed / cyc) + 1) : ''}</div>`;
+      } else {
+        middle = `
+          <div class="ht-clock">${fmtClock(left)}</div>
+          <div class="ht-bar"><span style="width: ${t.dur ? Math.min(100, elapsed / t.dur * 100) : 0}%;"></span></div>
+          <div class="ht-sub">Rustig uitademen door je mond. Langzaam opbouwen gaat voor lang.</div>
+          ${c.last ? `<div class="ht-sub" style="color: #737373;">Vorige keer: ${fmtClock(c.last)} · beste: ${fmtClock(c.best || c.last)}</div>` : ''}`;
+      }
+      el.className = cold ? 'cold' : 'breath';
+      // Alleen het middenstuk vernieuwen zolang de knoppen hetzelfde blijven (anders mis je soms een tik)
+      const struct = [t.kind, t.dur, !!t.start, t.running, !!t.pausedAt, t.done].join('|');
+      const mid = document.getElementById('ht-mid');
+      if (mid && el.dataset.struct === struct) { mid.innerHTML = middle; return; }
+      el.dataset.struct = struct;
+      el.innerHTML = `
+        <div class="ht-card">
+          <button class="ht-x" onclick="closeHabitTimer()" aria-label="Sluiten">✕</button>
+          <div class="ht-title">${cold ? 'Koud douchen' : 'Rust · box breathing'}</div>
+          ${!t.start && !t.done ? `<div class="ht-opts">${opts.map(([s, l]) => `<button class="${t.dur === s ? 'on' : ''}" onclick="htSetDur(${s})">${l}</button>`).join('')}</div>` : ''}
+          <div id="ht-mid">${middle}</div>
+          ${t.done ? `<button class="ht-main" onclick="closeHabitTimer()">Sluiten</button>`
+            : t.running ? `<button class="ht-sec" onclick="htPause()">Pauze</button>`
+            : `<button class="ht-main" onclick="htStart()">${t.pausedAt ? 'Verder' : 'Start'}</button>`}
+        </div>`;
+    }
+
+    // ============================================
+    // LICHAAM: VOORTGANGSFOTO'S (privé in Supabase Storage)
+    // ============================================
+    const PHOTO_BUCKET = 'progress-photos';
+    const photoPoses = [['voor', 'Voor'], ['zij', 'Zij'], ['achter', 'Achter']];
+    async function loadPhotosAndBlood() {
+      if (!state.user) return;
+      const ph = await supabaseClient.from('progress_photos').select('*').eq('user_id', state.user.id).order('date', { ascending: true });
+      state.photosError = !!ph.error; state.photos = ph.error ? [] : (ph.data || []);
+      const bl = await supabaseClient.from('blood_tests').select('*').eq('user_id', state.user.id).order('date', { ascending: true });
+      state.bloodError = !!bl.error; state.bloodTests = bl.error ? [] : (bl.data || []);
+    }
+    state.photoUrls = {};
+    async function photoUrlsFor(list) {
+      const need = list.filter(p => p && !state.photoUrls[p.path]);
+      if (!need.length) return;
+      const res = await supabaseClient.storage.from(PHOTO_BUCKET).createSignedUrls(need.map(p => p.path), 3600);
+      if (res.error || !res.data) return;
+      res.data.forEach(r => { if (r.signedUrl) state.photoUrls[r.path] = r.signedUrl; });
+      render();
+    }
+    // Foto verkleinen (max 1080 px, jpg) zodat hij snel laadt en weinig ruimte kost
+    function shrinkImage(file) {
+      return new Promise((resolve, reject) => {
+        const img = new Image(); const url = URL.createObjectURL(file);
+        img.onload = () => {
+          const max = 1080, sc = Math.min(1, max / Math.max(img.width, img.height));
+          const c = document.createElement('canvas'); c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          URL.revokeObjectURL(url);
+          c.toBlob(b => b ? resolve(b) : reject(new Error('Kon foto niet verwerken')), 'image/jpeg', 0.82);
+        };
+        img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Dit bestand is geen foto')); };
+        img.src = url;
+      });
+    }
+    async function uploadPhoto(input) {
+      const file = input.files && input.files[0]; input.value = '';
+      if (!file || !state.user) return;
+      const pose = state.photoPose || 'voor';
+      showToast('Foto uploaden...');
+      try {
+        const blob = await shrinkImage(file);
+        const date = todayStr();
+        const path = `${state.user.id}/${date}-${pose}-${Date.now()}.jpg`;
+        const up = await supabaseClient.storage.from(PHOTO_BUCKET).upload(path, blob, { contentType: 'image/jpeg' });
+        if (up.error) throw up.error;
+        const ins = await supabaseClient.from('progress_photos').insert([{ user_id: state.user.id, date, pose, path }]);
+        if (ins.error) throw ins.error;
+        await loadPhotosAndBlood(); render(); showToast('📸 Foto opgeslagen');
+      } catch (e) {
+        alert('Uploaden mislukt: ' + (e.message || e) + '\n\nHeb je update-okt.sql al uitgevoerd in Supabase?');
+      }
+    }
+    async function deletePhoto(id) {
+      const p = (state.photos || []).find(x => x.id === id); if (!p) return;
+      if (!confirm('Deze foto verwijderen?')) return;
+      await supabaseClient.storage.from(PHOTO_BUCKET).remove([p.path]);
+      await supabaseClient.from('progress_photos').delete().eq('id', id);
+      state.photoView = null; state.photoCmp = null;
+      await loadPhotosAndBlood(); render();
+    }
+    function photoWeight(date) {
+      const list = bodyEntriesFor('weight').filter(e => e.date <= date);
+      return list.length ? list[list.length - 1].value : null;
+    }
+    function renderPhotos() {
+      const pose = state.photoPose || 'voor';
+      const list = (state.photos || []).filter(p => p.pose === pose);
+      const cmp = state.photoCmp && state.photoCmp.pose === pose ? state.photoCmp : null;
+      const a = cmp ? list.find(p => p.id === cmp.a) : list[0];
+      const b = cmp ? list.find(p => p.id === cmp.b) : list[list.length - 1];
+      photoUrlsFor([a, b, ...list.slice(-12)]);
+      const img = (p) => p && state.photoUrls[p.path] ? `<img src="${esc(state.photoUrls[p.path])}" alt="Voortgangsfoto ${esc(p.date)}" loading="lazy">` : `<span>${p ? 'laden…' : 'nog geen foto'}</span>`;
+      const cap = (p, other) => {
+        if (!p) return '';
+        const w = photoWeight(p.date), wo = other ? photoWeight(other.date) : null;
+        const d = w !== null && wo !== null && other !== p ? Math.round((w - wo) * 10) / 10 : null;
+        return `${fmtDateShort(p.date)}${w !== null ? ' · ' + fmtVal(w) + ' kg' : ''}${d ? ` <b style="color: ${d < 0 ? '#22c55e' : '#a3a3a3'};">${d > 0 ? '+' : ''}${fmtVal(d)}</b>` : ''}`;
+      };
+      const viewing = state.photoView ? (state.photos || []).find(p => p.id === state.photoView) : null;
+      return `
+        ${renderBodyHeader()}
+        ${state.photosError ? `<div class="info-box"><div class="info-title">⚠️ Nog één update</div><div class="info-text">Voer update-okt.sql uit in Supabase om foto's op te slaan.</div></div>` : ''}
+        <div class="ph-poses">${photoPoses.map(([k, l]) => `<button class="${pose === k ? 'on' : ''}" onclick="state.photoPose = '${k}'; state.photoCmp = null; render();">${l}</button>`).join('')}</div>
+        <div class="card">
+          <label class="label">Vergelijk</label>
+          <div class="ph-cmp">
+            <div><div class="ph-img">${img(a)}</div><div class="ph-cap">${cap(a)}</div></div>
+            <div><div class="ph-img">${img(b)}</div><div class="ph-cap">${b && b !== a ? cap(b, a) : ''}</div></div>
+          </div>
+          ${list.length > 1 ? `<div class="hs-small" style="margin-top: 10px;">Tik op een foto hieronder om hem rechts te zetten.</div>` : ''}
+        </div>
+        ${list.length ? `
+          <label class="label">Alle foto's · ${photoPoses.find(x => x[0] === pose)[1].toLowerCase()}</label>
+          <div class="ph-grid">
+            ${list.slice().reverse().map(p => `
+              <button class="ph-th ${b && b.id === p.id ? 'sel' : ''}" onclick="state.photoCmp = { pose: '${pose}', a: ${JSON.stringify((a || p).id).replace(/"/g, '&quot;')}, b: ${JSON.stringify(p.id).replace(/"/g, '&quot;')} }; render();" oncontextmenu="state.photoView = ${JSON.stringify(p.id).replace(/"/g, '&quot;')}; render(); return false;" aria-label="Foto ${esc(p.date)}">
+                <span class="ph-img sm">${img(p)}</span><span class="ph-d">${fmtDateShort(p.date)}</span>
+              </button>`).join('')}
+          </div>` : ''}
+        <label class="btn btn-primary ph-up" style="width: 100%; padding: 18px; display: block; text-align: center; box-sizing: border-box; margin-top: 8px;">
+          + Nieuwe foto (${photoPoses.find(x => x[0] === pose)[1].toLowerCase()})
+          <input type="file" accept="image/*" capture="environment" onchange="uploadPhoto(this)" style="display: none;">
+        </label>
+        ${b ? `<button class="btn btn-secondary btn-small" style="width: 100%; margin-top: 8px;" onclick="state.photoView = ${JSON.stringify(b.id).replace(/"/g, '&quot;')}; render();">Rechterfoto groot bekijken / verwijderen</button>` : ''}
+        <div class="hs-small" style="margin: 14px 0;">Tip: elke 2 weken, zelfde plek, zelfde licht, 's ochtends. Je foto's zijn privé: alleen jij kunt ze zien.</div>
+        ${viewing ? `
+          <div class="modal-overlay" onclick="if (event.target === this) { state.photoView = null; render(); }">
+            <div class="modal" style="padding: 12px;">
+              <div class="ph-img big">${img(viewing)}</div>
+              <div class="ph-cap" style="margin: 10px 0;">${cap(viewing)}</div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <button class="btn btn-secondary" onclick="state.photoView = null; render();">Sluiten</button>
+                <button class="btn btn-secondary" style="color: #e5484d;" onclick="deletePhoto(${JSON.stringify(viewing.id).replace(/"/g, '&quot;')})">Verwijderen</button>
+              </div>
+            </div>
+          </div>` : ''}
+      `;
+    }
+
+    // ============================================
+    // LICHAAM: BLOEDWAARDEN
+    // ============================================
+    const bloodMarkers = [
+      ['testo', 'Testosteron (totaal)', 'nmol/L'],
+      ['ftesto', 'Vrij testosteron', 'pmol/L'],
+      ['shbg', 'SHBG', 'nmol/L'],
+      ['vitd', 'Vitamine D (25-OH)', 'nmol/L'],
+      ['ferritine', 'Ferritine', 'µg/L'],
+      ['hb', 'Hemoglobine', 'mmol/L'],
+      ['tsh', 'TSH (schildklier)', 'mU/L'],
+      ['hba1c', 'HbA1c', 'mmol/mol'],
+      ['ldl', 'LDL-cholesterol', 'mmol/L'],
+      ['zink', 'Zink', 'µmol/L']
+    ];
+    function bloodMarkerName(k) { const m = bloodMarkers.find(x => x[0] === k); return m ? m[1] : k.replace(/^c_/, ''); }
+    function bloodNum(v) { const n = parseFloat(String(v ?? '').replace(',', '.')); return isNaN(n) ? null : n; }
+    function bloodStatus(m) {
+      const v = bloodNum(m.v), lo = bloodNum(m.lo), hi = bloodNum(m.hi);
+      if (v === null || (lo === null && hi === null)) return '';
+      if (lo !== null && v < lo) return '<span class="bl-st low">onder referentie</span>';
+      if (hi !== null && v > hi) return '<span class="bl-st high">boven referentie</span>';
+      return '<span class="bl-st ok">binnen referentie</span>';
+    }
+    function openBloodForm(id) {
+      const t = id ? (state.bloodTests || []).find(x => x.id === id) : null;
+      const prev = (state.bloodTests || [])[(state.bloodTests || []).length - 1];
+      const markers = {};
+      bloodMarkers.forEach(([k, , unit]) => {
+        const old = t && t.markers && t.markers[k];
+        const p = prev && prev.markers && prev.markers[k];
+        markers[k] = { v: old ? old.v : '', unit: (old && old.unit) || (p && p.unit) || unit, lo: old ? old.lo : (p ? p.lo : ''), hi: old ? old.hi : (p ? p.hi : '') };
+      });
+      const custom = t ? Object.keys(t.markers || {}).filter(k => k.startsWith('c_')).map(k => ({ name: k.slice(2), ...t.markers[k] })) : [];
+      state.bloodForm = { id: t ? t.id : null, date: t ? t.date : todayStr(), note: t ? (t.note || '') : '', markers, custom };
+      render(); window.scrollTo(0, 0);
+    }
+    function bfSet(k, f, v) { if (state.bloodForm) state.bloodForm.markers[k][f] = v; }
+    function bfCustom(i, f, v) { if (state.bloodForm) state.bloodForm.custom[i][f] = v; }
+    function bfAddCustom() { state.bloodForm.custom.push({ name: '', v: '', unit: '', lo: '', hi: '' }); render(); }
+    async function saveBloodTest() {
+      const f = state.bloodForm; if (!f || !state.user) return;
+      const markers = {};
+      Object.entries(f.markers).forEach(([k, m]) => { if (String(m.v).trim()) markers[k] = { v: String(m.v).trim(), unit: m.unit, lo: String(m.lo || '').trim(), hi: String(m.hi || '').trim() }; });
+      f.custom.forEach(c => { if (String(c.name).trim() && String(c.v).trim()) markers['c_' + String(c.name).trim()] = { v: String(c.v).trim(), unit: c.unit, lo: String(c.lo || '').trim(), hi: String(c.hi || '').trim() }; });
+      if (!Object.keys(markers).length) { alert('Vul minstens één waarde in.'); return; }
+      const row = { user_id: state.user.id, date: f.date || todayStr(), markers, note: f.note || '' };
+      const res = f.id ? await supabaseClient.from('blood_tests').update(row).eq('id', f.id) : await supabaseClient.from('blood_tests').insert([row]);
+      if (res.error) { alert('Opslaan mislukt: ' + res.error.message + '\n\nHeb je update-okt.sql al uitgevoerd in Supabase?'); return; }
+      state.bloodForm = null; await loadPhotosAndBlood(); render(); window.scrollTo(0, 0); showToast('🩸 Uitslag opgeslagen');
+    }
+    async function deleteBloodTest(id) {
+      if (!confirm('Deze uitslag verwijderen?')) return;
+      await supabaseClient.from('blood_tests').delete().eq('id', id);
+      state.bloodForm = null; await loadPhotosAndBlood(); render();
+    }
+    function renderBloodForm() {
+      const f = state.bloodForm;
+      const row = (k, name, m, i) => `
+        <div class="bl-frow">
+          <div class="bl-fname">${i === undefined ? esc(name) : `<input class="form-input" placeholder="Naam" value="${esc(m.name)}" oninput="bfCustom(${i}, 'name', this.value)">`}</div>
+          <div class="bl-fgrid">
+            <label>Waarde<input class="form-input" inputmode="decimal" value="${esc(m.v)}" oninput="${i === undefined ? `bfSet('${k}', 'v', this.value)` : `bfCustom(${i}, 'v', this.value)`}"></label>
+            <label>Eenheid<input class="form-input" value="${esc(m.unit)}" oninput="${i === undefined ? `bfSet('${k}', 'unit', this.value)` : `bfCustom(${i}, 'unit', this.value)`}"></label>
+            <label>Ref. min<input class="form-input" inputmode="decimal" value="${esc(m.lo)}" oninput="${i === undefined ? `bfSet('${k}', 'lo', this.value)` : `bfCustom(${i}, 'lo', this.value)`}"></label>
+            <label>Ref. max<input class="form-input" inputmode="decimal" value="${esc(m.hi)}" oninput="${i === undefined ? `bfSet('${k}', 'hi', this.value)` : `bfCustom(${i}, 'hi', this.value)`}"></label>
+          </div>
+        </div>`;
+      return `
+        <button class="entry-action" style="margin-bottom: 14px;" onclick="state.bloodForm = null; render(); window.scrollTo(0, 0);">← Terug</button>
+        <div class="page-header" style="margin-bottom: 12px;"><div class="page-sub">Bloedwaarden</div><div class="page-title">${f.id ? 'Uitslag bewerken' : 'Nieuwe uitslag'}</div></div>
+        <div class="card">
+          <label class="label" for="bl-date">Datum van afname</label>
+          <input type="date" id="bl-date" class="form-input" value="${esc(f.date)}" onchange="state.bloodForm.date = this.value">
+          <div class="hs-small" style="margin-top: 10px;">Vul alleen in wat je hebt laten meten. De referentie (min/max) staat op de uitslag van je lab; die verschilt per lab. Je vorige referentie wordt alvast ingevuld.</div>
+        </div>
+        <div class="card" style="padding-top: 6px;">
+          ${bloodMarkers.map(([k, name]) => row(k, name, f.markers[k])).join('')}
+          ${f.custom.map((c, i) => row(null, null, c, i)).join('')}
+          <button class="btn btn-secondary btn-small" style="width: 100%; margin-top: 12px;" onclick="bfAddCustom()">+ Eigen waarde</button>
+        </div>
+        <div class="card"><label class="label" for="bl-note">Notitie (optioneel)</label><textarea id="bl-note" class="textarea" style="min-height: 70px;" placeholder="Bijv. nuchter, 's ochtends om 8:00" oninput="state.bloodForm.note = this.value">${esc(f.note)}</textarea></div>
+        <button class="btn btn-primary" style="width: 100%; padding: 18px;" onclick="saveBloodTest()">Opslaan</button>
+        ${f.id ? `<button class="btn btn-secondary" style="width: 100%; margin-top: 8px; color: #e5484d;" onclick="deleteBloodTest(${JSON.stringify(f.id).replace(/"/g, '&quot;')})">Uitslag verwijderen</button>` : ''}`;
+    }
+    function renderBlood() {
+      if (state.bloodForm) return renderBloodForm();
+      const tests = state.bloodTests || [];
+      const keys = [];
+      tests.forEach(t => Object.keys(t.markers || {}).forEach(k => { if (!keys.includes(k)) keys.push(k); }));
+      const sel = keys.includes(state.bloodSel) ? state.bloodSel : keys[0];
+      const pts = tests.filter(t => t.markers && t.markers[sel] && bloodNum(t.markers[sel].v) !== null).map(t => ({ date: t.date, m: t.markers[sel], v: bloodNum(t.markers[sel].v) }));
+      const last = pts[pts.length - 1];
+      const lo = last ? bloodNum(last.m.lo) : null, hi = last ? bloodNum(last.m.hi) : null;
+      const max = Math.max(...pts.map(p => p.v), hi || 0) * 1.1 || 1;
+      const latest = tests[tests.length - 1];
+      return `
+        ${renderBodyHeader()}
+        ${state.bloodError ? `<div class="info-box"><div class="info-title">⚠️ Nog één update</div><div class="info-text">Voer update-okt.sql uit in Supabase om bloedwaarden op te slaan.</div></div>` : ''}
+        ${keys.length ? `
+          <div class="ph-poses bl-chips">${keys.map(k => `<button class="${k === sel ? 'on' : ''}" onclick="state.bloodSel = '${esc(k)}'; render();">${esc(bloodMarkerName(k))}</button>`).join('')}</div>
+          <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;"><span style="font-size: 14px;">${esc(bloodMarkerName(sel))}</span><span style="font-size: 11px; color: #8a8a8a;">${esc(last ? last.m.unit || '' : '')}</span></div>
+            <div class="bl-chart">
+              ${hi !== null ? `<div class="bl-ref" style="bottom: ${hi / max * 100}%;"><span>max ${fmtVal(hi)}</span></div>` : ''}
+              ${lo !== null ? `<div class="bl-ref" style="bottom: ${lo / max * 100}%;"><span>min ${fmtVal(lo)}</span></div>` : ''}
+              ${pts.map(p => `<div class="bl-col"><span class="bl-v">${fmtVal(p.v)}</span><span class="bl-bar" style="height: ${Math.max(3, p.v / max * 100)}%;"></span></div>`).join('')}
+            </div>
+            <div class="bl-dates">${pts.map(p => `<span>${fmtDateShort(p.date)}</span>`).join('')}</div>
+            ${last ? `<div style="margin-top: 10px; font-size: 12px; color: #a3a3a3;">Laatste: <b style="color: #fafafa;">${fmtVal(last.v)} ${esc(last.m.unit || '')}</b> ${bloodStatus(last.m)}</div>` : ''}
+          </div>` : `<div class="empty">Nog geen uitslagen. Voeg je eerste uitslag van het lab toe.</div>`}
+        ${latest ? `
+          <label class="label">Laatste uitslag · ${fmtDateLong(latest.date)}</label>
+          <div class="card" style="padding: 4px 16px;">
+            ${Object.entries(latest.markers || {}).map(([k, m]) => `
+              <div class="bl-row"><span>${esc(bloodMarkerName(k))}</span><span>${esc(m.v)} ${esc(m.unit || '')}<br>${bloodStatus(m)}</span></div>`).join('')}
+          </div>
+          <label class="label">Alle uitslagen</label>
+          <div class="card" style="padding: 4px 16px;">
+            ${tests.slice().reverse().map(t => `<button class="bl-test" onclick="openBloodForm(${JSON.stringify(t.id).replace(/"/g, '&quot;')})"><span>${fmtDateLong(t.date)}</span><span>${Object.keys(t.markers || {}).length} ${Object.keys(t.markers || {}).length === 1 ? 'waarde' : 'waarden'} ›</span></button>`).join('')}
+          </div>` : ''}
+        <button class="btn btn-primary" style="width: 100%; padding: 18px;" onclick="openBloodForm()">+ Nieuwe uitslag</button>
+        <div class="hs-small" style="margin: 14px 0;">Je vult de waarden en de referentie van je eigen lab zelf in. De app laat alleen je trend zien en geeft geen medisch oordeel. Bespreek afwijkende waarden altijd met je huisarts.</div>
+      `;
+    }
+
+    // ============================================
     // EVENT HANDLERS
     // ============================================
-    function setSection(section) {
+    function setSection(section, fromBack) {
+      if (!fromBack && state.activeSection && state.activeSection !== section) {
+        state.navStack = [...(state.navStack || []).filter(s => s !== section), state.activeSection].slice(-15);
+      }
+      if (section !== 'dashboard') state.dashEdit = false;
       state.activeSection = section;
       render();
       window.scrollTo(0, 0);
     }
+
+    // ============================================
+    // TERUG-KNOP (Android / browser): stap voor stap terug, niet meteen afsluiten
+    // ============================================
+    // Chrome slaat geschiedenis-stappen over die zonder tik zijn gemaakt. Daarom maken we
+    // alleen een stap na een echte tik, en alleen als je scherm er daardoor anders uitziet.
+    let lastBackPress = 0, navDepth = 0, lastNavSig = '';
+    function navSig() {
+      return [state.activeSection, state.fView, state.fMain, state.trainView, state.chView, state.journalTab, state.valuesView,
+        state.showHabitModal ? 1 : 0, state.tcali ? 1 : 0, state.tswap ? 1 : 0, state.showBodyModal ? 1 : 0,
+        state.showEmergencyModal ? 1 : 0, state.fScan ? 1 : 0, state.dashEdit ? 1 : 0, state.htimer ? 1 : 0, state.bodyTab, state.bloodForm ? 1 : 0, state.photoView ? 1 : 0].join('|');
+    }
+    function navAfterTap() {
+      if (!state.user) return;
+      const sig = navSig();
+      if (navDepth === 0 || sig !== lastNavSig) {
+        navDepth++;
+        try { history.pushState({ pfDepth: navDepth }, ''); } catch (e) {}
+      }
+      lastNavSig = sig;
+    }
+    document.addEventListener('click', () => setTimeout(navAfterTap, 0), true);
+    // Eén stap terug binnen de app. Geeft false als er niets meer terug te gaan is.
+    function appBack() {
+      // 1. Open vensters sluiten
+      if (state.htimer) { closeHabitTimer(); return true; }
+      if (state.fScan) { stopFoodScan(); return true; }
+      if (state.showHabitModal) { state.showHabitModal = null; render(); return true; }
+      if (state.tcali) { closeCaliSheet(); return true; }
+      if (state.tswap) { closeSwap(); return true; }
+      if (state.showBodyModal) { state.showBodyModal = false; render(); return true; }
+      if (state.showEmergencyModal) { state.showEmergencyModal = false; render(); return true; }
+      if (state.showRestore) { state.showRestore = false; render(); return true; }
+      if (state.showRankUp) { closeRankUp(); return true; }
+      if (state.dashEdit) { state.dashEdit = false; render(); window.scrollTo(0, 0); return true; }
+      if (state.photoView) { state.photoView = null; render(); return true; }
+      if (state.bloodForm) { state.bloodForm = null; render(); window.scrollTo(0, 0); return true; }
+      // 2. Subschermen binnen een onderdeel
+      const sec = state.activeSection;
+      if (sec === 'food' && state.fView && state.fView !== 'day') {
+        if (state.fView === 'product' && !(state.fProduct && state.fProduct.logId)) state.fView = 'add';
+        else { state.fView = 'day'; state.fProduct = null; }
+        render(); window.scrollTo(0, 0); return true;
+      }
+      if (sec === 'food' && state.fMain && state.fMain !== 'dagboek') { state.fMain = 'dagboek'; render(); window.scrollTo(0, 0); return true; }
+      if (sec === 'training' && state.trainView && state.trainView !== 'list') {
+        if (state.trainView === 'edit' && state.trainForm && state.trainForm.exercises.length && !confirm('Training niet opgeslagen. Toch verlaten?')) return true;
+        state.trainForm = null; state.trainView = 'list'; render(); window.scrollTo(0, 0); return true;
+      }
+      if (sec === 'body' && state.bodyTab === 'challenges' && state.chView && state.chView !== 'list') {
+        state.chView = state.chView === 'setup' ? 'library' : state.chView === 'hard75setup' ? 'hard75' : 'list';
+        render(); window.scrollTo(0, 0); return true;
+      }
+      if (sec === 'journal' && state.journalTab === 'values' && state.valuesView === 'form') {
+        if (confirm('Stoppen? Je antwoorden worden niet bewaard.')) { state.vf = null; state.valuesView = 'overview'; render(); }
+        return true;
+      }
+      if (sec === 'journal' && state.journalTab && state.journalTab !== 'today') { setJournalTab('today'); window.scrollTo(0, 0); return true; }
+      // 3. Vorig onderdeel
+      if (sec !== 'dashboard') {
+        const stack = state.navStack || [];
+        const prev = stack.length ? stack[stack.length - 1] : 'dashboard';
+        state.navStack = stack.slice(0, -1);
+        setSection(prev, true);
+        return true;
+      }
+      return false;
+    }
+    window.addEventListener('popstate', (ev) => {
+      navDepth = (ev.state && ev.state.pfDepth) || 0;
+      if (!state.user) return; // inlogscherm: gewoon het normale gedrag
+      const moved = appBack();
+      lastNavSig = navSig();
+      if (moved) return;
+      // Op het dashboard: eerst waarschuwen, tweede keer binnen 2 sec = afsluiten
+      if (Date.now() - lastBackPress < 2000) { history.go(-(navDepth + 1)); return; }
+      lastBackPress = Date.now();
+      showToast('Druk nog een keer op terug om af te sluiten');
+    });
 
     function setJournalTab(tab) {
       state.journalTab = tab;
@@ -8771,7 +9621,7 @@
     // INIT
     // ============================================
     async function loadAll() {
-      await Promise.all([loadEntries(), loadRetention(), loadHabits(), loadBody(), loadTraining(), loadFood()]);
+      await Promise.all([loadEntries(), loadRetention(), loadHabits(), loadBody(), loadTraining(), loadFood(), loadPhotosAndBlood()]);
       // Eén onderdeel dat faalt mag de rest van de app niet blokkeren
       try {
         await loadChallenges();
