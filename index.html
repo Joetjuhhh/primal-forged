@@ -693,6 +693,134 @@
     .rm-time:disabled { color: #525252; }
     .rm-time.auto { display: inline-block; box-sizing: border-box; color: #a3a3a3; border-style: dashed; }
     #pf-night { position: fixed; inset: 0; background: #b80000; mix-blend-mode: multiply; pointer-events: none; z-index: 2147483647; }
+    /* Boeken */
+    .bk-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); text-align: center; gap: 8px; }
+    .bk-stats b { display: block; font-size: 24px; font-weight: 600; color: #fafafa; }
+    .bk-stats span { font-size: 11px; color: #8a8a8a; }
+    .bk-chips { display: flex; gap: 6px; overflow-x: auto; margin: 0 0 14px; padding-bottom: 2px; scrollbar-width: none; }
+    .bk-chips::-webkit-scrollbar { display: none; }
+    .bk-chips button { flex: none; background: #141414; border: 1px solid #262626; color: #a3a3a3; border-radius: 999px; padding: 0 14px; min-height: 36px; font-family: inherit; font-size: 12px; cursor: pointer; }
+    .bk-chips button.on { background: #7f1d1d; border-color: #7f1d1d; color: #fafafa; }
+    .bk-cat { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #e5484d; margin: 18px 0 10px; }
+    .bk-top { display: flex; gap: 14px; align-items: flex-start; }
+    .bk-cov, .bk-fb { flex: none; display: block; border-radius: 4px; overflow: hidden; background: #1c1c1c; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+    .bk-cov img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .bk-fb { display: flex; flex-direction: column; justify-content: space-between; padding: 6px; background: linear-gradient(160deg, #3a1010, #141414); border: 1px solid #2a2a2a; box-sizing: border-box; }
+    .bk-fb b { font-size: 10px; line-height: 1.2; color: #fafafa; font-weight: 600; overflow: hidden; }
+    .bk-fb small { font-size: 8px; color: #a3a3a3; line-height: 1.2; }
+    .bk-meta { flex: 1; min-width: 0; }
+    .bk-n { font-size: 11px; color: #e5484d; font-weight: 600; }
+    .bk-title { font-size: 16px; font-weight: 600; color: #fafafa; line-height: 1.25; margin-top: 2px; }
+    .bk-author { font-size: 12px; color: #8a8a8a; margin-top: 3px; }
+    .bk-done { font-size: 11px; color: #22c55e; margin-top: 8px; }
+    .bk-desc { font-size: 13px; color: #d4d4d4; line-height: 1.6; margin-top: 12px; }
+    .bk-why, .bk-note { font-size: 12px; color: #a3a3a3; line-height: 1.55; margin-top: 10px; padding-left: 10px; border-left: 2px solid #7f1d1d; }
+    .bk-note { border-left-color: #a16207; }
+    .bk-why span, .bk-note span { display: block; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #e5484d; margin-bottom: 2px; }
+    .bk-note span { color: #eab308; }
+    .bk-status { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 14px; }
+    .bk-status button { background: #141414; border: 1px solid #262626; color: #a3a3a3; border-radius: 8px; min-height: 40px; font-family: inherit; font-size: 12px; cursor: pointer; touch-action: manipulation; padding: 0 4px; }
+    .bk-status button.on.want { border-color: #525252; color: #fafafa; background: #262626; }
+    .bk-status button.on.reading { border-color: #a16207; color: #fde68a; background: rgba(161,98,7,0.18); }
+    .bk-status button.on.read { border-color: #15803d; color: #bbf7d0; background: rgba(21,128,61,0.2); }
+    .bk-card.bk-read { border-color: rgba(21,128,61,0.35); }
+    .bk-dash { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+    .bk-dash .btn { flex: none; }
+    .bk-today { display: block; width: 100%; margin-top: 12px; background: #141414; border: 1px dashed #333; color: #a3a3a3; border-radius: 8px; min-height: 40px; font-family: inherit; font-size: 12px; cursor: pointer; touch-action: manipulation; }
+    .bk-today.on { border-style: solid; border-color: #15803d; color: #bbf7d0; background: rgba(21,128,61,0.15); }
+    /* Journal: zoeken en terugblik */
+    .j-search { margin: 0 0 12px; }
+    .j-search input { width: 100%; box-sizing: border-box; }
+    .j-lb { border-left: 3px solid #d9a441; }
+    .j-lb-row + .j-lb-row { margin-top: 12px; padding-top: 12px; border-top: 1px solid #1f1f1f; }
+    .j-lb-when { font-size: 11px; color: #d9a441; }
+    .j-lb-k { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a8a8a; margin-top: 4px; }
+    .j-lb-t { font-size: 13px; color: #d4d4d4; line-height: 1.55; margin-top: 2px; }
+    #pf-offline, #pf-update { position: fixed; left: 50%; transform: translateX(-50%); top: calc(env(safe-area-inset-top, 0px) + 76px); z-index: 300; max-width: calc(100vw - 32px); box-sizing: border-box; border-radius: 999px; font-family: inherit; font-size: 12px; padding: 8px 14px; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.6); }
+    #pf-offline { background: #262626; color: #e5e5e5; border: 1px solid #404040; pointer-events: none; }
+    #pf-offline.syncing { background: #1e3a2a; border-color: #15803d; color: #bbf7d0; }
+    #pf-update { background: #7f1d1d; color: #fafafa; border: 1px solid #b91c1c; cursor: pointer; min-height: 40px; }
+    .pv p { font-size: 13px; color: #d4d4d4; line-height: 1.65; margin: 0 0 8px; }
+    .pv ul { margin: 0 0 8px; padding-left: 18px; }
+    .pv li { font-size: 13px; color: #d4d4d4; line-height: 1.6; margin-bottom: 6px; }
+    .pv b { color: #fafafa; font-weight: 600; }
+    .pv a { color: #e5484d; }
+    .pv-h { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #e5484d; margin: 18px 0 8px; }
+    .pv-out { padding-top: 24px; padding-bottom: 40px; }
+    .pv-del { border-color: rgba(229,72,77,0.35); }
+    .pv-del-btn { background: #7f1d1d; color: #fafafa; border: 1px solid #b91c1c; }
+    .pv-del-btn:disabled { background: #1c1c1c; color: #525252; border-color: #262626; cursor: not-allowed; }
+    .auth-privacy { text-align: center; font-size: 11px; color: #737373; margin-top: 18px; }
+    .auth-privacy a { color: #a3a3a3; }
+    .ob { max-width: 520px; margin: 0 auto; padding: calc(env(safe-area-inset-top, 0px) + 20px) 16px 40px; box-sizing: border-box; }
+    .ob-top { display: flex; align-items: center; gap: 0; margin-bottom: 20px; }
+    .ob-skip { margin-left: auto; background: none; border: none; color: #8a8a8a; font-family: inherit; font-size: 12px; cursor: pointer; min-height: 40px; }
+    .ob-dots { display: flex; gap: 6px; margin-bottom: 22px; }
+    .ob-dot { flex: 1; height: 3px; border-radius: 2px; background: #262626; }
+    .ob-dot.done { background: #7f1d1d; }
+    .ob-dot.on { background: #e5484d; }
+    .ob-title { font-size: 24px; font-weight: 600; color: #fafafa; letter-spacing: -0.01em; margin-bottom: 8px; }
+    .ob-sub { font-size: 13px; color: #a3a3a3; line-height: 1.6; margin-bottom: 18px; }
+    .ob-list { display: grid; gap: 8px; }
+    .ob-opt { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; background: #0f0f0f; border: 1px solid #262626; border-radius: 10px; padding: 14px; color: #fafafa; font-family: inherit; cursor: pointer; touch-action: manipulation; }
+    .ob-opt.on { border-color: #b91c1c; background: rgba(127,29,29,0.18); }
+    .ob-ic { font-size: 22px; width: 30px; text-align: center; }
+    .ob-t { flex: 1; font-size: 14px; font-weight: 500; }
+    .ob-t small { display: block; font-size: 12px; color: #8a8a8a; font-weight: 400; margin-top: 3px; }
+    .ob-ck { width: 22px; height: 22px; border-radius: 50%; border: 1px solid #404040; display: grid; place-items: center; font-size: 12px; color: #fafafa; }
+    .ob-opt.on .ob-ck { background: #b91c1c; border-color: #b91c1c; }
+    .ob-habits { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .ob-h { background: #0f0f0f; border: 1px solid #262626; border-radius: 10px; padding: 12px; }
+    .ob-h span { font-size: 20px; }
+    .ob-h b { display: block; font-size: 13px; color: #fafafa; font-weight: 500; margin-top: 6px; }
+    .ob-h small { display: block; font-size: 11px; color: #8a8a8a; line-height: 1.45; margin-top: 3px; }
+    .ob-nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 22px; }
+    .ob-nav .btn { min-width: 120px; min-height: 46px; }
+    .bs-card { border-left: 3px solid #b91c1c; }
+    .bs-row + .bs-row { margin-top: 12px; padding-top: 12px; border-top: 1px solid #1f1f1f; }
+    .bs-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+    .bs-top b { font-size: 14px; color: #fafafa; font-weight: 600; }
+    .bs-v { font-size: 13px; font-weight: 600; color: #a3a3a3; white-space: nowrap; }
+    .bs-v.ok, .bs-badge.ok { color: #22c55e; }
+    .bs-v.low, .bs-v.high, .bs-badge.low, .bs-badge.high { color: #eab308; }
+    .bs-v.deficit, .bs-badge.deficit { color: #e5484d; }
+    .bs-date { font-size: 11px; color: #737373; margin-top: 4px; }
+    .bs-badge { display: inline-block; font-size: 11px; color: #a3a3a3; background: #141414; border: 1px solid #262626; border-radius: 999px; padding: 3px 10px; margin: 2px 0 8px; }
+    .fast-card { text-align: center; }
+    .fast-ring { position: relative; width: 200px; height: 200px; margin: 4px auto 10px; }
+    .fast-ring svg { display: block; }
+    .fast-arc { transition: stroke-dashoffset 0.6s; }
+    .fast-mid { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .fast-big { font-size: 40px; font-weight: 600; color: #fafafa; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+    .fast-lbl { font-size: 12px; color: #8a8a8a; margin-top: 2px; }
+    .fast-ph { margin-top: 6px; }
+    .fast-ph b { display: block; font-size: 14px; color: #fafafa; font-weight: 600; }
+    .fast-ph span { display: block; font-size: 12px; color: #a3a3a3; line-height: 1.55; margin-top: 4px; }
+    .fast-times { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+    .fast-times div { background: #141414; border: 1px solid #1f1f1f; border-radius: 8px; padding: 8px; font-size: 15px; color: #fafafa; }
+    .fast-times span { display: block; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a8a8a; margin-bottom: 2px; }
+    .fast-plans { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+    .fast-plans button { background: #141414; border: 1px solid #262626; color: #a3a3a3; border-radius: 8px; padding: 8px 2px; font-family: inherit; cursor: pointer; touch-action: manipulation; }
+    .fast-plans button b { display: block; font-size: 14px; color: #e5e5e5; font-weight: 600; }
+    .fast-plans button small { display: block; font-size: 10px; margin-top: 2px; }
+    .fast-plans button.on { border-color: #b91c1c; background: rgba(127,29,29,0.2); }
+    .fast-plans button.on b { color: #fafafa; }
+    .fast-at { display: flex; align-items: center; gap: 8px; margin-top: 12px; flex-wrap: wrap; justify-content: center; }
+    .fast-at label { font-size: 12px; color: #8a8a8a; }
+    .fast-at input { width: 104px; }
+    .fast-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+    .fast-d { width: 82px; font-size: 12px; color: #a3a3a3; flex: none; }
+    .fast-bar { flex: 1; height: 6px; background: #1f1f1f; border-radius: 3px; overflow: hidden; }
+    .fast-bar span { display: block; height: 100%; border-radius: 3px; }
+    .fast-h { width: 44px; text-align: right; font-size: 12px; font-variant-numeric: tabular-nums; flex: none; }
+    .fast-ul { margin: 0; padding-left: 18px; }
+    .fast-ul li { font-size: 13px; color: #d4d4d4; line-height: 1.6; margin-bottom: 8px; }
+    .fast-ul b { color: #fafafa; font-weight: 600; }
+    .fast-dash { display: flex; align-items: center; gap: 14px; border-left: 3px solid #b91c1c; }
+    .bk-lessons { margin-top: 14px; padding-top: 12px; border-top: 1px solid #1f1f1f; display: grid; gap: 8px; }
+    .bk-lessons-t { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #22c55e; }
+    .bk-lessons input { width: 100%; box-sizing: border-box; font-size: 13px; }
+    .quote-card.own { border-left: 3px solid #22c55e; }
   </style>
 </head>
 <body>
@@ -710,7 +838,145 @@
     const SUPABASE_KEY = 'sb_publishable_rDP5Kvq0wBsObLeiXJ98OA_aa0q-ipz';
     // Kwam je binnen via de "wachtwoord vergeten"-mail? (vastleggen vóórdat Supabase de link verwerkt)
     const recoveryFromLink = /type=recovery/.test(location.hash) || /type=recovery/.test(location.search);
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // ============================================
+    // OFFLINE: laatst geladen gegevens bewaren + wijzigingen in de wachtrij
+    // ============================================
+    // Lezen: elk antwoord van de database wordt bewaard. Geen internet? Dan krijg je de laatst bewaarde versie.
+    // Schrijven: geen internet? Dan gaat de wijziging in een wachtrij en wordt verstuurd zodra je weer online bent.
+    const PF_DATA_CACHE = 'pf-data-v1';
+    const pfNet = { offline: false, fromCache: false, flushing: false };
+    const realFetch = window.fetch.bind(window);
+    function pfQueue() { try { return JSON.parse(localStorage.getItem('pf_queue') || '[]'); } catch (e) { return []; } }
+    function pfSaveQueue(q) { try { localStorage.setItem('pf_queue', JSON.stringify(q)); } catch (e) {} pfBanner(); }
+    function pfHeaders(h) { const o = {}; try { new Headers(h || {}).forEach((v, k) => { o[k] = v; }); } catch (e) {} return o; }
+    function pfIsNetErr(e) { return e && (e.name === 'TypeError' || /fetch|network|load failed/i.test(e.message || '')); }
+    function pfUid() { try { return (state && state.user && state.user.id) || null; } catch (e) { return null; } }
+    function pfTmpId() { return 'tmp-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8); }
+
+    async function pfFetch(input, init) {
+      init = init || {};
+      const url = typeof input === 'string' ? input : input.url;
+      const method = String(init.method || (typeof input !== 'string' && input.method) || 'GET').toUpperCase();
+      if (!/\/rest\/v1\//.test(url)) return realFetch(input, init);
+      const headers = pfHeaders(init.headers);
+      if (method === 'GET' || method === 'HEAD') {
+        const key = url + '#' + (headers.accept || '');
+        try {
+          const res = await realFetch(input, init);
+          if (res.ok && method === 'GET' && 'caches' in window) { const copy = res.clone(); caches.open(PF_DATA_CACHE).then(c => c.put(key, copy)).catch(() => {}); }
+          if (pfNet.offline) { pfNet.offline = false; pfNet.fromCache = false; pfBanner(); setTimeout(pfFlush, 300); }
+          return res;
+        } catch (e) {
+          if (!pfIsNetErr(e) || !('caches' in window)) throw e;
+          const hit = await caches.open(PF_DATA_CACHE).then(c => c.match(key)).catch(() => null);
+          pfNet.offline = true;
+          if (hit) { pfNet.fromCache = true; pfBanner(); return hit; }
+          pfBanner();
+          throw e;
+        }
+      }
+      // Schrijven: als er al iets in de wachtrij staat, achteraan aansluiten (volgorde blijft kloppen)
+      const queued = pfQueue().length > 0;
+      if (!queued && navigator.onLine !== false) {
+        try {
+          const res = await realFetch(input, init);
+          if (pfNet.offline) { pfNet.offline = false; pfBanner(); }
+          return res;
+        } catch (e) {
+          if (!pfIsNetErr(e)) throw e;
+        }
+      }
+      return pfEnqueue(url, method, headers, init.body, queued && navigator.onLine !== false);
+    }
+
+    function pfEnqueue(url, method, headers, body, justBehind) {
+      if (!justBehind) pfNet.offline = true;
+      else setTimeout(pfFlush, 200);
+      let rows = null, tmp = [];
+      try { rows = body ? JSON.parse(body) : null; } catch (e) {}
+      const upsert = /on_conflict=/.test(url) || /resolution=/.test(headers.prefer || '');
+      if (method === 'POST' && rows && !upsert) {
+        const list = Array.isArray(rows) ? rows : [rows];
+        list.forEach(r => { if (r && typeof r === 'object' && !r.id) { const id = pfTmpId(); tmp.push(id); r.__tmp = id; } else tmp.push(null); });
+      }
+      const q = pfQueue();
+      q.push({ uid: pfUid(), url, method, headers: { ...headers, authorization: undefined }, body: rows ? JSON.stringify(rows) : (body || null), tmp, at: Date.now() });
+      pfSaveQueue(q);
+      // Antwoord nabootsen zoals de database dat zou doen
+      const wantsRows = /return=representation/.test(headers.prefer || '');
+      if (method === 'POST' || method === 'PATCH') {
+        if (!wantsRows) return new Response(null, { status: method === 'POST' ? 201 : 204 });
+        let out = rows ? (Array.isArray(rows) ? rows : [rows]).map(r => { const c = { ...r }; if (c.__tmp) { c.id = c.__tmp; delete c.__tmp; } if (!c.created_at) c.created_at = new Date().toISOString(); return c; }) : [];
+        const single = /vnd\.pgrst\.object/.test(headers.accept || '');
+        return new Response(JSON.stringify(single ? (out[0] || null) : out), { status: 201, headers: { 'Content-Type': 'application/json' } });
+      }
+      return new Response(null, { status: 204 });
+    }
+
+    // Wachtrij versturen. Tijdelijke id's (van iets dat offline is aangemaakt) worden vervangen door de echte.
+    async function pfFlush() {
+      if (pfNet.flushing || navigator.onLine === false) return;
+      let q = pfQueue();
+      if (!q.length) return;
+      pfNet.flushing = true;
+      let sent = 0, failed = 0;
+      const map = (() => { try { return JSON.parse(localStorage.getItem('pf_tmpmap') || '{}'); } catch (e) { return {}; } })();
+      const swap = (s) => s ? s.replace(/tmp-[a-z0-9]+-[a-z0-9]+/g, m => map[m] || m) : s;
+      try {
+        const { data } = await supabaseClient.auth.getSession();
+        const token = data && data.session && data.session.access_token;
+        const uid = data && data.session && data.session.user.id;
+        if (!token) { pfNet.flushing = false; return; }
+        while (q.length) {
+          const it = q[0];
+          if (it.uid && it.uid !== uid) { q.shift(); pfSaveQueue(q); continue; }  // van een ander account
+          const headers = { ...it.headers, apikey: SUPABASE_KEY, authorization: 'Bearer ' + token };
+          delete headers['content-length'];
+          let body = swap(it.body);
+          const hasTmp = (it.tmp || []).some(Boolean);
+          if (hasTmp) {
+            headers.prefer = String(headers.prefer || '').split(',').map(x => x.trim()).filter(x => x && !/^return=/.test(x)).concat('return=representation').join(',');
+            headers.accept = 'application/json';
+            try { const rows = JSON.parse(body); (Array.isArray(rows) ? rows : [rows]).forEach(r => delete r.__tmp); body = JSON.stringify(rows); } catch (e) {}
+          }
+          let res;
+          try { res = await realFetch(swap(it.url), { method: it.method, headers, body: it.method === 'DELETE' ? undefined : body }); }
+          catch (e) { break; }   // nog steeds geen verbinding: later opnieuw
+          if (res.status >= 500) break;
+          if (res.ok && hasTmp) {
+            try { const out = await res.json(); (Array.isArray(out) ? out : [out]).forEach((r, i) => { if (it.tmp[i] && r && r.id) map[it.tmp[i]] = r.id; }); } catch (e) {}
+            try { localStorage.setItem('pf_tmpmap', JSON.stringify(map)); } catch (e) {}
+          }
+          if (res.ok) sent++; else { failed++; console.warn('Wijziging uit wachtrij geweigerd', res.status, it.url); }
+          q.shift(); pfSaveQueue(q);
+        }
+      } finally { pfNet.flushing = false; }
+      if (!q.length) { try { localStorage.removeItem('pf_tmpmap'); } catch (e) {} }
+      pfNet.offline = false; pfNet.fromCache = false; pfBanner();
+      if (sent || failed) {
+        if (typeof showToast === 'function') showToast(failed ? `⚠️ ${sent} wijziging(en) opgeslagen, ${failed} lukte niet` : `☁️ ${sent} offline wijziging${sent === 1 ? '' : 'en'} opgeslagen`);
+        if (state.user && typeof loadAll === 'function') { await loadAll(); render(); }
+      }
+    }
+    function pfBanner() {
+      let el = document.getElementById('pf-offline');
+      const n = pfQueue().length;
+      const show = pfNet.offline || navigator.onLine === false || n > 0;
+      if (!show) { if (el) el.remove(); return; }
+      if (!el) { el = document.createElement('div'); el.id = 'pf-offline'; el.setAttribute('role', 'status'); document.body.appendChild(el); }
+      const off = pfNet.offline || navigator.onLine === false;
+      el.className = off ? '' : 'syncing';
+      el.textContent = off
+        ? `Offline${n ? ` · ${n} wijziging${n === 1 ? '' : 'en'} wacht${n === 1 ? '' : 'en'}` : ''}${pfNet.fromCache ? ' · laatst geladen gegevens' : ''}`
+        : `${n} wijziging${n === 1 ? '' : 'en'} versturen…`;
+    }
+    window.addEventListener('online', () => { pfNet.offline = false; pfBanner(); pfFlush(); });
+    window.addEventListener('offline', () => { pfNet.offline = true; pfBanner(); });
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') pfFlush(); });
+    setInterval(() => { if (pfQueue().length) pfFlush(); }, 30000);
+    async function pfClearCache() { try { if ('caches' in window) await caches.delete(PF_DATA_CACHE); } catch (e) {} }
+
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { global: { fetch: pfFetch } });
 
     // ============================================
     // APP STATE
@@ -1451,6 +1717,11 @@
 
     function getDailyQuote() {
       const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+      // Om de dag een les die je zelf uit een boek hebt gehaald
+      try {
+        const own = bookLessonList();
+        if (own.length && dayOfYear % 2 === 0) { const l = own[Math.floor(dayOfYear / 2) % own.length]; return { text: esc(l.text), author: 'Jouw les uit ' + esc(l.title), own: true }; }
+      } catch (e) {}
       return quotes[dayOfYear % quotes.length];
     }
 
@@ -1682,6 +1953,9 @@
     }
 
     async function signOut() {
+      if (pfQueue().length && !confirm('Er staan nog ' + pfQueue().length + ' offline wijzigingen klaar die nog niet zijn verstuurd. Als je nu uitlogt, gaan ze verloren. Toch uitloggen?')) return;
+      try { localStorage.removeItem('pf_queue'); } catch (e) {}
+      pfClearCache();
       await supabaseClient.auth.signOut();
       state.user = null;
       state.entries = [];
@@ -2081,6 +2355,7 @@
                 : authMode === 'signup' ? `<span>Al een account?</span> <a href="#" onclick="setAuthMode('login'); return false;">Inloggen</a>`
                 : `<a href="#" onclick="setAuthMode('login'); return false;">← Terug naar inloggen</a>`}
             </div>
+            <div class="auth-privacy">${authMode === 'signup' ? 'Door te registreren ga je akkoord met de ' : ''}<a href="#" onclick="const em = document.getElementById('auth-email'); if (em) state.authEmail = em.value; state.showPrivacy = true; render(); window.scrollTo(0, 0); return false;">${authMode === 'signup' ? 'privacyverklaring' : 'Privacy'}</a>.</div>
           </div>
         </div>
       `;
@@ -2188,12 +2463,14 @@
         habits: () => renderHabitsCard(),
         foodtrain: () => renderFoodTrainCard(),
         steps: () => renderStepsCard(),
+        book: () => renderBookDashCard(),
+        fast: () => renderFastDashCard(),
         challenges: () => renderDashboardChallenges(),
         sleep: () => renderSleepDashCard(),
         year: () => renderYearCard(),
         stats: () => renderStatsCard(),
         quote: () => `
-        <div class="quote-card">
+        <div class="quote-card${quote.own ? ' own' : ''}">
           <div class="quote-text">"${quote.text}"</div>
           <div class="quote-author">— ${quote.author}</div>
         </div>`
@@ -4036,7 +4313,7 @@
     // ============================================
     // MOTIVATIE: XP, DAGSCORE, RANGEN
     // ============================================
-    const APP_VERSION = '5 okt · 10:00';
+    const APP_VERSION = '5 okt · 14:00';
     const XP = {
       habit: 5,
       journal: 15,
@@ -4050,7 +4327,9 @@
       sleepLog: 10,      // nacht ingevuld bij Slaap of Journal-ochtend
       sleepRoutine: 10,  // avondroutine: 5 of meer van de 7 afgevinkt
       foodDay: 10,       // dagboek: 3 of meer dingen gelogd
-      steps: 10          // stappendoel gehaald
+      steps: 10,         // stappendoel gehaald
+      bookRead: 50,      // boek uitgelezen (Boeken)
+      fast: 10           // vastendoel gehaald (1x per dag)
     };
 
     const ranks = [
@@ -4167,6 +4446,7 @@
       Object.keys(state.foodDayCounts || {}).forEach(d => starts.push(d));
       Object.keys(sleepSettings().routine || {}).forEach(d => starts.push(d));
       Object.keys(stepsData().log).forEach(d => starts.push(d));
+      Object.values(bookStatus()).forEach(b => b && b.s === 'read' && starts.push(b.at));
       const first = starts.filter(Boolean).filter(d => d <= today).sort()[0] || today;
 
       const retentionOn = (date) => retentions.some(r => r.start_date && r.start_date <= date && (r.is_active ? date <= today : (r.end_date ? date < r.end_date : false)));
@@ -4193,6 +4473,10 @@
         if (!e.daily) j.old = true; else { if (e.daily.morningAt) j.m = true; if (e.daily.eveningAt) j.ev = true; }
       });
       const journalPart = (date) => { const j = jIdx[date]; if (!j) return 0; if (j.old) return 1; return (j.m ? 0.5 : 0) + (j.ev ? 0.5 : 0); };
+      const bookXpOn = {};
+      Object.values(bookStatus()).forEach(b => { if (b && b.s === 'read' && b.at) bookXpOn[b.at] = (bookXpOn[b.at] || 0) + XP.bookRead; });
+      const fastXpOn = {};
+      fastData().log.forEach(x => { if (x && x.e && (new Date(x.e) - new Date(x.s)) >= (Number(x.goal) || 16) * 3600e3) fastXpOn[localDateStr(new Date(x.e))] = XP.fast; });
       const protByDate = {};
       (state.foodLogs || []).forEach(l => { protByDate[l.date] = (protByDate[l.date] || 0) + (Number(l.prot) || 0); });
       for (let date = first; date <= today; date = dateAdd(date, 1)) {
@@ -4231,6 +4515,8 @@
         let doubled = false;
         if (comeback && score >= 50) { xp *= 2; doubled = true; comeback = false; }
         xp += bonusOn[date] || 0;
+        xp += bookXpOn[date] || 0;
+        xp += fastXpOn[date] || 0;
         if (date === valuesDate) xp += VALUES_BONUS_XP;
         if (xp > 0) hadActivity = true;
         if ((score < 20 && hadActivity && date < today) || failDates.has(date)) comeback = true;
@@ -4407,6 +4693,8 @@
         ['Avondroutine 5/7 of meer', `+${XP.sleepRoutine} per avond`],
         ['Voeding: 3+ dingen gelogd', `+${XP.foodDay} per dag`],
         ['Stappendoel gehaald', `+${XP.steps} per dag`],
+        ['Boek uitgelezen', `+${XP.bookRead} per boek`],
+        ['Vastendoel gehaald', `+${XP.fast} per dag`],
         ['Lichaamsmeting', `+${XP.measurement} (1x per week)`],
         ['Waarden-opdracht', `+${VALUES_BONUS_XP} (eenmalig)`],
         ['75 Hard-dag volledig', `+${XP.hard75Day}`],
@@ -7275,11 +7563,62 @@
       `;
     }
 
-    function renderHistory() {
-      if (journaledEntries().length === 0) {
-        return `<div class="empty">Nog geen entries. Begin met schrijven!</div>`;
-      }
-      return journaledEntries().map(entry => entry.daily ? renderDailyEntry(entry) : `
+    // Alle tekst van een entry, om in te zoeken
+    function entryText(e) {
+      const d = e.daily || {};
+      return [d.theme, d.prompt, d.answer, d.win, d.tomorrow, d.hard, jGoalList(d.gratitude).join(' '), jGoalList(d.goals).join(' '), e.content].filter(Boolean).join(' \n ');
+    }
+    // Eerste stuk tekst dat de moeite waard is om terug te lezen
+    function entrySnippet(e, q) {
+      const d = e.daily || {};
+      const parts = [['Overwinning', d.win], ['Dankbaar', jGoalList(d.gratitude).join(' · ')], [d.prompt || 'Vraag', d.answer], ['Lastig moment', d.hard], ['Morgen beter', d.tomorrow], ['Doelen', jGoalList(d.goals).join(' · ')], ['Vrij geschreven', e.content]].filter(p => p[1]);
+      let hit = q ? parts.find(p => p[1].toLowerCase().includes(q)) : parts[0];
+      if (!hit) return null;
+      let t = hit[1];
+      if (q) { const i = t.toLowerCase().indexOf(q); if (i > 60) t = '…' + t.slice(i - 40); }
+      return [hit[0], t.length > 160 ? t.slice(0, 160) + '…' : t];
+    }
+    // Terugblik: wat schreef je een week, maand, drie maanden en een jaar geleden?
+    function journalLookback() {
+      const today = todayStr();
+      const byDate = {};
+      journaledEntries().forEach(e => { if (!byDate[e.date] && entrySnippet(e)) byDate[e.date] = e; });
+      const out = [];
+      [[365, 'Een jaar geleden', 7], [91, '3 maanden geleden', 5], [30, 'Een maand geleden', 3], [7, 'Een week geleden', 1]].forEach(([back, label, spread]) => {
+        if (out.length >= 2) return;
+        const target = dateAdd(today, -back);
+        for (let o = 0; o <= spread; o++) {
+          const e = byDate[dateAdd(target, -o)] || byDate[dateAdd(target, o)];
+          if (e && !out.some(x => x.e === e)) { out.push({ label, e }); break; }
+        }
+      });
+      return out;
+    }
+    function renderLookback() {
+      const lb = journalLookback();
+      if (!lb.length) return '';
+      return `
+        <div class="card j-lb">
+          <label class="label">⏳ Terugblik</label>
+          ${lb.map(({ label, e }) => { const [k, t] = entrySnippet(e); return `
+            <div class="j-lb-row">
+              <div class="j-lb-when">${label} · ${formatDate(e.date)}</div>
+              <div class="j-lb-k">${esc(k)}</div>
+              <div class="j-lb-t">${esc(t)}</div>
+            </div>`; }).join('')}
+        </div>`;
+    }
+    function journalSearch(v) {
+      state.jSearch = v;
+      const el = document.getElementById('j-hist-list');
+      if (el) el.innerHTML = renderHistoryList();
+    }
+    function renderHistoryList() {
+      const q = (state.jSearch || '').trim().toLowerCase();
+      let list = journaledEntries();
+      if (q) list = list.filter(e => entryText(e).toLowerCase().includes(q) || formatDate(e.date).toLowerCase().includes(q));
+      if (!list.length) return `<div class="empty">Niets gevonden voor "${esc(state.jSearch.trim())}".</div>`;
+      return (q ? `<div class="hs-small" style="margin: 0 0 10px;">${list.length} ${list.length === 1 ? 'dag' : 'dagen'} gevonden</div>` : '') + list.map(entry => entry.daily ? renderDailyEntry(entry) : `
         <div class="entry">
           <div class="entry-date">${formatDate(entry.date)}</div>
           <div class="entry-scores">
@@ -7303,6 +7642,18 @@
           </div>
         </div>
       `).join('');
+    }
+    function renderHistory() {
+      if (journaledEntries().length === 0) {
+        return `<div class="empty">Nog geen entries. Begin met schrijven!</div>`;
+      }
+      return `
+        ${state.jSearch ? '' : renderLookback()}
+        <div class="j-search">
+          <label class="sr-only" for="j-search-in">Zoek in je journal</label>
+          <input id="j-search-in" type="search" class="form-input" placeholder="🔍 Zoek in je journal (woord, maand…)" value="${esc(state.jSearch || '')}" oninput="journalSearch(this.value)" autocomplete="off">
+        </div>
+        <div id="j-hist-list">${renderHistoryList()}</div>`;
     }
 
     function editEntryById(id) {
@@ -7918,11 +8269,11 @@
       if (state.fView === 'quick') return renderFoodQuick();
       if (state.fView === 'custom') return renderFoodCustom();
       const fm = state.fMain || 'dagboek';
-      const foodTabs = `<div class="tabs" role="tablist">${[['dagboek', 'Dagboek'], ['tvoed', 'T-voeding'], ['supps', 'Supplementen']].map(([k, l]) => `<button class="tab ${fm === k ? 'active' : ''}" role="tab" aria-selected="${fm === k}" onclick="state.fMain = '${k}'; render(); window.scrollTo(0, 0);">${l}</button>`).join('')}</div>`;
+      const foodTabs = `<div class="tabs" role="tablist">${[['dagboek', 'Dagboek'], ['vasten', 'Vasten'], ['tvoed', 'T-voeding'], ['supps', 'Supps']].map(([k, l]) => `<button class="tab ${fm === k ? 'active' : ''}" role="tab" aria-selected="${fm === k}" onclick="state.fMain = '${k}'; render(); window.scrollTo(0, 0);">${l}</button>`).join('')}</div>`;
       if (fm !== 'dagboek') return `
         <div class="page-header" style="margin-bottom: 16px;"><div class="page-sub">Fysiek</div><div class="page-title">Voeding</div></div>
         ${foodTabs}
-        ${fm === 'tvoed' ? renderTFood() : renderSupps()}`;
+        ${fm === 'tvoed' ? renderTFood() : fm === 'vasten' ? renderFast() : renderSupps()}`;
       const date = state.fDate;
       const logs = foodDayLogs(date);
       const sum = foodSum(logs);
@@ -8234,6 +8585,12 @@
           <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Open retention →</div>
         </div>
         
+        <div class="card card-accent" style="cursor: pointer;" onclick="setSection('books')">
+          <label class="label">📚 Boeken</label>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">De top 20 voor discipline, mindset, training en gezondheid.${(() => { const c = bookCounts(); return c.read || c.reading ? ` <b style="color: #fafafa;">${c.read} gelezen${c.reading ? ' · ' + c.reading + ' bezig' : ''}</b>` : ''; })()}</div>
+          <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Bekijk de lijst →</div>
+        </div>
+
         <div class="card card-accent" style="cursor: pointer;" onclick="setSection('reminders')">
           <label class="label">🔔 Herinneringen</label>
           <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">Meldingen voor je journal, training, scherm weg en je avond. Slim: niet als je het al gedaan hebt.</div>
@@ -8281,11 +8638,10 @@
           `}
         </div>
 
-        <div class="card">
-          <label class="label">Komt binnenkort</label>
-          <div style="color: #525252; font-size: 12px;">
-            <p>• Bloedwaarden</p>
-          </div>
+
+        <div class="card" style="cursor: pointer;" onclick="setSection('privacy')">
+          <label class="label">🔒 Privacy & account</label>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">Wat er met je gegevens gebeurt, en je account verwijderen.</div>
         </div>
 
         <div style="text-align: center; font-size: 10px; color: #525252; letter-spacing: 0.1em; margin: 8px 0 16px;">VERSIE ${APP_VERSION}</div>
@@ -8323,6 +8679,8 @@
           ${state.activeSection === 'food' ? renderFood() : ''}
           ${state.activeSection === 'sleep' ? renderSleep() : ''}
           ${state.activeSection === 'reminders' ? renderReminders() : ''}
+          ${state.activeSection === 'books' ? renderBooks() : ''}
+          ${state.activeSection === 'privacy' ? renderPrivacy() : ''}
         </div>
         
         ${state.showRankUp ? renderRankUp() : ''}
@@ -8366,9 +8724,10 @@
         return;
       }
       if (!state.user) {
-        app.innerHTML = renderAuth();
+        app.innerHTML = state.showPrivacy ? renderPrivacy() : renderAuth();
         return;
       }
+      if (needsOnboarding()) { app.innerHTML = renderOnboarding(); return; }
       app.innerHTML = renderApp();
       applyNightMode();
       if (state.activeSection === 'body') setupBodyChart();
@@ -8745,6 +9104,67 @@
       ['Magnesium', 'als je weinig noten, groen en volkoren eet', 'Noten, zaden, groene groente en volkoren zijn de grote bronnen.'],
       ['Zink', 'als je weinig vlees, vis of schaaldieren eet', 'Vlees, schaaldieren en eieren zijn de grote bronnen.']
     ];
+    // Bloedwaarden ↔ supplementen: je laatst gemeten waarde en wat je ermee kunt
+    function bloodLatest(k) {
+      const tests = (state.bloodTests || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
+      for (const t of tests) { const m = t.markers && t.markers[k]; if (m && bloodNum(m.v) !== null) return { ...m, date: t.date }; }
+      return null;
+    }
+    // Niveau: 'low' | 'ok' | 'high' | null. Vitamine D zonder labreferentie: Gezondheidsraad/IOM-grenzen (nmol/L)
+    function bloodLevel(k, m) {
+      if (!m) return null;
+      const v = bloodNum(m.v), lo = bloodNum(m.lo), hi = bloodNum(m.hi);
+      if (k === 'vitd' && /nmol/i.test(m.unit || 'nmol/L')) return v < 30 ? 'deficit' : v < 50 ? 'low' : 'ok';
+      if (lo !== null && v < lo) return 'low';
+      if (hi !== null && v > hi) return 'high';
+      return lo !== null || hi !== null ? 'ok' : null;
+    }
+    const bloodSuppAdvice = {
+      vitd: { name: 'Vitamine D',
+        deficit: 'Echt tekort (onder 30). Bespreek met je huisarts of een hogere startdosis nodig is, en laat na 3 maanden opnieuw meten.',
+        low: 'Aan de lage kant (30–50). Neem 10–25 µg per dag bij je ontbijt met wat vet, zeker van oktober t/m maart. Laat over 3 maanden opnieuw meten.',
+        ok: 'Voldoende (50 of hoger). In de winter 10 µg aanhouden; in de zomer met genoeg zon kun je stoppen.' },
+      ferritine: { name: 'Ferritine (ijzervoorraad)',
+        low: 'Je ijzervoorraad is laag. Eet vaker rood vlees, lever of schelpdieren en laat je huisarts naar de oorzaak kijken. Neem zink en ijzer niet tegelijk.',
+        high: 'Je ijzervoorraad is hoog. Geen ijzersupplementen en geen extra lever; bespreek dit met je huisarts.',
+        ok: 'Je ijzervoorraad is goed. Geen ijzersupplement nodig.' },
+      zink: { name: 'Zink',
+        low: 'Zink is laag. Hier kan een supplement je testosteron wél helpen: 10–25 mg bij je avondeten, en vaker oesters, rood vlees of eieren.',
+        ok: 'Zink is goed. Een supplement voegt niets toe voor je testosteron.' },
+      testo: { name: 'Testosteron',
+        low: 'Onder de referentie. Eerst de basis: 7–9 uur slaap, krachttraining en een gezond vetpercentage. Supplementen helpen alleen bij een tekort. Laat het herhalen bij je huisarts: \'s ochtends vóór 10 uur en nuchter.',
+        high: 'Boven de referentie. Bespreek dit met je huisarts.',
+        ok: 'Binnen de referentie. Blijf doen wat je doet.' }
+    };
+    function bloodBadge(k) {
+      const m = bloodLatest(k); if (!m) return '';
+      const lv = bloodLevel(k, m);
+      const lbl = { deficit: 'tekort', low: 'laag', ok: 'goed', high: 'hoog' }[lv] || 'gemeten';
+      return `<span class="bs-badge ${lv || ''}">Jouw laatste: ${esc(String(m.v).replace('.', ','))} ${esc(m.unit || '')} · ${lbl}</span>`;
+    }
+    function renderBloodSupps() {
+      const keys = ['vitd', 'ferritine', 'zink', 'testo'];
+      const have = keys.map(k => [k, bloodLatest(k)]).filter(([, m]) => m);
+      const go = "state.bodyTab = 'bloed'; setSection('body')";
+      if (!have.length) return `
+        <div class="card bs-card" style="cursor: pointer;" onclick="${go}">
+          <label class="label">🩸 Jouw bloedwaarden</label>
+          <div class="su-txt">Weet je je vitamine D, ferritine, zink en testosteron? Dan zie je hier welke supplementen voor jóu zin hebben. Vul een uitslag in bij Lichaam → Bloed →</div>
+        </div>`;
+      const missing = keys.filter(k => !have.some(h => h[0] === k)).map(k => bloodSuppAdvice[k].name);
+      return `
+        <div class="card bs-card">
+          <label class="label">🩸 Op basis van jouw bloedwaarden</label>
+          ${have.map(([k, m]) => { const lv = bloodLevel(k, m); const a = bloodSuppAdvice[k]; const txt = (lv && a[lv]) || 'Geen referentiewaarde ingevuld, dus de app kan dit niet beoordelen. Vul de grenzen van je lab in bij Lichaam → Bloed.'; return `
+            <div class="bs-row">
+              <div class="bs-top"><b>${a.name}</b><span class="bs-v ${lv || ''}">${esc(String(m.v).replace('.', ','))} ${esc(m.unit || '')}</span></div>
+              <div class="su-txt">${txt}</div>
+              <div class="bs-date">Gemeten ${new Date(m.date + 'T12:00:00').toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+            </div>`; }).join('')}
+          ${missing.length ? `<div class="hs-small" style="margin-top: 10px;">Nog niet gemeten: ${missing.join(', ')}. Vraag ernaar bij je volgende bloedprik.</div>` : ''}
+          <button class="btn btn-secondary btn-small" style="width: 100%; margin-top: 12px;" onclick="${go}">Naar je bloedwaarden</button>
+        </div>`;
+    }
     function renderSupps() {
       const ref = suppRef;
       return `
@@ -8753,10 +9173,13 @@
           Supplementen vullen een tekort aan, ze vervangen geen goed eten. Vitamines en mineralen verhogen je testosteron alleen als je een tekort hebt. Slaap, training en een gezond vetpercentage maken meer verschil.
         </div>
 
+        ${renderBloodSupps()}
+
         <label class="label" style="margin-bottom: 10px;">Voor je testosteron</label>
         ${suppTesto.map(([icon, name, txt, dose, warn, when]) => `
           <div class="card su-card">
             <div class="su-head"><span class="su-icon">${icon}</span><span class="su-name">${name}</span></div>
+            ${name === 'Zink' ? bloodBadge('zink') : name === 'Vitamine D' ? bloodBadge('vitd') : ''}
             <div class="su-txt">${ref(txt)}</div>
             <div class="su-grid">
               <div><span>Dosis</span>${dose}</div>
@@ -9031,9 +9454,11 @@
       ['week', 'Weekrapport', 'Zondag en maandag'],
       ['hard75', '75 Hard', 'Alleen als je hem doet'],
       ['todo', 'Vandaag te doen', 'Wat er vandaag nog openstaat'],
+      ['fast', 'Vasten', 'Alleen als je aan het vasten bent'],
       ['habits', 'Positieve gewoontes', 'Afvinken met één tik'],
       ['foodtrain', 'Voeding & training', 'Calorieën, eiwit en je training van vandaag'],
       ['steps', 'Stappen', 'Invullen en je laatste 7 dagen'],
+      ['book', 'Aan het lezen', 'Alleen als je een boek leest'],
       ['challenges', 'Challenges vandaag', 'Alleen als je challenges hebt'],
       ['sleep', 'Slaap', 'Vannacht of je avondroutine'],
       ['year', 'Jaaroverzicht', 'Elke dag een vakje, kleur = dagscore'],
@@ -9044,7 +9469,13 @@
       const d = userPrefs().dash || {};
       const known = dashCards.map(c => c[0]);
       const order = (d.order || []).filter(k => known.includes(k));
-      known.forEach(k => { if (!order.includes(k)) order.push(k); });
+      // Nieuwe kaarten op hun standaardplek invoegen (na de kaart die er standaard voor staat)
+      known.forEach((k, i) => {
+        if (order.includes(k)) return;
+        let at = order.length;
+        for (let j = i - 1; j >= 0; j--) { const pos = order.indexOf(known[j]); if (pos >= 0) { at = pos + 1; break; } }
+        order.splice(at, 0, k);
+      });
       return { order, off: (d.off || []).filter(k => known.includes(k)) };
     }
 
@@ -9738,6 +10169,555 @@
     }
 
     // ============================================
+    // BOEKEN (top 20, covers live van Open Library)
+    // ============================================
+    const bookCats = [
+      ['mind', 'Mindset & discipline'],
+      ['habits', 'Gewoontes & focus'],
+      ['body', 'Lichaam & gezondheid'],
+      ['man', 'Man-zijn']
+    ];
+    // [id, titel, schrijver, jaar, categorie, Open Library cover-id, omschrijving, waarom in Primal Forged, kanttekening]
+    const books = [
+      ['canthurtme', "Can't Hurt Me", 'David Goggins', 2018, 'mind', 9406261,
+        'Van een jeugd vol geweld, armoede en overgewicht naar Navy SEAL en ultraloper. Goggins laat zien hoe je je eigen grenzen verlegt met de "40%-regel": als je denkt dat je op bent, zit je pas op 40% van wat je kunt.',
+        'Past bij 75 Hard en je challenges: elk hoofdstuk eindigt met een opdracht, zoals een "accountability mirror" en een "cookie jar" met je eigen overwinningen.', ''],
+      ['75hard', '75 Hard', 'Andy Frisella', 2020, 'mind', null,
+        'Het boek achter de challenge, met als ondertitel "A Tactical Guide to Winning the War with Yourself". Frisella legt uit waarom 75 Hard geen fitnessprogramma is maar mentale training: vijf regels, 75 dagen, één fout en je begint opnieuw.',
+        'De challenge zit in de app (Lichaam → Challenges). Dit boek geeft je het waarom erachter, zodat je het volhoudt als het zwaar wordt.', ''],
+      ['discipline', 'Discipline Is Destiny', 'Ryan Holiday', 2022, 'mind', 12996579,
+        'Zelfbeheersing volgens de Stoïcijnen, uitgelegd met verhalen over mensen als Lou Gehrig, Marcus Aurelius en Toni Morrison. Korte hoofdstukken over slaap, eten, verleiding en hard werken.',
+        'Discipline is de kern van de app: retention, gewoontes en je dagscore draaien er allemaal om.', ''],
+      ['obstacle', 'The Obstacle Is the Way', 'Ryan Holiday', 2014, 'mind', 14651917,
+        'Het obstakel is de weg: tegenslag is geen reden om te stoppen, maar het materiaal waar je sterker van wordt. Stoïcisme in drie stappen: hoe je kijkt, wat je doet en wat je wilt.',
+        'Voor de dagen dat het tegenzit. Past bij het "Lastig moment" in je avond-journal.', ''],
+      ['meditations', 'Meditations', 'Marcus Aurelius', 180, 'mind', 8612366,
+        'Het persoonlijke dagboek van een Romeinse keizer die zichzelf elke avond bijstuurde: over tijd, dood, ego en doen wat goed is. Nooit bedoeld om te publiceren.',
+        'Het oerboek van journaling. Lees elke dag een paar regels, het leest goed in kleine stukjes. Tip: de vertaling van Gregory Hays leest het makkelijkst.', ''],
+      ['ownership', 'Extreme Ownership', 'Jocko Willink & Leif Babin', 2015, 'mind', 8312790,
+        'Twee Navy SEAL-officieren over leiderschap uit de oorlog in Irak: alles wat in jouw wereld gebeurt is jouw verantwoordelijkheid. Geen excuses, geen schuld bij anderen.',
+        'Past bij "Morgen beter" in je avond-journal: niet wijzen naar anderen, maar kijken wat jij anders doet.', ''],
+      ['meaning', "Man's Search for Meaning", 'Viktor Frankl', 1946, 'mind', 8513458,
+        'Een psychiater overleeft Auschwitz en beschrijft hoe mensen met een doel het langer volhielden. Alles kan je worden afgenomen, behalve hoe je ergens op reageert.',
+        'Past bij het onderdeel Waarden: weten waarvoor je het doet maakt elke gewoonte makkelijker.', ''],
+      ['atomic', 'Atomic Habits', 'James Clear', 2018, 'habits', 12886417,
+        'Het standaardwerk over gewoontes. Kleine verbeteringen stapelen zich op. Maak een gewoonte zichtbaar, aantrekkelijk, makkelijk en bevredigend, en draai dat om voor slechte gewoontes.',
+        'Precies de logica achter je positieve en negatieve gewoontes, en achter "identiteit eerst": je vinkt niet af, je stemt op wie je wilt zijn.', ''],
+      ['mindset', 'Mindset', 'Carol Dweck', 2006, 'habits', 746414,
+        'Het verschil tussen een "vaste" en een "groei"-mindset: zie je talent als iets wat je hebt, of als iets wat je opbouwt? Wie gelooft dat hij kan groeien, zoekt uitdaging op in plaats van die te vermijden.',
+        'Past bij je rangen en de comeback-bonus: een slechte dag is informatie, geen oordeel.', 'De grote effecten uit de vroege studies zijn in latere, grotere onderzoeken kleiner gebleken. Het idee blijft bruikbaar, maar verwacht er geen wonderen van.'],
+      ['deepwork', 'Deep Work', 'Cal Newport', 2016, 'habits', 14859612,
+        'Waarom geconcentreerd werken zonder afleiding zeldzaam en waardevol is geworden, en hoe je het traint: vaste blokken, telefoon weg, verveling leren verdragen.',
+        'Past bij schermtijd, "Scherm weg" en de gewoonte om je telefoon niet als eerste te pakken.', ''],
+      ['dopamine', 'Dopamine Nation', 'Anna Lembke', 2021, 'habits', 11757830,
+        'Een verslavingspsychiater van Stanford over hoe telefoons, porno, suiker en gamen je beloningssysteem uitputten. Elke kick wordt gevolgd door een dip. Herstel begint met een maand "dopamine-vasten".',
+        'Het wetenschappelijke verhaal achter retention, schermtijd en de dopamine-challenge.', ''],
+      ['outlive', 'Outlive', 'Peter Attia', 2023, 'body', 14590549,
+        'Een arts over langer gezond leven: spierkracht, conditie (zone 2 en VO2max), stabiliteit, slaap en voeding als je belangrijkste medicijn. Kritisch op standaardadvies.',
+        'Verbindt bijna alles in de app: training, stappen, slaap, voeding en bloedwaarden.', ''],
+      ['primal', 'The Primal Blueprint', 'Mark Sisson', 2009, 'body', 6306707,
+        'Leven zoals je lichaam is gebouwd: onbewerkt eten, veel bewegen op lage intensiteit, af en toe heel hard, zwaar tillen, zon, slaap en spelen.',
+        'De naam zegt het al: de "primal" gedachte achter Primal Forged, met echte voeding en zon als basis.', 'Sisson verkoopt ook eigen voedingsproducten. Lees het als visie, niet als dieetboek.'],
+      ['strength', 'Starting Strength', 'Mark Rippetoe', 2005, 'body', 8722490,
+        'De klassieker over de basisoefeningen: squat, deadlift, bankdrukken, overhead press en power clean. Elke beweging stap voor stap uitgelegd, plus een simpel schema voor beginners.',
+        'Past bij Training: dezelfde basisoefeningen als in je schema, met perfecte techniek.', ''],
+      ['sleep', 'Why We Sleep', 'Matthew Walker', 2017, 'body', 10308777,
+        'Een slaaponderzoeker over wat slaap doet voor je hersenen, hormonen, spieren en gezondheid, en wat er gebeurt als je te weinig slaapt. Het boek dat slaap op de kaart zette.',
+        'Past bij Slaap: je slaapdoel, je avondroutine en "Scherm weg".', 'Wetenschappers vinden sommige claims overdreven of te stellig (bekende kritiek van Alexey Guzey). De grote lijn klopt, de enge cijfers niet altijd.'],
+      ['breath', 'Breath', 'James Nestor', 2020, 'body', 11409711,
+        'Een journalist onderzoekt hoe we ademen: door de neus, langzaam en minder. Met oude technieken, experimenten op zichzelf en wat het doet voor slaap, stress en sport.',
+        'Past bij de adem-timer bij je gewoontes.', ''],
+      ['wimhof', 'De Wim Hof Methode', 'Wim Hof', 2020, 'body', 10389859,
+        'De Nederlandse "Iceman" over zijn drie pijlers: kou, ademhaling en mindset. Met zijn eigen verhaal en een stappenplan om te beginnen.',
+        'Past bij de koude-douche-timer en de adem-timer.', 'Doe de ademhaling nooit in of bij water of tijdens autorijden: je kunt even flauwvallen.'],
+      ['comfort', 'The Comfort Crisis', 'Michael Easter', 2021, 'body', 11101220,
+        'We zijn kapot van het comfort: altijd warm, altijd eten, nooit verveeld. Easter gaat 33 dagen op jacht in Alaska en laat zien waarom honger, kou, verveling en zwaar sjouwen goed voor je zijn.',
+        'Past bij kou, wandelen en stappen, en bij "misogi": één keer per jaar iets doen waarvan je niet zeker weet of het lukt.', ''],
+      ['countdown', 'Count Down', 'Shanna Swan', 2021, 'body', 13765476,
+        'Een epidemioloog over de daling van zaadkwaliteit en testosteron in westerse landen, en de rol van hormoonverstorende stoffen in plastic, verpakkingen en verzorgingsproducten.',
+        'Past bij T-voeding en Supplementen: wat je vermijdt is net zo belangrijk als wat je eet.', 'Hoe groot de daling echt is, wordt onder wetenschappers betwist. Het advies om plastic en verzorgingsproducten te beperken kan geen kwaad.'],
+      ['niceguy', 'No More Mr. Nice Guy', 'Robert Glover', 2003, 'man', 11981149,
+        'Over mannen die alles doen om aardig gevonden te worden: conflicten vermijden, hun eigen behoeften wegstoppen en stiekem rekenen op iets terug. Glover laat zien hoe je grenzen stelt en stopt met pleasen.',
+        'Past bij Waarden en je journal: eerlijk zijn over wat jij wilt.', '']
+    ];
+    const bookById = id => books.find(b => b[0] === id);
+    function bookLessons() { const l = userPrefs().bookLessons; return l && typeof l === 'object' ? l : {}; }
+    function bookLessonList() {
+      const L = bookLessons(), out = [];
+      books.forEach(b => (L[b[0]] || []).forEach(t => { if (t && String(t).trim()) out.push({ text: String(t).trim(), title: b[1] }); }));
+      return out;
+    }
+    function bookLesson(id, i, v) {
+      const L = { ...bookLessons() };
+      const arr = (L[id] || ['', '', '']).slice(0, 3);
+      while (arr.length < 3) arr.push('');
+      arr[i] = String(v || '').trim().slice(0, 240);
+      if (arr.some(Boolean)) L[id] = arr; else delete L[id];
+      saveUserPrefs({ bookLessons: L });
+      const el = document.getElementById('bl-saved-' + id);
+      if (el) { el.textContent = '✓ Opgeslagen · komt terug als quote van de dag'; el.style.opacity = 1; }
+    }
+    function bookStatus() { const b = userPrefs().books; return b && typeof b === 'object' ? b : {}; }
+    function bookCounts() {
+      const st = Object.values(bookStatus());
+      return { read: st.filter(x => x && x.s === 'read').length, reading: st.filter(x => x && x.s === 'reading').length, want: st.filter(x => x && x.s === 'want').length };
+    }
+    function bookSet(id, s) {
+      if (!bookById(id)) return;
+      const all = { ...bookStatus() };
+      const cur = all[id];
+      if (cur && cur.s === s) delete all[id];
+      else all[id] = { s, at: s === 'read' && cur && cur.s === 'read' ? cur.at : todayStr() };
+      saveUserPrefs({ books: all });
+      progressCache = null;
+      render();
+      if (all[id] && all[id].s === 'read') showToast(`📚 Uitgelezen! +${XP.bookRead} XP`);
+    }
+    function bookCover(b, w, h) {
+      const [, title, author, , , cover] = b;
+      const fb = `<span class="bk-fb" style="width: ${w}px; height: ${h}px;"><b>${esc(title)}</b><small>${esc(author)}</small></span>`;
+      if (!cover) return fb;
+      // Laadt de cover niet (offline of niet gevonden), dan een nette kaart met de titel
+      return `<span class="bk-cov" style="width: ${w}px; height: ${h}px;" data-fb="${esc(fb)}"><img src="https://covers.openlibrary.org/b/id/${cover}-M.jpg?default=false" alt="Cover van ${esc(title)}" loading="lazy" width="${w}" height="${h}" onload="if (this.naturalWidth < 10) bookCoverFail(this);" onerror="bookCoverFail(this)"></span>`;
+    }
+    function bookCoverFail(img) { const p = img.parentNode; if (p && p.dataset.fb) p.outerHTML = p.dataset.fb; }
+    function renderBooks() {
+      const st = bookStatus();
+      const f = state.bookFilter || 'all';
+      const c = bookCounts();
+      const list = books.map((b, i) => ({ b, n: i + 1 })).filter(({ b }) => f === 'all' ? true : f === 'mine' ? !!st[b[0]] : b[4] === f);
+      const chips = [['all', 'Alles'], ...bookCats.map(([k, l]) => [k, l.split(' &')[0]]), ['mine', `Mijn lijst${c.read + c.reading + c.want ? ' (' + (c.read + c.reading + c.want) + ')' : ''}`]];
+      const statusBtn = (id, s, label) => `<button class="${st[id] && st[id].s === s ? 'on ' + s : ''}" aria-pressed="${!!(st[id] && st[id].s === s)}" onclick="bookSet('${id}', '${s}')">${label}</button>`;
+      let lastCat = null;
+      return `
+        <button class="entry-action" style="margin-bottom: 14px;" onclick="setSection('more')">← Terug</button>
+        <div class="page-header" style="margin-bottom: 12px;"><div class="page-sub">Meer</div><div class="page-title">Boeken</div></div>
+        <div class="card">
+          <div class="bk-stats">
+            <div><b>${c.read}</b><span>gelezen</span></div>
+            <div><b>${c.reading}</b><span>bezig</span></div>
+            <div><b>${c.want}</b><span>op je lijst</span></div>
+          </div>
+          <div class="hs-small" style="margin-top: 10px;">Elk uitgelezen boek = +${XP.bookRead} XP. Wat je nu leest, staat op je dashboard. Lezen blijft een gewoonte: 10 pagina's per dag.</div>
+        </div>
+        <div class="bk-chips" role="tablist">${chips.map(([k, l]) => `<button role="tab" aria-selected="${f === k}" class="${f === k ? 'on' : ''}" onclick="state.bookFilter = '${k}'; render();">${esc(l)}</button>`).join('')}</div>
+        ${!list.length ? `<div class="empty">Nog niets op je lijst. Tik bij een boek op "Wil ik lezen", "Bezig" of "Gelezen".</div>` : ''}
+        ${list.map(({ b, n }) => {
+          const [id, title, author, year, cat, , desc, why, note] = b;
+          const head = f === 'all' && cat !== lastCat ? `<div class="bk-cat">${esc(bookCats.find(x => x[0] === cat)[1])}</div>` : '';
+          lastCat = cat;
+          const s = st[id];
+          return `${head}
+          <div class="card bk-card${s ? ' bk-' + s.s : ''}">
+            <div class="bk-top">
+              ${bookCover(b, 72, 108)}
+              <div class="bk-meta">
+                <div class="bk-n">#${n}</div>
+                <div class="bk-title">${esc(title)}</div>
+                <div class="bk-author">${esc(author)} · ${year < 1000 ? 'ca. ' + year : year}</div>
+                ${s && s.s === 'read' ? `<div class="bk-done">✓ Gelezen ${s.at ? '· ' + new Date(s.at + 'T12:00:00').toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}</div>` : ''}
+              </div>
+            </div>
+            <div class="bk-desc">${esc(desc)}</div>
+            <div class="bk-why"><span>Waarom in Primal Forged</span>${esc(why)}</div>
+            ${note ? `<div class="bk-note"><span>Kanttekening</span>${esc(note)}</div>` : ''}
+            <div class="bk-status">${statusBtn(id, 'want', 'Wil ik lezen')}${statusBtn(id, 'reading', 'Bezig')}${statusBtn(id, 'read', 'Gelezen')}</div>
+            ${s && s.s === 'read' ? (() => { const L = bookLessons()[id] || []; return `
+            <div class="bk-lessons">
+              <div class="bk-lessons-t">Jouw 3 belangrijkste lessen</div>
+              ${[0, 1, 2].map(i => `<label class="sr-only" for="bl-${id}-${i}">Les ${i + 1} uit ${esc(title)}</label><input id="bl-${id}-${i}" class="form-input" maxlength="240" placeholder="Les ${i + 1}${i === 0 ? ', bijv. wat je anders bent gaan doen' : ''}" value="${esc(L[i] || '')}" onchange="bookLesson('${id}', ${i}, this.value)">`).join('')}
+              <div class="hs-small" id="bl-saved-${id}">Je lessen komen om de dag terug als quote van de dag op je dashboard.</div>
+            </div>`; })() : ''}
+          </div>`;
+        }).join('')}
+        <div class="hs-small" style="margin: 4px 0 16px;">Covers: <a href="https://openlibrary.org" target="_blank" rel="noopener" style="color: #a3a3a3;">Open Library</a>. De meeste boeken zijn ook in het Nederlands vertaald.</div>`;
+    }
+    function renderBookDashCard() {
+      const st = bookStatus();
+      const reading = books.filter(b => st[b[0]] && st[b[0]].s === 'reading');
+      if (!reading.length) return '';
+      const readToday = !!state.habits.reading;
+      return `
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <label class="label" style="margin: 0;">📚 Aan het lezen</label>
+            <button class="st-goal" onclick="setSection('books')">Alle boeken ›</button>
+          </div>
+          ${reading.slice(0, 2).map(b => `
+            <div class="bk-dash">
+              ${bookCover(b, 44, 66)}
+              <div class="bk-meta">
+                <div class="bk-title" style="font-size: 14px;">${esc(b[1])}</div>
+                <div class="bk-author">${esc(b[2])}</div>
+              </div>
+              <button class="btn btn-secondary btn-small" onclick="bookSet('${b[0]}', 'read')">Uit ✓</button>
+            </div>`).join('')}
+          ${habitConfig.reading ? `<button class="bk-today ${readToday ? 'on' : ''}" onclick="toggleHabit('reading')">${readToday ? "✓ 10 pagina's gelezen vandaag" : "Vandaag 10 pagina's gelezen? Tik om af te vinken"}</button>` : ''}
+        </div>`;
+    }
+
+    // ============================================
+    // PRIVACY & ACCOUNT VERWIJDEREN
+    // ============================================
+    const PRIVACY_DATE = '5 oktober 2026';
+    const PRIVACY_MAIL = 'info@primal-forged.com';
+    function renderPrivacy() {
+      const back = state.user ? `setSection('more')` : `state.showPrivacy = false; render();`;
+      const h = (t) => `<div class="pv-h">${t}</div>`;
+      return `
+        <div class="${state.user ? '' : 'container pv-out'}">
+        <button class="entry-action" style="margin-bottom: 14px;" onclick="${back}">← Terug</button>
+        <div class="page-header" style="margin-bottom: 12px;"><div class="page-sub">Primal Forged</div><div class="page-title">Privacy</div></div>
+        <div class="card pv">
+          <p>Primal Forged is een persoonlijke app. Wat je invult is van jou. We verkopen niets, tonen geen advertenties en volgen je niet.</p>
+          ${h('Welke gegevens')}
+          <ul>
+            <li><b>Account:</b> je e-mailadres en een versleuteld wachtwoord.</li>
+            <li><b>Wat je zelf invult:</b> journal, gewoontes, challenges, retention, slaap, stappen, training, voeding, lichaamsmetingen, voortgangsfoto's, bloedwaarden, boeken en je instellingen.</li>
+            <li><b>Meldingen:</b> als je herinneringen aanzet, het adres van je toestel voor pushmeldingen en je tijdzone.</li>
+            <li><b>Locatie:</b> alleen als je bij Vitamine D je locatie deelt. Die blijft op je eigen toestel en wordt niet verstuurd.</li>
+          </ul>
+          ${h('Gezondheidsgegevens')}
+          <p>Slaap, gewicht, foto's, bloedwaarden, libido en stemming zijn gezondheidsgegevens: bijzondere persoonsgegevens onder de AVG. We verwerken ze alleen omdat jij ze zelf invult en daarmee uitdrukkelijk toestemming geeft (AVG artikel 9 lid 2a). Je trekt die toestemming in door de gegevens of je account te verwijderen.</p>
+          ${h('Waarvoor')}
+          <p>Alleen om de app te laten werken: je gegevens bewaren, je voortgang, dagscore en XP berekenen en je herinneringen sturen. Niet voor iets anders.</p>
+          ${h('Waar staat het')}
+          <ul>
+            <li>Je gegevens en foto's staan in een database bij <b>Supabase</b>. Alleen jij kunt erbij: elke rij en elke foto is afgeschermd met je eigen account. Foto's staan in een privé-opslag.</li>
+            <li>De app zelf wordt geleverd via <b>Netlify</b>.</li>
+            <li>Bij het laden haalt je toestel bestanden op bij <b>unpkg</b> (database-bibliotheek), <b>Google Fonts</b> (lettertype), <b>Open Library</b> (boekcovers) en, als je een product zoekt, <b>Open Food Facts</b>. Die diensten zien dan je IP-adres, maar krijgen geen gegevens uit de app.</li>
+            <li>Alles gaat over een versleutelde verbinding (https).</li>
+          </ul>
+          ${h('Hoe lang')}
+          <p>Zolang je account bestaat. Verwijder je je account, dan worden al je gegevens en foto's direct gewist.</p>
+          ${h('Jouw rechten')}
+          <ul>
+            <li><b>Inzien en meenemen:</b> Meer → Back-up downloaden geeft je al je gegevens als bestand.</li>
+            <li><b>Aanpassen:</b> alles wat je invult kun je zelf bewerken of verwijderen.</li>
+            <li><b>Alles wissen:</b> Meer → Privacy & account → Account verwijderen.</li>
+            <li><b>Vragen of een klacht:</b> mail naar <a href="mailto:${PRIVACY_MAIL}">${PRIVACY_MAIL}</a>. Je kunt ook een klacht indienen bij de <a href="https://autoriteitpersoonsgegevens.nl" target="_blank" rel="noopener">Autoriteit Persoonsgegevens</a>.</li>
+          </ul>
+          ${h('Geen medisch advies')}
+          <p>De informatie in de app (over slaap, supplementen, voeding, bloedwaarden en training) is algemene informatie met bronnen. Het is geen medisch advies. Twijfel je over je gezondheid, ga dan naar een arts.</p>
+          <div class="hs-small" style="margin-top: 16px;">Laatst bijgewerkt: ${PRIVACY_DATE}</div>
+        </div>
+        ${state.user ? renderDeleteAccount() : ''}
+        </div>`;
+    }
+    function renderDeleteAccount() {
+      const busy = state.delBusy;
+      return `
+        <div class="card pv-del" id="pv-del">
+          <label class="label" style="color: #e5484d;">Account verwijderen</label>
+          <div style="font-size: 13px; color: #a3a3a3; line-height: 1.6;">Dit wist je account en <b style="color: #fafafa;">al je gegevens</b> voorgoed: journal, gewoontes, challenges, trainingen, voeding, metingen, foto's, bloedwaarden en instellingen. Dit kan niet ongedaan worden gemaakt.</div>
+          <div style="font-size: 12px; color: #a3a3a3; margin-top: 10px;">Tip: download eerst een <a href="#" onclick="setSection('more'); return false;" style="color: #e5e5e5;">back-up</a>.</div>
+          <label class="hs-small" for="del-confirm" style="display: block; margin: 14px 0 6px;">Typ <b style="color: #fafafa;">VERWIJDER</b> om te bevestigen</label>
+          <input id="del-confirm" class="form-input" autocomplete="off" autocapitalize="characters" style="width: 100%; box-sizing: border-box;" oninput="document.getElementById('del-btn').disabled = this.value.trim().toUpperCase() !== 'VERWIJDER';" ${busy ? 'disabled' : ''}>
+          <button id="del-btn" class="btn pv-del-btn" style="width: 100%; margin-top: 10px;" disabled onclick="deleteMyAccount()">${busy ? 'Bezig met wissen…' : 'Account en alle gegevens verwijderen'}</button>
+        </div>`;
+    }
+    async function deleteMyAccount() {
+      const inp = document.getElementById('del-confirm');
+      if (!inp || inp.value.trim().toUpperCase() !== 'VERWIJDER') return;
+      if (navigator.onLine === false) { alert('Je bent offline. Account verwijderen kan alleen met internet.'); return; }
+      state.delBusy = true; render();
+      const uid = state.user.id;
+      try {
+        // 1. Foto's uit de opslag (de database mag die niet zelf wissen)
+        const paths = new Set((state.photos || []).map(p => p.path).filter(Boolean));
+        try {
+          const { data: files } = await supabaseClient.storage.from('progress-photos').list(uid, { limit: 1000 });
+          (files || []).forEach(f => f && f.name && paths.add(uid + '/' + f.name));
+        } catch (e) {}
+        const all = [...paths];
+        for (let i = 0; i < all.length; i += 100) {
+          const { error } = await supabaseClient.storage.from('progress-photos').remove(all.slice(i, i + 100));
+          if (error) throw new Error("Foto's wissen lukte niet: " + error.message);
+        }
+        // 2. Meldingen op dit toestel uit
+        try { if ('serviceWorker' in navigator) { const reg = await navigator.serviceWorker.ready; const sub = reg.pushManager && await reg.pushManager.getSubscription(); if (sub) await sub.unsubscribe(); } } catch (e) {}
+        // 3. Alle gegevens en het account zelf
+        const { error } = await supabaseClient.rpc('delete_my_account');
+        if (error) throw new Error(error.message + (/function|schema cache/i.test(error.message) ? '\n\nIs account-update.sql al uitgevoerd in Supabase?' : ''));
+        // 4. Dit toestel opschonen
+        try { Object.keys(localStorage).filter(k => k.startsWith('pf_') || k.startsWith('sb-')).forEach(k => localStorage.removeItem(k)); } catch (e) {}
+        await pfClearCache();
+        state.delBusy = false;
+        try { await supabaseClient.auth.signOut(); } catch (e) {}
+        state.user = null; state.showPrivacy = false; authMode = 'login';
+        render();
+        alert('Je account en al je gegevens zijn verwijderd.');
+      } catch (e) {
+        state.delBusy = false; render();
+        alert('Verwijderen lukte niet: ' + (e.message || e));
+      }
+    }
+
+    // ============================================
+    // WELKOM: korte start voor nieuwe gebruikers
+    // ============================================
+    const obFocus = [
+      ['discipline', '🔥', 'Discipline & gewoontes', 'Elke dag de basis: gewoontes, journal, challenges'],
+      ['training', '🏋️', 'Training & kracht', 'Schema, sets en gewichten, stappen'],
+      ['sleep', '😴', 'Beter slapen', 'Slaapdoel, avondroutine, nachtmodus'],
+      ['food', '🥩', 'Voeding & testosteron', 'Eiwit, calorieën, T-voeding, supplementen'],
+      ['h75', '⚔️', '75 Hard doen', 'De challenge van 75 dagen, zonder fouten']
+    ];
+    function needsOnboarding() {
+      if (!state.user || state.recovery) return false;
+      const p = userPrefs();
+      if (p.onboarded) return false;
+      const has = (state.entries || []).length || Object.keys(state.habitHistory || {}).length || (state.workouts || []).length
+        || (state.challenges || []).length || (state.bodyStats || []).length || (state.foodLogs || []).length || Object.keys(state.habits || {}).some(k => state.habits[k]);
+      return !has;
+    }
+    function obState() {
+      if (!state.ob) { const s = sleepSettings(); state.ob = { step: 0, focus: ['discipline'], wake: s.wake, hours: s.hours, steps: stepsData().goal, push: false }; }
+      return state.ob;
+    }
+    function obGo(step) {
+      const o = obState();
+      const w = document.getElementById('ob-wake'), h = document.getElementById('ob-hours'), st = document.getElementById('ob-steps');
+      if (w && w.value) o.wake = w.value;
+      if (h) o.hours = Number(h.value) || o.hours;
+      if (st) { const n = parseInt(String(st.value).replace(/[^\d]/g, ''), 10); if (n >= 1000) o.steps = Math.min(n, 100000); }
+      if (step === 1 && !o.focus.length) { alert('Kies minstens één doel.'); return; }
+      o.step = step; render(); window.scrollTo(0, 0);
+    }
+    function obToggleFocus(k) { const o = obState(); o.focus = o.focus.includes(k) ? o.focus.filter(x => x !== k) : [...o.focus, k]; render(); }
+    function obFinish(skip) {
+      const o = obState();
+      if (!skip) {
+        obGo(o.step);   // laatste invoer vasthouden
+        const f = o.focus;
+        const want = { foodtrain: f.includes('training') || f.includes('food'), steps: f.includes('training') || f.includes('discipline'), sleep: f.includes('sleep') || f.includes('discipline'), challenges: f.includes('discipline') || f.includes('h75') };
+        const off = Object.keys(want).filter(k => !want[k]);
+        saveUserPrefs({ onboarded: todayStr(), focus: f, dash: { ...(userPrefs().dash || {}), off }, steps: { goal: o.steps, log: stepsData().log } });
+        saveSleepSettings({ wake: o.wake, hours: o.hours });
+      } else saveUserPrefs({ onboarded: todayStr() });
+      const goTrain = !skip && o.focus.includes('training') && !trainingPlan();
+      const goH75 = !skip && o.focus.includes('h75');
+      state.ob = null;
+      if (goTrain) { setSection('training'); openTrainSetup(); showToast('Stel je trainingsschema in'); }
+      else if (goH75) { state.bodyTab = 'challenges'; state.chView = 'list'; setSection('body'); showToast('Start hier 75 Hard'); }
+      else { setSection('dashboard'); showToast('💪 Klaar. Dag 1 begint nu.'); }
+      if (!skip && o.push) setTimeout(pushEnable, 400);
+    }
+    function renderOnboarding() {
+      const o = obState();
+      const dots = [0, 1, 2, 3].map(i => `<span class="ob-dot ${i === o.step ? 'on' : i < o.step ? 'done' : ''}"></span>`).join('');
+      const nav = (prev, next, nextLabel) => `
+        <div class="ob-nav">
+          ${prev !== null ? `<button class="btn btn-secondary" onclick="obGo(${prev})">Terug</button>` : '<span></span>'}
+          <button class="btn btn-primary" onclick="${next === 'finish' ? 'obFinish(false)' : `obGo(${next})`}">${nextLabel}</button>
+        </div>`;
+      let body = '';
+      if (o.step === 0) body = `
+        <div class="ob-title">Welkom bij Primal Forged</div>
+        <div class="ob-sub">Waar wil je mee aan de slag? Kies er één of meer. Je dashboard past zich hierop aan.</div>
+        <div class="ob-list">${obFocus.map(([k, ic, t, sub]) => `
+          <button class="ob-opt ${o.focus.includes(k) ? 'on' : ''}" aria-pressed="${o.focus.includes(k)}" onclick="obToggleFocus('${k}')">
+            <span class="ob-ic">${ic}</span><span class="ob-t">${t}<small>${sub}</small></span><span class="ob-ck">${o.focus.includes(k) ? '✓' : ''}</span>
+          </button>`).join('')}</div>
+        ${nav(null, 1, 'Volgende')}`;
+      if (o.step === 1) body = `
+        <div class="ob-title">Je dagelijkse basis</div>
+        <div class="ob-sub">Elke dag vink je deze gewoontes af op je dashboard. Zes of meer = een sterke dag. Tik er later op voor uitleg en bronnen.</div>
+        <div class="ob-habits">${visibleHabitKeys.map(k => `<div class="ob-h"><span>${habitConfig[k].icon}</span><b>${esc(habitConfig[k].label.charAt(0) + habitConfig[k].label.slice(1).toLowerCase())}</b><small>${esc(habitConfig[k].what || '')}</small></div>`).join('')}</div>
+        <div class="ob-sub" style="margin-top: 14px;">Je journal heeft twee momenten: 's ochtends je slaap en 3 doelen, 's avonds dankbaarheid en je overwinning.</div>
+        ${nav(0, 2, 'Volgende')}`;
+      if (o.step === 2) body = `
+        <div class="ob-title">Je slaapdoel</div>
+        <div class="ob-sub">Hoe laat sta je meestal op en hoeveel slaap wil je? De app rekent je bedtijd uit en herinnert je een uur van tevoren om je scherm weg te leggen.</div>
+        <div class="card">
+          <label class="label" for="ob-wake">Opstaan</label>
+          <input id="ob-wake" type="time" class="form-input" value="${esc(o.wake)}" style="width: 100%; box-sizing: border-box;" onchange="obGo(2)">
+          <label class="label" for="ob-hours" style="margin-top: 14px;">Uren slaap</label>
+          <select id="ob-hours" class="form-input" style="width: 100%; box-sizing: border-box;" onchange="obGo(2)">${[6.5, 7, 7.5, 8, 8.5, 9].map(h => `<option value="${h}" ${Number(o.hours) === h ? 'selected' : ''}>${String(h).replace('.', ',')} uur</option>`).join('')}</select>
+          <div class="hs-small" style="margin-top: 12px;">Bedtijd: <b style="color: #fafafa;">${min2hm(hm2min(o.wake) - Math.round(o.hours * 60))}</b> · scherm weg om ${min2hm(hm2min(o.wake) - Math.round(o.hours * 60) - 60)}</div>
+        </div>
+        ${nav(1, 3, 'Volgende')}`;
+      if (o.step === 3) body = `
+        <div class="ob-title">Laatste stap</div>
+        <div class="card">
+          <label class="label" for="ob-steps">Stappendoel per dag</label>
+          <input id="ob-steps" class="form-input" inputmode="numeric" value="${o.steps}" style="width: 100%; box-sizing: border-box;">
+          <div class="hs-small" style="margin-top: 8px;">8.000–10.000 is een goed doel. Je kunt het later aanpassen.</div>
+        </div>
+        <div class="card">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="flex: 1;"><span style="font-size: 14px;">Herinneringen</span><small style="display: block; font-size: 12px; color: #8a8a8a; margin-top: 3px;">Ochtend-journal, training, scherm weg en je avond. Niet als je het al gedaan hebt.</small></span>
+            <button class="de-sw ${o.push ? 'on' : ''}" role="switch" aria-checked="${o.push}" aria-label="Herinneringen" onclick="obGo(3); state.ob.push = !state.ob.push; render();"><i></i></button>
+          </div>
+        </div>
+        ${o.focus.includes('training') && !trainingPlan() ? `<div class="hs-small" style="margin-bottom: 12px;">Hierna stel je je trainingsschema in.</div>` : ''}
+        ${nav(2, 'finish', 'Start')}`;
+      return `
+        <div class="ob">
+          <div class="ob-top"><span class="logo">PRIMAL</span><span class="logo logo-accent">FORGED</span><button class="ob-skip" onclick="obFinish(true)">Overslaan</button></div>
+          <div class="ob-dots" aria-label="Stap ${o.step + 1} van 4">${dots}</div>
+          ${body}
+        </div>`;
+    }
+
+    // ============================================
+    // VASTEN (tab in Voeding + dashboardkaart)
+    // ============================================
+    const fastPlans = [[13, '13:11', 'Instap'], [16, '16:8', 'Meest gebruikt'], [18, '18:6', 'Gevorderd'], [20, '20:4', 'Zwaar']];
+    const fastSources = [
+      ['Overzicht', 'Intermittent fasting: effecten op gezondheid en veroudering (de Cabo & Mattson, NEJM 2019)', 'https://www.nejm.org/doi/full/10.1056/NEJMra1905136'],
+      ['Onderzoek', '16:8 met minder calorieën vs. alleen minder calorieën, 139 mensen, 12 maanden (Liu, NEJM 2022)', 'https://www.nejm.org/doi/full/10.1056/NEJMoa2114833'],
+      ['Onderzoek', '16:8 zonder andere regels, 116 mensen, 12 weken (Lowe, JAMA Internal Medicine 2020)', 'https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/2771095'],
+      ['Onderzoek', '16:8 bij krachtsporters: vet omlaag, kracht gelijk, testosteron licht omlaag (Moro 2016)', 'https://translational-medicine.biomedcentral.com/articles/10.1186/s12967-016-1044-0']
+    ];
+    function fastData() {
+      const f = userPrefs().fast || {};
+      return { goal: Number(f.goal) || 16, start: f.start || null, log: Array.isArray(f.log) ? f.log : [] };
+    }
+    function saveFast(patch) { const f = { ...fastData(), ...patch }; f.log = f.log.slice(-90); saveUserPrefs({ fast: f }); }
+    // Iets gegeten in je dagboek terwijl je vastte? Dan stopt je vasten op dat moment.
+    function fastAutoStop() {
+      const f = fastData(); if (!f.start) return null;
+      const startMs = new Date(f.start).getTime();
+      const ate = (state.foodLogs || []).map(l => l.created_at ? new Date(l.created_at).getTime() : 0).filter(t => t > startMs + 60000).sort((a, b) => a - b)[0];
+      if (!ate) return null;
+      fastEnd(new Date(ate).toISOString(), true);
+      return ate;
+    }
+    function fastElapsedMin(f) { return f.start ? Math.max(0, Math.floor((Date.now() - new Date(f.start).getTime()) / 60000)) : 0; }
+    function fastFmt(min) { return `${Math.floor(min / 60)}:${String(min % 60).padStart(2, '0')}`; }
+    function fastPhase(h) {
+      if (h < 4) return ['Verteren', 'Je lichaam verwerkt je laatste maaltijd. Insuline is nog hoog.'];
+      if (h < 12) return ['Bloedsuiker daalt', 'Insuline zakt. Je lichaam haalt energie uit de suikervoorraad in je lever.'];
+      if (h < 18) return ['Meer vetverbranding', 'De suikervoorraad raakt op. Je lichaam schakelt over op vet en maakt ketonen.'];
+      return ['Diep vasten', 'Ketonen stijgen verder. Drink genoeg water en neem wat zout als je duizelig wordt.'];
+    }
+    // Wanneer at je voor het laatst? (uit je dagboek, laatste 24 uur)
+    function lastMealTime() {
+      const since = Date.now() - 24 * 3600e3;
+      const t = (state.foodLogs || []).map(l => l.created_at ? new Date(l.created_at).getTime() : 0).filter(x => x > since && x <= Date.now()).sort((a, b) => b - a)[0];
+      return t || null;
+    }
+    function fastStart(fromMs) {
+      const t = fromMs ? new Date(fromMs) : new Date();
+      saveFast({ start: t.toISOString() });
+      render(); showToast(`⏳ Vasten gestart · doel ${fastData().goal} uur`);
+    }
+    function fastStartAt() {
+      const el = document.getElementById('fast-at'); if (!el || !el.value) return;
+      const [h, m] = el.value.split(':').map(Number);
+      const d = new Date(); d.setHours(h, m, 0, 0);
+      if (d.getTime() > Date.now()) d.setDate(d.getDate() - 1);  // later dan nu = gisteravond
+      fastStart(d.getTime());
+    }
+    function fastEnd(atIso, auto) {
+      const f = fastData(); if (!f.start) return;
+      const end = atIso || new Date().toISOString();
+      const min = Math.round((new Date(end) - new Date(f.start)) / 60000);
+      if (min < 1) { saveFast({ start: null }); render(); return; }
+      const reached = min >= f.goal * 60;
+      saveFast({ start: null, log: [...f.log, { s: f.start, e: end, goal: f.goal }] });
+      progressCache = null;
+      if (!auto) render();
+      showToast(auto ? `🍽️ Vasten gestopt bij je maaltijd · ${fastFmt(min)} uur${reached ? ` · doel gehaald, +${XP.fast} XP` : ''}`
+        : reached ? `✅ ${fastFmt(min)} uur gevast · doel gehaald, +${XP.fast} XP` : `Vasten gestopt na ${fastFmt(min)} uur`);
+    }
+    function fastSetGoal(h) { saveFast({ goal: h }); render(); }
+    function fastRing(f, size) {
+      const min = fastElapsedMin(f), goalMin = f.goal * 60;
+      const pct = Math.min(1, min / goalMin);
+      const r = size / 2 - 8, c = 2 * Math.PI * r;
+      return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-hidden="true">
+        <circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="#1f1f1f" stroke-width="8"/>
+        <circle class="fast-arc" cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${pct >= 1 ? '#22c55e' : '#b91c1c'}" stroke-width="8" stroke-linecap="round"
+          stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${(c * (1 - pct)).toFixed(1)}" transform="rotate(-90 ${size / 2} ${size / 2})"/>
+      </svg>`;
+    }
+    function renderFast() {
+      fastAutoStop();
+      const f = fastData();
+      const on = !!f.start;
+      const min = fastElapsedMin(f);
+      const [ph, phTxt] = fastPhase(min / 60);
+      const endAt = on ? new Date(new Date(f.start).getTime() + f.goal * 3600e3) : null;
+      const last = lastMealTime();
+      const recent = f.log.slice(-7).reverse();
+      const streak = (() => { let n = 0; for (let i = f.log.length - 1; i >= 0; i--) { const x = f.log[i]; if ((new Date(x.e) - new Date(x.s)) >= x.goal * 3600e3) n++; else break; } return n; })();
+      return `
+        <div class="hs-side" style="margin: 0 0 16px;">
+          <div class="hs-side-t">Eerlijk vooraf</div>
+          Vasten helpt vooral omdat je minder vaak eet. In grote onderzoeken viel je er niet méér door af dan door gewoon minder te eten. ${fastRef('[2]')} ${fastRef('[3]')} Het is een handige structuur, geen wondermiddel. Eet in je eetvenster genoeg eiwit.
+        </div>
+        <div class="card fast-card">
+          <div class="fast-ring">
+            ${fastRing(f, 200)}
+            <div class="fast-mid">
+              <div class="fast-big" id="fast-clock">${on ? fastFmt(min) : f.goal + ':00'}</div>
+              <div class="fast-lbl">${on ? `van ${f.goal} uur` : 'doel'}</div>
+            </div>
+          </div>
+          ${on ? `
+            <div class="fast-ph"><b>${ph}</b><span>${phTxt}</span></div>
+            <div class="fast-times"><div><span>Gestart</span>${new Date(f.start).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })}${new Date(f.start).toDateString() !== new Date().toDateString() ? ' (gist.)' : ''}</div><div><span>Doel bereikt</span>${endAt.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })}</div></div>
+            <button class="btn ${min >= f.goal * 60 ? 'btn-primary' : 'btn-secondary'}" style="width: 100%; margin-top: 14px;" onclick="fastEnd()">${min >= f.goal * 60 ? 'Vasten afronden ✓' : 'Vasten stoppen'}</button>
+            <div class="hs-small" style="margin-top: 8px; text-align: center;">Log je iets in je dagboek, dan stopt het vasten vanzelf.</div>`
+          : `
+            <div class="fast-plans" role="radiogroup" aria-label="Kies je vastenschema">${fastPlans.map(([h, l, sub]) => `<button role="radio" aria-checked="${f.goal === h}" class="${f.goal === h ? 'on' : ''}" onclick="fastSetGoal(${h})"><b>${l}</b><small>${sub}</small></button>`).join('')}</div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 14px;" onclick="fastStart()">Start nu</button>
+            ${last ? `<button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" onclick="fastStart(${last})">Vanaf je laatste maaltijd (${new Date(last).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })})</button>` : ''}
+            <form class="fast-at" onsubmit="event.preventDefault(); fastStartAt();">
+              <label for="fast-at">Of laatst gegeten om</label>
+              <input id="fast-at" type="time" class="form-input" value="20:00">
+              <button type="submit" class="btn btn-secondary">Start</button>
+            </form>`}
+        </div>
+        ${recent.length ? `
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;"><label class="label" style="margin: 0;">Laatste keren</label>${streak > 1 ? `<span style="font-size: 12px; color: #22c55e;">${streak}× op rij gehaald</span>` : ''}</div>
+          ${recent.map(x => { const m = Math.round((new Date(x.e) - new Date(x.s)) / 60000); const ok = m >= x.goal * 60; return `
+            <div class="fast-row"><span class="fast-d">${new Date(x.e).toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric', month: 'short' })}</span>
+              <span class="fast-bar"><span style="width: ${Math.min(100, m / (x.goal * 60) * 100)}%; background: ${ok ? '#22c55e' : '#525252'};"></span></span>
+              <span class="fast-h" style="color: ${ok ? '#22c55e' : '#a3a3a3'};">${fastFmt(m)}</span></div>`; }).join('')}
+          <div class="hs-small" style="margin-top: 8px;">Doel gehaald = +${XP.fast} XP (één keer per dag).</div>
+        </div>` : ''}
+        <div class="card">
+          <label class="label">Goed om te weten</label>
+          <ul class="fast-ul">
+            <li><b>Wat mag wel:</b> water, zwarte koffie, thee zonder suiker. Een snufje zout helpt tegen hoofdpijn.</li>
+            <li><b>Trainen:</b> kan prima. Zet je training liefst vlak vóór je eetvenster en eet daarna een eiwitrijke maaltijd.</li>
+            <li><b>Testosteron:</b> bij krachtsporters op 16:8 bleven spieren en kracht gelijk, maar daalde testosteron licht. ${fastRef('[4]')} Voor je T is genoeg eten en slapen belangrijker dan lang vasten.</li>
+            <li><b>Niet doen</b> als je diabetes hebt of medicijnen voor je bloedsuiker gebruikt, als je een eetstoornis hebt (gehad), of als je jonger bent dan 18. Twijfel je, vraag het je huisarts.</li>
+          </ul>
+        </div>
+        ${suppSourcesHtml(fastSources)}`;
+    }
+    function fastRef(t) { return suppRef(t); }
+    function renderFastDashCard() {
+      fastAutoStop();
+      const f = fastData(); if (!f.start) return '';
+      const min = fastElapsedMin(f);
+      const done = min >= f.goal * 60;
+      return `
+        <div class="card fast-dash" style="cursor: pointer;" onclick="state.fMain = 'vasten'; state.fView = 'day'; setSection('food')">
+          ${fastRing(f, 64)}
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 13px;">⏳ Vasten <b id="fast-clock-d">${fastFmt(min)}</b> / ${f.goal}u</div>
+            <div style="font-size: 11px; color: ${done ? '#22c55e' : '#a3a3a3'}; margin-top: 4px;">${done ? 'Doel gehaald · tik om af te ronden →' : fastPhase(min / 60)[0] + ' · nog ' + fastFmt(f.goal * 60 - min) + ' →'}</div>
+          </div>
+        </div>`;
+    }
+    // De klok loopt door zonder de hele pagina opnieuw te tekenen
+    setInterval(() => {
+      const a = document.getElementById('fast-clock'), b = document.getElementById('fast-clock-d');
+      if (!a && !b) return;
+      const f = fastData(); if (!f.start) return;
+      const min = fastElapsedMin(f);
+      if (a) a.textContent = fastFmt(min);
+      if (b) b.textContent = fastFmt(min);
+      if (min === f.goal * 60) render();
+    }, 20000);
+
+    // ============================================
     // HERINNERINGEN (pushmeldingen via Supabase Edge Function "send-reminders")
     // ============================================
     const VAPID_PUBLIC = 'BFVrf-QjhZJ-XWJBnp6jB9dBUM2ROfcaqgMzdEvYldMg2956WCJ-7elXxYc9ic3dyYUAmRc7Ak8_tVtQQ3jYrYg';
@@ -9858,7 +10838,7 @@
       } catch (e) {}
     }
     // Melding aangetikt of link met #onderdeel: naar dat onderdeel
-    const navSections = ['dashboard', 'journal', 'body', 'training', 'food', 'sleep', 'more', 'week', 'reminders'];
+    const navSections = ['dashboard', 'journal', 'body', 'training', 'food', 'sleep', 'more', 'week', 'reminders', 'books', 'privacy'];
     function gotoFromHash() {
       const h = (location.hash || '').replace('#', '');
       if (state.user && navSections.includes(h)) {
@@ -10030,8 +11010,31 @@
       }
     }
 
+    // Nieuwe versie online gezet? Dan een balk om bij te werken
+    async function checkNewVersion() {
+      if (navigator.onLine === false) return;
+      try {
+        const res = await realFetch(location.pathname + '?v=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) return;
+        const m = (await res.text()).match(/const APP_VERSION = '([^']+)'/);
+        if (!m || m[1] === APP_VERSION || document.getElementById('pf-update')) return;
+        const el = document.createElement('button');
+        el.id = 'pf-update';
+        el.innerHTML = `Nieuwe versie (${esc(m[1])}) · <b>tik om bij te werken</b>`;
+        el.onclick = () => { el.textContent = 'Bijwerken…'; location.reload(); };
+        document.body.appendChild(el);
+      } catch (e) {}
+    }
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') checkNewVersion(); });
+    setInterval(checkNewVersion, 30 * 60 * 1000);
+    setTimeout(checkNewVersion, 8000);
+
     async function init() {
-      const { data: { session } } = await supabaseClient.auth.getSession();
+      let { data: { session } } = await supabaseClient.auth.getSession();
+      // Offline en je sessie kon niet worden ververst: toch je laatst bekende account gebruiken
+      if (!session && navigator.onLine === false) {
+        try { const st = JSON.parse(localStorage.getItem('sb-dgqfvyjgtkoeiyswgngs-auth-token') || 'null'); if (st && st.user) session = { user: st.user }; } catch (e) {}
+      }
       
       if (session) {
         state.user = session.user;
@@ -10042,6 +11045,8 @@
       state.loading = false;
       render();
       if (state.user && !state.recovery) gotoFromHash();
+      pfBanner();
+      if (state.user) setTimeout(pfFlush, 1500);
       window.addEventListener('hashchange', gotoFromHash);
       
       supabaseClient.auth.onAuthStateChange(async (event, session) => {
