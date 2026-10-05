@@ -906,6 +906,100 @@
     .hm-dash-ws { margin-top: 12px; }
     .hm-dash-l { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #22c55e; }
     .hm-dash-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+    .hf-list { margin-top: 12px; display: grid; gap: 10px; }
+    .hf { background: #111; border: 1px solid #222; border-radius: 10px; padding: 12px; }
+    .hf-h b { display: block; font-size: 14px; color: #fafafa; font-weight: 600; }
+    .hf-h span { display: block; font-size: 11px; color: #8a8a8a; margin-top: 2px; }
+    .hf-h em { display: inline-block; font-style: normal; font-size: 10px; color: #86efac; border: 1px solid rgba(21,128,61,0.5); border-radius: 999px; padding: 1px 8px; margin-top: 6px; }
+    .hf dl { display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 6px 10px; margin: 10px 0 0; }
+    .hf dt { font-size: 11px; color: #8a8a8a; }
+    .hf dd { margin: 0; font-size: 12px; color: #d4d4d4; line-height: 1.5; }
+    .hf-tot { font-size: 12px; color: #a3a3a3; line-height: 1.55; }
+    .hf-tot b { color: #e5e5e5; }
+    /* Kompas, review, afstuderen */
+    .kp-ta { width: 100%; box-sizing: border-box; resize: vertical; font-family: inherit; line-height: 1.5; }
+    .kp-card { border-left: 3px solid #d9a441; }
+    .kp-goal { border-left: 3px solid #7f1d1d; }
+    .kp-gn { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #e5484d; margin-bottom: 8px; }
+    .kp-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+    .kp-row label { font-size: 12px; color: #8a8a8a; flex: none; min-width: 52px; }
+    .kp-row .form-input { flex: 1; min-width: 0; }
+    .kp-links { margin-top: 10px; }
+    .kp-links summary { list-style: none; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #a3a3a3; cursor: pointer; min-height: 32px; }
+    .kp-links summary::-webkit-details-marker { display: none; }
+    .kp-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .kp-chips button { background: #141414; border: 1px solid #262626; color: #a3a3a3; border-radius: 999px; padding: 6px 10px; font-family: inherit; font-size: 12px; cursor: pointer; touch-action: manipulation; }
+    .kp-chips button.on { border-color: #b91c1c; color: #fafafa; background: rgba(127,29,29,0.25); }
+    .kp-goalline { font-size: 12px; color: #a3a3a3; line-height: 1.5; margin: 10px 0; padding: 8px 10px; border-left: 2px solid #d9a441; background: rgba(217,164,65,0.06); }
+    .kp-goalline b { color: #fafafa; font-weight: 600; }
+    .kp-goalline span { display: block; color: #8a8a8a; margin-top: 2px; }
+    .kp-why-card { border-left: 3px solid #d9a441; }
+    .kp-quote { font-size: 15px; color: #fafafa; line-height: 1.6; font-style: italic; }
+    .kp-id { font-size: 13px; color: #d9a441; margin-top: 8px; }
+    .kp-dash-id { font-size: 13px; color: #d9a441; font-style: italic; margin-top: 8px; line-height: 1.5; cursor: pointer; }
+    .kp-dash { border-left: 3px solid #d9a441; }
+    .kp-focus { font-size: 17px; color: #fafafa; font-weight: 500; line-height: 1.4; }
+    .kp-focus-card { border-left: 3px solid #22c55e; }
+    .kp-comeback { font-size: 12px; color: #d4d4d4; line-height: 1.55; margin-top: 8px; }
+    .j-why { display: block; width: 100%; text-align: left; background: rgba(217,164,65,0.07); border: 1px solid rgba(217,164,65,0.25); border-radius: 8px; padding: 10px 12px; color: #e5e5e5; font-family: inherit; font-size: 13px; line-height: 1.5; font-style: italic; cursor: pointer; margin-bottom: 12px; }
+    .j-why span { display: block; font-style: normal; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #d9a441; margin-bottom: 3px; }
+    .rv-q { font-size: 13px; color: #a3a3a3; margin-top: 12px; line-height: 1.5; }
+    .rv-rate { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+    .rv-rate input { flex: 1; accent-color: #d9a441; }
+    .rv-rate b { font-size: 24px; color: #fafafa; width: 32px; text-align: right; }
+    .rv-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; text-align: center; }
+    .rv-stats b { display: block; font-size: 18px; color: #fafafa; font-weight: 600; }
+    .rv-stats span { font-size: 10px; color: #8a8a8a; }
+    .rv-seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 8px; }
+    .rv-seg button { background: #141414; border: 1px solid #262626; color: #a3a3a3; border-radius: 8px; min-height: 40px; font-family: inherit; font-size: 13px; cursor: pointer; }
+    .rv-seg button.on { border-color: #d9a441; color: #fafafa; background: rgba(217,164,65,0.15); }
+    .lb-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr); gap: 8px; padding: 8px 0; font-size: 13px; align-items: baseline; }
+    .lb-row + .lb-row { border-top: 1px solid #1a1a1a; }
+    .lb-row > span:first-child { color: #a3a3a3; }
+    .lb-h span { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a8a8a; }
+    .lb-then { color: #8a8a8a; text-align: right; }
+    .lb-now { color: #fafafa; text-align: right; font-weight: 600; }
+    .lb-now.up { color: #22c55e; }
+    .lb-now.down { color: #e5484d; }
+    .hl-box { background: #111; border: 1px solid #222; border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+    .hl-top { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; color: #a3a3a3; }
+    .hl-top b { color: #fafafa; }
+    .hl-auto { font-size: 11px; color: #86efac; }
+    .hl-target { font-size: 15px; color: #fafafa; font-weight: 500; margin-top: 4px; }
+    .hl-bar { height: 6px; background: #1f1f1f; border-radius: 3px; overflow: hidden; margin-top: 10px; }
+    .hl-bar span { display: block; height: 100%; background: #d9a441; border-radius: 3px; }
+    .hab-grad { position: absolute; top: 2px; right: 4px; font-size: 11px; }
+    .habit { position: relative; }
+    /* Buddy's */
+    .bd-card { border-left: 3px solid #3b82f6; }
+    .bd-head { display: flex; align-items: center; gap: 12px; }
+    .bd-av { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #1e3a8a, #7f1d1d); display: grid; place-items: center; font-weight: 600; color: #fafafa; flex: none; }
+    .bd-av.sm { width: 32px; height: 32px; font-size: 13px; }
+    .bd-name { font-size: 16px; color: #fafafa; font-weight: 600; }
+    .bd-sub { font-size: 11px; color: #8a8a8a; margin-top: 2px; }
+    .bd-tr { font-size: 11px; color: #737373; border: 1px solid #262626; border-radius: 999px; padding: 2px 8px; flex: none; }
+    .bd-tr.on { color: #86efac; border-color: rgba(21,128,61,0.5); }
+    .bd-focus { margin-top: 12px; font-size: 14px; color: #fafafa; line-height: 1.4; padding: 10px 12px; background: rgba(34,197,94,0.06); border-left: 2px solid #22c55e; }
+    .bd-focus span { display: block; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #22c55e; margin-bottom: 3px; }
+    .bd-focus i { color: #737373; }
+    .bd-focus small { display: block; font-size: 11px; color: #a3a3a3; margin-top: 4px; }
+    .bd-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(64px, 1fr)); gap: 6px; margin-top: 12px; text-align: center; }
+    .bd-stats b { display: block; font-size: 18px; color: #fafafa; font-weight: 600; }
+    .bd-stats span { font-size: 10px; color: #8a8a8a; }
+    .bd-ch { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .bd-ch span { font-size: 11px; color: #d4d4d4; background: #141414; border: 1px solid #262626; border-radius: 999px; padding: 3px 9px; }
+    .bd-act { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+    .bd-pick { display: grid; gap: 6px; margin-top: 8px; }
+    .bd-pick button { text-align: left; background: #141414; border: 1px solid #262626; color: #e5e5e5; border-radius: 8px; padding: 10px 12px; font-family: inherit; font-size: 13px; cursor: pointer; }
+    .bd-code { font-size: 32px; letter-spacing: 0.25em; text-align: center; color: #fafafa; font-weight: 600; margin: 4px 0; font-variant-numeric: tabular-nums; }
+    .bd-ev { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; font-size: 13px; color: #d4d4d4; line-height: 1.45; }
+    .bd-ev + .bd-ev { border-top: 1px solid #1a1a1a; }
+    .bd-ev.new { color: #fafafa; }
+    .bd-ev b { color: #fafafa; }
+    .bd-ev small { display: block; font-size: 11px; color: #737373; margin-top: 2px; }
+    .bd-mini { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+    .bd-mini b { display: block; font-size: 13px; color: #fafafa; font-weight: 600; }
+    .bd-mini span { display: block; font-size: 12px; color: #a3a3a3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   </style>
 </head>
 <body>
@@ -1671,11 +1765,12 @@
           </div>`;
       }
       const st = habitStats(key);
-      const check = info.check ? `
+      const lvlHtml = habitLevelHtml(key) + compassGoalLine('h:' + key);
+      const check = lvlHtml + (info.check ? `
         <div class="hs-check">
           <div class="hs-check-t">Afvinken als je vandaag</div>
           ${Array.isArray(info.check) ? info.check.map(c => `<div>✓ ${c}</div>`).join('') : `<div>${info.check}</div>`}
-        </div>` : '';
+        </div>` : '');
       const body = info.parts
         ? info.parts.map(p => `
             <div class="hs-part"><span>${p.label}</span>${p.badge ? `<span class="hs-badge">${p.badge}</span>` : ''}<i></i></div>
@@ -2041,6 +2136,7 @@
       if (pfQueue().length && !confirm('Er staan nog ' + pfQueue().length + ' offline wijzigingen klaar die nog niet zijn verstuurd. Als je nu uitlogt, gaan ze verloren. Toch uitloggen?')) return;
       try { localStorage.removeItem('pf_queue'); } catch (e) {}
       pfClearCache();
+      state.buddy = null;
       await supabaseClient.auth.signOut();
       state.user = null;
       state.entries = [];
@@ -2265,6 +2361,7 @@
         showToast('⚠️ Habit niet opgeslagen');
       }
       state.habitHistory[today] = { ...(state.habitHistory[today] || {}), [habit]: !!state.habits[habit] };
+      try { habitGradCheck(); } catch (e) {}
       if (habitChallenge(habit)) {
         const msgs = await settleChallenges();
         if (msgs.length) { render(); showToast(msgs[0]); }
@@ -2551,6 +2648,8 @@
         book: () => renderBookDashCard(),
         fast: () => renderFastDashCard(),
         home: () => renderHomeDashCard(),
+        focus: () => renderFocusCard(),
+        buddies: () => renderBuddyDashCard(),
         challenges: () => renderDashboardChallenges(),
         sleep: () => renderSleepDashCard(),
         year: () => renderYearCard(),
@@ -2573,6 +2672,7 @@
         <div class="page-header">
           <div class="greeting">${getGreeting()}, Strijder</div>
           <div class="greeting-sub">${hard75Active() ? '75 Hard is je hoofdfocus' : 'Dag ' + Math.max(1, getJournalStreak()) + ' van je transformatie'}</div>
+          ${compass().identity ? `<div class="kp-dash-id" onclick="setSection('kompas')">${esc(compass().identity)}</div>` : ''}
         </div>
 
         ${body}
@@ -4011,6 +4111,7 @@
         <div style="margin-bottom: 16px;">
           <div style="font-size: 10px; color: #e5484d; letter-spacing: 0.2em; font-weight: 600;">${(chKinds[c.kind] || '').toUpperCase()}${Number(c.attempt) > 1 ? ' · POGING ' + c.attempt : ''}</div>
           <div style="font-size: 24px; font-weight: 300; letter-spacing: 0.06em; margin-top: 4px;">${esc(c.name.toUpperCase())}</div>
+          ${compassGoalLine('ch:' + c.id)}
         </div>
 
         ${c.kind === 'hard75' && isActive ? renderHard75Hero(c) : `<div class="card" style="text-align: center;">
@@ -4399,7 +4500,7 @@
     // ============================================
     // MOTIVATIE: XP, DAGSCORE, RANGEN
     // ============================================
-    const APP_VERSION = '5 okt · 16:00';
+    const APP_VERSION = '5 okt · 21:00';
     const XP = {
       habit: 5,
       journal: 15,
@@ -4418,7 +4519,9 @@
       fast: 10,          // vastendoel gehaald (1x per dag)
       homeItem: 20,      // stap in Primal Home (eenmalig)
       homeMaint: 10,     // onderhoud in Primal Home gedaan
-      homeRoom: 50       // ruimte in Primal Home compleet (eenmalig)
+      homeRoom: 50,      // ruimte in Primal Home compleet (eenmalig)
+      review: 25,        // wekelijkse review gedaan
+      habitGrad: 100     // gewoonte afgestudeerd (60 van 66 dagen)
     };
 
     const ranks = [
@@ -4571,6 +4674,8 @@
       Object.entries(homeSt()).forEach(([id, v]) => { if (v && v.s === 'have' && homeIds.has(id)) addH(v.at, XP.homeItem); });
       Object.values(homeMaintLog()).forEach(arr => (arr || []).forEach(dt => addH(dt, XP.homeMaint)));
       Object.values(homeBadges()).forEach(dt => addH(dt, XP.homeRoom));
+      Object.values(reviews()).forEach(r => r && r.at && addH(r.at, XP.review));
+      Object.values(habitGradLog()).forEach(arr => (arr || []).forEach(g => g && addH(g.at, XP.habitGrad)));
       const fastXpOn = {};
       fastData().log.forEach(x => { if (x && x.e && (new Date(x.e) - new Date(x.s)) >= (Number(x.goal) || 16) * 3600e3) fastXpOn[localDateStr(new Date(x.e))] = XP.fast; });
       const protByDate = {};
@@ -4759,7 +4864,7 @@
           </div>
           <div class="progress-bar" style="margin-top: 14px;"><div class="progress-fill" style="width: ${barPct}%; background: #e5484d;"></div></div>
           <div style="font-size: 10px; color: #8a8a8a; margin-top: 6px;">${nextText}</div>
-          ${p.comebackReady ? `<div style="font-size: 11px; color: #eab308; margin-top: 10px;">🔥 Comeback: haal vandaag een dagscore van 50 en je XP telt dubbel</div>` : ''}
+          ${p.comebackReady ? `<div style="font-size: 11px; color: #eab308; margin-top: 10px;">🔥 Comeback: haal vandaag een dagscore van 50 en je XP telt dubbel</div>${compassWhyLine() ? `<div class="kp-comeback">Weet nog waarom je begon: <i>${esc(compassWhyLine())}</i> Vandaag is genoeg: de 2-minutenversie telt ook.</div>` : ''}` : ''}
           ${p.today.doubled ? `<div style="font-size: 11px; color: #22c55e; margin-top: 10px;">🔥 Comeback-bonus actief: vandaag dubbele XP</div>` : ''}
           <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; margin-top: 14px; align-items: end;">
             ${week.map(d => {
@@ -4792,6 +4897,8 @@
         ['Stappendoel gehaald', `+${XP.steps} per dag`],
         ['Boek uitgelezen', `+${XP.bookRead} per boek`],
         ['Vastendoel gehaald', `+${XP.fast} per dag`],
+        ['Wekelijkse review', `+${XP.review} per week`],
+        ['Gewoonte afgestudeerd (60 van 66 dagen)', `+${XP.habitGrad} per niveau`],
         ['Primal Home: stap gedaan', `+${XP.homeItem} (eenmalig per stap)`],
         ['Primal Home: onderhoud gedaan', `+${XP.homeMaint}`],
         ['Primal Home: ruimte compleet', `+${XP.homeRoom} (eenmalig)`],
@@ -7413,6 +7520,7 @@
       const vtop = latestValues();
       const tabs = `
         ${vtop ? `<button class="j-values" onclick="openValues();" aria-label="Mijn waarden bekijken"><span>🧭</span>${vtop.top.map(esc).join(' · ')}</button>` : ''}
+        ${mode === 'ochtend' && compassWhyLine() ? `<button class="j-why" onclick="setSection('kompas')"><span>Je waarom</span>${esc(compassWhyLine())}</button>` : ''}
         <div class="j-mode">
           <button class="${mode === 'ochtend' ? 'on' : ''}" onclick="setJMode('ochtend')">☀ Ochtend${jd.morningAt ? ' ✓' : ''}</button>
           <button class="${mode === 'avond' ? 'on' : ''}" onclick="setJMode('avond')">☾ Avond${jd.eveningAt ? ' ✓' : ''}</button>
@@ -8679,6 +8787,24 @@
           <div class="page-title">Meer</div>
         </div>
 
+        <div class="card card-accent kp-meer" style="cursor: pointer;" onclick="setSection('kompas')">
+          <label class="label">🧭 Kompas</label>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">${compassHas() ? (compass().identity ? '<i style="color: #e5e5e5;">' + esc(compass().identity) + '</i>' : 'Je waarom, je visie en je doelen dit kwartaal.') : 'Zonder waarom houdt niets stand. Schrijf op waarom je dit doet en wie je wilt zijn.'}</div>
+          <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">${compassHas() ? 'Bekijk je kompas →' : 'Begin hier →'}</div>
+        </div>
+
+        <div class="card card-accent" style="cursor: pointer;" onclick="${reviewDue() ? 'reviewStart()' : "state.review90 = true; setSection('review')"}">
+          <label class="label">📋 Wekelijkse review</label>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">${reviewDue() ? 'Je review staat klaar: 10 minuten terugkijken en één focus kiezen.' : currentFocus() ? 'Focus deze week: <b style="color: #fafafa;">' + esc(currentFocus().text) + '</b>' : 'Elke zondag: terugkijken, bijsturen en één focus kiezen.'}</div>
+          <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">${reviewDue() ? 'Start je review →' : 'Wie was je 90 dagen geleden? →'}</div>
+        </div>
+
+        <div class="card card-accent" style="cursor: pointer;" onclick="setSection('buddies')">
+          <label class="label">🤝 Buddy's</label>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">${buddyState().list && buddyState().list.length ? buddyState().list.map(x => esc((x.p && x.p.name) || 'Buddy')).join(', ') : 'Samen houd je het langer vol. Nodig maximaal 3 mensen uit die je kent.'}</div>
+          <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Open →</div>
+        </div>
+
         <div class="card card-accent" style="cursor: pointer;" onclick="setSection('retention')">
           <label class="label">🔥 Retention</label>
           <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">${state.retentionStreak ? 'Huidige reeks: <b style="color: #fafafa;">' + getRetentionDays() + ' dagen</b>' : 'Nog geen actieve reeks.'}</div>
@@ -8788,6 +8914,9 @@
           ${state.activeSection === 'books' ? renderBooks() : ''}
           ${state.activeSection === 'privacy' ? renderPrivacy() : ''}
           ${state.activeSection === 'home' ? renderHome() : ''}
+          ${state.activeSection === 'kompas' ? renderCompass() : ''}
+          ${state.activeSection === 'review' ? renderReview() : ''}
+          ${state.activeSection === 'buddies' ? renderBuddies() : ''}
         </div>
         
         ${state.showRankUp ? renderRankUp() : ''}
@@ -8839,6 +8968,7 @@
       applyNightMode();
       if (state.activeSection === 'body') setupBodyChart();
       if (!state.showRankUp) setTimeout(checkRankUp, 50);
+      if (state.buddy && state.buddy.me) buddyPushSnapshot();
     }
 
     // ============================================
@@ -9583,9 +9713,11 @@
     // ============================================
     const dashCards = [
       ['rank', 'Rang & dagscore', 'XP, rang en je week'],
+      ['focus', 'Focus & review', 'Je focus van de week, review op zondag'],
       ['week', 'Weekrapport', 'Zondag en maandag'],
       ['hard75', '75 Hard', 'Alleen als je hem doet'],
       ['todo', 'Vandaag te doen', 'Wat er vandaag nog openstaat'],
+      ['buddies', "Buddy's", "Alleen als je buddy's hebt"],
       ['fast', 'Vasten', 'Alleen als je aan het vasten bent'],
       ['habits', 'Positieve gewoontes', 'Afvinken met één tik'],
       ['foodtrain', 'Voeding & training', 'Calorieën, eiwit en je training van vandaag'],
@@ -9782,7 +9914,7 @@
               <div class="habit-wrap"><button class="habit ${state.habits[key] ? 'done' : ''}" aria-label="${esc(cfg.title)}${state.habits[key] ? ' – gedaan' : ' – afvinken'}" onclick="toggleHabit('${key}')">
                 <span class="habit-icon">${cfg.icon}</span>
                 <span class="habit-label">${cfg.label}</span>
-                ${habitChallengeLabel(key)}
+                ${habitChallengeLabel(key)}${habitGradStats(key).graduated ? '<span class="hab-grad" title="Automatisch">🎓</span>' : ''}
               </button><button class="habit-info ${state.habits[key] ? 'done' : ''}" onclick="state.showHabitModal = '${key}'; render();" aria-label="Uitleg over ${esc(cfg.title)}">i</button></div>
             `).join('')}
           </div>
@@ -10512,6 +10644,7 @@
             <li><b>Account:</b> je e-mailadres en een versleuteld wachtwoord.</li>
             <li><b>Wat je zelf invult:</b> journal, gewoontes, challenges, retention, slaap, stappen, training, voeding, vasten, lichaamsmetingen, voortgangsfoto's, bloedwaarden, boeken, je leefomgeving-lijst en je instellingen.</li>
             <li><b>Meldingen:</b> als je herinneringen aanzet, het adres van je toestel voor pushmeldingen en je tijdzone.</li>
+            <li><b>Buddy's:</b> als je buddy's gebruikt, zien zij je naam en alleen wat je zelf aanzet (zoals je focus of dagscore). Je journal, foto's, metingen, bloedwaarden, slaap, libido en retention zijn nooit zichtbaar voor anderen.</li>
             <li><b>Locatie:</b> alleen als je bij Vitamine D je locatie deelt. Die blijft op je eigen toestel en wordt niet verstuurd.</li>
           </ul>
           ${h('Gezondheidsgegevens')}
@@ -10618,6 +10751,8 @@
       if (w && w.value) o.wake = w.value;
       if (h) o.hours = Number(h.value) || o.hours;
       if (st) { const n = parseInt(String(st.value).replace(/[^\d]/g, ''), 10); if (n >= 1000) o.steps = Math.min(n, 100000); }
+      const wy = document.getElementById('ob-why'), idn = document.getElementById('ob-id');
+      if (wy) o.why = wy.value.trim(); if (idn) o.identity = idn.value.trim();
       if (step === 1 && !o.focus.length) { alert('Kies minstens één doel.'); return; }
       o.step = step; render(); window.scrollTo(0, 0);
     }
@@ -10631,6 +10766,7 @@
         const off = Object.keys(want).filter(k => !want[k]);
         saveUserPrefs({ onboarded: todayStr(), focus: f, dash: { ...(userPrefs().dash || {}), off }, steps: { goal: o.steps, log: stepsData().log } });
         saveSleepSettings({ wake: o.wake, hours: o.hours });
+        if (o.why || o.identity) compassSet({ why: (o.why || '').slice(0, 600), identity: (o.identity || '').slice(0, 140) });
       } else saveUserPrefs({ onboarded: todayStr() });
       const goTrain = !skip && o.focus.includes('training') && !trainingPlan();
       const goH75 = !skip && o.focus.includes('h75');
@@ -10642,7 +10778,7 @@
     }
     function renderOnboarding() {
       const o = obState();
-      const dots = [0, 1, 2, 3].map(i => `<span class="ob-dot ${i === o.step ? 'on' : i < o.step ? 'done' : ''}"></span>`).join('');
+      const dots = [0, 1, 2, 3, 4].map(i => `<span class="ob-dot ${i === o.step ? 'on' : i < o.step ? 'done' : ''}"></span>`).join('');
       const nav = (prev, next, nextLabel) => `
         <div class="ob-nav">
           ${prev !== null ? `<button class="btn btn-secondary" onclick="obGo(${prev})">Terug</button>` : '<span></span>'}
@@ -10658,23 +10794,34 @@
           </button>`).join('')}</div>
         ${nav(null, 1, 'Volgende')}`;
       if (o.step === 1) body = `
+        <div class="ob-title">Je waarom</div>
+        <div class="ob-sub">Zonder waarom houdt niets stand. Waarom begin je hieraan? Dit komt terug op de momenten dat het zwaar is.</div>
+        <div class="card">
+          <label class="label" for="ob-why">Waarom ben je hier?</label>
+          <textarea id="ob-why" class="form-input kp-ta" rows="4" placeholder="Bijv. Ik wil sterker, rustiger en betrouwbaarder worden, voor mezelf en voor de mensen om me heen.">${esc(o.why || '')}</textarea>
+          <label class="label" for="ob-id" style="margin-top: 14px;">Wie wil je zijn?</label>
+          <input id="ob-id" class="form-input" maxlength="140" style="width: 100%; box-sizing: border-box;" placeholder="Ik ben iemand die…" value="${esc(o.identity || '')}">
+          <div class="hs-small" style="margin-top: 8px;">Mag je later aanvullen in je Kompas. Overslaan kan ook.</div>
+        </div>
+        ${nav(0, 2, 'Volgende')}`;
+      if (o.step === 2) body = `
         <div class="ob-title">Je dagelijkse basis</div>
         <div class="ob-sub">Elke dag vink je deze gewoontes af op je dashboard. Zes of meer = een sterke dag. Tik er later op voor uitleg en bronnen.</div>
         <div class="ob-habits">${visibleHabitKeys.map(k => `<div class="ob-h"><span>${habitConfig[k].icon}</span><b>${esc(habitConfig[k].label.charAt(0) + habitConfig[k].label.slice(1).toLowerCase())}</b><small>${esc(habitConfig[k].what || '')}</small></div>`).join('')}</div>
         <div class="ob-sub" style="margin-top: 14px;">Je journal heeft twee momenten: 's ochtends je slaap en 3 doelen, 's avonds dankbaarheid en je overwinning.</div>
-        ${nav(0, 2, 'Volgende')}`;
-      if (o.step === 2) body = `
+        ${nav(1, 3, 'Volgende')}`;
+      if (o.step === 3) body = `
         <div class="ob-title">Je slaapdoel</div>
         <div class="ob-sub">Hoe laat sta je meestal op en hoeveel slaap wil je? De app rekent je bedtijd uit en herinnert je een uur van tevoren om je scherm weg te leggen.</div>
         <div class="card">
           <label class="label" for="ob-wake">Opstaan</label>
-          <input id="ob-wake" type="time" class="form-input" value="${esc(o.wake)}" style="width: 100%; box-sizing: border-box;" onchange="obGo(2)">
+          <input id="ob-wake" type="time" class="form-input" value="${esc(o.wake)}" style="width: 100%; box-sizing: border-box;" onchange="obGo(3)">
           <label class="label" for="ob-hours" style="margin-top: 14px;">Uren slaap</label>
-          <select id="ob-hours" class="form-input" style="width: 100%; box-sizing: border-box;" onchange="obGo(2)">${[6.5, 7, 7.5, 8, 8.5, 9].map(h => `<option value="${h}" ${Number(o.hours) === h ? 'selected' : ''}>${String(h).replace('.', ',')} uur</option>`).join('')}</select>
+          <select id="ob-hours" class="form-input" style="width: 100%; box-sizing: border-box;" onchange="obGo(3)">${[6.5, 7, 7.5, 8, 8.5, 9].map(h => `<option value="${h}" ${Number(o.hours) === h ? 'selected' : ''}>${String(h).replace('.', ',')} uur</option>`).join('')}</select>
           <div class="hs-small" style="margin-top: 12px;">Bedtijd: <b style="color: #fafafa;">${min2hm(hm2min(o.wake) - Math.round(o.hours * 60))}</b> · scherm weg om ${min2hm(hm2min(o.wake) - Math.round(o.hours * 60) - 60)}</div>
         </div>
-        ${nav(1, 3, 'Volgende')}`;
-      if (o.step === 3) body = `
+        ${nav(2, 4, 'Volgende')}`;
+      if (o.step === 4) body = `
         <div class="ob-title">Laatste stap</div>
         <div class="card">
           <label class="label" for="ob-steps">Stappendoel per dag</label>
@@ -10684,15 +10831,15 @@
         <div class="card">
           <div style="display: flex; align-items: center; gap: 12px;">
             <span style="flex: 1;"><span style="font-size: 14px;">Herinneringen</span><small style="display: block; font-size: 12px; color: #8a8a8a; margin-top: 3px;">Ochtend-journal, training, scherm weg en je avond. Niet als je het al gedaan hebt.</small></span>
-            <button class="de-sw ${o.push ? 'on' : ''}" role="switch" aria-checked="${o.push}" aria-label="Herinneringen" onclick="obGo(3); state.ob.push = !state.ob.push; render();"><i></i></button>
+            <button class="de-sw ${o.push ? 'on' : ''}" role="switch" aria-checked="${o.push}" aria-label="Herinneringen" onclick="obGo(4); state.ob.push = !state.ob.push; render();"><i></i></button>
           </div>
         </div>
         ${o.focus.includes('training') && !trainingPlan() ? `<div class="hs-small" style="margin-bottom: 12px;">Hierna stel je je trainingsschema in.</div>` : ''}
-        ${nav(2, 'finish', 'Start')}`;
+        ${nav(3, 'finish', 'Start')}`;
       return `
         <div class="ob">
           <div class="ob-top"><span class="logo">PRIMAL</span><span class="logo logo-accent">FORGED</span><button class="ob-skip" onclick="obFinish(true)">Overslaan</button></div>
-          <div class="ob-dots" aria-label="Stap ${o.step + 1} van 4">${dots}</div>
+          <div class="ob-dots" aria-label="Stap ${o.step + 1} van 5">${dots}</div>
           ${body}
         </div>`;
     }
@@ -10866,7 +11013,12 @@
       bottled: ['Nanoplastics in flessenwater: ±240.000 deeltjes per liter (NIH, PNAS 2024)', 'https://www.nih.gov/news-events/nih-research-matters/plastic-particles-bottled-water'],
       sprays: ['Schoonmaken met sprays en achteruitgang van de longfunctie (AJRCCM 2018)', 'https://pubmed.ncbi.nlm.nih.gov/29451393/'],
       hap: ['Hydroxyapatiet-tandpasta vs. fluoride: 189 volwassenen, 18 maanden (Frontiers in Public Health 2023)', 'https://www.frontiersin.org/articles/10.3389/fpubh.2023.1199728/full'],
-      ntp: ['NTP: fluoride en de ontwikkeling van het brein bij kinderen (2024)', 'https://ntp.niehs.nih.gov/research/assessments/noncancer/completed/fluoride']
+      ntp: ['NTP: fluoride en de ontwikkeling van het brein bij kinderen (2024)', 'https://ntp.niehs.nih.gov/research/assessments/noncancer/completed/fluoride'],
+      filtercost: ['Kosten van waterfilters: aanschaf, onderhoud, PFAS (Waterfilterplatform, 2026)', 'https://www.waterfilterplatform.nl/pfas-waterfilter/kosten'],
+      zerowater: ['ZeroWater vervangfilter: prijs en wat het weghaalt (bol.com)', 'https://www.bol.com/nl/nl/p/zerowater-1-pack-waterfilter-waterkan-vervangingsfilters/9200000084830042/'],
+      zip: ['ZIP omgekeerde osmose zonder installatie (Waterfilterexpert)', 'https://www.waterfilterexpert.nl/zip-omgekeerde-osmose-systeem-zonder-installatie'],
+      laptop: ['Laptop op schoot en de temperatuur van de balzak (Human Reproduction 2005)', 'https://academic.oup.com/humrep/article-abstract/20/2/452/603276'],
+      induction: ['Zwitserse overheid (BAG): advies bij inductiekookplaten', 'https://www.bag.admin.ch/dam/en/sd-web/Q-QOAC2li-HY/Fact%20sheet%20induction%20hob.pdf']
     };
     // i = impact (3 groot, 2 middel, 1 detail) · c = kosten (0 gratis … 3 €€€) · h = hormoonvriendelijk
     // m = onderhoud [dagen, taak] · save = besparing · go = koppeling naar een tab of onderdeel
@@ -10874,9 +11026,10 @@
       ['keuken', 'Keuken & eten', [
         { id: 'k1', t: 'Niet opwarmen in plastic', i: 3, c: 0, h: 1, src: ['microwave'], x: 'Verwarm eten in glas of keramiek, niet in plastic bakjes. Ook niet heet afwassen in de vaatwasser. Bij verhitten komen veel meer micro- en nanoplastics vrij.' },
         { id: 'k13', t: 'Niet verkoold vlees', i: 3, c: 0, x: "Zwartgeblakerd vlees van de barbecue of grill bevat kankerverwekkende stoffen (HCA's en PAK's). Snijd verbrande stukjes eraf en grill op lager vuur." },
-        { id: 'k7', t: 'Groente en fruit wassen met zuiveringszout', i: 2, c: 0, src: ['soda'], go: ['recepten', 'Recept: groentebad'], x: '1 theelepel zuiveringszout op een halve liter water, 12–15 minuten laten weken en afspoelen. In onderzoek haalde dit 80–96% van de bestrijdingsmiddelen van de schil, veel meer dan alleen water.' },
+        { id: 'k7', t: 'Groente en fruit wassen met zuiveringszout', i: 2, c: 0, src: ['soda'], go: ['recepten:r7', 'Recept: groentebad'], x: '1 theelepel zuiveringszout op een halve liter water, 12–15 minuten laten weken en afspoelen. In onderzoek haalde dit 80–96% van de bestrijdingsmiddelen van de schil, veel meer dan alleen water.' },
         { id: 'k8', t: 'Vers in plaats van blik en plastic', i: 2, c: 0, h: 1, src: ['bpa'], x: 'Koop zoveel mogelijk vers of in glas. BPA mag sinds juli 2026 niet meer in nieuwe verpakkingen in de EU, maar oude voorraad en vervangers zoals BPS zijn er nog.' },
         { id: 'k15', t: 'Kleine vette vis', i: 2, c: 0, x: 'Haring, makreel en sardines in plaats van grote roofvis zoals zwaardvis en tonijn: evenveel omega-3, veel minder kwik.' },
+        { id: 'k17', t: 'Stoommandje in plaats van magnetron', i: 2, c: 1, h: 1, x: 'Warm je eten op in een stoommandje (bamboe of RVS) boven een pan kokend water. In ±5 minuten is het warm, het blijft sappig en er komt geen plastic bakje aan te pas. Ook ideaal voor groente.' },
         { id: 'k12', t: 'Bakken en frituren in stabiel vet', i: 2, c: 1, src: ['oils'], x: 'Gebruik olijfolie, roomboter, ghee of rund- of ganzenvet. Geen zonnebloem- of maisolie: die vormen bij verhitten veel meer schadelijke aldehyden. Gebruik frituurvet niet eindeloos opnieuw.' },
         { id: 'k9', t: 'Geen hete drank in plastic bekers', i: 2, c: 1, h: 1, x: 'Koffie en soep niet uit plastic bekers of to-go-bekers met een plastic laagje. Neem je eigen RVS-beker mee.' },
         { id: 'k2', t: 'Glazen of RVS bewaarbakjes', i: 2, c: 2, h: 1, x: 'Bewaar restjes en je lunch in glas of RVS, zeker warm en vet eten: vet neemt stoffen uit plastic makkelijk op.' },
@@ -10892,7 +11045,7 @@
       ['water', 'Water', [
         { id: 'w3', t: 'Oud huis? Kraan even laten lopen', i: 3, c: 0, x: "Is je huis van vóór 1960, dan kunnen er nog loden leidingen zijn. Laat 's ochtends en na een vakantie de kraan even lopen tot het water koud is. Twijfel je: je waterbedrijf kan het water testen." },
         { id: 'w1', t: 'Een goed waterfilter', i: 2, c: 2, h: 1, src: ['bottled'], m: [60, 'Waterfilter vervangen'], save: 'Kraanwater met filter kost een paar cent per liter. Flessenwater ±€0,40: bij 1 liter per dag scheelt dat €100–150 per jaar.', x: 'In kraanwater zitten sporen van PFAS, medicijnresten, hormoonverstorende stoffen (xeno-oestrogenen) en bestrijdingsmiddelen. De gemeten hoeveelheden zijn laag, maar je drinkt het elke dag, en van de effecten van al die stoffen samen op lange termijn weet niemand veel. Met een goed filter haal je het grootste deel eruit. Flessenwater is géén oplossing: daar zitten honderdduizenden nanoplastics per liter in.' },
-        { id: 'w2', t: 'Het juiste filter kiezen', i: 2, c: 2, x: 'Omgekeerde osmose haalt het meest weg (ook PFAS, medicijnresten en hormoonverstorende stoffen), maar ook mineralen: kies er een met remineralisatie. Actieve kool (kan of onder het aanrecht) haalt chloor, smaak en een deel van de PFAS weg. Vervang het filter op tijd, anders groeien er juist bacteriën in.' },
+        { id: 'w2', t: 'Het juiste filter kiezen', i: 2, c: 2, extra: 'filters', src: ['filtercost', 'zerowater', 'zip'], x: 'Omgekeerde osmose haalt het meest weg (ook PFAS, medicijnresten en hormoonverstorende stoffen), maar ook mineralen: kies er een met remineralisatie. Actieve kool haalt chloor, smaak en een deel van de PFAS weg. Let op een NSF-certificaat (NSF 58 voor omgekeerde osmose, NSF 53 voor actieve kool): dat is een onafhankelijke test. Vervang het filter op tijd, anders groeien er juist bacteriën in. Hieronder de 4 typen naast elkaar (richtprijzen oktober 2026).' },
         { id: 'w4', t: 'Drinkfles van RVS of glas', i: 1, c: 1, h: 1, x: 'Een fles van RVS of glas geeft niets af, ook niet in de zon of met warme thee.' }
       ]],
       ['lucht', 'Lucht in huis', [
@@ -10901,7 +11054,7 @@
         { id: 'l2', t: 'Afzuigkap aan bij het koken', i: 3, c: 0, m: [90, 'Filter afzuigkap schoonmaken'], x: 'Zeker op gas: koken geeft fijnstof en (op gas) stikstofdioxide. Afzuigkap aan, en nog 10 minuten laten draaien.' },
         { id: 'l4', t: 'Houtkachel of open haard beperken', i: 3, c: 0, x: 'Een van de grootste bronnen van fijnstof in en om je huis. Stook zo min mogelijk, en alleen droog hout.' },
         { id: 'l5', t: 'Koolmonoxidemelder', i: 3, c: 1, m: [180, 'CO-melder testen'], x: 'Heb je gas, een cv-ketel of een kachel: hang een CO-melder op. Koolmonoxide ruik je niet. Test hem twee keer per jaar met de testknop.' },
-        { id: 'l3', t: 'Geen geurkaarsen, wierook of luchtverfrissers', i: 2, c: 0, h: 1, go: ['recepten', 'Recept: natuurlijke frisse geur'], save: 'Geen geurkaarsen en luchtverfrissers meer: al snel €50+ per jaar.', x: 'Ze geven fijnstof en vluchtige stoffen af. Wil je een frisse geur: ventileren, of een pannetje met citroenschil en rozemarijn laten pruttelen.' },
+        { id: 'l3', t: 'Geen geurkaarsen, wierook of luchtverfrissers', i: 2, c: 0, h: 1, go: ['recepten:r9', 'Recept: natuurlijke frisse geur'], save: 'Geen geurkaarsen en luchtverfrissers meer: al snel €50+ per jaar.', x: 'Ze geven fijnstof en vluchtige stoffen af. Wil je een frisse geur: ventileren, of een pannetje met citroenschil en rozemarijn laten pruttelen.' },
         { id: 'l6', t: 'Schoenen uit in huis', i: 2, c: 0, x: 'Zo loop je geen lood, bestrijdingsmiddelen en straatvuil naar binnen.' },
         { id: 'l8', t: 'Luchtvochtigheid 40–60%', i: 2, c: 1, x: 'Te droog geeft droge slijmvliezen, te vochtig geeft schimmel en huisstofmijt. Een hygrometer kost een paar euro.' },
         { id: 'l7', t: 'Stofzuigen met HEPA-filter, nat afstoffen', i: 2, c: 2, h: 1, x: 'Huisstof bevat vlamvertragers en weekmakers uit meubels en elektronica. Een HEPA-filter houdt het fijne stof vast; nat afstoffen voorkomt dat je het opwaait.' }
@@ -10911,14 +11064,14 @@
         { id: 's6', t: 'Schimmel direct aanpakken', i: 3, c: 1, m: [30, 'Badkamer en kozijnen op schimmel checken'], x: 'Schimmel in de badkamer of bij kozijnen: weghalen én de oorzaak oplossen, meestal vocht en te weinig ventilatie. Na het douchen de tegels aftrekken en het raam open.' },
         { id: 's1', t: 'Natuurlijke schoonmaakmiddelen', i: 2, c: 0, go: ['recepten', 'Bekijk de recepten'], save: 'Azijn, soda en zuiveringszout zijn veel goedkoper dan losse middelen: tientallen euro\'s per jaar.', x: 'Azijn tegen kalk, soda tegen vet, groene zeep voor vloeren, zuiveringszout als schuurmiddel, en microvezeldoeken. Daarmee kun je bijna alles schoonmaken.' },
         { id: 's2', t: 'Minder sprays', i: 2, c: 0, src: ['sprays'], x: 'Bij mensen die vaak met sprays schoonmaakten ging de longfunctie over de jaren meetbaar sneller achteruit. Spuit op je doek in plaats van in de lucht, of kies een fles zonder spray.' },
-        { id: 's4', t: 'Parfumvrij wasmiddel, geen wasverzachter', i: 2, c: 0, h: 1, save: 'Geen wasverzachter meer: ±€30 per jaar.', x: 'Parfum en wasverzachter blijven in je kleding en beddengoed zitten, dag en nacht tegen je huid. Een scheutje azijn in het wasverzachterbakje maakt je was ook zacht.' },
+        { id: 's4', t: 'Parfumvrij wasmiddel, geen wasverzachter', i: 2, c: 0, h: 1, go: ['recepten:r10', 'Recept: wasmiddel van kastanjes'], save: 'Geen wasverzachter meer: ±€30 per jaar.', x: 'Parfum en wasverzachter blijven in je kleding en beddengoed zitten, dag en nacht tegen je huid. Een scheutje azijn in het wasverzachterbakje maakt je was ook zacht.' },
         { id: 's5', t: 'Nieuwe kleding eerst wassen', i: 1, c: 0, x: 'Was nieuwe kleding en beddengoed voor je het gebruikt: zo gaan restjes van kleurstoffen en finish eruit.' }
       ]],
       ['verzorging', 'Verzorging', [
-        { id: 'v6', t: 'Zon slim: schaduw eerst', i: 3, c: 0, x: 'Schaduw is je beste bescherming: zoek die op tussen 12 en 15 uur in de zomer. Bouw je zon rustig op in het voorjaar, dan went je huid en maak je vitamine D aan. Bedek je met pet, shirt en zonnebril. Kun je niet uit de zon (strand, festival, lange wandeling), smeer dan toch, met een minerale crème zonder parfum: verbranden is altijd erger dan smeren.' },
+        { id: 'v6', t: 'Zon slim: schaduw eerst', i: 3, c: 0, go: ['recepten:r12', 'Recept: zonnebrand met zinkoxide'], x: 'Schaduw is je beste bescherming: zoek die op tussen 12 en 15 uur in de zomer. Bouw je zon rustig op in het voorjaar, dan went je huid en maak je vitamine D aan. Bedek je met pet, shirt en zonnebril. Kun je niet uit de zon (strand, festival, lange wandeling), smeer dan toch, met een minerale crème zonder parfum: verbranden is altijd erger dan smeren.' },
         { id: 'v1', t: 'Parfumvrije verzorging', i: 2, c: 0, h: 1, go: ['etiket', 'Check een etiket'], x: "Kijk of er 'parfum' of 'fragrance' op het etiket staat. Parfum is de grootste bron van allergieën en kan ftalaten bevatten: weekmakers die in onderzoek samengaan met een lager testosteron." },
-        { id: 'v4', t: 'Natuurlijke deodorant', i: 2, c: 1, h: 1, go: ['recepten', 'Recept: zelf deodorant maken'], x: 'Laat gewone deodorant en antitranspirant, zeker spuitbussen, staan. Je brengt het elke dag aan op een gevoelige plek met veel lymfeklieren, en een spuitbus adem je ook in. Kies een natuurlijke deodorant zonder aluminium, parfum en alcohol, bijvoorbeeld op basis van zuiveringszout, magnesium of kokosolie.' },
-        { id: 'v5', t: 'Fluoridevrije tandpasta', i: 2, c: 1, src: ['hap', 'ntp'], x: 'Kies tandpasta zonder fluoride, mét hydroxyapatiet: hetzelfde mineraal waar je tandglazuur van gemaakt is. In een onderzoek van 18 maanden met 189 volwassenen beschermde het even goed tegen gaatjes als fluoridetandpasta. Fluoride is ook niet zonder zorgen: bij hoge blootstelling vond het Amerikaanse NTP een verband met een lager IQ bij kinderen.' },
+        { id: 'v4', t: 'Natuurlijke deodorant', i: 2, c: 1, h: 1, go: ['recepten:r8', 'Recept: zelf deodorant maken'], x: 'Laat gewone deodorant en antitranspirant, zeker spuitbussen, staan. Je brengt het elke dag aan op een gevoelige plek met veel lymfeklieren, en een spuitbus adem je ook in. Kies een natuurlijke deodorant zonder aluminium, parfum en alcohol, bijvoorbeeld op basis van zuiveringszout, magnesium of kokosolie.' },
+        { id: 'v5', t: 'Fluoridevrije tandpasta', i: 2, c: 1, src: ['hap', 'ntp'], go: ['recepten:r11', 'Recept: tandpasta met kokosolie'], x: 'Kies tandpasta zonder fluoride, mét hydroxyapatiet: hetzelfde mineraal waar je tandglazuur van gemaakt is. In een onderzoek van 18 maanden met 189 volwassenen beschermde het even goed tegen gaatjes als fluoridetandpasta. Fluoride is ook niet zonder zorgen: bij hoge blootstelling vond het Amerikaanse NTP een verband met een lager IQ bij kinderen.' },
         { id: 'v3', t: 'Weinig ingrediënten, check het etiket', i: 1, c: 0, h: 1, go: ['etiket', 'Naar de etiket-checker'], x: 'Hoe korter de ingrediëntenlijst, hoe beter. Met de etiket-checker in deze app zie je wat een stof is. Apps als Yuka of INCI Beauty scannen een product in één keer.' },
         { id: 'v7', t: 'Chloorvrij wc-papier', i: 1, c: 0, x: 'Ongebleekt of chloorvrij gebleekt wc-papier, zonder parfum, lotion of kleurtjes.' },
         { id: 'v2', t: 'Zonder paraffine of minerale olie', i: 1, c: 1, x: "Kies verzorging op basis van plantaardige oliën en boters (olijf, kokos, jojoba, sheaboter) in plaats van paraffine, vaseline of 'paraffinum liquidum'. Zeker voor je lippen: lippenbalsem slik je deels in." }
@@ -10931,12 +11084,39 @@
         { id: 'b4', t: "'s Avonds rood en gedimd licht", i: 2, c: 1, x: "Na zonsondergang gedimde, warme lampen, en een rode lamp voor de avond en voor 's nachts naar het toilet. Rood licht remt je melatonine het minst." },
         { id: 'b5', t: 'Blauwlichtfilter op je schermen', i: 1, c: 0, x: "Zet 's avonds de nachtmodus aan op je telefoon en laptop, of draag een oranje bril. Het scherm helemaal wegleggen werkt nog beter." }
       ]],
+      ['elektro', 'Elektronica', [
+        { id: 'e1', t: 'Laptop niet op je schoot', i: 2, c: 0, src: ['laptop'], x: 'Leg je laptop niet op je schoot, en zeker niet als hij aan de lader zit: dan wordt hij het warmst. In onderzoek steeg de temperatuur van de balzak bij een laptop op schoot binnen een uur met ruim 2 °C, en warmte is slecht voor je zaadkwaliteit. Een kussen ertussen hielp niet genoeg. Zet hem op tafel of op een laptopstandaard.' },
+        { id: 'e2', t: 'Telefoon niet naast je hoofd opladen', i: 2, c: 0, x: "Laad je telefoon niet in bed, onder je kussen of naast je hoofd. Een telefoon die laadt wordt warm, onder een kussen is dat een brandrisico, en 's nachts stoort hij met licht en meldingen. Straling neemt snel af met afstand: een meter verder scheelt al veel. Leg hem buiten de slaapkamer of minstens een meter van je bed, op vliegtuigmodus." },
+        { id: 'e3', t: 'Zwanger? Afstand van de inductieplaat', i: 2, c: 0, src: ['induction'], x: "Een inductiekookplaat geeft dichtbij een magnetisch veld dat snel zwakker wordt met afstand. De Zwitserse overheid adviseert: houd minstens 15 cm afstand, zet de pan altijd midden op de zone en gebruik een pan die de zone helemaal bedekt. Ben je zwanger, kook dan liefst op de achterste zones, of voor op halve kracht, en leun niet tegen de kookplaat. Heb je een pacemaker of ander elektronisch implantaat: overleg met je arts. Is dit niet van toepassing, kies dan 'Niet voor mij'." }
+      ]],
       ['overig', 'Overig', [
         { id: 'o1', t: 'Kassabonnetjes weigeren', i: 2, c: 0, h: 1, x: 'Thermisch papier bevat bisfenolen (sinds 2020 geen BPA meer, maar vaak de vervanger BPS) die via je huid worden opgenomen, zeker met ingesmeerde handen. Vraag om een digitaal bonnetje of laat hem liggen.' },
         { id: 'o3', t: 'Geen bestrijdingsmiddelen in huis en tuin', i: 2, c: 0, h: 1, x: 'Geen gif tegen onkruid, mieren of insecten. Heet water, azijn, of met de hand werkt meestal ook.' },
         { id: 'o2', t: 'Katoen en linnen', i: 1, c: 2, x: 'Beddengoed, ondergoed en handdoeken van katoen of linnen in plaats van synthetisch: ademt beter en geeft geen plastic vezels af.' }
       ]]
     ];
+    const homeFilters = [
+      { t: 'Filterkan', ex: 'bijv. ZeroWater', inst: 'Geen. Vullen onder de kraan.', buy: '€30–80', year: '€250–350 (filter €29, ±1 maand per persoon; korter bij hard water)', pfas: '94% PFOA/PFOS (opgave fabrikant)', also: 'Lood, chloor en bijna alle mineralen', minus: 'Goedkoop om te kopen, duur in gebruik. Kleine hoeveelheden.', where: 'bol.com, Amazon.nl, waterfilterwinkel.com' },
+      { t: 'Actieve kool onder het aanrecht', ex: 'blokfilter, NSF 53', inst: 'Op de koudwaterleiding onder de gootsteen, met apart kraantje of 3-wegkraan. Zelf, of installateur ±€100.', buy: '€100–300', year: '±€100 (filter elke 6–12 maanden, ±€50)', pfas: '60–90% (vooral lange ketens)', also: 'Chloor, smaak, deel organische stoffen en medicijnresten. Mineralen blijven.', minus: 'Haalt minder weg dan omgekeerde osmose.', where: 'aqualogic.nl, aquaathome.nl, waterfilterwinkel.com' },
+      { t: 'Omgekeerde osmose op het aanrecht', ex: 'bijv. ZIP, Waterdrop K-serie', inst: 'Geen. Stekker erin, reservoir vullen, na ±10 min schoon water.', buy: '€300–500 (ZIP €475)', year: '±€80–150 (voorfilters 6–12 mnd, membraan 2–3 jaar)', pfas: '95–99% (alle PFAS)', also: 'Vrijwel alles: medicijnresten, hormoonverstorende stoffen, zware metalen, ook mineralen (kies remineralisatie).', minus: 'Neemt ruimte in, reservoir zelf bijvullen.', where: 'waterfilterexpert.nl, Amazon.nl, waterdropfilter.eu', best: 'Huurhuis of geen installatie' },
+      { t: 'Omgekeerde osmose onder het aanrecht', ex: 'bijv. Waterdrop G-serie, NSF 58', inst: 'Onder de gootsteen, op afvoer en eigen kraantje. Zelf met wat handigheid, anders ±€100.', buy: '€300–800', year: '±€80 (voorfilters ±€40, membraan elke 2–5 jaar)', pfas: '95–99% (alle PFAS)', also: 'Vrijwel alles, ook mineralen: kies een model met remineralisatie.', minus: 'Gooit water weg: ±1 liter per 2–3 liter schoon water (nieuwe modellen).', where: 'waterdropfilter.eu, Amazon.nl, allewaterfilters.nl, bol.com', best: 'Grondigst en per liter het goedkoopst' }
+    ];
+    function homeFiltersHtml() {
+      return `<div class="hf-list">${homeFilters.map((f, i) => `
+        <div class="hf">
+          <div class="hf-h"><b>${i + 1}. ${esc(f.t)}</b><span>${esc(f.ex)}</span>${f.best ? `<em>${esc(f.best)}</em>` : ''}</div>
+          <dl>
+            <dt>Aanschaf</dt><dd>${esc(f.buy)}</dd>
+            <dt>Per jaar</dt><dd>${esc(f.year)}</dd>
+            <dt>PFAS weg</dt><dd>${esc(f.pfas)}</dd>
+            <dt>Ook weg</dt><dd>${esc(f.also)}</dd>
+            <dt>Installatie</dt><dd>${esc(f.inst)}</dd>
+            <dt>Nadeel</dt><dd>${esc(f.minus)}</dd>
+            <dt>Te koop</dt><dd>${esc(f.where)}</dd>
+          </dl>
+        </div>`).join('')}
+        <div class="hf-tot"><b>Over 5 jaar</b> (aanschaf + onderhoud): actieve kool ±€600–800 · omgekeerde osmose onder het aanrecht ±€700–1.200 · filterkan met ZeroWater-filters €1.300+.</div></div>`;
+    }
     const homeCost = ['Gratis', '€', '€€', '€€€'];
     const homeImpact = { 3: 'Grote impact', 2: 'Impact', 1: 'Detail' };
     const homeBuiltIn = homeGroups.flatMap(([gid, , items]) => items.map(it => ({ ...it, g: gid })));
@@ -11054,20 +11234,26 @@
     }
     function homeGo(where) {
       if (where === 'sleep') { setSection('sleep'); return; }
-      state.homeTab = where; render(); window.scrollTo(0, 0);
+      const [tab, rec] = where.split(':');
+      state.homeTab = tab; state.homeRec = rec || null; render();
+      const el = rec && document.getElementById('rec-' + rec);
+      if (el) el.scrollIntoView({ block: 'start' }), window.scrollBy(0, -70); else window.scrollTo(0, 0);
     }
 
     // ---------- Recepten ----------
     const homeRecipes = [
-      { id: 'r1', t: 'Allesreiniger', use: 'Aanrecht, tafel, tegels, kranen', ing: ['1 deel schoonmaakazijn', '1 deel water', 'optioneel: een paar druppels etherische olie (citroen, tea tree)'], how: 'Mengen in een fles of plantenspuit. Op je doek spuiten, niet in de lucht.', keep: 'Onbeperkt houdbaar.', warn: 'Niet op marmer, natuursteen of gewaxt hout: azijn tast dat aan.' },
-      { id: 'r2', t: 'Ontvetter', use: 'Kookplaat, afzuigkap, oven, pannen', ing: ['1 eetlepel soda (natriumcarbonaat)', '1 liter warm water'], how: 'Soda oplossen in het warme water, aanbrengen met een doek of spons, even laten inwerken en naspoelen.', keep: 'Elke keer vers maken.', warn: 'Draag handschoenen: soda irriteert je huid. Niet op aluminium.' },
-      { id: 'r3', t: 'Schuurpasta', use: 'Gootsteen, bad, pannen, aangekoekt vuil', ing: ['3 eetlepels zuiveringszout', '1 eetlepel water of vloeibare groene zeep'], how: 'Mengen tot een pasta, opbrengen met een spons, schrobben en naspoelen.', keep: 'Vers maken.', warn: '' },
-      { id: 'r4', t: 'Glas & spiegels', use: 'Ramen, spiegels, douchewand', ing: ['1 deel schoonmaakazijn', '4 delen water'], how: 'In een plantenspuit, op je microvezeldoek spuiten en droog nawrijven.', keep: 'Onbeperkt houdbaar.', warn: '' },
-      { id: 'r5', t: 'Wc-reiniger', use: 'Toiletpot', ing: ['3 eetlepels zuiveringszout', '1 kopje schoonmaakazijn'], how: 'Zuiveringszout in de pot strooien, azijn erover, 10–15 minuten laten bruisen, borstelen en doortrekken.', keep: 'Vers gebruiken.', warn: 'Nooit samen met bleek of een gewone wc-reiniger gebruiken.' },
-      { id: 'r6', t: 'Wasverzachter', use: 'Wasmachine', ing: ['Scheutje (±50 ml) schoonmaakazijn'], how: 'In het wasverzachterbakje. De azijngeur verdwijnt bij het drogen.', keep: 'Onbeperkt houdbaar.', warn: '' },
-      { id: 'r7', t: 'Groentebad', use: 'Groente en fruit', ing: ['1 theelepel zuiveringszout', '½ liter water'], how: 'Groente of fruit 12–15 minuten laten weken, daarna afspoelen met kraanwater.', keep: 'Elke keer vers maken.', warn: '' },
-      { id: 'r8', t: 'Deodorant', use: 'Onder je oksels', ing: ['3 eetlepels kokosolie', '2 eetlepels pijlwortel of maizena', '1 eetlepel zuiveringszout (begin met 1 theelepel als je gevoelige huid hebt)', 'optioneel: 5 druppels etherische olie (lavendel, tea tree)'], how: 'Kokosolie zacht laten worden (au bain-marie), alles goed mengen en in een glazen potje laten opstijven. Een erwtgroot beetje met je vingers aanbrengen.', keep: '3 maanden. Boven 24 °C wordt het zacht: koel bewaren.', warn: 'Roodheid of jeuk? Minder zuiveringszout, of een deodorant op basis van magnesium.' },
-      { id: 'r9', t: 'Natuurlijke frisse geur', use: 'Woonkamer, keuken', ing: ['Schillen van 1 citroen of sinaasappel', '2 takjes rozemarijn', 'optioneel: een kaneelstokje', 'pannetje water'], how: 'Zacht laten pruttelen op het vuur. Water bijvullen, nooit droog laten koken.', keep: 'Eén middag.', warn: '' }
+      { id: 'r1', cat: 'schoon', t: 'Allesreiniger', use: 'Aanrecht, tafel, tegels, kranen', ing: ['1 deel schoonmaakazijn', '1 deel water', 'optioneel: een paar druppels etherische olie (citroen, tea tree)'], how: 'Mengen in een fles of plantenspuit. Op je doek spuiten, niet in de lucht.', keep: 'Onbeperkt houdbaar.', warn: 'Niet op marmer, natuursteen of gewaxt hout: azijn tast dat aan.' },
+      { id: 'r2', cat: 'schoon', t: 'Ontvetter', use: 'Kookplaat, afzuigkap, oven, pannen', ing: ['1 eetlepel soda (natriumcarbonaat)', '1 liter warm water'], how: 'Soda oplossen in het warme water, aanbrengen met een doek of spons, even laten inwerken en naspoelen.', keep: 'Elke keer vers maken.', warn: 'Draag handschoenen: soda irriteert je huid. Niet op aluminium.' },
+      { id: 'r3', cat: 'schoon', t: 'Schuurpasta', use: 'Gootsteen, bad, pannen, aangekoekt vuil', ing: ['3 eetlepels zuiveringszout', '1 eetlepel water of vloeibare groene zeep'], how: 'Mengen tot een pasta, opbrengen met een spons, schrobben en naspoelen.', keep: 'Vers maken.', warn: '' },
+      { id: 'r4', cat: 'schoon', t: 'Glas & spiegels', use: 'Ramen, spiegels, douchewand', ing: ['1 deel schoonmaakazijn', '4 delen water'], how: 'In een plantenspuit, op je microvezeldoek spuiten en droog nawrijven.', keep: 'Onbeperkt houdbaar.', warn: '' },
+      { id: 'r5', cat: 'schoon', t: 'Wc-reiniger', use: 'Toiletpot', ing: ['3 eetlepels zuiveringszout', '1 kopje schoonmaakazijn'], how: 'Zuiveringszout in de pot strooien, azijn erover, 10–15 minuten laten bruisen, borstelen en doortrekken.', keep: 'Vers gebruiken.', warn: 'Nooit samen met bleek of een gewone wc-reiniger gebruiken.' },
+      { id: 'r6', cat: 'schoon', t: 'Wasverzachter', use: 'Wasmachine', ing: ['Scheutje (±50 ml) schoonmaakazijn'], how: 'In het wasverzachterbakje. De azijngeur verdwijnt bij het drogen.', keep: 'Onbeperkt houdbaar.', warn: '' },
+      { id: 'r7', cat: 'verzorging', t: 'Groentebad', use: 'Groente en fruit', ing: ['1 theelepel zuiveringszout', '½ liter water'], how: 'Groente of fruit 12–15 minuten laten weken, daarna afspoelen met kraanwater.', keep: 'Elke keer vers maken.', warn: '' },
+      { id: 'r8', cat: 'verzorging', t: 'Deodorant', use: 'Onder je oksels', ing: ['3 eetlepels kokosolie', '2 eetlepels pijlwortel of maizena', '1 eetlepel zuiveringszout (begin met 1 theelepel als je gevoelige huid hebt)', 'optioneel: 5 druppels etherische olie (lavendel, tea tree)'], how: 'Kokosolie zacht laten worden (au bain-marie), alles goed mengen en in een glazen potje laten opstijven. Een erwtgroot beetje met je vingers aanbrengen.', keep: '3 maanden. Boven 24 °C wordt het zacht: koel bewaren.', warn: 'Roodheid of jeuk? Minder zuiveringszout, of een deodorant op basis van magnesium.' },
+      { id: 'r9', cat: 'schoon', t: 'Natuurlijke frisse geur', use: 'Woonkamer, keuken', ing: ['Schillen van 1 citroen of sinaasappel', '2 takjes rozemarijn', 'optioneel: een kaneelstokje', 'pannetje water'], how: 'Zacht laten pruttelen op het vuur. Water bijvullen, nooit droog laten koken.', keep: 'Eén middag.', warn: '' },
+      { id: 'r10', cat: 'schoon', t: 'Wasmiddel van kastanjes', use: 'Wasmachine, gewone was', ing: ['±10 paardenkastanjes per liter wasmiddel', '1 liter kokend water (in twee keer)', 'optioneel: een paar druppels etherische olie voor de geur'], how: 'Pel de bruine schil eraf (die kan witte was verkleuren) en snijd het witte binnenste in stukjes. Giet er 500 ml kokend water op en laat minstens 8 uur (een nacht) weken. Zeef het vocht in een fles. Giet nog eens kokend water over de stukjes, laat 2–3 uur staan, pureer met een staafmixer en zeef opnieuw. Gebruik ±50 ml per was, direct in de trommel. Werkt het best op 20–40 °C.', keep: 'Een paar weken, koel bewaard. In de herfst kun je stukjes kastanje drogen, dan heb je het hele jaar voorraad.', warn: 'Paardenkastanjes zijn giftig om te eten: buiten bereik van kinderen en huisdieren, niet verwarren met tamme kastanjes. Voor zware vlekken een vlekkenmiddel of wat soda erbij.', src: ['Wasmiddel van kastanjes, stap voor stap (Ideal Home)', 'https://www.idealhome.co.uk/house-manual/cleaning/how-to-make-laundry-detergent-from-conkers'] },
+      { id: 'r11', cat: 'verzorging', t: 'Tandpasta met kokosolie', use: 'Tanden poetsen, fluoridevrij', ing: ['3 eetlepels kokosolie', '1 eetlepel hydroxyapatietpoeder (±10%, online te koop)', '1 eetlepel zuiveringszout', '1 theelepel xylitol (optioneel, voor de smaak en tegen gaatjesbacteriën)', '5–10 druppels pepermuntolie'], how: 'Kokosolie zacht laten worden, alles goed door elkaar roeren en in een glazen potje doen. Een erwtgroot beetje op je tandenborstel scheppen met een schoon lepeltje of spateltje.', keep: '2–3 maanden. Boven 24 °C wordt het vloeibaar: even roeren.', warn: 'De hydroxyapatiet zorgt voor de bescherming tegen gaatjes; zonder dat poeder poets je wel schoon, maar bescherm je je glazuur minder. Xylitol is giftig voor honden. Spoel de wastafel na met warm water: kokosolie kan je afvoer laten verstoppen.', src: ['Hydroxyapatiet-tandpasta vs. fluoride: 189 volwassenen, 18 maanden (Frontiers in Public Health 2023)', 'https://www.frontiersin.org/articles/10.3389/fpubh.2023.1199728/full'] },
+      { id: 'r12', cat: 'verzorging', t: 'Zonnebrandcrème met zinkoxide', use: 'Korte tijd in de zon, gezicht en armen', ing: ['40 g sheaboter', '30 g kokosolie', '20 g bijenwas (pastilles)', '25 g zinkoxide, non-nano (±20% van het geheel)', 'optioneel: 1 theelepel vitamine E-olie (houdbaarheid)'], how: 'Sheaboter, kokosolie en bijenwas au bain-marie smelten. Van het vuur halen en iets laten afkoelen. Zet een mondkapje op en roer het zinkoxide er rustig door: blijf roeren of kloppen tot het mengsel lobbig en afgekoeld is, anders zakt het zink uit. In een glazen pot doen. Dik en gelijkmatig opbrengen, elke 2 uur en na zwemmen opnieuw.', keep: '±6 maanden, koel en donker bewaard.', warn: 'Zelfgemaakte zonnebrand heeft geen geteste beschermingsfactor: het zink verdeelt zich nooit zo gelijkmatig als in een geteste crème, waardoor je plekken mist. Gebruik hem voor korte momenten, en neem voor het strand, de bergen of een lange dag buiten een geteste minerale crème. Schaduw blijft je beste bescherming. Geen citrusoliën (citroen, limoen, bergamot) toevoegen: die maken je huid juist gevoeliger voor zon. Adem het zinkpoeder niet in.', src: ['Zelfgemaakte zonnebrand van Pinterest: 2 op de 3 recepten beschermen onvoldoende (Health Communication 2019)', 'https://doi.org/10.1080/10410236.2019.1616442'] }
     ];
     // ---------- Etiket-checker ----------
     const homeIngr = [
@@ -11123,6 +11309,7 @@
           <details class="hm-det">
             <summary><span class="hm-tw"><span class="hm-t">${esc(it.t)}</span>${s === 'want' ? '<span class="hm-flag want">Wil ik doen</span>' : s === 'na' ? '<span class="hm-flag na">Niet voor mij</span>' : ''}${opts && opts.noChips ? '' : homeChips(it)}</span><span class="hm-pm" aria-hidden="true"></span></summary>
             ${it.x ? `<div class="hm-txt">${esc(it.x)}</div>` : ''}
+            ${it.extra === 'filters' ? homeFiltersHtml() : ''}
             ${it.save ? `<div class="hm-save"><b>Bespaart:</b> ${esc(it.save)}</div>` : ''}
             ${it.m ? `<div class="hm-save"><b>Onderhoud:</b> ${esc(it.m[1])}, elke ${it.m[0] >= 60 ? Math.round(it.m[0] / 30) + ' maanden' : it.m[0] + ' dagen'}. Vink je deze stap af, dan krijg je hier een herinnering voor.</div>` : ''}
             ${it.go ? `<button class="hm-go" onclick="homeGo('${it.go[0]}')">${esc(it.go[1])} →</button>` : ''}
@@ -11225,9 +11412,9 @@
     }
     function renderHomeRecipes() {
       return `
-        <div class="hs-small" style="margin: 0 0 12px;">Met azijn, soda, zuiveringszout en groene zeep maak je bijna alles schoon. Goedkoper, en zonder parfum of sprays.</div>
-        ${homeRecipes.map(r => `
-          <details class="card hm-rec">
+        <div class="hs-small" style="margin: 0 0 12px;">Met azijn, soda, zuiveringszout, groene zeep en zelfs kastanjes maak je bijna alles schoon. En een paar verzorgingsproducten maak je makkelijk zelf. Goedkoper, en zonder parfum of sprays.</div>
+        ${[['schoon', 'Schoonmaken & was'], ['verzorging', 'Verzorging & keuken']].map(([cat, name]) => `<div class="bk-cat">${name}</div>` + homeRecipes.filter(r => r.cat === cat).map(r => `
+          <details class="card hm-rec" id="rec-${r.id}" ${state.homeRec === r.id ? 'open' : ''}>
             <summary><span class="hm-tw"><span class="hm-t">${esc(r.t)}</span><span class="hm-rec-use">${esc(r.use)}</span></span><span class="hm-pm" aria-hidden="true"></span></summary>
             <div class="hm-rec-h">Nodig</div>
             <ul class="hm-rec-ul">${r.ing.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
@@ -11235,7 +11422,8 @@
             <div class="hm-txt" style="margin-top: 0;">${esc(r.how)}</div>
             <div class="hm-save"><b>Houdbaar:</b> ${esc(r.keep)}</div>
             ${r.warn ? `<div class="hm-warn">⚠ ${esc(r.warn)}</div>` : ''}
-          </details>`).join('')}
+            ${r.src ? `<a class="hm-src" href="${r.src[1]}" target="_blank" rel="noopener noreferrer">Bron: ${esc(r.src[0])} ↗</a>` : ''}
+          </details>`).join('')).join('')}
         <div class="card" style="border-left: 3px solid #eab308;"><div class="su-txt"><b style="color: #fafafa;">Altijd:</b> nooit bleek mengen met azijn, ammoniak of een andere wc-reiniger, en bewaar zelfgemaakte middelen in een duidelijk gelabelde fles, buiten bereik van kinderen.</div></div>`;
     }
     function renderHomeLabel() {
@@ -11281,6 +11469,577 @@
     }
 
     // ============================================
+    // KOMPAS: je waarom, visie, identiteit en kwartaaldoelen
+    // ============================================
+    function compass() { const c = userPrefs().compass; return c && typeof c === 'object' ? c : {}; }
+    function compassSet(patch) { saveUserPrefs({ compass: { ...compass(), ...patch, updated: todayStr() }, whyLine: compassWhyLine({ ...compass(), ...patch }) }); }
+    function compassHas() { const c = compass(); return !!(c.why || c.identity || (c.goals || []).length); }
+    // Korte versie van je waarom (voor meldingen en kleine plekken)
+    function compassWhyLine(c) {
+      c = c || compass();
+      const w = String(c.why || '').trim(); if (!w) return null;
+      const first = w.split(/(?<=[.!?])\s/)[0];
+      return first.length > 110 ? first.slice(0, 107).trim() + '…' : first;
+    }
+    function quarterKey(d) { const x = new Date((d || todayStr()) + 'T12:00:00'); return x.getFullYear() + '-Q' + (Math.floor(x.getMonth() / 3) + 1); }
+    function compassGoals() { return (compass().goals || []).filter(g => g && g.t); }
+    function compassGoalFor(link) { return compassGoals().find(g => (g.links || []).includes(link)) || null; }
+    function compassGoalLine(link) {
+      const g = compassGoalFor(link); if (!g) return '';
+      return `<div class="kp-goalline">🧭 Hoort bij je doel <b>${esc(g.t)}</b>${g.why ? `<span>${esc(g.why)}</span>` : ''}</div>`;
+    }
+    function compassSaveField(field, v) {
+      compassSet({ [field]: String(v || '').trim().slice(0, 600) });
+      const el = document.getElementById('kp-saved'); if (el) { el.textContent = '✓ Opgeslagen'; setTimeout(() => { if (el) el.textContent = ''; }, 1500); }
+    }
+    function compassGoalSet(i, field, v) {
+      const goals = (compass().goals || []).slice(0, 3);
+      while (goals.length < 3) goals.push({ t: '', why: '', value: '', links: [] });
+      goals[i] = { ...goals[i], [field]: typeof v === 'string' ? v.trim().slice(0, 300) : v };
+      if (!goals[i].q) goals[i].q = quarterKey();
+      compassSet({ goals });
+      if (field === 'links' || field === 'value') render();
+      else { const el = document.getElementById('kp-saved'); if (el) el.textContent = '✓ Opgeslagen'; }
+    }
+    function compassToggleLink(i, link) {
+      const g = (compass().goals || [])[i] || {};
+      const links = (g.links || []).includes(link) ? g.links.filter(x => x !== link) : (g.links || []).concat(link);
+      // een gewoonte of challenge hoort bij één doel
+      const goals = (compass().goals || []).map((x, j) => j === i ? x : { ...x, links: (x.links || []).filter(l => l !== link) });
+      compass().goals && compassSet({ goals });
+      compassGoalSet(i, 'links', links);
+    }
+    function compassLinkOptions() {
+      const out = visibleHabitKeys.map(k => ['h:' + k, habitConfig[k].icon + ' ' + habitConfig[k].title]);
+      activeChallenges().forEach(c => out.push(['ch:' + c.id, '🏁 ' + c.name]));
+      return out;
+    }
+    function renderCompass() {
+      const c = compass();
+      const goals = (c.goals || []).slice(0, 3);
+      while (goals.length < 3) goals.push({ t: '', why: '', value: '', links: [] });
+      const vtop = latestValues();
+      const vals = vtop ? vtop.top : valueOptions.slice(0, 12);
+      const opts = compassLinkOptions();
+      const ta = (id, field, ph, rows) => `<textarea id="${id}" class="form-input kp-ta" rows="${rows || 3}" placeholder="${esc(ph)}" onchange="compassSaveField('${field}', this.value)">${esc(c[field] || '')}</textarea>`;
+      const q = quarterKey();
+      const stale = goals.some(g => g.t && g.q && g.q !== q);
+      return `
+        <button class="entry-action" style="margin-bottom: 14px;" onclick="setSection('more')">← Terug</button>
+        <div class="page-header" style="margin-bottom: 8px;"><div class="page-sub">Fundament</div><div class="page-title">Kompas</div></div>
+        <div class="hm-sub">Zonder waarom houdt niets stand. Schrijf het op, dan komt het terug op de momenten die ertoe doen.</div>
+        <div class="card kp-card">
+          <label class="label" for="kp-why">Waarom ben je hier?</label>
+          <div class="hs-small" style="margin: -4px 0 8px;">In je eigen woorden. Wat wil je veranderen, en waarom is dat belangrijk voor je?</div>
+          ${ta('kp-why', 'why', 'Bijv. Ik wil een vader zijn waar mijn kinderen tegenop kijken: sterk, rustig en iemand die doet wat hij zegt.', 4)}
+        </div>
+        <div class="card kp-card">
+          <label class="label" for="kp-identity">Wie ben je? · identiteitszin</label>
+          <div class="hs-small" style="margin: -4px 0 8px;">Komt bovenaan je dashboard te staan. Begin met "Ik ben iemand die…"</div>
+          <input id="kp-identity" class="form-input" style="width: 100%; box-sizing: border-box;" maxlength="140" placeholder="Ik ben iemand die zijn woord houdt, ook tegenover zichzelf." value="${esc(c.identity || '')}" onchange="compassSaveField('identity', this.value)">
+        </div>
+        <div class="card kp-card">
+          <label class="label" for="kp-vision">Over een jaar · je visie</label>
+          ${ta('kp-vision', 'vision', 'Hoe ziet je leven eruit over 12 maanden? Lichaam, geest, relaties, werk.', 4)}
+        </div>
+        <div id="kp-saved" class="hs-small" style="min-height: 16px; margin: -8px 0 8px; color: #22c55e;"></div>
+        <label class="label" style="margin: 8px 0 10px;">Doelen dit kwartaal (${q.replace('-Q', ' · Q')})</label>
+        ${stale ? `<div class="info-box"><div class="info-title">Nieuw kwartaal</div><div class="info-text">Je doelen zijn van een vorig kwartaal. Kijk of ze nog kloppen, pas ze aan of kies nieuwe.</div></div>` : ''}
+        ${goals.map((g, i) => `
+          <div class="card kp-goal">
+            <div class="kp-gn">Doel ${i + 1}</div>
+            <label class="sr-only" for="kp-g${i}">Doel ${i + 1}</label>
+            <input id="kp-g${i}" class="form-input" style="width: 100%; box-sizing: border-box;" maxlength="100" placeholder="${['Bijv. 10 kg sterker op de squat', 'Bijv. elke dag 7+ uur slaap', 'Bijv. elke week één avond echt aandacht voor mijn relatie'][i]}" value="${esc(g.t || '')}" onchange="compassGoalSet(${i}, 't', this.value)">
+            <label class="sr-only" for="kp-gw${i}">Waarom</label>
+            <input id="kp-gw${i}" class="form-input" style="width: 100%; box-sizing: border-box; margin-top: 8px;" maxlength="200" placeholder="Waarom is dit belangrijk voor je?" value="${esc(g.why || '')}" onchange="compassGoalSet(${i}, 'why', this.value)">
+            <div class="kp-row">
+              <label for="kp-gv${i}">Waarde</label>
+              <select id="kp-gv${i}" class="form-input" onchange="compassGoalSet(${i}, 'value', this.value)">
+                <option value="">Kies…</option>${vals.map(v => `<option ${g.value === v ? 'selected' : ''}>${esc(v)}</option>`).join('')}
+              </select>
+            </div>
+            ${g.t ? `
+            <details class="kp-links" ${state.kpOpen === i ? 'open' : ''} ontoggle="if (this.open) state.kpOpen = ${i};">
+              <summary>Gewoontes en challenges die hierbij horen (${(g.links || []).length}) <span class="hm-pm" aria-hidden="true"></span></summary>
+              <div class="kp-chips">${opts.map(([k, l]) => `<button class="${(g.links || []).includes(k) ? 'on' : ''}" aria-pressed="${(g.links || []).includes(k)}" onclick="compassToggleLink(${i}, '${k}')">${esc(l)}</button>`).join('')}</div>
+            </details>` : ''}
+          </div>`).join('')}
+        ${!vtop ? `<div class="hs-small" style="margin: 0 0 12px;">Tip: doe eerst de <a href="#" onclick="openValues(); return false;" style="color: #e5484d;">waarden-opdracht</a>, dan kies je hier uit je eigen top 5.</div>` : ''}
+        <div class="card" style="cursor: pointer;" onclick="state.review90 = true; setSection('review');">
+          <label class="label">⏳ Wie was je 90 dagen geleden?</label>
+          <div class="su-txt">Vergelijk jezelf nu met drie maanden terug: dagscore, slaap, training, gewicht en wat je toen schreef →</div>
+        </div>`;
+    }
+
+    // ============================================
+    // WEKELIJKSE REVIEW: ritueel met je waarom, goed/lastig en één focus
+    // ============================================
+    function reviews() { const r = userPrefs().reviews; return r && typeof r === 'object' ? r : {}; }
+    // Welke week review je nu? Zondag: deze week. Maandag/dinsdag: vorige week als die nog open staat.
+    function reviewTargetWeek() {
+      const today = todayStr(), dow = new Date().getDay();
+      const thisW = weekKey(today), lastW = weekKey(dateAdd(today, -7));
+      if ((dow === 1 || dow === 2) && !reviews()[lastW]) return lastW;
+      return thisW;
+    }
+    function reviewDue() {
+      const dow = new Date().getDay(), today = todayStr();
+      if (dow === 1 || dow === 2) return !reviews()[weekKey(dateAdd(today, -7))];   // ma/di: vorige week nog open
+      if (dow === 0 || dow === 6) return !reviews()[weekKey(today)];               // za/zo: deze week
+      return false;
+    }
+    function currentFocus() {
+      const wk = weekKey(todayStr());
+      const r = Object.values(reviews()).filter(x => x && x.forWeek === wk && x.focus).sort((a, b) => String(b.at).localeCompare(String(a.at)))[0];
+      return r ? { text: r.focus, goal: r.focusGoal || '', from: r } : null;
+    }
+    function reviewStart() {
+      const wk = reviewTargetWeek();
+      const ex = reviews()[wk] || {};
+      const prevFocus = Object.values(reviews()).find(x => x && x.forWeek === wk && x.focus);
+      state.rv = { wk, rate: ex.rate || 6, last: ex.last || '', good: ex.good || '', hard: ex.hard || '', focus: ex.focus || '', focusGoal: ex.focusGoal || '', prevFocus: prevFocus ? prevFocus.focus : '' };
+      state.review90 = false;
+      setSection('review'); window.scrollTo(0, 0);
+    }
+    function rvSet(f, v) { if (state.rv) state.rv[f] = v; }
+    function reviewSave() {
+      const r = state.rv; if (!r) return;
+      ['good', 'hard', 'focus'].forEach(f => { const el = document.getElementById('rv-' + f); if (el) r[f] = el.value.trim().slice(0, 500); });
+      if (!r.focus) { alert('Kies je ene focus voor volgende week. Dat is het belangrijkste deel van je review.'); return; }
+      const all = { ...reviews() };
+      const was = all[r.wk];
+      all[r.wk] = { rate: Number(r.rate), last: r.last, good: r.good, hard: r.hard, focus: r.focus, focusGoal: r.focusGoal, forWeek: dateAdd(r.wk, 7), at: (was && was.at) || todayStr() };
+      // focus geldt voor de week ná de reviewweek; review je op zondag, dan is dat morgen
+      saveUserPrefs({ reviews: all });
+      progressCache = null;
+      state.rv = null;
+      setSection('dashboard');
+      showToast(was ? '✓ Review bijgewerkt' : `✓ Review klaar · +${XP.review} XP`);
+      try { buddyPushSnapshot && buddyPushSnapshot(); } catch (e) {}
+    }
+    function renderReview() {
+      if (state.review90 || !state.rv) return `
+        <button class="entry-action" style="margin-bottom: 14px;" onclick="setSection('${compassHas() ? 'kompas' : 'more'}')">← Terug</button>
+        <div class="page-header" style="margin-bottom: 12px;"><div class="page-sub">Terugblik</div><div class="page-title">90 dagen</div></div>
+        ${renderLookback90()}`;
+      const r = state.rv;
+      const c = compass();
+      const w = computeWeek(r.wk === weekKey(todayStr()) ? 0 : 1);
+      const goals = compassGoals();
+      const opt = (f, v, l) => `<button class="${r[f] === v ? 'on' : ''}" aria-pressed="${r[f] === v}" onclick="rvSet('${f}', '${v}'); render();">${l}</button>`;
+      const is13 = Object.keys(reviews()).length > 0 && (Object.keys(reviews()).length + 1) % 13 === 0;
+      return `
+        <button class="entry-action" style="margin-bottom: 14px;" onclick="state.rv = null; setSection('dashboard')">← Terug</button>
+        <div class="page-header" style="margin-bottom: 8px;"><div class="page-sub">Week ${w.week}</div><div class="page-title">Review</div></div>
+        <div class="hm-sub">10 minuten. Kijk terug, stuur bij, kies één focus.</div>
+        <div class="card kp-why-card">
+          <label class="label">1 · Je waarom</label>
+          ${c.why ? `<div class="kp-quote">${esc(c.why)}</div>` : `<div class="su-txt">Je hebt je waarom nog niet opgeschreven. <a href="#" onclick="setSection('kompas'); return false;" style="color: #e5484d;">Doe dat in je Kompas →</a></div>`}
+          ${c.identity ? `<div class="kp-id">${esc(c.identity)}</div>` : ''}
+          <div class="rv-q">Leefde je er deze week naar?</div>
+          <div class="rv-rate"><input type="range" min="1" max="10" value="${r.rate}" oninput="rvSet('rate', this.value); document.getElementById('rv-rate-v').textContent = this.value;" aria-label="Cijfer 1 tot 10"><b id="rv-rate-v">${r.rate}</b></div>
+        </div>
+        <div class="card">
+          <label class="label">2 · Je week in cijfers</label>
+          <div class="rv-stats"><div><b>${w.avg}</b><span>gem. dagscore</span></div><div><b>+${fmtInt(w.xp)}</b><span>XP</span></div><div><b>${w.workouts.length}</b><span>trainingen</span></div><div><b>${w.journals}</b><span>journal</span></div></div>
+          ${r.prevFocus ? `
+            <div class="rv-q" style="margin-top: 14px;">Je focus was: <b style="color: #fafafa;">${esc(r.prevFocus)}</b>. Gehaald?</div>
+            <div class="rv-seg">${opt('last', 'ja', 'Ja')}${opt('last', 'deels', 'Deels')}${opt('last', 'nee', 'Nee')}</div>` : ''}
+        </div>
+        <div class="card">
+          <label class="label" for="rv-good">3 · Wat ging goed?</label>
+          <textarea id="rv-good" class="form-input kp-ta" rows="3" placeholder="Waar ben je trots op?" onchange="rvSet('good', this.value)">${esc(r.good)}</textarea>
+          <label class="label" for="rv-hard" style="margin-top: 14px;">Wat hield je tegen?</label>
+          <textarea id="rv-hard" class="form-input kp-ta" rows="3" placeholder="Eerlijk zijn mag. Wat was het echte obstakel?" onchange="rvSet('hard', this.value)">${esc(r.hard)}</textarea>
+        </div>
+        <div class="card kp-focus-card">
+          <label class="label" for="rv-focus">4 · Je ene focus voor volgende week</label>
+          <div class="hs-small" style="margin: -4px 0 8px;">Eén ding. Concreet genoeg dat je zondag weet of het gelukt is. Staat de hele week bovenaan je dashboard.</div>
+          <input id="rv-focus" class="form-input" style="width: 100%; box-sizing: border-box;" maxlength="120" placeholder="Bijv. elke avond om 22:30 scherm weg" value="${esc(r.focus)}" onchange="rvSet('focus', this.value)">
+          ${goals.length ? `<div class="kp-row"><label for="rv-goal">Bij doel</label><select id="rv-goal" class="form-input" onchange="rvSet('focusGoal', this.value)"><option value="">Geen</option>${goals.map(g => `<option ${r.focusGoal === g.t ? 'selected' : ''}>${esc(g.t)}</option>`).join('')}</select></div>` : ''}
+        </div>
+        <button class="btn btn-primary" style="width: 100%; padding: 16px;" onclick="reviewSave()">Review afronden${reviews()[r.wk] ? '' : ` · +${XP.review} XP`}</button>
+        ${is13 ? `<div class="card" style="margin-top: 14px; cursor: pointer; border-left: 3px solid #d9a441;" onclick="state.review90 = true; render(); window.scrollTo(0, 0);"><label class="label">⏳ Kwartaal-terugblik</label><div class="su-txt">Je 13e review: tijd om terug te kijken op de afgelopen 90 dagen en je kompas bij te stellen →</div></div>` : `<button class="hm-go" style="margin-top: 10px;" onclick="state.review90 = true; render(); window.scrollTo(0, 0);">Of bekijk: wie was je 90 dagen geleden? →</button>`}`;
+    }
+    // Dashboardkaart: je focus van deze week en of je review klaarstaat
+    function renderFocusCard() {
+      const f = currentFocus();
+      const id = compass().identity;
+      const due = reviewDue();
+      if (!f && !due && !compassHas()) return `
+        <div class="card kp-dash" style="cursor: pointer;" onclick="setSection('kompas')">
+          <label class="label">🧭 Kompas</label>
+          <div class="su-txt">Zonder waarom houdt niets stand. Schrijf in 2 minuten op waarom je dit doet en wie je wilt zijn →</div>
+        </div>`;
+      if (!f && !due) return '';
+      return `
+        <div class="card kp-dash">
+          ${f ? `<label class="label">Focus deze week</label><div class="kp-focus">${esc(f.text)}</div>${f.goal ? `<div class="hs-small" style="margin-top: 4px;">🧭 ${esc(f.goal)}</div>` : ''}` : ''}
+          ${due ? `<button class="btn btn-primary btn-small" style="width: 100%; margin-top: ${f ? 12 : 0}px;" onclick="reviewStart()">📋 Tijd voor je wekelijkse review · 10 min</button>` : ''}
+          ${id && !f && !due ? '' : ''}
+        </div>`;
+    }
+
+    // 90 dagen terug: jij nu tegenover jij toen (30 dagen rond beide momenten)
+    function renderLookback90() {
+      const today = todayStr();
+      const p = getProgress();
+      const win = (endOff) => { const end = dateAdd(today, -endOff), start = dateAdd(end, -29); return [start, end]; };
+      const [nS, nE] = win(0), [tS, tE] = win(90);
+      const first = p.days.length ? p.days[0].date : today;
+      const enough = first <= tE;
+      const daysIn = (a, b) => p.days.filter(d => d.date >= a && d.date <= b);
+      const avg = (arr, f) => arr.length ? Math.round(arr.reduce((x, d) => x + f(d), 0) / arr.length) : null;
+      const sNow = avg(daysIn(nS, nE), d => d.score), sThen = avg(daysIn(tS, tE), d => d.score);
+      const xNow = daysIn(nS, nE).reduce((a, d) => a + d.xp, 0), xThen = daysIn(tS, tE).reduce((a, d) => a + d.xp, 0);
+      const tr = (a, b) => (state.workouts || []).filter(w => w.date >= a && w.date <= b).length;
+      const sl = (a, b) => { const n = sleepNights(a, b); return n.length ? sleepAvg(n) : null; };
+      const jr = (a, b) => journaledEntries().filter(e => e.date >= a && e.date <= b).length;
+      const wAt = (d) => { const list = (state.bodyStats || []).filter(b => b.weight && b.entry_date <= d).sort((a, b) => b.entry_date.localeCompare(a.entry_date)); return list[0] ? Number(list[0].weight) : null; };
+      const rankAt = (d) => { let r = 0; Object.entries(p.achieved || {}).forEach(([n, dt]) => { if (dt <= d) r = Math.max(r, Number(n)); }); return r ? ranks[r - 1].name : '—'; };
+      const then = journaledEntries().filter(e => e.date >= dateAdd(today, -97) && e.date <= dateAdd(today, -83)).map(e => ({ e, s: entrySnippet(e) })).find(x => x.s);
+      const row = (label, a, b, fmt, better) => {
+        const fa = a === null || a === undefined ? '—' : fmt(a), fb = b === null || b === undefined ? '—' : fmt(b);
+        let cls = '';
+        if (a !== null && b !== null && a !== undefined && b !== undefined && a !== b && better) cls = (better === 'up' ? b > a : b < a) ? 'up' : 'down';
+        return `<div class="lb-row"><span>${label}</span><span class="lb-then">${fa}</span><span class="lb-now ${cls}">${fb}</span></div>`;
+      };
+      return `
+        ${!enough ? `<div class="info-box"><div class="info-title">Nog even geduld</div><div class="info-text">Je gebruikt de app nog geen 90 dagen. Over ${diffDays(today, dateAdd(first, 90 + 29))} dagen is deze vergelijking compleet. Wat er al is, zie je hieronder.</div></div>` : ''}
+        <div class="card">
+          <div class="lb-row lb-h"><span></span><span class="lb-then">90 dagen geleden</span><span class="lb-now">Nu</span></div>
+          ${row('Gem. dagscore', sThen, sNow, v => v, 'up')}
+          ${row('XP in 30 dagen', xThen, xNow, v => fmtInt(v), 'up')}
+          ${row('Trainingen', tr(tS, tE), tr(nS, nE), v => v, 'up')}
+          ${row('Gem. slaap', sl(tS, tE), sl(nS, nE), v => fmtSleepDur(v), 'up')}
+          ${row('Journal-dagen', jr(tS, tE), jr(nS, nE), v => v, 'up')}
+          ${row('Gewicht', wAt(tE), wAt(nE), v => fmtVal(v) + ' kg', null)}
+          ${row('Rang', rankAt(tE), rankAt(nE), v => v, null)}
+          <div class="hs-small" style="margin-top: 10px;">Per periode van 30 dagen. Groen = beter dan toen.</div>
+        </div>
+        ${then ? `
+        <div class="card j-lb">
+          <label class="label">Wat je toen schreef · ${formatDate(then.e.date)}</label>
+          <div class="j-lb-k">${esc(then.s[0])}</div>
+          <div class="j-lb-t">${esc(then.s[1])}</div>
+        </div>` : ''}
+        <div class="card" style="cursor: pointer;" onclick="state.bodyTab = 'fotos'; setSection('body');">
+          <label class="label">📸 Je foto's</label>
+          <div class="su-txt">Leg je foto van toen naast die van nu bij Lichaam → Foto's →</div>
+        </div>
+        <div class="card kp-why-card">
+          <label class="label">En je kompas?</label>
+          ${compass().why ? `<div class="kp-quote">${esc(compass().why)}</div>` : ''}
+          <div class="su-txt" style="margin-top: 8px;">Klopt je waarom nog? Zijn je doelen voor het komende kwartaal scherp?</div>
+          <button class="btn btn-secondary btn-small" style="width: 100%; margin-top: 12px;" onclick="setSection('kompas')">Naar je kompas</button>
+        </div>`;
+    }
+
+    // ============================================
+    // GEWOONTES LATEN AFSTUDEREN: 60 van 66 dagen = automatisch, dan een niveau omhoog
+    // ============================================
+    const habitLevels = {
+      coldShower: ['30–60 sec koud aan het eind', '2 minuten koud', '3 minuten koud', 'Koud bad of ijsbad, 2–5 minuten'],
+      sunlight: ['10 min ochtendlicht', '20 min ochtendlicht', '20 min ochtend + 10 min avondlicht'],
+      cleanEating: ['Geen fastfood en frisdrank', 'Ook geen toegevoegde suiker', 'De hele dag alleen onbewerkt'],
+      workout: ['30 min bewegen', '45 min training', '60 min zware training'],
+      meditation: ['5 min stil', '10 min stil', '20 min stil'],
+      noAlcohol: ['Geen alcohol', 'Ook geen alcohol op feestjes en in het weekend'],
+      reading: ["10 pagina's", "20 pagina's", "30 pagina's"],
+      stretching: ['10 min', '15 min', '20 min + mobility']
+    };
+    const GRAD_WINDOW = 66, GRAD_NEED = 60;
+    function habitLvl(k) { const l = (userPrefs().habitLvl || {})[k]; return l && typeof l === 'object' ? l : { n: 0, since: null }; }
+    function habitGradLog() { const g = userPrefs().habitGrad; return g && typeof g === 'object' ? g : {}; }
+    function habitGradStats(k) {
+      const today = todayStr(), lvl = habitLvl(k);
+      const start = lvl.since && lvl.since > dateAdd(today, -(GRAD_WINDOW - 1)) ? lvl.since : dateAdd(today, -(GRAD_WINDOW - 1));
+      let done = 0, days = 0;
+      for (let d = start; d <= today; d = dateAdd(d, 1)) { days++; const h = d === today ? state.habits : (state.habitHistory || {})[d]; if (h && h[k]) done++; }
+      const graduated = (habitGradLog()[k] || []).some(x => x.n === lvl.n);
+      const eligible = !graduated && days >= GRAD_WINDOW && done >= GRAD_NEED;
+      return { done, days, graduated, eligible, lvl };
+    }
+    // Wordt bij het laden en na afvinken gecontroleerd
+    function habitGradCheck() {
+      const log = { ...habitGradLog() }; let fresh = null;
+      visibleHabitKeys.forEach(k => {
+        const s = habitGradStats(k);
+        if (s.eligible) { log[k] = (log[k] || []).concat({ n: s.lvl.n, at: todayStr() }); fresh = k; }
+      });
+      if (fresh) { saveUserPrefs({ habitGrad: log }); progressCache = null; setTimeout(() => showToast(`🎓 ${habitConfig[fresh].title} gaat nu vanzelf · +${XP.habitGrad} XP`), 1200); }
+    }
+    function habitLevelUp(k) {
+      const lv = habitLvl(k), max = (habitLevels[k] || []).length - 1;
+      if (lv.n >= max) return;
+      const all = { ...(userPrefs().habitLvl || {}) };
+      all[k] = { n: lv.n + 1, since: todayStr() };
+      saveUserPrefs({ habitLvl: all });
+      render();
+      showToast(`⬆ ${habitConfig[k].title}: niveau ${lv.n + 2}`);
+    }
+    function habitLevelHtml(k) {
+      const levels = habitLevels[k]; if (!levels) return '';
+      const s = habitGradStats(k), max = levels.length - 1;
+      const pct = Math.min(100, Math.round(s.done / GRAD_NEED * 100));
+      return `
+        <div class="hl-box">
+          <div class="hl-top"><span>Jouw niveau <b>${s.lvl.n + 1}</b> van ${levels.length}</span>${s.graduated ? '<span class="hl-auto">🎓 Automatisch</span>' : ''}</div>
+          <div class="hl-target">${esc(levels[s.lvl.n])}</div>
+          ${s.graduated
+            ? (s.lvl.n < max ? `<div class="hs-small" style="margin-top: 6px;">Dit gaat nu vanzelf. Tijd om het zwaarder te maken: <b style="color: #fafafa;">${esc(levels[s.lvl.n + 1])}</b>.</div><button class="btn btn-primary btn-small" style="width: 100%; margin-top: 10px;" onclick="habitLevelUp('${k}')">Niveau omhoog</button>` : `<div class="hs-small" style="margin-top: 6px;">Hoogste niveau bereikt. Dit is wie je bent.</div>`)
+            : `<div class="hl-bar"><span style="width: ${pct}%;"></span></div><div class="hs-small" style="margin-top: 6px;">${s.done} van de ${GRAD_NEED} dagen in ${GRAD_WINDOW} dagen. Haal je er ${GRAD_NEED}, dan gaat het vanzelf (+${XP.habitGrad} XP) en mag je een niveau omhoog.</div>`}
+        </div>`;
+    }
+
+    // ============================================
+    // BUDDY'S: 1-op-1 maatjes, alleen op uitnodiging, maximaal 3
+    // ============================================
+    const buddyShareDefs = [
+      ['focus', 'Je focus van de week', 'En of je hem haalde, en of je je review deed'],
+      ['score', 'Dagscore en rang', 'Je score van vandaag, je weekgemiddelde en je rang'],
+      ['streak', 'Gewoontes en reeks', 'Hoeveel gewoontes je vandaag deed (niet welke) en je reeks goede dagen'],
+      ['challenge', 'Challenges', 'Naam en dag, bijv. 75 Hard dag 23/75'],
+      ['training', 'Training vandaag', 'Alleen of je getraind hebt, geen gewichten'],
+      ['home', 'Primal Home-score', 'Je score van 0 tot 100']
+    ];
+    const buddyNudges = ['Kom op, je kunt het. 💪', 'Denk aan je focus deze week.', 'Ik doe het vandaag ook. Jij ook?', 'Morgen niet missen. Twee keer missen is een nieuwe gewoonte.', 'Ik geloof in je.'];
+    const buddyRespects = ['Respect. 🔥', 'Sterk bezig!', 'Dit is wie je bent.', 'Trots op je.'];
+    function buddyShare() { const s = userPrefs().buddyShare; return s && typeof s === 'object' ? s : {}; }
+    function buddyState() { return state.buddy || { loaded: false, me: null, list: [], events: [], invite: null, error: null }; }
+    async function loadBuddies(quiet) {
+      if (!state.user) return;
+      const uid = state.user.id;
+      const b = { ...buddyState(), loaded: true, error: null };
+      try {
+        const me = await supabaseClient.from('buddy_profiles').select('*').eq('user_id', uid).maybeSingle();
+        if (me.error) throw me.error;
+        b.me = me.data || null;
+        const links = await supabaseClient.from('buddy_links').select('*');
+        if (links.error) throw links.error;
+        const ids = (links.data || []).map(l => l.user_a === uid ? l.user_b : l.user_a);
+        b.links = links.data || [];
+        let profiles = [];
+        if (ids.length) {
+          const pr = await supabaseClient.from('buddy_profiles').select('*').in('user_id', ids);
+          profiles = pr.data || [];
+        }
+        b.list = ids.map(id => ({ id, link: (links.data || []).find(l => l.user_a === id || l.user_b === id), p: profiles.find(x => x.user_id === id) || null }));
+        const ev = await supabaseClient.from('buddy_events').select('*').eq('to_user', uid).order('created_at', { ascending: false }).limit(20);
+        b.events = ev.data || [];
+        const inv = await supabaseClient.from('buddy_invites').select('*').eq('owner', uid).order('created_at', { ascending: false }).limit(1);
+        b.invite = (inv.data || []).find(x => !x.expires_at || new Date(x.expires_at) > new Date()) || null;
+      } catch (e) {
+        b.error = /relation|does not exist|schema cache/i.test(e.message || '') ? 'setup' : (e.message || String(e));
+      }
+      state.buddy = b;
+      // Nieuwe duwtjes en respect laten zien
+      const fresh = (b.events || []).filter(e => !e.seen);
+      if (fresh.length && !quiet) {
+        const e = fresh[0], from = buddyName(e.from_user);
+        setTimeout(() => showToast(`${e.kind === 'nudge' ? '👊' : '🔥'} ${from}: ${e.msg || (e.kind === 'nudge' ? 'geeft je een duwtje' : 'geeft je respect')}`), 1500);
+      }
+      buddyPushSnapshot();
+    }
+    function buddyName(id) { const x = buddyState().list.find(b => b.id === id); return (x && x.p && x.p.name) || 'Je buddy'; }
+    // De samenvatting die je buddy's mogen zien: alleen wat jij aanzet
+    function buddySnapshot() {
+      const sh = buddyShare(), snap = { at: new Date().toISOString() };
+      try {
+        const p = getProgress();
+        if (sh.focus) {
+          const f = currentFocus(); snap.focus = f ? f.text : null;
+          const lastW = weekKey(dateAdd(todayStr(), -7)), thisW = weekKey(todayStr());
+          const r = reviews()[thisW] || reviews()[lastW];
+          snap.review = r ? { week: r === reviews()[thisW] ? 'deze' : 'vorige', last: r.last || null } : null;
+        }
+        if (sh.score) {
+          snap.score = p.today.score;
+          const last7 = p.days.slice(-7); snap.avg7 = last7.length ? Math.round(last7.reduce((a, d) => a + d.score, 0) / last7.length) : null;
+          snap.rank = p.current ? ranks[p.current - 1].name : null;
+        }
+        if (sh.streak) {
+          snap.habits = getPositiveHabitsCount(); snap.habitsOf = visibleHabitKeys.length;
+          let n = 0; for (let i = p.days.length - 2; i >= 0 && p.days[i].score >= 50; i--) n++;
+          if (p.today.score >= 50) n++;
+          snap.streak = n;
+        }
+        if (sh.challenge) snap.challenges = activeChallenges().filter(c => c.start_date <= todayStr()).slice(0, 3).map(c => { const ev = evalChallenge(c); return { n: c.name, d: ev.dayNum, of: ev.D }; });
+        if (sh.training) snap.trained = (state.workouts || []).some(w => w.date === todayStr());
+        if (sh.home) snap.home = homeScore();
+      } catch (e) {}
+      return snap;
+    }
+    let buddyPushTimer = null, buddyLastSnap = '';
+    function buddyPushSnapshot() {
+      const b = buddyState();
+      if (!state.user || !b.me) return;
+      clearTimeout(buddyPushTimer);
+      buddyPushTimer = setTimeout(async () => {
+        const snap = buddySnapshot();
+        const key = JSON.stringify({ ...snap, at: null });
+        if (key === buddyLastSnap) return;
+        buddyLastSnap = key;
+        await supabaseClient.from('buddy_profiles').update({ snapshot: snap, updated_at: new Date().toISOString() }).eq('user_id', state.user.id);
+      }, 2500);
+    }
+    async function buddySaveProfile() {
+      const name = ((document.getElementById('bd-name') || {}).value || '').trim().slice(0, 40);
+      if (!name) { alert('Vul een naam in: zo zien je buddy\'s wie je bent.'); return; }
+      const row = { user_id: state.user.id, name, snapshot: buddySnapshot(), updated_at: new Date().toISOString() };
+      const { error } = await supabaseClient.from('buddy_profiles').upsert(row, { onConflict: 'user_id' });
+      if (error) { alert('Opslaan lukte niet: ' + error.message + (/relation|schema cache/i.test(error.message) ? '\n\nHeb je buddy-update.sql al uitgevoerd in Supabase?' : '')); return; }
+      buddyLastSnap = '';
+      await loadBuddies(true); render();
+      showToast('✓ Buddy-profiel opgeslagen');
+    }
+    function buddyToggleShare(k) {
+      const s = { ...buddyShare(), [k]: !buddyShare()[k] };
+      saveUserPrefs({ buddyShare: s });
+      buddyLastSnap = ''; buddyPushSnapshot(); render();
+    }
+    function buddyCode() { const a = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let c = ''; const r = crypto.getRandomValues(new Uint32Array(6)); r.forEach(x => c += a[x % a.length]); return c; }
+    async function buddyInvite() {
+      if (buddyState().list.length >= 3) { alert('Je hebt al 3 buddy\'s. Meer kan niet: dan blijft het persoonlijk.'); return; }
+      const code = buddyCode();
+      const { error } = await supabaseClient.from('buddy_invites').insert([{ code, owner: state.user.id }]);
+      if (error) { alert('Code maken lukte niet: ' + error.message); return; }
+      await loadBuddies(true); render();
+    }
+    function buddyInviteLink(code) { return location.origin + location.pathname + '#buddy=' + code; }
+    async function buddyShareInvite(code) {
+      const text = `Word mijn buddy in Primal Forged. Open deze link en log in, of vul de code ${code} in bij Meer → Buddy's: ${buddyInviteLink(code)}`;
+      try { if (navigator.share) { await navigator.share({ title: 'Primal Forged buddy', text }); return; } } catch (e) { return; }
+      try { await navigator.clipboard.writeText(text); showToast('✓ Uitnodiging gekopieerd'); } catch (e) { prompt('Kopieer deze uitnodiging:', text); }
+    }
+    async function buddyAccept(codeIn) {
+      const code = String(codeIn || (document.getElementById('bd-code') || {}).value || '').trim().toUpperCase();
+      if (!/^[A-Z0-9]{6,10}$/.test(code)) { alert('Vul de code van 6 tekens in.'); return; }
+      if (!buddyState().me) { state.buddyPendingCode = code; alert('Kies eerst je naam hieronder, dan koppel je daarna.'); render(); return; }
+      const { error } = await supabaseClient.rpc('accept_buddy_invite', { p_code: code });
+      if (error) { alert(error.message.replace(/^.*?: /, '')); return; }
+      state.buddyPendingCode = null;
+      await loadBuddies(true); render();
+      showToast('🤝 Jullie zijn nu buddy\'s');
+    }
+    async function buddyRemove(id) {
+      if (!confirm(`${buddyName(id)} weghalen als buddy? Jullie zien dan niets meer van elkaar.`)) return;
+      const x = buddyState().list.find(b => b.id === id);
+      if (x && x.link) await supabaseClient.from('buddy_links').delete().eq('id', x.link.id);
+      await loadBuddies(true); render();
+    }
+    async function buddySend(to, kind, msg) {
+      const { error } = await supabaseClient.from('buddy_events').insert([{ from_user: state.user.id, to_user: to, kind, msg }]);
+      state.buddyPick = null;
+      if (error) { alert(/row-level|policy/i.test(error.message) ? 'Je hebt vandaag al 5 berichten naar deze buddy gestuurd. Morgen weer.' : 'Versturen lukte niet: ' + error.message); render(); return; }
+      render();
+      showToast(kind === 'nudge' ? `👊 Duwtje verstuurd naar ${buddyName(to)}` : `🔥 Respect verstuurd naar ${buddyName(to)}`);
+    }
+    async function buddyMarkSeen() {
+      const ids = (buddyState().events || []).filter(e => !e.seen).map(e => e.id);
+      if (!ids.length) return;
+      await supabaseClient.from('buddy_events').update({ seen: true }).in('id', ids);
+      (buddyState().events || []).forEach(e => { if (ids.includes(e.id)) e.seen = true; });
+    }
+    function buddyAgo(iso) {
+      if (!iso) return 'nog niet bijgewerkt';
+      const m = Math.round((Date.now() - new Date(iso)) / 60000);
+      return m < 2 ? 'net' : m < 60 ? `${m} min geleden` : m < 1440 ? `${Math.round(m / 60)} uur geleden` : `${Math.round(m / 1440)} dagen geleden`;
+    }
+    function buddyCardHtml(x, compact) {
+      const s = (x.p && x.p.snapshot) || {};
+      const name = (x.p && x.p.name) || 'Buddy';
+      const stale = s.at && (Date.now() - new Date(s.at)) > 36 * 3600e3;
+      const bits = [];
+      if (s.score !== undefined) bits.push(`<div><b style="color: ${scoreColor(s.score)};">${s.score}</b><span>vandaag</span></div>`);
+      if (s.avg7 !== undefined && s.avg7 !== null) bits.push(`<div><b>${s.avg7}</b><span>gem. 7 dagen</span></div>`);
+      if (s.streak !== undefined) bits.push(`<div><b>${s.streak}</b><span>reeks 50+</span></div>`);
+      if (s.habits !== undefined) bits.push(`<div><b>${s.habits}/${s.habitsOf}</b><span>gewoontes</span></div>`);
+      if (s.home !== undefined) bits.push(`<div><b>${s.home}</b><span>Primal Home</span></div>`);
+      const pick = state.buddyPick && state.buddyPick.id === x.id ? state.buddyPick.kind : null;
+      return `
+        <div class="card bd-card">
+          <div class="bd-head"><div class="bd-av">${esc(name.charAt(0).toUpperCase())}</div><div style="flex: 1; min-width: 0;"><div class="bd-name">${esc(name)}</div><div class="bd-sub">${s.rank ? esc(s.rank) + ' · ' : ''}${stale ? 'niet actief sinds ' : 'bijgewerkt '}${buddyAgo(s.at)}</div></div>${s.trained !== undefined ? `<span class="bd-tr ${s.trained ? 'on' : ''}">${s.trained ? '🏋️ getraind' : 'nog niet getraind'}</span>` : ''}</div>
+          ${s.focus !== undefined ? `<div class="bd-focus"><span>Focus deze week</span>${s.focus ? esc(s.focus) : '<i>nog geen focus gekozen</i>'}${s.review ? `<small>Review ${s.review.week === 'deze' ? 'deze week' : 'vorige week'} gedaan${s.review.last ? ` · vorige focus: ${{ ja: 'gehaald ✓', deels: 'deels gehaald', nee: 'niet gehaald' }[s.review.last]}` : ''}</small>` : ''}</div>` : ''}
+          ${bits.length ? `<div class="bd-stats">${bits.join('')}</div>` : ''}
+          ${!compact && s.challenges && s.challenges.length ? `<div class="bd-ch">${s.challenges.map(c => `<span>🏁 ${esc(c.n)} · dag ${c.d}/${c.of}</span>`).join('')}</div>` : ''}
+          ${!Object.keys(s).filter(k => k !== 'at').length ? `<div class="hs-small" style="margin-top: 8px;">${esc(name)} deelt nog niets.</div>` : ''}
+          <div class="bd-act">
+            <button class="btn btn-secondary btn-small" onclick="state.buddyPick = ${pick === 'nudge' ? 'null' : `{ id: '${x.id}', kind: 'nudge' }`}; render();">👊 Duwtje</button>
+            <button class="btn btn-secondary btn-small" onclick="state.buddyPick = ${pick === 'respect' ? 'null' : `{ id: '${x.id}', kind: 'respect' }`}; render();">🔥 Respect</button>
+          </div>
+          ${pick ? `<div class="bd-pick">${(pick === 'nudge' ? buddyNudges : buddyRespects).map((m, i) => `<button onclick="buddySend('${x.id}', '${pick}', (${pick === 'nudge' ? 'buddyNudges' : 'buddyRespects'})[${i}])">${esc(m)}</button>`).join('')}</div>` : ''}
+          ${!compact ? `<button class="hm-go" style="color: #737373;" onclick="buddyRemove('${x.id}')">Buddy weghalen</button>` : ''}
+        </div>`;
+    }
+    function renderBuddies() {
+      const b = buddyState();
+      if (!b.loaded) { loadBuddies().then(render); return `<div class="empty">Laden…</div>`; }
+      setTimeout(buddyMarkSeen, 800);
+      const sh = buddyShare();
+      const head = `
+        <button class="entry-action" style="margin-bottom: 14px;" onclick="setSection('more')">← Terug</button>
+        <div class="page-header" style="margin-bottom: 8px;"><div class="page-sub">Samen</div><div class="page-title">Buddy's</div></div>
+        <div class="hm-sub">Maximaal 3 mensen die je kent. Je deelt alleen wat je zelf aanzet.</div>`;
+      if (b.error === 'setup') return head + `<div class="info-box"><div class="info-title">Nog één stap</div><div class="info-text">Voer buddy-update.sql uit in Supabase (SQL Editor). Daarna werken buddy's.</div></div>`;
+      if (b.error) return head + `<div class="info-box"><div class="info-title">Laden lukte niet</div><div class="info-text">${esc(b.error)}</div></div><button class="btn btn-secondary" style="width: 100%;" onclick="state.buddy = null; render();">Opnieuw proberen</button>`;
+      const code = state.buddyPendingCode || '';
+      return head + `
+        ${!b.me ? `
+        <div class="card kp-card">
+          <label class="label" for="bd-name">Hoe heet je voor je buddy's?</label>
+          <input id="bd-name" class="form-input" maxlength="40" placeholder="Je voornaam" style="width: 100%; box-sizing: border-box;">
+          <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="buddySaveProfile()">Opslaan</button>
+        </div>` : ''}
+        ${b.me && code ? `<div class="card" style="border-left: 3px solid #22c55e;"><label class="label">Uitnodiging</label><div class="su-txt">Je bent uitgenodigd met code <b style="color: #fafafa;">${esc(code)}</b>.</div><button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="buddyAccept('${esc(code)}')">Koppelen</button></div>` : ''}
+        ${b.list.map(x => buddyCardHtml(x)).join('')}
+        ${b.me ? `
+        <div class="card">
+          <label class="label">${b.list.length ? 'Nog iemand uitnodigen' : 'Nodig een buddy uit'} (${b.list.length}/3)</label>
+          ${b.invite ? `
+            <div class="bd-code">${esc(b.invite.code)}</div>
+            <div class="hs-small" style="text-align: center;">${b.invite.expires_at ? 'Geldig tot ' + new Date(b.invite.expires_at).toLocaleDateString('nl-NL', { day: 'numeric', month: 'long' }) : '7 dagen geldig'} · eenmalig te gebruiken</div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="buddyShareInvite('${esc(b.invite.code)}')">Uitnodiging delen</button>`
+          : b.list.length < 3 ? `<button class="btn btn-primary" style="width: 100%;" onclick="buddyInvite()">Maak een uitnodigingscode</button>` : `<div class="su-txt">Je hebt het maximum van 3 buddy's.</div>`}
+          <div class="kp-row" style="margin-top: 14px;"><label for="bd-code">Code gekregen?</label><input id="bd-code" class="form-input" maxlength="10" placeholder="ABC123" style="text-transform: uppercase;" value="${esc(code)}"><button class="btn btn-secondary btn-small" onclick="buddyAccept()">Koppel</button></div>
+        </div>
+        <div class="card">
+          <label class="label">Wat deel je?</label>
+          ${buddyShareDefs.map(([k, l, sub]) => `
+            <div class="de-row" style="padding-left: 0; padding-right: 0;">
+              <span class="de-txt"><span style="color: ${sh[k] ? '#fafafa' : '#737373'};">${l}</span><small>${sub}</small></span>
+              <button class="de-sw ${sh[k] ? 'on' : ''}" role="switch" aria-checked="${!!sh[k]}" aria-label="${esc(l)} delen" onclick="buddyToggleShare('${k}')"><i></i></button>
+            </div>`).join('')}
+          <div class="hs-small" style="margin-top: 10px;">🔒 Nooit gedeeld: je journal, foto's, gewicht, metingen, bloedwaarden, slaap, libido en retention.</div>
+          <div class="kp-row" style="margin-top: 10px;"><label for="bd-name2">Je naam</label><input id="bd-name2" class="form-input" maxlength="40" value="${esc(b.me.name)}" onchange="(async () => { const v = this.value.trim().slice(0, 40); if (v) { await supabaseClient.from('buddy_profiles').update({ name: v }).eq('user_id', state.user.id); state.buddy.me.name = v; showToast('✓ Naam opgeslagen'); } })()"></div>
+        </div>` : ''}
+        ${(b.events || []).length ? `
+        <div class="card">
+          <label class="label">Ontvangen</label>
+          ${b.events.slice(0, 10).map(e => `<div class="bd-ev ${e.seen ? '' : 'new'}"><span>${e.kind === 'nudge' ? '👊' : '🔥'}</span><div><b>${esc(buddyName(e.from_user))}</b> ${esc(e.msg || '')}<small>${buddyAgo(e.created_at)}</small></div></div>`).join('')}
+        </div>` : ''}`;
+    }
+    function renderBuddyDashCard() {
+      const b = buddyState();
+      if (!b.loaded || !b.list.length) return '';
+      const unseen = (b.events || []).filter(e => !e.seen);
+      return `
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <label class="label" style="margin: 0;">🤝 Buddy's</label>
+            <button class="st-goal" onclick="setSection('buddies')">${unseen.length ? `${unseen.length} nieuw · ` : ''}Alles ›</button>
+          </div>
+          ${unseen.slice(0, 2).map(e => `<div class="bd-ev new" style="margin-top: 8px;"><span>${e.kind === 'nudge' ? '👊' : '🔥'}</span><div><b>${esc(buddyName(e.from_user))}</b> ${esc(e.msg || '')}</div></div>`).join('')}
+          ${b.list.map(x => { const s = (x.p && x.p.snapshot) || {}; return `
+            <div class="bd-mini">
+              <div class="bd-av sm">${esc(((x.p && x.p.name) || 'B').charAt(0).toUpperCase())}</div>
+              <div style="flex: 1; min-width: 0;"><b>${esc((x.p && x.p.name) || 'Buddy')}</b><span>${s.focus ? '🎯 ' + esc(s.focus) : s.score !== undefined ? 'Dagscore ' + s.score : buddyAgo(s.at)}</span></div>
+              <button class="btn btn-secondary btn-small" onclick="buddySend('${x.id}', 'nudge', buddyNudges[0])" aria-label="Duwtje naar ${esc((x.p && x.p.name) || 'buddy')}">👊</button>
+            </div>`; }).join('')}
+        </div>`;
+    }
+
+    // ============================================
     // HERINNERINGEN (pushmeldingen via Supabase Edge Function "send-reminders")
     // ============================================
     const VAPID_PUBLIC = 'BFVrf-QjhZJ-XWJBnp6jB9dBUM2ROfcaqgMzdEvYldMg2956WCJ-7elXxYc9ic3dyYUAmRc7Ak8_tVtQQ3jYrYg';
@@ -11290,7 +12049,7 @@
       ['protein', 'Eiwit-check', 'Alleen als je onder 60% van je eiwitdoel zit', false, '15:00'],
       ['screen', 'Scherm weg', 'Een uur voor je bedtijd (uit je slaapdoel)', true, null],
       ['evening', 'Dag afsluiten', 'Avond-journal en routine · niet als je al hebt afgesloten', true, '21:30'],
-      ['weekly', 'Weekrapport', 'Op zondag', false, '19:00'],
+      ['weekly', 'Wekelijkse review', 'Zondag: 10 minuten terugkijken en je focus kiezen', true, '19:00'],
       ['home', 'Primal Home', 'Onderhoud dat aan de beurt is, en op zaterdag je stap van de week', true, '10:00']
     ];
     function reminderPrefs() {
@@ -11402,9 +12161,16 @@
       } catch (e) {}
     }
     // Melding aangetikt of link met #onderdeel: naar dat onderdeel
-    const navSections = ['dashboard', 'journal', 'body', 'training', 'food', 'sleep', 'more', 'week', 'reminders', 'books', 'privacy', 'home'];
+    const navSections = ['dashboard', 'journal', 'body', 'training', 'food', 'sleep', 'more', 'week', 'reminders', 'books', 'privacy', 'home', 'kompas', 'review', 'buddies'];
     function gotoFromHash() {
       const h = (location.hash || '').replace('#', '');
+      const bm = h.match(/^buddy=([A-Za-z0-9]{6,10})$/);
+      if (bm && state.user) {
+        state.buddyPendingCode = bm[1].toUpperCase();
+        setSection('buddies');
+        try { history.replaceState(history.state, '', location.pathname + location.search); } catch (e) {}
+        return;
+      }
       if (state.user && navSections.includes(h)) {
         if (h === 'journal') state.jMode = new Date().getHours() >= 15 ? 'avond' : 'ochtend';
         setSection(h);
@@ -11564,6 +12330,7 @@
       await Promise.all([loadEntries(), loadRetention(), loadHabits(), loadBody(), loadTraining(), loadFood(), loadPhotosAndBlood()]);
       syncProtTarget();
       try { homeSyncServer(); } catch (e) {}
+      loadBuddies().then(() => { if (state.activeSection === 'dashboard' || state.activeSection === 'buddies' || state.activeSection === 'more') render(); }).catch(() => {});
       // Eén onderdeel dat faalt mag de rest van de app niet blokkeren
       try {
         await loadChallenges();
@@ -11573,6 +12340,8 @@
         console.error('Challenges laden mislukt:', e);
         state.challengesError = 'Challenges konden niet laden.';
       }
+      // pas na het laden van alle gewoonte-historie
+      try { habitGradCheck(); } catch (e) {}
     }
 
     // Nieuwe versie online gezet? Dan een balk om bij te werken
