@@ -60,6 +60,101 @@
     .nav-item { flex: 1; padding: 12px 2px; background: transparent; border: none; color: #525252; font-size: 9px; text-transform: uppercase; letter-spacing: 0.02em; cursor: pointer; font-family: inherit; text-align: center; }
     .nav-item.active { color: #7f1d1d; }
     .nav-icon { font-size: 18px; display: block; margin-bottom: 4px; }
+    .container > .entry-action:first-child, .container > .cr-wrap:first-child { margin-top: 62px; }
+    .gtabs + .page-header, .gtabs + .entry-action + .page-header, .container > .entry-action:first-child + .page-header { padding-top: 6px; }
+    .gtabs { display: flex; gap: 6px; margin: 62px 0 18px; overflow-x: auto; scrollbar-width: none; }
+    .gtabs::-webkit-scrollbar { display: none; }
+    .gtabs button { flex: 1 0 auto; padding: 9px 10px; border-radius: 999px; background: #0f0f0f; border: 1px solid #222; color: #8a8a8a; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; font-family: inherit; white-space: nowrap; }
+    .gtabs button.on { background: rgba(127, 29, 29, 0.25); border-color: #7f1d1d; color: #fafafa; }
+    .gtabs button i { font-style: normal; color: #e5484d; margin-left: 2px; }
+    @media (max-width: 360px) { .gtabs { gap: 4px; } .gtabs button { padding: 9px 7px; letter-spacing: 0.03em; } }
+    /* Ketens breken */
+    .kt-card { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; background: #0a0a0a; border: 1px solid #1c1c1c; padding: 16px; margin-bottom: 10px; color: #fafafa; font-family: inherit; cursor: pointer; touch-action: manipulation; }
+    .kt-card:active { background: #111; }
+    .kt-ic { font-size: 28px; flex: none; width: 40px; text-align: center; }
+    .kt-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+    .kt-main b { font-size: 15px; font-weight: 600; }
+    .kt-mode { font-size: 9px; text-transform: uppercase; letter-spacing: 0.12em; color: #737373; }
+    .kt-line { font-size: 14px; color: #e5e5e5; margin-top: 4px; }
+    .kt-meta { font-size: 11px; color: #8a8a8a; line-height: 1.5; }
+    .kt-meta i { font-style: normal; font-weight: 600; }
+    .kt-go { color: #525252; font-size: 22px; flex: none; }
+    .kt-ret { border-left: 3px solid #e5484d; }
+    .kt-sos { display: block; width: 100%; background: #7f1d1d; border: 1px solid #b91c1c; color: #fff; font-family: inherit; font-size: 15px; font-weight: 600; letter-spacing: 0.04em; padding: 16px; margin-bottom: 16px; cursor: pointer; border-radius: 4px; touch-action: manipulation; }
+    .kt-sos:active { background: #991b1b; }
+    .kt-sos.sm { font-size: 13px; padding: 10px; margin: 12px 0 0; }
+    .kt-tot { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 8px; margin-bottom: 16px; }
+    .kt-tot > div { background: #0f0f0f; border: 1px solid #1c1c1c; padding: 12px 6px; text-align: center; display: flex; flex-direction: column; gap: 4px; }
+    .kt-tot b { font-size: 18px; color: #fafafa; }
+    .kt-tot span { font-size: 9px; text-transform: uppercase; letter-spacing: 0.04em; color: #737373; overflow-wrap: anywhere; }
+    .kt-pat { border-left: 3px solid #d9a441; }
+    .kt-add { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 16px; }
+    .kt-add button { background: #0a0a0a; border: 1px solid #1c1c1c; color: #e5e5e5; font-family: inherit; font-size: 12px; padding: 14px 4px; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; line-height: 1.25; touch-action: manipulation; }
+    .kt-add button span { font-size: 24px; }
+    .kt-add button small { font-size: 10px; color: #737373; }
+    @media (max-width: 360px) { .kt-add { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    .kt-hero { background: linear-gradient(180deg, #160808, #0a0a0a); border: 1px solid #2a1414; padding: 22px 18px; margin-bottom: 14px; text-align: center; }
+    .kt-hero-ic { font-size: 34px; }
+    .kt-hero-n { font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: #a3a3a3; margin-top: 6px; }
+    .kt-hero-big { font-size: 56px; font-weight: 700; color: #fafafa; line-height: 1.05; margin-top: 8px; }
+    .kt-hero-big span { display: block; font-size: 12px; font-weight: 400; text-transform: uppercase; letter-spacing: 0.14em; color: #a3a3a3; margin-top: 4px; }
+    .kt-hero-sub { font-size: 13px; color: #d4d4d4; line-height: 1.55; margin-top: 12px; }
+    .kt-hero-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 16px; }
+    .kt-hero-stats > div { display: flex; flex-direction: column; gap: 3px; }
+    .kt-hero-stats b { font-size: 18px; color: #fafafa; }
+    .kt-hero-stats span { font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: #737373; }
+    .kt-step { display: flex; align-items: center; gap: 12px; }
+    .kt-step > span { font-size: 13px; color: #a3a3a3; }
+    .kt-step > span:first-child { flex: 1; }
+    .kt-step button { width: 46px; height: 46px; border-radius: 50%; background: #141414; border: 1px solid #333; color: #fafafa; font-size: 22px; cursor: pointer; font-family: inherit; touch-action: manipulation; }
+    .kt-step b { font-size: 26px; min-width: 36px; text-align: center; }
+    .kt-yn { display: flex; align-items: center; gap: 8px; }
+    .kt-yn > span { flex: 1; font-size: 13px; color: #a3a3a3; }
+    .kt-yn button { background: #141414; border: 1px solid #262626; color: #a3a3a3; border-radius: 8px; min-height: 42px; padding: 0 14px; font-family: inherit; font-size: 13px; cursor: pointer; }
+    .kt-yn button.on.ok { border-color: #22c55e; color: #fafafa; background: rgba(34,197,94,0.15); }
+    .kt-yn button.on.no { border-color: #e5484d; color: #fafafa; background: rgba(229,72,77,0.15); }
+    .kt-week { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; margin-top: 16px; padding-top: 14px; border-top: 1px solid #1c1c1c; }
+    .kt-wd { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .kt-wd small { font-size: 10px; color: #737373; }
+    .kt-dot { width: 22px; height: 22px; border-radius: 50%; background: #1c1c1c; border: 1px solid #262626; }
+    .kt-dot.free { background: #22c55e; border-color: #22c55e; }
+    .kt-dot.ok { background: #86efac; border-color: #86efac; }
+    .kt-dot.over { background: #d9a441; border-color: #d9a441; }
+    .kt-dot.slip { background: #e5484d; border-color: #e5484d; }
+    .kt-rw { margin-top: 14px; }
+    .kt-rw-t { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; color: #e5e5e5; margin-bottom: 8px; }
+    .kt-rw-t span { color: #a3a3a3; white-space: nowrap; }
+    .kt-build { display: inline-block; border: 1px solid #22c55e55; color: #bbf7d0; background: rgba(34,197,94,0.08); border-radius: 999px; padding: 5px 10px; font-size: 12px; }
+    .kt-plan { margin-top: 12px; padding: 12px; background: #0f0f0f; border-left: 3px solid #e5484d; font-size: 13px; color: #e5e5e5; line-height: 1.5; }
+    .kt-plan span { display: block; font-size: 9px; text-transform: uppercase; letter-spacing: 0.12em; color: #8a8a8a; margin-bottom: 4px; }
+    .kt-tl { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid #161616; }
+    .kt-tl:last-of-type { border-bottom: none; }
+    .kt-tl-d { flex: none; width: 22px; height: 22px; border-radius: 50%; border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #0a0a0a; }
+    .kt-tl.on .kt-tl-d { background: #22c55e; border-color: #22c55e; }
+    .kt-tl b { display: block; font-size: 12px; color: #fafafa; }
+    .kt-tl span { font-size: 12px; color: #a3a3a3; line-height: 1.5; }
+    .kt-tl:not(.on) b { color: #a3a3a3; }
+    .kt-safe { margin-top: 12px; padding: 12px; border: 1px solid #eab30855; background: rgba(234,179,8,0.06); }
+    .kt-dash .kt-mini { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #161616; cursor: pointer; }
+    .kt-mini span { font-size: 20px; width: 26px; text-align: center; }
+    .kt-mini b { font-size: 13px; font-weight: 600; flex: none; }
+    .kt-mini i { font-style: normal; font-size: 12px; color: #a3a3a3; margin-left: auto; text-align: right; }
+    .kp-row:has(> [data-kf]) label { min-width: 130px; max-width: 48%; }
+    /* Craving */
+    .cr-wrap { text-align: center; padding-top: 4px; }
+    .cr-step { font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: #e5484d; }
+    .cr-breath { position: relative; width: 220px; height: 220px; margin: 18px auto 16px; }
+    .cr-ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid #7f1d1d; background: radial-gradient(circle, rgba(127,29,29,0.35), rgba(127,29,29,0.05) 70%); animation: crBreath 10s ease-in-out infinite; }
+    .cr-mid { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .cr-clock { font-size: 44px; font-weight: 700; color: #fafafa; font-variant-numeric: tabular-nums; }
+    .cr-in { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: #a3a3a3; margin-top: 4px; }
+    @keyframes crBreath { 0% { transform: scale(0.72); } 40% { transform: scale(1); } 100% { transform: scale(0.72); } }
+    @media (prefers-reduced-motion: reduce) { .cr-ring { animation: none; transform: scale(0.9); } }
+    .cr-hint { font-size: 13px; color: #d4d4d4; line-height: 1.6; margin: 0 auto 12px; max-width: 420px; }
+    .cr-block { text-align: left; background: #0a0a0a; border: 1px solid #1c1c1c; border-left: 3px solid #e5484d; padding: 14px; margin-bottom: 12px; font-size: 14px; color: #fafafa; line-height: 1.55; }
+    .cr-block > span { display: block; font-size: 9px; text-transform: uppercase; letter-spacing: 0.14em; color: #8a8a8a; margin-bottom: 6px; }
+    .cr-block ul { margin: 0; padding-left: 18px; }
+    .cr-block li { font-size: 13px; color: #e5e5e5; margin: 3px 0; }
     
     .card { background: #0a0a0a; border: 1px solid #1c1c1c; padding: 20px; margin-bottom: 16px; }
     .card-accent { border-left: 3px solid #7f1d1d; }
@@ -1820,21 +1915,26 @@
       `;
     }
 
+    // Retention = discipline, geen verslaving. Fases gaan over wat je traint, niet over hormonen.
     const retentionPhases = [
-      { days: 0, name: 'Opstarten', color: '#525252' },
-      { days: 7, name: 'Dopamine Reset', color: '#eab308' },
-      { days: 14, name: 'T-Boost', color: '#f97316' },
-      { days: 30, name: 'Rewiring', color: '#22c55e' },
-      { days: 60, name: 'Transformatie', color: '#3b82f6' },
-      { days: 90, name: 'Meesterschap', color: '#7f1d1d' }
+      { days: 0, name: 'Fundament', color: '#d4d4d4', text: 'Word je bewust van wanneer de drang komt: tijd, plek, stemming.' },
+      { days: 7, name: 'Discipline', color: '#eab308', text: 'De eerste week staat. Houd vast aan je plan, juist als het saai wordt.' },
+      { days: 14, name: 'Focus', color: '#f97316', text: 'Zet de energie bewust in: training, werk, je kwartaaldoel.' },
+      { days: 30, name: 'Beheersing', color: '#22c55e', text: 'Een impuls is een signaal, geen opdracht. Jij kiest.' },
+      { days: 60, name: 'Standvastig', color: '#3b82f6', text: 'Discipline is geen gevecht meer. Het is wie je bent.' },
+      { days: 90, name: 'Meesterschap', color: '#e5484d', text: 'Je gaat bewust om met je seksualiteit en je energie.' }
     ];
 
     const retentionMilestones = [
-      { days: 7, title: 'Dopamine Receptor Upregulatie', desc: 'Je hersenen beginnen gevoeliger te worden voor natuurlijke dopamine.' },
-      { days: 14, title: 'Testosteron Piek', desc: 'Onderzoek toont een piek in testosteron niveaus rond dag 7-14.' },
-      { days: 30, title: 'Prefrontale Cortex Verbetering', desc: 'Betere impulse controle en besluitvorming.' },
-      { days: 60, title: 'ΔFosB Normalisatie', desc: 'De verslavings-gerelateerde proteïnen normaliseren.' },
-      { days: 90, title: 'Neuroplastische Reset', desc: 'Significante herstel van neurale paden.' }
+      { days: 1, title: 'Spark', desc: 'De eerste dag. Je hebt gekozen.' },
+      { days: 3, title: 'Resist', desc: 'De eerste dagen zijn het lastigst. Weet wanneer de drang komt en heb een plan.' },
+      { days: 7, title: 'Hold', desc: 'Een week. Je patronen worden zichtbaar: wanneer, waar en waarom.' },
+      { days: 14, title: 'Steel', desc: 'Twee weken. Vervang het oude moment door iets wat je opbouwt.' },
+      { days: 30, title: 'Unchained', desc: 'Een maand. Zelfbeheersing wordt een gewoonte in plaats van een gevecht.' },
+      { days: 60, title: 'Unshaken', desc: 'Een impuls bepaalt niet meer wat je doet.' },
+      { days: 90, title: 'Sovereign Mind', desc: 'Drie maanden. Jij bepaalt waar je aandacht en energie heen gaan.' },
+      { days: 180, title: 'Mastery', desc: 'Een half jaar discipline, dag in dag uit.' },
+      { days: 365, title: 'Free', desc: 'Een jaar. Dit is wie je bent.' }
     ];
 
     const quotes = [
@@ -2304,13 +2404,13 @@
         state.retentionStreak = data;
         state.retentionAll = [...(state.retentionAll || []), data];
         render();
-        showToast('🔥 Streak gestart!');
+        showToast('🔥 Vandaag besloot je: jij bepaalt.');
       }
     }
 
     async function resetRetention() {
       if (!state.user || !state.retentionStreak) return;
-      if (!confirm('Weet je zeker dat je je streak wilt resetten?')) return;
+      if (!confirm('Uitglijder? Je beste reeks en al je dagen blijven staan. Daarna begin je gewoon opnieuw.')) return;
       
       await supabaseClient.from('retention').update({ 
         is_active: false, 
@@ -2321,6 +2421,7 @@
       state.retentionAll = (state.retentionAll || []).map(r => r.id === state.retentionStreak.id ? { ...r, is_active: false, end_date: todayStr() } : r);
       state.retentionStreak = null;
       render();
+      showToast('Uitglijder genoteerd. Je bent niet terug bij nul.');
     }
 
     async function toggleHabit(habit) {
@@ -2650,6 +2751,7 @@
         home: () => renderHomeDashCard(),
         focus: () => renderFocusCard(),
         buddies: () => renderBuddyDashCard(),
+        ketens: () => renderKetenDashCard(),
         challenges: () => renderDashboardChallenges(),
         sleep: () => renderSleepDashCard(),
         year: () => renderYearCard(),
@@ -2911,8 +3013,7 @@
     // RENDER: LICHAAM
     // ============================================
     function renderBody() {
-      if (state.bodyTab === 'challenges') return renderChallenges();
-      if (state.bodyTab === 'fotos') return renderPhotos();
+      if (state.bodyTab === 'fotos') { state.bodyTab = 'metingen'; setTimeout(() => { const a = document.getElementById('ph-anchor'); if (a) a.scrollIntoView({ block: 'start' }); }, 60); }
       if (state.bodyTab === 'bloed') return renderBlood();
       const start = getBodyStartDate();
       const w = latestBodyValue('weight');
@@ -3039,6 +3140,10 @@
             ` : ''}
           </div>
         ` : ''}
+
+        <div id="ph-anchor" style="scroll-margin-top: 80px;"></div>
+        <label class="label" style="margin: 22px 0 10px;">📸 Voortgangsfoto's</label>
+        ${renderPhotos(true)}
 
         <div class="card">
           <label class="label">Lengte (voor BMI en FFMI)</label>
@@ -3700,6 +3805,7 @@
     // CHALLENGES: NAVIGATIE
     // ============================================
     function setBodyTab(tab) {
+      if (tab === 'challenges') { state.chView = 'list'; setSection('challenges'); return; }
       state.bodyTab = tab;
       state.chView = 'list';
       state.bloodForm = null; state.photoView = null;
@@ -3724,16 +3830,19 @@
     // RENDER: CHALLENGES
     // ============================================
     function renderBodyHeader() {
+      if (state.activeSection === 'challenges') return `
+        <div class="page-header">
+          <div class="page-sub">Forge</div>
+          <div class="page-title">Challenges${activeChallenges().length ? ' <span style="color: #e5484d;">' + activeChallenges().length + '</span>' : ''}</div>
+        </div>`;
       return `
         <div class="page-header">
-          <div class="page-sub">Fysiek</div>
+          <div class="page-sub">Body</div>
           <div class="page-title">Lichaam</div>
         </div>
         <div class="tabs">
-          <button class="tab ${!['challenges', 'fotos', 'bloed'].includes(state.bodyTab) ? 'active' : ''}" onclick="setBodyTab('metingen')">Metingen</button>
-          <button class="tab ${state.bodyTab === 'fotos' ? 'active' : ''}" onclick="setBodyTab('fotos')">Foto's</button>
-          <button class="tab ${state.bodyTab === 'bloed' ? 'active' : ''}" onclick="setBodyTab('bloed')">Bloed</button>
-          <button class="tab ${state.bodyTab === 'challenges' ? 'active' : ''}" onclick="setBodyTab('challenges')">Challenges${activeChallenges().length ? ' (' + activeChallenges().length + ')' : ''}</button>
+          <button class="tab ${state.bodyTab !== 'bloed' ? 'active' : ''}" onclick="setBodyTab('metingen')">Metingen</button>
+          <button class="tab ${state.bodyTab === 'bloed' ? 'active' : ''}" onclick="setBodyTab('bloed')">Bloedwaarden</button>
         </div>
       `;
     }
@@ -4500,7 +4609,7 @@
     // ============================================
     // MOTIVATIE: XP, DAGSCORE, RANGEN
     // ============================================
-    const APP_VERSION = '5 okt · 21:00';
+    const APP_VERSION = '6 okt · 12:00';
     const XP = {
       habit: 5,
       journal: 15,
@@ -4521,7 +4630,9 @@
       homeMaint: 10,     // onderhoud in Primal Home gedaan
       homeRoom: 50,      // ruimte in Primal Home compleet (eenmalig)
       review: 25,        // wekelijkse review gedaan
-      habitGrad: 100     // gewoonte afgestudeerd (60 van 66 dagen)
+      habitGrad: 100,    // gewoonte afgestudeerd (60 van 66 dagen)
+      ketenDay: 5,       // per keten: dag vrij of binnen je doel
+      craving: 10        // craving doorstaan (max 3 per dag)
     };
 
     const ranks = [
@@ -4640,6 +4751,7 @@
       Object.keys(stepsData().log).forEach(d => starts.push(d));
       Object.values(bookStatus()).forEach(b => b && b.s === 'read' && starts.push(b.at));
       Object.values(homeSt()).forEach(v => v && v.s === 'have' && starts.push(v.at));
+      ketenChains(true).forEach(c => starts.push(c.start));
       const first = starts.filter(Boolean).filter(d => d <= today).sort()[0] || today;
 
       const retentionOn = (date) => retentions.some(r => r.start_date && r.start_date <= date && (r.is_active ? date <= today : (r.end_date ? date < r.end_date : false)));
@@ -4676,6 +4788,7 @@
       Object.values(homeBadges()).forEach(dt => addH(dt, XP.homeRoom));
       Object.values(reviews()).forEach(r => r && r.at && addH(r.at, XP.review));
       Object.values(habitGradLog()).forEach(arr => (arr || []).forEach(g => g && addH(g.at, XP.habitGrad)));
+      const ketenXpOn = ketenXpByDate();
       const fastXpOn = {};
       fastData().log.forEach(x => { if (x && x.e && (new Date(x.e) - new Date(x.s)) >= (Number(x.goal) || 16) * 3600e3) fastXpOn[localDateStr(new Date(x.e))] = XP.fast; });
       const protByDate = {};
@@ -4696,6 +4809,8 @@
         if (foodT && foodSince && date >= foodSince && date >= foodWindow) parts.push({ w: 10, v: (protByDate[date] || 0) >= foodT.prot ? 1 : 0 });
         if (chs.length) parts.push({ w: 15, v: chs.filter(x => x.done).length / chs.length });
         if (ret) parts.push({ w: 10, v: 1 });
+        const kScore = ketenScoreOn(date);
+        if (kScore !== null) parts.push({ w: 10, v: kScore });
         const wSum = parts.reduce((a, p) => a + p.w, 0);
         let score = Math.round(parts.reduce((a, p) => a + p.w * p.v, 0) / wSum * 100) - neg * 5;
         score = Math.max(0, Math.min(100, score));
@@ -4719,6 +4834,7 @@
         xp += bookXpOn[date] || 0;
         xp += fastXpOn[date] || 0;
         xp += homeXpOn[date] || 0;
+        xp += ketenXpOn[date] || 0;
         if (date === valuesDate) xp += VALUES_BONUS_XP;
         if (xp > 0) hadActivity = true;
         if ((score < 20 && hadActivity && date < today) || failDates.has(date)) comeback = true;
@@ -4890,6 +5006,9 @@
         ['Journal-entry', `+${XP.journal} per dag`],
         ['Challenge-dag gehaald', `+${XP.challengeDay} per challenge`],
         ['Retention-dag', `+${XP.retentionDay} per dag`],
+        ['Keten: dag vrij of binnen je doel', `+${XP.ketenDay} per keten per dag`],
+        ['Craving doorstaan', `+${XP.craving} (max 3 per dag)`],
+        ['Keten-mijlpaal (1 t/m 365 dagen)', `+${ketenMs[0][2]} tot +${fmtInt(ketenMs[ketenMs.length - 1][2])}`],
         ['Training', `+${XP.training} per dag`],
         ['Nacht ingevuld (Slaap)', `+${XP.sleepLog} per nacht`],
         ['Avondroutine 5/7 of meer', `+${XP.sleepRoutine} per avond`],
@@ -4911,7 +5030,7 @@
       ];
       return `
         <div class="page-header">
-          <div class="page-sub">Motivatie</div>
+          <div class="page-sub">Forge</div>
           <div class="page-title">Rangen</div>
         </div>
 
@@ -4968,7 +5087,6 @@
           </div>
         </div>
 
-        <button class="btn btn-secondary" style="width: 100%;" onclick="setSection('dashboard')">← Terug naar dashboard</button>
       `;
     }
 
@@ -6854,7 +6972,6 @@
           <button class="btn btn-secondary btn-small" style="margin-top: 12px;" onclick="writeWeekReflection(${esc(JSON.stringify(q))}, ${w.week})">Beantwoord in Journal</button>
         </div>
 
-        <button class="btn btn-secondary" style="width: 100%;" onclick="setSection('dashboard')">← Terug naar dashboard</button>
       `;
     }
 
@@ -6881,43 +6998,67 @@
     // ============================================
     // RENDER: RETENTION
     // ============================================
+    function retentionStats() {
+      const today = todayStr(), from30 = dateAdd(today, -29);
+      const rs = (state.retentionAll || []).filter(r => r.start_date);
+      const on = new Set(); let best = getRetentionDays();
+      rs.forEach(r => {
+        const end = r.is_active ? dateAdd(today, 1) : (r.end_date || r.start_date);
+        for (let d = r.start_date; d < end && d <= today; d = dateAdd(d, 1)) on.add(d);
+        if (!r.is_active && r.end_date) best = Math.max(best, diffDays(r.start_date, r.end_date));
+      });
+      const first = rs.map(r => r.start_date).sort()[0];
+      let known = 0, good = 0;
+      if (first) for (let d = first > from30 ? first : from30; d <= today; d = dateAdd(d, 1)) { known++; if (on.has(d)) good++; }
+      return { best, total: on.size, pct: known ? Math.round(good / known * 100) : null };
+    }
     function renderRetention() {
       const days = getRetentionDays();
       const phase = getRetentionPhase(days);
       const nextMilestone = getNextMilestone(days);
-      const progress = nextMilestone ? (days / nextMilestone.days) * 100 : 100;
-      
+      const prevMs = [...retentionMilestones].reverse().find(m => m.days <= days);
+      const progress = nextMilestone && days < nextMilestone.days ? Math.round((days - (prevMs ? prevMs.days : 0)) / (nextMilestone.days - (prevMs ? prevMs.days : 0)) * 100) : 100;
+      const st = retentionStats();
+      const science = `
+        <details class="card hm-why">
+          <summary><span class="hm-gn">Eerlijk over de wetenschap</span><span class="hm-pm" aria-hidden="true"></span></summary>
+          <div class="su-txt" style="margin-top: 10px;">Online lees je vaak dat je testosteron rond dag 7 piekt. Het onderzoek waar dat op gebaseerd is (2003) is ingetrokken. Er is geen goed bewijs voor grote lichamelijke veranderingen door retention.</div>
+          <div class="su-txt" style="margin-top: 8px;">Daarom gaat het hier om wat je wél traint: discipline, focus, impulscontrole en bewust omgaan met je seksualiteit.</div>
+          ${ketenSrcHtml(['retract'])}
+        </details>`;
       return `
-        <div class="page-header">
-          <div class="page-sub">Discipline</div>
+        <button class="entry-action" style="margin-bottom: 14px;" onclick="setSection('ketens')">← Ketens</button>
+        <div class="page-header" style="margin-bottom: 8px;">
+          <div class="page-sub">Discipline · Focus · Zelfbeheersing</div>
           <div class="page-title">Retention</div>
         </div>
-        
+
         ${state.retentionStreak ? `
-          <div class="card" style="text-align: center;">
-            <div class="streak-big">
-              <div class="streak-number" style="color: ${phase.color}">${days}</div>
-              <div class="streak-label">Dagen Streak</div>
-            </div>
-            <div class="phase-indicator" style="background: ${phase.color}20; border: 1px solid ${phase.color}50;">
+          <div class="kt-hero">
+            <div class="kt-hero-ic">🔥</div>
+            <div class="kt-hero-big" style="color: ${phase.color};">${days}<span>${days === 1 ? 'dag' : 'dagen'}</span></div>
+            <div class="kt-hero-sub">${days ? `${days} ${days === 1 ? 'dag' : 'dagen'} geleden besloot je dat je impulsen jou niet meer besturen.` : 'Vandaag besloot je dat je impulsen jou niet meer besturen.'}</div>
+            <div class="phase-indicator" style="background: ${phase.color}20; border: 1px solid ${phase.color}50; margin-top: 14px;">
               <div class="phase-name" style="color: ${phase.color}">Fase: ${phase.name}</div>
+              <div class="hs-small" style="margin-top: 6px; color: #d4d4d4;">${esc(phase.text)}</div>
             </div>
+            <div class="kt-hero-stats"><div><b>${st.pct !== null ? st.pct + '%' : '–'}</b><span>deze maand</span></div><div><b>${st.total}</b><span>dagen totaal</span></div><div><b>${st.best}</b><span>beste reeks</span></div></div>
             ${nextMilestone && days < nextMilestone.days ? `
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: ${progress}%; background: ${phase.color};"></div>
-              </div>
-              <div style="font-size: 10px; color: #525252; margin-top: 8px;">
-                Nog ${nextMilestone.days - days} dagen tot ${nextMilestone.title}
-              </div>
+              <div class="progress-bar" style="margin-top: 14px;"><div class="progress-fill" style="width: ${progress}%; background: ${phase.color};"></div></div>
+              <div class="hs-small" style="margin-top: 8px;">Nog ${nextMilestone.days - days} ${nextMilestone.days - days === 1 ? 'dag' : 'dagen'} tot <b style="color: #fafafa;">${nextMilestone.title}</b></div>
             ` : ''}
           </div>
-          
-          <button class="emergency-btn" onclick="state.showEmergencyModal = true; render();">
-            🚨 NOODPROTOCOL
-          </button>
-          
+
+          <button class="kt-sos" onclick="state.showEmergencyModal = true; render();">🆘 Ik heb een drang</button>
+
           <div class="card">
-            <label class="label">Milestones</label>
+            <label class="label">Bouw terug</label>
+            <div class="su-txt">De energie die vrijkomt is van jou. Zet hem bewust in.</div>
+            <div class="kp-chips" style="margin-top: 10px;">${['Discipline', 'Focus', 'Impulscontrole', 'Training', 'Bewust omgaan met seksualiteit'].map(b => `<span class="kt-build">${b}</span>`).join('')}</div>
+          </div>
+
+          <div class="card">
+            <label class="label">Mijlpalen</label>
             ${retentionMilestones.map(m => `
               <div class="milestone ${days >= m.days ? 'achieved' : ''}">
                 <div class="milestone-day">${m.days}</div>
@@ -6928,9 +7069,9 @@
               </div>
             `).join('')}
           </div>
-          
+
           <div class="card">
-            <label class="label">Urge Technieken</label>
+            <label class="label">Wat helpt bij een drang</label>
             <div class="urge-grid">
               ${urges.map(u => `
                 <div class="urge" title="${u.desc}">
@@ -6940,18 +7081,18 @@
               `).join('')}
             </div>
           </div>
-          
-          <button class="btn btn-secondary" style="width: 100%;" onclick="resetRetention()">Reset Streak</button>
+          ${science}
+          <button class="btn btn-secondary" style="width: 100%; margin-bottom: 16px;" onclick="resetRetention()">Uitglijder: opnieuw beginnen</button>
         ` : `
-          <div class="card" style="text-align: center; padding: 40px;">
-            <div style="font-size: 48px; margin-bottom: 16px;">🔥</div>
-            <div style="font-size: 14px; color: #a3a3a3; margin-bottom: 24px;">
-              Begin je retention journey en track je voortgang.
-            </div>
-            <button class="btn btn-primary" onclick="startRetention()">Start Streak</button>
+          <div class="card" style="text-align: center; padding: 32px 20px;">
+            <div style="font-size: 44px; margin-bottom: 12px;">🔥</div>
+            <div class="su-txt" style="margin-bottom: 8px;">Retention is geen verbod, maar een keuze: je traint discipline, focus en zelfbeheersing.</div>
+            ${st.total ? `<div class="hs-small" style="margin-bottom: 18px;">Je beste reeks: <b style="color: #fafafa;">${st.best} dagen</b> · ${st.total} dagen totaal. Die blijven staan.</div>` : '<div style="height: 12px;"></div>'}
+            <button class="btn btn-primary" onclick="startRetention()">${st.total ? 'Vandaag opnieuw beginnen' : 'Start vandaag'}</button>
           </div>
+          ${science}
         `}
-        
+
         ${state.showEmergencyModal ? renderEmergencyModal() : ''}
       `;
     }
@@ -6960,7 +7101,7 @@
       return `
         <div class="modal-overlay" onclick="if(event.target === this) { state.showEmergencyModal = false; render(); }">
           <div class="modal">
-            <div class="modal-title">🚨 NOODPROTOCOL</div>
+            <div class="modal-title">🆘 DRANG</div>
             <p style="font-size: 12px; color: #a3a3a3; margin-bottom: 16px;">
               Je hebt een urge. Dat is normaal. Volg deze stappen:
             </p>
@@ -7669,7 +7810,7 @@
     function renderJournal() {
       return `
         <div class="page-header">
-          <div class="page-sub">Reflectie</div>
+          <div class="page-sub">Mind</div>
           <div class="page-title">Journal</div>
         </div>
         
@@ -7696,13 +7837,11 @@
           <button class="tab ${state.journalTab === 'new' ? 'active' : ''}" onclick="setJournalTab('new')">Vandaag</button>
           <button class="tab ${state.journalTab === 'history' ? 'active' : ''}" onclick="setJournalTab('history')">Geschiedenis</button>
           <button class="tab ${state.journalTab === 'patterns' ? 'active' : ''}" onclick="setJournalTab('patterns')">Patronen</button>
-          <button class="tab ${state.journalTab === 'values' ? 'active' : ''}" onclick="state.valuesView = 'overview'; setJournalTab('values')">Waarden</button>
         </div>
         
         ${state.journalTab === 'new' ? (state.editingId ? renderNewEntry() : renderJournalToday()) : ''}
         ${state.journalTab === 'history' ? renderHistory() : ''}
         ${state.journalTab === 'patterns' ? renderPatterns() : ''}
-        ${state.journalTab === 'values' ? renderValues() : ''}
       `;
     }
 
@@ -8037,7 +8176,7 @@
       showToast(first ? '🧭 Je waarden staan · +' + VALUES_BONUS_XP + ' XP' : '🧭 Je waarden zijn bijgewerkt');
     }
     function openValueChallenge(id) {
-      state.activeSection = 'body'; state.bodyTab = 'challenges';
+      state.activeSection = 'challenges';
       chGo('setup', id);
     }
 
@@ -8052,7 +8191,7 @@
         </div>`;
       const emb = state.activeSection === 'journal';
       const head = `
-        ${emb ? '' : `<div class="page-header"><div class="page-sub">Fundament</div><div class="page-title">Waarden</div></div>`}
+        ${emb ? '' : `<div class="page-header"><div class="page-sub">Mind</div><div class="page-title">Waarden</div></div>`}
         ${state.valuesLocal ? `<div class="info-box"><div class="info-title">Nog één update</div><div class="info-text">Voer waarden-update.sql uit in Supabase, dan worden je waarden ook online bewaard.</div></div>` : ''}`;
       if (!round) {
         return `${head}${intro}
@@ -8115,7 +8254,7 @@
       const f = state.vf;
       const steps = `<div class="v-steps">${['Vragen', 'Top 5', 'Cijfers'].map((t, i) => `<span class="${f.step === i + 1 ? 'on' : f.step > i + 1 ? 'done' : ''}">${i + 1}. ${t}</span>`).join('')}</div>`;
       const head = `
-        ${state.activeSection === 'journal' ? '' : `<div class="page-header"><div class="page-sub">Fundament</div><div class="page-title">Waarden</div></div>`}
+        ${state.activeSection === 'journal' ? '' : `<div class="page-header"><div class="page-sub">Mind</div><div class="page-title">Waarden</div></div>`}
         <button class="entry-action" style="margin-bottom: 16px;" onclick="if (confirm('Stoppen? Je antwoorden worden niet bewaard.')) { state.vf = null; state.valuesView = 'overview'; render(); }">← Stoppen</button>
         ${steps}`;
       if (f.step === 1) {
@@ -8770,8 +8909,8 @@
     }
 
     function openValues() {
-      state.activeSection = 'journal'; state.journalTab = 'values'; state.valuesView = 'overview';
-      render(); window.scrollTo(0, 0);
+      state.valuesView = 'overview';
+      setSection('values');
     }
 
     function renderMore() {
@@ -8787,40 +8926,16 @@
           <div class="page-title">Meer</div>
         </div>
 
-        <div class="card card-accent kp-meer" style="cursor: pointer;" onclick="setSection('kompas')">
-          <label class="label">🧭 Kompas</label>
-          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">${compassHas() ? (compass().identity ? '<i style="color: #e5e5e5;">' + esc(compass().identity) + '</i>' : 'Je waarom, je visie en je doelen dit kwartaal.') : 'Zonder waarom houdt niets stand. Schrijf op waarom je dit doet en wie je wilt zijn.'}</div>
-          <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">${compassHas() ? 'Bekijk je kompas →' : 'Begin hier →'}</div>
-        </div>
-
-        <div class="card card-accent" style="cursor: pointer;" onclick="${reviewDue() ? 'reviewStart()' : "state.review90 = true; setSection('review')"}">
-          <label class="label">📋 Wekelijkse review</label>
-          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">${reviewDue() ? 'Je review staat klaar: 10 minuten terugkijken en één focus kiezen.' : currentFocus() ? 'Focus deze week: <b style="color: #fafafa;">' + esc(currentFocus().text) + '</b>' : 'Elke zondag: terugkijken, bijsturen en één focus kiezen.'}</div>
-          <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">${reviewDue() ? 'Start je review →' : 'Wie was je 90 dagen geleden? →'}</div>
+        <div class="card card-accent" style="cursor: pointer;" onclick="setSection('home')">
+          <label class="label">Primal Home</label>
+          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">Gezonder wonen, stap voor stap: keuken, water, lucht, verzorging en slaapkamer.${(() => { const n = Object.keys(homeSt()).length; return n ? ` <b style="color: #fafafa;">Score ${homeScore()}/100</b>` : ''; })()}</div>
+          <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Bekijk de lijst →</div>
         </div>
 
         <div class="card card-accent" style="cursor: pointer;" onclick="setSection('buddies')">
           <label class="label">🤝 Buddy's</label>
           <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">${buddyState().list && buddyState().list.length ? buddyState().list.map(x => esc((x.p && x.p.name) || 'Buddy')).join(', ') : 'Samen houd je het langer vol. Nodig maximaal 3 mensen uit die je kent.'}</div>
           <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Open →</div>
-        </div>
-
-        <div class="card card-accent" style="cursor: pointer;" onclick="setSection('retention')">
-          <label class="label">🔥 Retention</label>
-          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">${state.retentionStreak ? 'Huidige reeks: <b style="color: #fafafa;">' + getRetentionDays() + ' dagen</b>' : 'Nog geen actieve reeks.'}</div>
-          <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Open retention →</div>
-        </div>
-        
-        <div class="card card-accent" style="cursor: pointer;" onclick="setSection('books')">
-          <label class="label">📚 Boeken</label>
-          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">De top 20 voor discipline, mindset, training en gezondheid.${(() => { const c = bookCounts(); return c.read || c.reading ? ` <b style="color: #fafafa;">${c.read} gelezen${c.reading ? ' · ' + c.reading + ' bezig' : ''}</b>` : ''; })()}</div>
-          <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Bekijk de lijst →</div>
-        </div>
-
-        <div class="card card-accent" style="cursor: pointer;" onclick="setSection('home')">
-          <label class="label">Primal Home</label>
-          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">Gezonder wonen, stap voor stap: keuken, water, lucht, verzorging en slaapkamer.${(() => { const n = Object.keys(homeSt()).length; return n ? ` <b style="color: #fafafa;">Score ${homeScore()}/100</b>` : ''; })()}</div>
-          <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Bekijk de lijst →</div>
         </div>
 
         <div class="card card-accent" style="cursor: pointer;" onclick="setSection('reminders')">
@@ -8838,17 +8953,6 @@
           <button class="btn btn-primary" id="backup-btn" style="width: 100%;" onclick="exportBackup()">Back-up downloaden</button>
           <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" onclick="pickRestoreFile()">Back-up terugzetten</button>
           <input type="file" id="restore-file" accept=".json,application/json" style="display: none;" onchange="onRestoreFile(this)">
-        </div>
-
-        <div class="card" style="cursor: pointer;" onclick="state.weekOffset = 0; setSection('week');">
-          <label class="label">📊 Weekrapport</label>
-          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">Je week in één overzicht: dagscore, XP, habits, challenges en trainingen. Blader terug naar eerdere weken.</div>
-          <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">Bekijk deze week →</div>
-        </div>
-
-        <div class="card" style="cursor: pointer;" onclick="setSection('ranks')">
-          <label class="label">🏅 Rangen</label>
-          <div style="font-size: 12px; color: #a3a3a3; line-height: 1.6;">Alle rangen, wat je nog nodig hebt en hoe je XP verdient.</div>
         </div>
 
         <div class="card">
@@ -8899,7 +9003,13 @@
         <div id="toast" class="toast"></div>
         
         <div class="container">
+          ${renderGroupTabs()}
           ${state.activeSection === 'dashboard' ? renderDashboard() : ''}
+          ${state.activeSection === 'challenges' ? renderChallenges() : ''}
+          ${state.activeSection === 'ketens' ? renderKetens() : ''}
+          ${state.activeSection === 'keten' ? renderKeten() : ''}
+          ${state.activeSection === 'ketenform' ? renderKetenForm() : ''}
+          ${state.activeSection === 'craving' ? renderCraving() : ''}
           ${state.activeSection === 'journal' ? renderJournal() : ''}
           ${state.activeSection === 'body' ? renderBody() : ''}
           ${state.activeSection === 'ranks' ? renderRanks() : ''}
@@ -8922,28 +9032,8 @@
         ${state.showRankUp ? renderRankUp() : ''}
         ${state.showRestore ? renderRestoreModal() : ''}
 
-        <nav class="nav">
-          <button class="nav-item ${state.activeSection === 'dashboard' ? 'active' : ''}" onclick="setSection('dashboard')">
-            <span class="nav-icon">📊</span>Dashboard
-          </button>
-          <button class="nav-item ${state.activeSection === 'journal' ? 'active' : ''}" onclick="setSection('journal')">
-            <span class="nav-icon">📝</span>Journal
-          </button>
-          <button class="nav-item ${state.activeSection === 'body' ? 'active' : ''}" onclick="setSection('body')">
-            <span class="nav-icon">💪</span>Lichaam
-          </button>
-          <button class="nav-item ${state.activeSection === 'training' ? 'active' : ''}" onclick="setSection('training')">
-            <span class="nav-icon">🏋️</span>Training
-          </button>
-          <button class="nav-item ${state.activeSection === 'food' ? 'active' : ''}" onclick="state.fView = 'day'; setSection('food')">
-            <span class="nav-icon">🍽️</span>Voeding
-          </button>
-          <button class="nav-item ${state.activeSection === 'sleep' ? 'active' : ''}" onclick="setSection('sleep')">
-            <span class="nav-icon">😴</span>Slaap
-          </button>
-          <button class="nav-item ${state.activeSection === 'more' ? 'active' : ''}" onclick="setSection('more')">
-            <span class="nav-icon">⚡</span>Meer
-          </button>
+        <nav class="nav" aria-label="Hoofdmenu">
+          ${navGroups.map(g => `<button class="nav-item ${navGroupOf(state.activeSection) === g.k ? 'active' : ''}" ${navGroupOf(state.activeSection) === g.k ? 'aria-current="page"' : ''} onclick="navGo('${g.k}')"><span class="nav-icon" aria-hidden="true">${g.icon}</span>${g.label}</button>`).join('')}
         </nav>
       `;
     }
@@ -8964,6 +9054,7 @@
         return;
       }
       if (needsOnboarding()) { app.innerHTML = renderOnboarding(); return; }
+      if (state.activeSection === 'body' && state.bodyTab === 'challenges') { state.activeSection = 'challenges'; state.bodyTab = 'metingen'; }
       app.innerHTML = renderApp();
       applyNightMode();
       if (state.activeSection === 'body') setupBodyChart();
@@ -9714,6 +9805,7 @@
     const dashCards = [
       ['rank', 'Rang & dagscore', 'XP, rang en je week'],
       ['focus', 'Focus & review', 'Je focus van de week, review op zondag'],
+      ['ketens', 'Ketens', 'Alleen als je een keten breekt'],
       ['week', 'Weekrapport', 'Zondag en maandag'],
       ['hard75', '75 Hard', 'Alleen als je hem doet'],
       ['todo', 'Vandaag te doen', 'Wat er vandaag nog openstaat'],
@@ -10191,7 +10283,7 @@
       const list = bodyEntriesFor('weight').filter(e => e.date <= date);
       return list.length ? list[list.length - 1].value : null;
     }
-    function renderPhotos() {
+    function renderPhotos(embed) {
       const pose = state.photoPose || 'voor';
       const list = (state.photos || []).filter(p => p.pose === pose);
       const cmp = state.photoCmp && state.photoCmp.pose === pose ? state.photoCmp : null;
@@ -10207,7 +10299,7 @@
       };
       const viewing = state.photoView ? (state.photos || []).find(p => p.id === state.photoView) : null;
       return `
-        ${renderBodyHeader()}
+        ${embed ? '' : renderBodyHeader()}
         ${state.photosError ? `<div class="info-box"><div class="info-title">⚠️ Nog één update</div><div class="info-text">Voer update-okt.sql uit in Supabase om foto's op te slaan.</div></div>` : ''}
         <div class="ph-poses">${photoPoses.map(([k, l]) => `<button class="${pose === k ? 'on' : ''}" onclick="state.photoPose = '${k}'; state.photoCmp = null; render();">${l}</button>`).join('')}</div>
         <div class="card">
@@ -10559,8 +10651,7 @@
       const statusBtn = (id, s, label) => `<button class="${st[id] && st[id].s === s ? 'on ' + s : ''}" aria-pressed="${!!(st[id] && st[id].s === s)}" onclick="bookSet('${id}', '${s}')">${label}</button>`;
       let lastCat = null;
       return `
-        <button class="entry-action" style="margin-bottom: 14px;" onclick="setSection('more')">← Terug</button>
-        <div class="page-header" style="margin-bottom: 12px;"><div class="page-sub">Meer</div><div class="page-title">Boeken</div></div>
+        <div class="page-header" style="margin-bottom: 12px;"><div class="page-sub">Mind</div><div class="page-title">Boeken</div></div>
         <div class="card">
           <div class="bk-stats">
             <div><b>${c.read}</b><span>gelezen</span></div>
@@ -11512,6 +11603,7 @@
     function compassLinkOptions() {
       const out = visibleHabitKeys.map(k => ['h:' + k, habitConfig[k].icon + ' ' + habitConfig[k].title]);
       activeChallenges().forEach(c => out.push(['ch:' + c.id, '🏁 ' + c.name]));
+      ketenChains().forEach(c => out.push(['k:' + c.id, ketenIcon(c) + ' ' + ketenName(c)]));
       return out;
     }
     function renderCompass() {
@@ -11525,8 +11617,7 @@
       const q = quarterKey();
       const stale = goals.some(g => g.t && g.q && g.q !== q);
       return `
-        <button class="entry-action" style="margin-bottom: 14px;" onclick="setSection('more')">← Terug</button>
-        <div class="page-header" style="margin-bottom: 8px;"><div class="page-sub">Fundament</div><div class="page-title">Kompas</div></div>
+        <div class="page-header" style="margin-bottom: 8px;"><div class="page-sub">Mind</div><div class="page-title">Kompas</div></div>
         <div class="hm-sub">Zonder waarom houdt niets stand. Schrijf het op, dan komt het terug op de momenten die ertoe doen.</div>
         <div class="card kp-card">
           <label class="label" for="kp-why">Waarom ben je hier?</label>
@@ -11565,6 +11656,11 @@
             </details>` : ''}
           </div>`).join('')}
         ${!vtop ? `<div class="hs-small" style="margin: 0 0 12px;">Tip: doe eerst de <a href="#" onclick="openValues(); return false;" style="color: #e5484d;">waarden-opdracht</a>, dan kies je hier uit je eigen top 5.</div>` : ''}
+        <div class="card card-accent" style="cursor: pointer;" onclick="reviewStart()">
+          <label class="label">📋 Wekelijkse review</label>
+          <div class="su-txt">${reviewDue() ? 'Je review staat klaar: 10 minuten terugkijken en één focus kiezen.' : currentFocus() ? 'Focus deze week: <b style="color: #fafafa;">' + esc(currentFocus().text) + '</b>' : 'Elke zondag: terugkijken, bijsturen en één focus kiezen.'}</div>
+          <div style="font-size: 11px; color: #e5484d; margin-top: 10px;">${reviewDue() ? 'Start je review →' : 'Review openen →'}</div>
+        </div>
         <div class="card" style="cursor: pointer;" onclick="state.review90 = true; setSection('review');">
           <label class="label">⏳ Wie was je 90 dagen geleden?</label>
           <div class="su-txt">Vergelijk jezelf nu met drie maanden terug: dagscore, slaap, training, gewicht en wat je toen schreef →</div>
@@ -11619,7 +11715,7 @@
     }
     function renderReview() {
       if (state.review90 || !state.rv) return `
-        <button class="entry-action" style="margin-bottom: 14px;" onclick="setSection('${compassHas() ? 'kompas' : 'more'}')">← Terug</button>
+        <button class="entry-action" style="margin-bottom: 14px;" onclick="setSection('kompas')">← Kompas</button>
         <div class="page-header" style="margin-bottom: 12px;"><div class="page-sub">Terugblik</div><div class="page-title">90 dagen</div></div>
         ${renderLookback90()}`;
       const r = state.rv;
@@ -11629,7 +11725,7 @@
       const opt = (f, v, l) => `<button class="${r[f] === v ? 'on' : ''}" aria-pressed="${r[f] === v}" onclick="rvSet('${f}', '${v}'); render();">${l}</button>`;
       const is13 = Object.keys(reviews()).length > 0 && (Object.keys(reviews()).length + 1) % 13 === 0;
       return `
-        <button class="entry-action" style="margin-bottom: 14px;" onclick="state.rv = null; setSection('dashboard')">← Terug</button>
+        <button class="entry-action" style="margin-bottom: 14px;" onclick="state.rv = null; setSection('kompas')">← Kompas</button>
         <div class="page-header" style="margin-bottom: 8px;"><div class="page-sub">Week ${w.week}</div><div class="page-title">Review</div></div>
         <div class="hm-sub">10 minuten. Kijk terug, stuur bij, kies één focus.</div>
         <div class="card kp-why-card">
@@ -11801,7 +11897,8 @@
       ['streak', 'Gewoontes en reeks', 'Hoeveel gewoontes je vandaag deed (niet welke) en je reeks goede dagen'],
       ['challenge', 'Challenges', 'Naam en dag, bijv. 75 Hard dag 23/75'],
       ['training', 'Training vandaag', 'Alleen of je getraind hebt, geen gewichten'],
-      ['home', 'Primal Home-score', 'Je score van 0 tot 100']
+      ['home', 'Primal Home-score', 'Je score van 0 tot 100'],
+      ['ketens', 'Ketens', 'Per keten de naam en je dagen vrij. Retention wordt nooit gedeeld.']
     ];
     const buddyNudges = ['Kom op, je kunt het. 💪', 'Denk aan je focus deze week.', 'Ik doe het vandaag ook. Jij ook?', 'Morgen niet missen. Twee keer missen is een nieuwe gewoonte.', 'Ik geloof in je.'];
     const buddyRespects = ['Respect. 🔥', 'Sterk bezig!', 'Dit is wie je bent.', 'Trots op je.'];
@@ -11867,6 +11964,7 @@
         if (sh.challenge) snap.challenges = activeChallenges().filter(c => c.start_date <= todayStr()).slice(0, 3).map(c => { const ev = evalChallenge(c); return { n: c.name, d: ev.dayNum, of: ev.D }; });
         if (sh.training) snap.trained = (state.workouts || []).some(w => w.date === todayStr());
         if (sh.home) snap.home = homeScore();
+        if (sh.ketens) snap.ketens = ketenChains().slice(0, 4).map(c => { const st = ketenStats(c); return { n: ketenName(c), i: ketenIcon(c), d: st.streak, p: st.pct }; });
       } catch (e) {}
       return snap;
     }
@@ -11963,6 +12061,7 @@
           ${s.focus !== undefined ? `<div class="bd-focus"><span>Focus deze week</span>${s.focus ? esc(s.focus) : '<i>nog geen focus gekozen</i>'}${s.review ? `<small>Review ${s.review.week === 'deze' ? 'deze week' : 'vorige week'} gedaan${s.review.last ? ` · vorige focus: ${{ ja: 'gehaald ✓', deels: 'deels gehaald', nee: 'niet gehaald' }[s.review.last]}` : ''}</small>` : ''}</div>` : ''}
           ${bits.length ? `<div class="bd-stats">${bits.join('')}</div>` : ''}
           ${!compact && s.challenges && s.challenges.length ? `<div class="bd-ch">${s.challenges.map(c => `<span>🏁 ${esc(c.n)} · dag ${c.d}/${c.of}</span>`).join('')}</div>` : ''}
+          ${!compact && Array.isArray(s.ketens) && s.ketens.length ? `<div class="bd-ch">${s.ketens.map(k => `<span>${esc(k.i || '⛓️')} ${esc(k.n)} · ${Number(k.d) || 0} dagen vrij</span>`).join('')}</div>` : ''}
           ${!Object.keys(s).filter(k => k !== 'at').length ? `<div class="hs-small" style="margin-top: 8px;">${esc(name)} deelt nog niets.</div>` : ''}
           <div class="bd-act">
             <button class="btn btn-secondary btn-small" onclick="state.buddyPick = ${pick === 'nudge' ? 'null' : `{ id: '${x.id}', kind: 'nudge' }`}; render();">👊 Duwtje</button>
@@ -12040,6 +12139,476 @@
     }
 
     // ============================================
+    // KETENS BREKEN: wat je niet beheerst, beheerst jou
+    // ============================================
+    const ketenSrc = {
+      who: ['WHO: gezondheidswinst na stoppen met roken', 'https://www.who.int/news-room/questions-and-answers/item/tobacco-health-benefits-of-smoking-cessation'],
+      nci: ['NCI: nicotine-ontwenning, duur en tips (Engels)', 'https://www.cancer.gov/about-cancer/causes-prevention/risk/tobacco/withdrawal-fact-sheet'],
+      ins: ['Vergoeding stoppen-met-rokenprogramma 2026 (Zorgverzekeringwijzer)', 'https://www.zorgverzekeringwijzer.nl/zorgvergoedingen/stoppen-met-roken/'],
+      mehta: ['Eén maand geen alcohol: insuline, bloeddruk, lever (BMJ Open 2018)', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC5942469'],
+      cannabis: ['Cannabis-ontwenning: verloop en klachten (review)', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC5648025/'],
+      lambert: ['Eén week zonder social media: welzijn, depressie, angst (RCT 2022)', 'https://pubmed.ncbi.nlm.nih.gov/35512731/'],
+      smmeta: ['Minder social media, minder depressieklachten (meta-analyse)', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC12651081'],
+      loket: ['Loket Kansspel: anoniem hulp bij gokken', 'https://www.loketkansspel.nl'],
+      cruks: ['Cruks: jezelf laten uitsluiten van gokken', 'https://cruksregister.nl'],
+      retract: ['Het "testosteron-piek op dag 7"-onderzoek is ingetrokken (Snopes)', 'https://www.snopes.com/fact-check/increase-testosterone-45-percent/']
+    };
+    // measure: count (aantal per dag) · minutes (minuten per dag) · plan (dag volgens plan) · free (vrij ja/nee)
+    const ketenTypes = {
+      roken: { n: 'Roken', icon: '🚬', measure: 'count', unit: 'sigaretten', modes: ['stop', 'less'], cost: 'pack', build: ['Training', 'Wandelen', 'Ademhaling'],
+        win: 'Betere conditie, adem en smaak, en elke dag geld terug.',
+        tips: ['Gooi alles weg: sigaretten, aanstekers, asbakken.', 'Vervang het moment, niet alleen de sigaret: koffie op een andere plek, na het eten meteen opstaan.', 'Een craving duurt een paar minuten. Ademhaling of 20 push-ups overbrugt hem.', 'Nicotinevervangers of medicatie vergroten je kans flink, zeker samen met begeleiding.'],
+        timeline: [[0.02, '20 minuten', 'Hartslag en bloeddruk dalen.'], [0.5, '12 uur', 'Koolmonoxide in je bloed is weer normaal.'], [14, '2–12 weken', 'Betere bloedsomloop en longfunctie.'], [30, '1–9 maanden', 'Minder hoesten en kortademigheid.'], [365, '1 jaar', 'Risico op hartziekte ±half zo groot als bij een roker.'], [1825, '5–15 jaar', 'Risico op een beroerte als dat van een niet-roker.'], [3650, '10 jaar', 'Risico op longkanker ±half zo groot.'], [5475, '15 jaar', 'Risico op hartziekte als dat van een niet-roker.']], tsrc: ['who'],
+        help: 'Een erkend stoppen-met-rokenprogramma valt in 2026 onder je basisverzekering: tot 3 keer per jaar, zonder eigen risico, inclusief nicotinevervangers en medicatie. Vraag je huisarts om een verwijzing.', hsrc: ['ins', 'nci'] },
+      nicotine: { n: 'Nicotine', sub: 'Vapen & snus', icon: '💨', measure: 'count', unit: 'keer', modes: ['stop', 'less'], cost: 'week', build: ['Training', 'Ademhaling', 'Water drinken'],
+        win: 'Rustiger hartslag, minder onrust tussen de shots door, en geld terug.',
+        tips: ['Leg je vape of snus niet meer binnen handbereik.', 'Koop geen "laatste" meer: die bestaat niet.', 'Kauwgom zonder suiker, water of iets knapperigs helpt tegen het hand-mond-ritueel.'],
+        timeline: [[1, 'Dag 1–3', 'Ontwenning op zijn sterkst: onrust, prikkelbaarheid, trek.'], [7, 'Week 1', 'Het zwaarste deel heb je gehad.'], [30, '1 maand', 'De meeste ontwenningsklachten zijn weg. Cravings komen steeds verder uit elkaar.']], tsrc: ['nci'],
+        help: 'Hulp bij stoppen met vapen of snus loopt via dezelfde stoppen-met-rokenprogramma\'s. Vraag je huisarts.', hsrc: ['ins', 'nci'] },
+      alcohol: { n: 'Alcohol', icon: '🍺', measure: 'count', unit: 'glazen', modes: ['stop', 'less'], cost: 'unit', safety: true, build: ['Slaap', 'Training', 'Herstel'],
+        win: 'Diepere slaap, betere training en herstel, helder hoofd, geld terug.',
+        tips: ['Bepaal vóór de borrel hoeveel je drinkt, en wissel af met water.', 'Zeg het hardop: "ik drink niet / vandaag niet". Je hoeft het niet uit te leggen.', 'Alcoholvrij bier of een bitter lemon in je hand voorkomt de vraag.', 'Vaste alcoholvrije dagen maken minderen veel makkelijker.'],
+        timeline: [[3, 'Dag 1–3', 'Drink je veel, dan kun je ontwenning merken (zie veiligheid).'], [30, '1 maand', 'In een onderzoek bij mensen die ±26 glazen per week dronken: insulineresistentie −26%, bloeddruk −6%, gewicht −1,5%, leverwaarde GGT −29%.']], tsrc: ['mehta'],
+        help: 'Drink je lang en dagelijks veel, stop dan niet ineens zonder arts: ontwenning van alcohol kan gevaarlijk zijn (trillen, verwardheid, zelfs epileptische aanvallen). Ga eerst langs je huisarts, of begin met minderen.' },
+      cannabis: { n: 'Cannabis', icon: '🌿', measure: 'count', unit: 'keer', modes: ['stop', 'less'], cost: 'week', build: ['Sport', 'Slaap', 'Contact'],
+        win: 'Scherper geheugen en focus, meer energie en motivatie, geld terug.',
+        tips: ['Reken op een paar slechte nachten in de eerste week: plan sport en daglicht, minder cafeïne.', 'Levendige dromen zijn normaal en gaan voorbij.', 'Verander je avondroutine: daar zit het patroon meestal.'],
+        timeline: [[2, 'Dag 1–2', 'Ontwenning begint bij dagelijks gebruik.'], [5, 'Dag 2–5', 'Piek: prikkelbaar, onrustig, slecht slapen, weinig trek.'], [21, '2–3 weken', 'Grotendeels voorbij. Slaapproblemen kunnen wat langer duren.']], tsrc: ['cannabis'],
+        help: 'Last van somberheid, angst of achterdocht na lang en veel blowen? Praat met je huisarts.' },
+      social: { n: 'Social media', sub: 'en schermtijd', icon: '📱', measure: 'minutes', unit: 'min', modes: ['less', 'stop'], cost: 'none', build: ['Lezen', 'Wandelen', 'Contact', 'Training'],
+        win: 'Tijd, rust in je hoofd, betere slaap en meer echte aandacht.',
+        tips: ['Haal de apps van je beginscherm, of verwijder ze een week.', 'Zet je telefoon op grijstinten: kleur maakt het verslavend.', 'Telefoon niet in de slaapkamer en niet als eerste in de ochtend.', 'Lees je schermtijd af in Digitaal welzijn (Android) of Schermtijd (iPhone).'],
+        timeline: [[7, '1 week', 'In een gerandomiseerd onderzoek gaf één week pauze al meer welzijn en minder depressie- en angstklachten.']], tsrc: ['lambert', 'smmeta'] },
+      gamen: { n: 'Gamen', icon: '🎮', measure: 'minutes', unit: 'min', modes: ['less', 'stop'], cost: 'none', build: ['Kwartaaldoel', 'Training', 'Leren'],
+        win: 'Uren per week terug voor je doelen, je lichaam en je mensen.',
+        tips: ['Speel alleen op vaste momenten, met een wekker.', 'Geen gamen na een bepaalde tijd: dat redt je slaap.', 'Zet de tijd die je terugwint in op je kwartaaldoel.'] },
+      junk: { n: 'Junk food', icon: '🍬', measure: 'plan', modes: ['less'], cost: 'none', build: ['Koken', 'T-voeding', 'Eiwit'],
+        win: 'Stabielere energie, betere hormoonbalans, minder trek.',
+        tips: ['Wat niet in huis is, eet je niet.', 'Eet genoeg eiwit: dat dempt de trek.', 'Plan één vrij moment per week in plaats van elke dag een beetje.'] },
+      gokken: { n: 'Gokken', icon: '🎰', measure: 'free', modes: ['stop'], cost: 'week', build: ['Sparen', 'Sport', 'Contact'],
+        win: 'Rust, controle over je geld en vertrouwen van je naasten.',
+        tips: ['Schrijf jezelf in bij Cruks: dan kun je bij geen enkele legale aanbieder meer spelen.', 'Blokkeer gok-sites en -apps op je telefoon.', 'Laat iemand die je vertrouwt meekijken in je geldzaken.'],
+        help: 'Anoniem en gratis hulp via Loket Kansspel. Met Cruks sluit je jezelf (minimaal 6 maanden) uit van alle legale gokaanbieders in Nederland.', hsrc: ['loket', 'cruks'] },
+      shoppen: { n: 'Impulsief shoppen', icon: '🛒', measure: 'free', modes: ['stop'], cost: 'week', build: ['Sparen', 'Primal Home'],
+        win: 'Geld voor wat er écht toe doet, en minder spullen.',
+        tips: ['48-uurregel: wil je iets, zet het op een lijstje en kijk over 2 dagen of je het nog wilt.', 'Verwijder opgeslagen betaalgegevens en shop-apps.', 'Zet je "bespaard"-geld op een aparte rekening.'] },
+      custom: { n: 'Eigen keten', icon: '⛓️', measure: 'free', modes: ['stop'], cost: 'week', build: [], win: '', tips: [] }
+    };
+    const ketenMs = [[1, 'Spark', 10], [3, 'Resist', 20], [7, 'Hold', 50], [14, 'Steel', 75], [30, 'Unchained', 150], [60, 'Unshaken', 200], [90, 'Sovereign Mind', 300], [180, 'Mastery', 500], [365, 'Free', 1000]];
+    const cravTriggers = ['Stress', 'Verveling', 'Eenzaamheid', 'Boosheid', 'Gezelschap', 'Alcohol', 'Na het eten', 'Avond', 'Seksuele trigger', 'Social media', 'Anders'];
+    const cravDid = ['Gewacht', 'Gewandeld', 'Getraind', 'Gedoucht', 'Gebeld', 'Gemediteerd', 'Toch toegegeven'];
+    const cravDistract = ['20 push-ups of squats', 'Koud water over je gezicht of een koude douche', '10 minuten naar buiten', 'Iemand bellen of appen', 'Een glas water, langzaam', '10 pagina\'s lezen'];
+
+    function ketenData() { const k = userPrefs().ketens; return k && typeof k === 'object' ? { chains: k.chains || [], log: k.log || {}, cravings: k.cravings || [], ms: k.ms || {} } : { chains: [], log: {}, cravings: [], ms: {} }; }
+    function ketenSave(patch) { saveUserPrefs({ ketens: { ...ketenData(), ...patch } }); progressCache = null; ketenSyncRisks(); }
+    function ketenChains(all) { return ketenData().chains.filter(c => all || !c.archived); }
+    function ketenById(id) { return ketenData().chains.find(c => c.id === id); }
+    function ketenType(c) { return ketenTypes[c.type] || ketenTypes.custom; }
+    function ketenName(c) { return c.type === 'custom' ? (c.name || 'Eigen keten') : ketenType(c).n; }
+    function ketenIcon(c) { return c.type === 'custom' ? (c.icon || '⛓️') : ketenType(c).icon; }
+    function ketenLogVal(c, d) { const l = ketenData().log[c.id]; return l ? l[d] : undefined; }
+    // Status van één dag: free | ok | over | slip | null (onbekend)
+    function ketenDayState(c, d, weekCache) {
+      if (d < c.start || d > todayStr()) return null;
+      const t = ketenType(c), v = ketenLogVal(c, d);
+      if (t.measure === 'count') {
+        const n = v === undefined || v === null ? 0 : Number(v);
+        if (!n) return 'free';
+        if (c.mode === 'stop') return 'slip';
+        const wk = weekKey(d), lim = Number(c.limitWeek) || 0;
+        const sum = weekCache && weekCache[wk] !== undefined ? weekCache[wk] : ketenWeekSum(c, wk, d);
+        if (weekCache) weekCache[wk] = sum;
+        return lim && sum <= lim && (!c.limitDay || n <= c.limitDay) ? 'ok' : 'over';
+      }
+      if (t.measure === 'minutes') {
+        if (v === undefined || v === null || v === '') return null;
+        const n = Number(v);
+        if (!n) return 'free';
+        if (c.mode === 'stop') return 'slip';
+        return n <= (Number(c.limitMin) || 60) ? 'ok' : 'over';
+      }
+      if (t.measure === 'plan') return v === undefined ? null : v ? 'ok' : 'over';
+      return v === false || v === 0 ? 'slip' : 'free';   // free: alleen een melding van gebruik telt
+    }
+    function ketenWeekSum(c, wk, upto) {
+      let s = 0; for (let i = 0; i < 7; i++) { const d = dateAdd(wk, i); if (upto && d > upto) break; const v = ketenLogVal(c, d); if (v) s += Number(v) || 0; } return s;
+    }
+    const ketenGood = st => st === 'free' || st === 'ok';
+    function ketenStats(c) {
+      const today = todayStr();
+      let streak = 0, best = 0, run = 0, total = 0, known30 = 0, good30 = 0;
+      const from30 = dateAdd(today, -29);
+      for (let d = c.start; d <= today; d = dateAdd(d, 1)) {
+        const st = ketenDayState(c, d);
+        if (ketenGood(st)) { total++; run++; best = Math.max(best, run); } else if (st) run = 0;
+        if (d >= from30 && st) { known30++; if (ketenGood(st)) good30++; }
+      }
+      // huidige reeks: terug vanaf vandaag (vandaag nog onbekend = vanaf gisteren)
+      let d = today; if (!ketenDayState(c, d)) d = dateAdd(d, -1);
+      while (d >= c.start && ketenGood(ketenDayState(c, d))) { streak++; d = dateAdd(d, -1); }
+      const days = diffDays(c.start, today) + 1;
+      return { streak, best, total, pct: known30 ? Math.round(good30 / known30 * 100) : null, known30, days };
+    }
+    // Wat je terugwint: geld en tijd
+    function ketenSaved(c) {
+      const t = ketenType(c), today = todayStr();
+      let eur = 0, min = 0;
+      const unitCost = t.cost === 'pack' ? (Number(c.price) || 0) / (Number(c.perPack) || 20) : t.cost === 'unit' ? (Number(c.price) || 0) : 0;
+      const dayCost = t.cost === 'week' ? (Number(c.weekCost) || 0) / 7 : 0;
+      for (let d = c.start; d <= today; d = dateAdd(d, 1)) {
+        const st = ketenDayState(c, d), v = Number(ketenLogVal(c, d)) || 0;
+        if (t.measure === 'count' && unitCost) eur += Math.max(0, (Number(c.base) || 0) - v) * unitCost;
+        if (t.measure === 'count' && dayCost) eur += ketenGood(st) ? dayCost : 0;
+        if ((t.measure === 'free') && dayCost) eur += ketenGood(st) ? dayCost : 0;
+        if (t.measure === 'minutes' && st) min += Math.max(0, (Number(c.base) || 0) - v);
+      }
+      return { eur: Math.round(eur), min: Math.round(min) };
+    }
+    function ketenMsCheck() {
+      const k = ketenData(), ms = { ...k.ms }; let fresh = null;
+      ketenChains().forEach(c => {
+        const s = ketenStats(c);
+        ketenMs.forEach(([d, name]) => { if (s.streak >= d && !(ms[c.id] && ms[c.id][d])) { ms[c.id] = { ...(ms[c.id] || {}), [d]: todayStr() }; fresh = [c, d, name]; } });
+      });
+      if (fresh) { ketenSave({ ms }); setTimeout(() => showToast(`⛓️ ${ketenName(fresh[0])}: ${fresh[1]} ${fresh[1] === 1 ? 'dag' : 'dagen'} · ${fresh[2]}`), 900); }
+    }
+    // Voor de dagscore en XP: per datum
+    function ketenScoreOn(date) {
+      const list = ketenChains(true).filter(c => c.start <= date);
+      if (!list.length) return null;
+      const sts = list.map(c => ketenDayState(c, date)).filter(Boolean);
+      if (!sts.length) return null;
+      return sts.filter(ketenGood).length / sts.length;
+    }
+    function ketenXpByDate() {
+      const out = {}, k = ketenData(), add = (d, n) => { out[d] = (out[d] || 0) + n; };
+      ketenChains(true).forEach(c => {
+        for (let d = c.start; d <= todayStr(); d = dateAdd(d, 1)) if (ketenGood(ketenDayState(c, d))) add(d, XP.ketenDay);
+        Object.entries(k.ms[c.id] || {}).forEach(([days, dt]) => { const m = ketenMs.find(x => x[0] === Number(days)); if (m) add(dt, m[2]); });
+      });
+      const perDay = {};
+      k.cravings.forEach(cr => { if (!cr.gave) { const d = String(cr.at).slice(0, 10); perDay[d] = (perDay[d] || 0) + 1; if (perDay[d] <= 3) add(d, XP.craving); } });
+      return out;
+    }
+    // Risicomomenten doorgeven aan de server (pushmelding)
+    function ketenSyncRisks() {
+      try {
+        const r = ketenChains().filter(c => c.risk).map(c => ({ id: c.id, t: c.risk, n: ketenName(c), plan: (c.plan || '').slice(0, 120) }));
+        if (JSON.stringify(r) !== JSON.stringify(userPrefs().ketenRisks || [])) saveUserPrefs({ ketenRisks: r });
+      } catch (e) {}
+    }
+
+    // ---------- Invoer ----------
+    function ketenLog(id, d, v) {
+      const c = ketenById(id); if (!c) return;
+      const k = ketenData(), log = { ...k.log, [id]: { ...(k.log[id] || {}) } };
+      if (v === null || v === undefined || v === '') delete log[id][d]; else log[id][d] = v;
+      const before = ketenDayState(c, d);
+      ketenSave({ log });
+      const after = ketenDayState(c, d);
+      ketenMsCheck();
+      render();
+      if ((after === 'slip' || after === 'over') && before !== after) showToast('Uitglijder genoteerd. Je bent niet terug bij nul: je vrije dagen blijven staan.');
+    }
+    function ketenStep(id, d, delta) { const v = Math.max(0, (Number(ketenLogVal(ketenById(id), d)) || 0) + delta); ketenLog(id, d, v); }
+    function ketenMinutes(id, d) {
+      const el = document.getElementById('kt-min-' + id); if (!el) return;
+      const n = parseInt(String(el.value).replace(/[^\d]/g, ''), 10);
+      ketenLog(id, d, isNaN(n) ? null : Math.min(n, 1440));
+    }
+
+    // ---------- Keten toevoegen / instellen ----------
+    function ketenNew(type) {
+      const t = ketenTypes[type];
+      state.kf = { type, mode: t.modes[0], start: todayStr(), base: '', price: '', perPack: 20, weekCost: '', limitWeek: type === 'alcohol' ? 7 : '', limitDay: '', limitMin: type === 'gamen' ? 60 : 60, planDays: 6, plan: '', risk: '', rewardT: '', rewardEur: '', build: (t.build || []).slice(0, 2), name: '', heavy: null };
+      setSection('ketenform'); window.scrollTo(0, 0);
+    }
+    function ketenEdit(id) {
+      const c = ketenById(id); if (!c) return;
+      state.kf = { ...c, rewardT: (c.reward || {}).t || '', rewardEur: (c.reward || {}).eur || '', build: c.build || [], editId: id };
+      setSection('ketenform'); window.scrollTo(0, 0);
+    }
+    function kfSet(f, v) { if (state.kf) state.kf[f] = v; }
+    function kfRead() {
+      const f = state.kf; if (!f) return;
+      document.querySelectorAll('[data-kf]').forEach(el => { f[el.dataset.kf] = el.value; });
+    }
+    function ketenFormSave() {
+      kfRead();
+      const f = state.kf; if (!f) return;
+      if (f.type === 'custom' && !String(f.name || '').trim()) { alert('Geef je keten een naam.'); return; }
+      if (f.type === 'alcohol' && f.mode === 'stop' && f.heavy === null) { alert('Beantwoord eerst de vraag over hoeveel je drinkt. Dat is voor je veiligheid.'); return; }
+      const k = ketenData();
+      const row = { id: f.editId || 'k' + Date.now().toString(36), type: f.type, name: String(f.name || '').trim().slice(0, 40), icon: f.icon || '', mode: f.mode, start: f.start || todayStr(),
+        base: Number(f.base) || 0, price: Number(String(f.price).replace(',', '.')) || 0, perPack: Number(f.perPack) || 20, weekCost: Number(String(f.weekCost).replace(',', '.')) || 0,
+        limitWeek: Number(f.limitWeek) || 0, limitDay: Number(f.limitDay) || 0, limitMin: Number(f.limitMin) || 0, planDays: Number(f.planDays) || 6,
+        plan: String(f.plan || '').trim().slice(0, 200), risk: f.risk || '', reward: { t: String(f.rewardT || '').trim().slice(0, 60), eur: Number(f.rewardEur) || 0 }, build: f.build || [], heavy: f.heavy };
+      const chains = f.editId ? k.chains.map(c => c.id === f.editId ? { ...c, ...row } : c) : k.chains.concat(row);
+      ketenSave({ chains });
+      state.kf = null; state.ketenId = row.id;
+      setSection('keten');
+      ketenMsCheck();
+      showToast(f.editId ? '✓ Keten bijgewerkt' : `⛓️ ${ketenName(row)}: vandaag besloot je dat dit jou niet meer bestuurt.`);
+    }
+    function ketenArchive(id) {
+      const c = ketenById(id); if (!c) return;
+      if (!confirm(`${ketenName(c)} afsluiten? Je resultaten en XP blijven bewaard.`)) return;
+      ketenSave({ chains: ketenData().chains.map(x => x.id === id ? { ...x, archived: todayStr() } : x) });
+      setSection('ketens');
+    }
+
+    // ---------- Craving ----------
+    let cravTimer = null;
+    function cravingStart(id) {
+      const list = ketenChains();
+      if (!id && list.length === 1) id = list[0].id;
+      state.cr = { id: id || null, stage: id ? 'timer' : 'pick', t0: Date.now(), trig: [], did: [], gave: false, n: 1 };
+      setSection('craving'); window.scrollTo(0, 0);
+      clearInterval(cravTimer);
+      cravTimer = setInterval(() => {
+        const el = document.getElementById('cr-clock'); if (!el || !state.cr) { if (!state.cr) clearInterval(cravTimer); return; }
+        const left = Math.max(0, 600 - Math.floor((Date.now() - state.cr.t0) / 1000));
+        el.textContent = `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`;
+        const br = document.getElementById('cr-in'); if (br) br.textContent = ((Date.now() - state.cr.t0) / 1000) % 10 < 4 ? 'adem in · 4' : 'adem uit · 6';
+        if (!left) { clearInterval(cravTimer); const m = document.getElementById('cr-done-msg'); if (m) m.textContent = '10 minuten volgehouden. De golf is voorbij.'; }
+      }, 1000);
+    }
+    function cravPick(id) { state.cr.id = id; state.cr.stage = 'timer'; state.cr.t0 = Date.now(); render(); }
+    function cravEnd(gave) { state.cr.gave = gave; if (gave && !state.cr.did.includes('Toch toegegeven')) state.cr.did.push('Toch toegegeven'); state.cr.stage = 'log'; clearInterval(cravTimer); render(); window.scrollTo(0, 0); }
+    function cravToggle(f, v) { const a = state.cr[f]; state.cr[f] = a.includes(v) ? a.filter(x => x !== v) : a.concat(v); if (f === 'did') state.cr.gave = state.cr.did.includes('Toch toegegeven'); render(); }
+    function cravSave() {
+      const cr = state.cr; if (!cr) return;
+      const c = ketenById(cr.id);
+      const k = ketenData();
+      const rec = { id: 'c' + Date.now().toString(36), cid: cr.id, at: new Date().toISOString().slice(0, 16), sec: Math.round((Date.now() - cr.t0) / 1000), trig: cr.trig, did: cr.did, gave: !!cr.gave };
+      ketenSave({ cravings: k.cravings.concat(rec).slice(-500) });
+      if (cr.gave && c) {
+        const t = ketenType(c), d = todayStr();
+        if (t.measure === 'count') ketenLog(c.id, d, (Number(ketenLogVal(c, d)) || 0) + (Number(cr.n) || 1));
+        else if (t.measure === 'free') ketenLog(c.id, d, false);
+      }
+      state.cr = null;
+      state.ketenId = c ? c.id : null;
+      setSection(c ? 'keten' : 'ketens');
+      showToast(rec.gave ? 'Uitglijder genoteerd. Je bent niet terug bij nul. Wat leer je hiervan?' : `💪 Craving doorstaan · +${XP.craving} XP`);
+    }
+    function cravPatterns(id) {
+      const list = ketenData().cravings.filter(x => !id || x.cid === id);
+      if (list.length < 5) return null;
+      const count = (arr) => { const m = {}; arr.forEach(x => m[x] = (m[x] || 0) + 1); return Object.entries(m).sort((a, b) => b[1] - a[1]); };
+      const trig = count(list.flatMap(x => x.trig || []));
+      const bucket = h => h < 6 ? 'nacht' : h < 12 ? 'ochtend' : h < 17 ? 'middag' : h < 22 ? 'avond' : 'nacht';
+      const times = count(list.map(x => bucket(Number(String(x.at).slice(11, 13)) || 0)));
+      const helped = count(list.filter(x => !x.gave).flatMap(x => (x.did || []).filter(d => d !== 'Toch toegegeven')));
+      const won = list.filter(x => !x.gave).length;
+      return { n: list.length, won, trig: trig[0] ? [trig[0][0], Math.round(trig[0][1] / list.length * 100)] : null, time: times[0] ? [times[0][0], Math.round(times[0][1] / list.length * 100)] : null, helped: helped[0] ? helped[0][0] : null };
+    }
+
+    // ---------- Weergave ----------
+    function ketenSrcHtml(keys) { return (keys || []).filter(k => ketenSrc[k]).map(k => `<a class="hm-src" href="${ketenSrc[k][1]}" target="_blank" rel="noopener noreferrer">Bron: ${esc(ketenSrc[k][0])} ↗</a>`).join(''); }
+    function ketenNextMs(streak) { return ketenMs.find(m => m[0] > streak) || null; }
+    function ketenTodayLine(c) {
+      const s = ketenStats(c), t = ketenType(c);
+      if (c.mode === 'less' && t.measure === 'count') return `${ketenWeekSum(c, weekKey(todayStr()))} van ${c.limitWeek || '–'} ${t.unit} deze week`;
+      if (t.measure === 'minutes') { const v = ketenLogVal(c, todayStr()); return v === undefined ? 'Vul je schermtijd van vandaag in' : `${v} min vandaag · doel ${c.mode === 'stop' ? 0 : c.limitMin}`; }
+      if (t.measure === 'plan') { let ok = 0; for (let i = 0; i < 7; i++) if (ketenDayState(c, dateAdd(weekKey(todayStr()), i)) === 'ok') ok++; return `${ok} van ${c.planDays || 6} dagen volgens plan deze week`; }
+      return `${s.streak} ${s.streak === 1 ? 'dag' : 'dagen'} vrij`;
+    }
+    function ketenCardHtml(c) {
+      const s = ketenStats(c), sv = ketenSaved(c), nx = ketenNextMs(s.streak);
+      return `
+        <button class="kt-card" onclick="state.ketenId = '${c.id}'; setSection('keten');">
+          <span class="kt-ic">${ketenIcon(c)}</span>
+          <span class="kt-main">
+            <b>${esc(ketenName(c))}</b><span class="kt-mode">${c.mode === 'stop' ? 'Stoppen' : 'Minderen'}</span>
+            <span class="kt-line">${esc(ketenTodayLine(c))}</span>
+            <span class="kt-meta">${s.pct !== null ? `<i style="color: ${s.pct >= 90 ? '#22c55e' : s.pct >= 70 ? '#d9a441' : '#e5484d'};">${s.pct}% ${c.mode === 'less' ? 'binnen doel' : 'vrij'}</i> deze maand · ` : ''}${s.total} ${c.mode === 'less' ? (s.total === 1 ? 'dag' : 'dagen') + ' binnen doel' : s.total === 1 ? 'vrije dag' : 'vrije dagen'}${sv.eur ? ` · €${sv.eur} bespaard` : ''}${sv.min ? ` · ${Math.round(sv.min / 60)} uur terug` : ''}${nx && c.mode === 'stop' ? ` · nog ${nx[0] - s.streak} tot ${nx[1]}` : ''}</span>
+          </span>
+          <span class="kt-go" aria-hidden="true">›</span>
+        </button>`;
+    }
+    function retentionKetenCard() {
+      const active = !!state.retentionStreak;
+      const days = active ? getRetentionDays() : 0;
+      const ranges = (state.retentionAll || []).filter(r => r.start_date);
+      const best = Math.max(days, ...ranges.map(r => r.end_date ? diffDays(r.start_date, r.end_date) : 0), 0);
+      return `
+        <button class="kt-card kt-ret" onclick="setSection('retention')">
+          <span class="kt-ic">🔥</span>
+          <span class="kt-main">
+            <b>Retention</b><span class="kt-mode">Discipline · Focus · Zelfbeheersing</span>
+            <span class="kt-line">${active ? `${days} ${days === 1 ? 'dag' : 'dagen'} · fase ${esc(getRetentionPhase(days).name)}` : 'Niet actief. Tik om te starten.'}</span>
+            <span class="kt-meta">Beste reeks: ${best} dagen</span>
+          </span>
+          <span class="kt-go" aria-hidden="true">›</span>
+        </button>`;
+    }
+    function renderKetens() {
+      const list = ketenChains();
+      const used = new Set(list.map(c => c.type));
+      const tot = list.reduce((a, c) => { const s = ketenSaved(c); a.eur += s.eur; a.min += s.min; return a; }, { eur: 0, min: 0 });
+      const p = cravPatterns();
+      return `
+        <div class="page-header" style="margin-bottom: 8px;"><div class="page-sub">Wat je niet beheerst, beheerst jou</div><div class="page-title">Ketens breken</div></div>
+        ${list.length ? `<button class="kt-sos" onclick="cravingStart()">🆘 Ik heb een craving</button>` : ''}
+        ${list.length && (tot.eur || tot.min) ? `<div class="kt-tot"><div><b>€${fmtInt(tot.eur)}</b><span>bespaard</span></div><div><b>${Math.round(tot.min / 60)} uur</b><span>teruggewonnen</span></div><div><b>${ketenData().cravings.filter(x => !x.gave).length}</b><span>cravings doorstaan</span></div></div>` : ''}
+        ${list.map(ketenCardHtml).join('')}
+        ${retentionKetenCard()}
+        ${p ? `<div class="card kt-pat"><label class="label">Jouw patroon</label><div class="su-txt">${p.trig ? `Je sterkste trigger is <b>${esc(p.trig[0].toLowerCase())}</b> (${p.trig[1]}% van je cravings). ` : ''}${p.time ? `De meeste cravings komen in de <b>${p.time[0]}</b>. ` : ''}${p.helped ? `Wat het vaakst hielp: <b>${esc(p.helped.toLowerCase())}</b>. ` : ''}${p.won} van de ${p.n} cravings doorstaan.</div></div>` : ''}
+        <details class="card hm-why" ${list.length ? '' : 'open'}>
+          <summary><span class="hm-gn">Breek → Bouw</span><span class="hm-pm" aria-hidden="true"></span></summary>
+          <div class="hm-pr"><b>1 · Herken</b><span>Wat beheerst jou? Niet alles wat plezier geeft is een keten. Een keten is iets waarvan jíj vindt dat het je vrijheid kost.</span></div>
+          <div class="hm-pr"><b>2 · Breek</b><span>Doorbreek het patroon: weet wanneer het komt, heb een plan, en overbrug de craving.</span></div>
+          <div class="hm-pr"><b>3 · Bouw</b><span>Gebruik de vrijgekomen tijd, energie en geld om jezelf sterker te maken.</span></div>
+          <div class="hs-small" style="margin-top: 10px;">Een uitglijder zet je niet terug naar nul. Wat telt is hoeveel van je dagen vrij zijn.</div>
+        </details>
+        <label class="label" style="margin: 18px 0 10px;">${list.length ? 'Nog een keten breken' : 'Welke keten wil je breken?'}</label>
+        <div class="kt-add">${Object.entries(ketenTypes).filter(([k]) => k === 'custom' || !used.has(k)).map(([k, t]) => `<button onclick="ketenNew('${k}')"><span>${t.icon}</span>${esc(t.n)}${t.sub ? `<small>${esc(t.sub)}</small>` : ''}</button>`).join('')}</div>
+        ${ketenChains(true).some(c => c.archived) ? `<details class="card" style="margin-top: 14px;"><summary class="hs-small" style="cursor: pointer;">Afgesloten ketens</summary>${ketenChains(true).filter(c => c.archived).map(c => `<div class="hs-small" style="margin-top: 8px;">${ketenIcon(c)} ${esc(ketenName(c))} · ${ketenStats(c).total} vrije dagen · afgesloten ${esc(c.archived)}</div>`).join('')}</details>` : ''}`;
+    }
+    function renderKeten() {
+      const c = ketenById(state.ketenId);
+      if (!c) { state.activeSection = 'ketens'; return renderKetens(); }
+      const t = ketenType(c), s = ketenStats(c), sv = ketenSaved(c), today = todayStr();
+      const nx = ketenNextMs(s.streak), p = cravPatterns(c.id);
+      const days7 = []; for (let i = 6; i >= 0; i--) days7.push(dateAdd(today, -i));
+      const wd = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
+      const vToday = ketenLogVal(c, today);
+      let input = '';
+      if (t.measure === 'count') input = `
+        <div class="kt-step"><span>Vandaag</span><button aria-label="Minder" onclick="ketenStep('${c.id}', '${today}', -1)">−</button><b>${Number(vToday) || 0}</b><button aria-label="Meer" onclick="ketenStep('${c.id}', '${today}', 1)">+</button><span>${t.unit}</span></div>
+        <div class="hs-small" style="margin-top: 6px;">Niets ingevuld telt als vrij. Gebruikt? Tik op +. Gisteren vergeten: <a href="#" onclick="ketenStep('${c.id}', '${dateAdd(today, -1)}', 1); return false;" style="color: #e5484d;">+1 bij gisteren</a></div>`;
+      else if (t.measure === 'minutes') input = `
+        <form class="st-form" onsubmit="event.preventDefault(); ketenMinutes('${c.id}', '${today}');"><label class="sr-only" for="kt-min-${c.id}">Minuten vandaag</label><input id="kt-min-${c.id}" class="form-input" inputmode="numeric" placeholder="Minuten vandaag" value="${vToday !== undefined ? vToday : ''}"><button class="btn btn-primary" type="submit">Opslaan</button></form>
+        <div class="hs-small" style="margin-top: 6px;">Lees het af in Digitaal welzijn (Android) of Schermtijd (iPhone).</div>`;
+      else if (t.measure === 'plan') input = `<div class="kt-yn"><span>Vandaag volgens plan?</span><button class="${vToday === true ? 'on ok' : ''}" onclick="ketenLog('${c.id}', '${today}', ${vToday === true ? 'null' : 'true'})">Ja</button><button class="${vToday === false ? 'on no' : ''}" onclick="ketenLog('${c.id}', '${today}', ${vToday === false ? 'null' : 'false'})">Nee</button></div>`;
+      else input = `<div class="kt-yn"><span>Vandaag</span><button class="${vToday !== false ? 'on ok' : ''}" onclick="ketenLog('${c.id}', '${today}', null)">Vrij</button><button class="${vToday === false ? 'on no' : ''}" onclick="ketenLog('${c.id}', '${today}', false)">Toch gedaan</button></div>`;
+      const tl = (t.timeline || []).map(([d, when, txt]) => `<div class="kt-tl ${s.streak >= d || (d < 1 && s.streak >= 1) ? 'on' : ''}"><span class="kt-tl-d">${s.streak >= d || (d < 1 && s.streak >= 1) ? '✓' : ''}</span><div><b>${esc(when)}</b><span>${esc(txt)}</span></div></div>`).join('');
+      const reward = c.reward && c.reward.t && c.reward.eur ? `<div class="kt-rw"><div class="kt-rw-t">🎯 ${esc(c.reward.t)} <span>€${fmtInt(Math.min(sv.eur, c.reward.eur))} / €${fmtInt(c.reward.eur)}</span></div><div class="hl-bar"><span style="width: ${Math.min(100, Math.round(sv.eur / c.reward.eur * 100))}%; background: ${sv.eur >= c.reward.eur ? '#22c55e' : '#d9a441'};"></span></div>${sv.eur >= c.reward.eur ? '<div class="hs-small" style="color: #22c55e; margin-top: 6px;">Verdiend. Gun het jezelf.</div>' : ''}</div>` : '';
+      return `
+        <button class="entry-action" style="margin-bottom: 14px;" onclick="setSection('ketens')">← Ketens</button>
+        <div class="kt-hero">
+          <div class="kt-hero-ic">${ketenIcon(c)}</div>
+          <div class="kt-hero-n">${esc(ketenName(c))}</div>
+          <div class="kt-hero-big">${c.mode === 'stop' || ['free'].includes(t.measure) ? `${s.streak}<span>${s.streak === 1 ? 'dag' : 'dagen'} vrij</span>` : `${s.pct !== null ? s.pct : '–'}<span>% volgens doel</span>`}</div>
+          <div class="kt-hero-sub">${s.days} ${s.days === 1 ? 'dag' : 'dagen'} geleden besloot je dat ${esc(ketenName(c).toLowerCase())} jou niet meer bestuurt.</div>
+          <div class="kt-hero-stats"><div><b>${s.pct !== null ? s.pct + '%' : '–'}</b><span>${c.mode === 'less' ? 'binnen doel' : 'vrij'} deze maand</span></div><div><b>${s.total}</b><span>${c.mode === 'less' ? 'dagen binnen doel' : 'vrije dagen'}</span></div><div><b>${s.best}</b><span>beste reeks</span></div></div>
+          ${nx ? `<div class="hs-small" style="margin-top: 10px;">Volgende mijlpaal: <b style="color: #fafafa;">${nx[1]}</b> op ${nx[0]} ${nx[0] === 1 ? 'dag' : 'dagen'} (+${nx[2]} XP)</div>` : '<div class="hs-small" style="margin-top: 10px; color: #22c55e;">Alle mijlpalen gehaald. Free.</div>'}
+        </div>
+        ${compassGoalLine('k:' + c.id)}
+        <button class="kt-sos" onclick="cravingStart('${c.id}')">🆘 Ik heb een craving</button>
+        <div class="card">${input}
+          <div class="kt-week">${days7.map(d => { const st = ketenDayState(c, d); return `<div class="kt-wd"><span class="kt-dot ${st || 'none'}" title="${d}"></span><small>${wd[new Date(d + 'T12:00:00').getDay()]}</small></div>`; }).join('')}</div>
+          ${c.mode === 'less' && t.measure === 'count' ? `<div class="hs-small" style="margin-top: 8px;">Deze week: ${ketenWeekSum(c, weekKey(today))} van max ${c.limitWeek} ${t.unit}.</div>` : ''}
+        </div>
+        ${sv.eur || sv.min || reward ? `<div class="card"><label class="label">Wat je terugwint</label><div class="kt-tot" style="margin: 0;">${sv.eur ? `<div><b>€${fmtInt(sv.eur)}</b><span>bespaard</span></div>` : ''}${sv.min ? `<div><b>${Math.round(sv.min / 60)} uur</b><span>tijd terug</span></div>` : ''}</div>${reward}</div>` : ''}
+        <div class="card">
+          <label class="label">Bouw terug</label>
+          <div class="su-txt">${esc(t.win || 'Wat bouw je met de vrijgekomen tijd en energie?')}</div>
+          ${(c.build || []).length ? `<div class="kp-chips" style="margin-top: 10px;">${c.build.map(b => `<span class="kt-build">${esc(b)}</span>`).join('')}</div>` : ''}
+          ${c.plan ? `<div class="kt-plan"><span>Je als-dan-plan</span>${esc(c.plan)}</div>` : `<div class="hs-small" style="margin-top: 10px;">Tip: maak een als-dan-plan bij Instellingen, bijv. "Als ik na het eten trek krijg, dan ga ik 10 minuten wandelen."</div>`}
+        </div>
+        ${p ? `<div class="card kt-pat"><label class="label">Jouw patroon</label><div class="su-txt">${p.trig ? `Sterkste trigger: <b>${esc(p.trig[0].toLowerCase())}</b> (${p.trig[1]}%). ` : ''}${p.time ? `Meestal in de <b>${p.time[0]}</b>. ` : ''}${p.helped ? `Wat hielp: <b>${esc(p.helped.toLowerCase())}</b>. ` : ''}${p.won}/${p.n} doorstaan.</div></div>` : ''}
+        ${tl ? `<div class="card"><label class="label">Wat je lichaam terugwint</label>${tl}${ketenSrcHtml(t.tsrc)}</div>` : ''}
+        ${t.safety ? `<div class="card" style="border-left: 3px solid #eab308;"><label class="label" style="color: #eab308;">⚠ Veiligheid</label><div class="su-txt">${esc(t.help)}</div></div>` : ''}
+        ${(t.tips || []).length ? `<div class="card"><label class="label">Wat helpt</label><ul class="fast-ul">${t.tips.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
+        ${t.help && !t.safety ? `<div class="card"><label class="label">Hulp</label><div class="su-txt">${esc(t.help)}</div>${ketenSrcHtml(t.hsrc)}</div>` : ''}
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px;">
+          <button class="btn btn-secondary" onclick="ketenEdit('${c.id}')">Instellingen</button>
+          <button class="btn btn-secondary" onclick="ketenArchive('${c.id}')">Keten afsluiten</button>
+        </div>`;
+    }
+    function renderKetenForm() {
+      const f = state.kf; if (!f) { state.activeSection = 'ketens'; return renderKetens(); }
+      const t = ketenTypes[f.type] || ketenTypes.custom;
+      const inp = (key, label, ph, mode) => `<div class="kp-row"><label for="kf-${key}">${label}</label><input id="kf-${key}" data-kf="${key}" class="form-input" ${mode ? `inputmode="${mode}"` : ''} placeholder="${esc(ph || '')}" value="${esc(f[key] !== undefined && f[key] !== null ? f[key] : '')}"></div>`;
+      const modeBtns = t.modes.length > 1 ? `<div class="rv-seg" style="grid-template-columns: 1fr 1fr;">${t.modes.map(m => `<button class="${f.mode === m ? 'on' : ''}" onclick="kfRead(); kfSet('mode', '${m}'); render();">${m === 'stop' ? 'Stoppen' : 'Minderen'}</button>`).join('')}</div>` : '';
+      const buildOpts = [...new Set([...(t.build || []), 'Training', 'Lezen', 'Wandelen', 'Slaap', 'Contact', 'Kwartaaldoel', 'Sparen', 'Meditatie'])];
+      return `
+        <button class="entry-action" style="margin-bottom: 14px;" onclick="state.kf = null; setSection(${f.editId ? `'keten'` : `'ketens'`})">← Terug</button>
+        <div class="page-header" style="margin-bottom: 8px;"><div class="page-sub">${f.editId ? 'Instellingen' : 'Nieuwe keten'}</div><div class="page-title">${t.icon} ${esc(f.type === 'custom' ? (f.name || 'Eigen keten') : t.n)}</div></div>
+        ${f.type === 'custom' ? `<div class="card">${inp('name', 'Naam', 'Bijv. energiedrank')}${inp('icon', 'Icoon', '⛓️')}</div>` : ''}
+        <div class="card">
+          <label class="label">Wat wil je?</label>
+          ${modeBtns || `<div class="su-txt">${t.measure === 'plan' ? 'Minderen: je kiest hoeveel dagen per week je je aan je plan houdt.' : 'Stoppen.'}</div>`}
+          ${f.type === 'alcohol' && f.mode === 'stop' ? `
+            <div class="kt-safe">
+              <div class="rv-q" style="margin-top: 0;">Drink je de laatste tijd (bijna) elke dag, en meestal 6 glazen of meer?</div>
+              <div class="rv-seg" style="grid-template-columns: 1fr 1fr;"><button class="${f.heavy === true ? 'on' : ''}" onclick="kfRead(); kfSet('heavy', true); render();">Ja</button><button class="${f.heavy === false ? 'on' : ''}" onclick="kfRead(); kfSet('heavy', false); render();">Nee</button></div>
+              ${f.heavy === true ? `<div class="su-txt" style="margin-top: 10px; color: #fde68a;">⚠ Stop dan niet ineens zonder arts: ontwenning van alcohol kan gevaarlijk zijn. Ga eerst langs je huisarts voor begeleiding, of kies hierboven voor <b>minderen</b> en bouw rustig af.</div>` : ''}
+            </div>` : ''}
+          <div class="kp-row"><label for="kf-start">Start</label><input id="kf-start" data-kf="start" type="date" class="form-input" value="${esc(f.start)}" max="${todayStr()}"></div>
+          ${t.measure === 'count' && f.mode === 'less' ? inp('limitWeek', `Max ${t.unit}/week`, '7', 'numeric') : ''}
+          ${t.measure === 'minutes' && f.mode === 'less' ? inp('limitMin', 'Max min/dag', '60', 'numeric') : ''}
+          ${t.measure === 'plan' ? inp('planDays', 'Dagen per week', '6', 'numeric') : ''}
+        </div>
+        <div class="card">
+          <label class="label">Wat het je kost</label>
+          ${t.measure === 'count' ? inp('base', `Voorheen ${t.unit}/dag`, '10', 'decimal') : ''}
+          ${t.measure === 'minutes' ? inp('base', 'Voorheen min/dag', '120', 'numeric') : ''}
+          ${t.cost === 'pack' ? inp('price', 'Prijs pakje €', '9,80', 'decimal') + inp('perPack', 'Stuks per pakje', '20', 'numeric') : ''}
+          ${t.cost === 'unit' ? inp('price', `Prijs per ${t.unit === 'glazen' ? 'glas' : 'stuk'} €`, '3', 'decimal') : ''}
+          ${t.cost === 'week' ? inp('weekCost', 'Kosten per week €', '25', 'decimal') : ''}
+          ${t.cost !== 'none' ? `<div class="kp-row"><label for="kf-rewardT">Beloning</label><input id="kf-rewardT" data-kf="rewardT" class="form-input" placeholder="Bijv. nieuwe hardloopschoenen" value="${esc(f.rewardT || '')}"></div>${inp('rewardEur', 'Bedrag €', '150', 'decimal')}` : ''}
+          ${t.cost === 'none' ? '<div class="hs-small">Je wint hier tijd terug: die zie je op de pagina van je keten.</div>' : ''}
+        </div>
+        <div class="card">
+          <label class="label">Je plan</label>
+          <label class="sr-only" for="kf-plan">Als-dan-plan</label>
+          <textarea id="kf-plan" data-kf="plan" class="form-input kp-ta" rows="3" placeholder="Als ... (moment of trigger), dan ... (wat je in plaats daarvan doet)">${esc(f.plan || '')}</textarea>
+          <div class="kp-row"><label for="kf-risk">Risicomoment</label><input id="kf-risk" data-kf="risk" type="time" class="form-input" value="${esc(f.risk || '')}"></div>
+          <div class="hs-small">Op dit tijdstip krijg je elke dag een melding met je plan. Leeg laten mag.</div>
+          <label class="label" style="margin-top: 14px;">Bouw terug</label>
+          <div class="kp-chips">${buildOpts.map(b => `<button class="${(f.build || []).includes(b) ? 'on' : ''}" onclick="kfRead(); kfSet('build', (state.kf.build || []).includes('${b}') ? state.kf.build.filter(x => x !== '${b}') : (state.kf.build || []).concat('${b}')); render();">${esc(b)}</button>`).join('')}</div>
+        </div>
+        <button class="btn btn-primary" style="width: 100%; padding: 16px; margin-bottom: 16px;" onclick="ketenFormSave()">${f.editId ? 'Opslaan' : 'Keten breken'}</button>`;
+    }
+    function renderCraving() {
+      const cr = state.cr; if (!cr) { state.activeSection = 'ketens'; return renderKetens(); }
+      if (cr.stage === 'pick') return `
+        <button class="entry-action" style="margin-bottom: 14px;" onclick="state.cr = null; setSection('ketens')">← Terug</button>
+        <div class="page-header"><div class="page-sub">Craving</div><div class="page-title">Waarvoor?</div></div>
+        ${ketenChains().map(c => `<button class="kt-card" onclick="cravPick('${c.id}')"><span class="kt-ic">${ketenIcon(c)}</span><span class="kt-main"><b>${esc(ketenName(c))}</b></span><span class="kt-go">›</span></button>`).join('')}`;
+      const c = ketenById(cr.id), t = c ? ketenType(c) : {};
+      if (cr.stage === 'timer') {
+        const why = compassWhyLine();
+        const ideas = [...((c && c.build) || []).map(b => b === 'Training' ? '20 push-ups of squats' : b === 'Wandelen' ? '10 minuten naar buiten' : b === 'Lezen' ? '10 pagina\'s lezen' : null).filter(Boolean), ...cravDistract].filter((x, i, a) => a.indexOf(x) === i).slice(0, 4);
+        return `
+          <div class="cr-wrap">
+            <div class="cr-step">Stap 1 · Stop</div>
+            <div class="cr-breath"><div class="cr-ring" style="animation-delay: -${(((Date.now() - cr.t0) / 1000) % 10).toFixed(1)}s;"></div><div class="cr-mid"><div id="cr-clock" class="cr-clock" role="timer">${(() => { const l = Math.max(0, 600 - Math.floor((Date.now() - cr.t0) / 1000)); return Math.floor(l / 60) + ':' + String(l % 60).padStart(2, '0'); })()}</div><div id="cr-in" class="cr-in" aria-hidden="true">adem in · 4</div></div></div>
+            <div class="cr-hint">Adem 4 tellen in door je neus, 6 tellen uit. Een craving is een golf: hij komt op, piekt en zakt weer.</div>
+            <div id="cr-done-msg" class="cr-hint" style="color: #22c55e;"></div>
+            ${why ? `<div class="cr-block"><span>Waarom je dit doet</span>${esc(why)}</div>` : `<div class="cr-block"><span>Waarom</span>Denk aan waarom je begon. <a href="#" onclick="setSection('kompas'); return false;" style="color: #e5484d;">Schrijf het op in je Kompas</a></div>`}
+            ${c && c.plan ? `<div class="cr-block"><span>Je plan</span>${esc(c.plan)}</div>` : ''}
+            <div class="cr-block"><span>Doe nu iets anders</span><ul>${ideas.map(i => `<li>${esc(i)}</li>`).join('')}</ul></div>
+            <button class="btn btn-primary" style="width: 100%; padding: 16px;" onclick="cravEnd(false)">De craving is weg 💪</button>
+            <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" onclick="cravEnd(true)">Ik heb toegegeven</button>
+          </div>`;
+      }
+      return `
+        <div class="page-header" style="margin-bottom: 8px;"><div class="page-sub">${c ? esc(ketenName(c)) : 'Craving'}</div><div class="page-title">${cr.gave ? 'Uitglijder' : 'Doorstaan'}</div></div>
+        <div class="hm-sub">${cr.gave ? 'Je bent niet terug bij nul. Kijk eerlijk wat er gebeurde: daar leer je van.' : 'Sterk. Nu nog even vastleggen, dan leert de app je patroon.'}</div>
+        <div class="card"><label class="label">Wat triggerde je?</label><div class="kp-chips">${cravTriggers.map(x => `<button class="${cr.trig.includes(x) ? 'on' : ''}" onclick="cravToggle('trig', '${x}')">${x}</button>`).join('')}</div></div>
+        <div class="card"><label class="label">Wat deed je?</label><div class="kp-chips">${cravDid.map(x => `<button class="${cr.did.includes(x) ? 'on' : ''}" onclick="cravToggle('did', '${x}')">${x}</button>`).join('')}</div>
+          ${cr.gave && c && t.measure === 'count' ? `<div class="kt-step" style="margin-top: 14px;"><span>Hoeveel</span><button onclick="state.cr.n = Math.max(1, (state.cr.n || 1) - 1); render();">−</button><b>${cr.n}</b><button onclick="state.cr.n = (state.cr.n || 1) + 1; render();">+</button><span>${t.unit}</span></div>` : ''}
+        </div>
+        <button class="btn btn-primary" style="width: 100%; padding: 16px; margin-bottom: 16px;" onclick="cravSave()">Opslaan</button>`;
+    }
+    function renderKetenDashCard() {
+      const list = ketenChains();
+      if (!list.length && !state.retentionStreak) return '';
+      return `
+        <div class="card kt-dash">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;"><label class="label" style="margin: 0;">⛓️ Ketens</label><button class="st-goal" onclick="setSection('ketens')">Alles ›</button></div>
+          ${list.slice(0, 4).map(c => `<div class="kt-mini" onclick="state.ketenId = '${c.id}'; setSection('keten');"><span>${ketenIcon(c)}</span><b>${esc(ketenName(c))}</b><i>${esc(ketenTodayLine(c))}</i></div>`).join('')}
+          ${state.retentionStreak ? `<div class="kt-mini" onclick="setSection('retention')"><span>🔥</span><b>Retention</b><i>${getRetentionDays()} dagen</i></div>` : ''}
+          ${list.length ? `<button class="kt-sos sm" onclick="cravingStart()">🆘 Craving</button>` : ''}
+        </div>`;
+    }
+
+
+    // ============================================
     // HERINNERINGEN (pushmeldingen via Supabase Edge Function "send-reminders")
     // ============================================
     const VAPID_PUBLIC = 'BFVrf-QjhZJ-XWJBnp6jB9dBUM2ROfcaqgMzdEvYldMg2956WCJ-7elXxYc9ic3dyYUAmRc7Ak8_tVtQQ3jYrYg';
@@ -12050,7 +12619,8 @@
       ['screen', 'Scherm weg', 'Een uur voor je bedtijd (uit je slaapdoel)', true, null],
       ['evening', 'Dag afsluiten', 'Avond-journal en routine · niet als je al hebt afgesloten', true, '21:30'],
       ['weekly', 'Wekelijkse review', 'Zondag: 10 minuten terugkijken en je focus kiezen', true, '19:00'],
-      ['home', 'Primal Home', 'Onderhoud dat aan de beurt is, en op zaterdag je stap van de week', true, '10:00']
+      ['home', 'Primal Home', 'Onderhoud dat aan de beurt is, en op zaterdag je stap van de week', true, '10:00'],
+      ['ketens', 'Ketens: risicomoment', 'Op het tijdstip dat je per keten instelt, met je als-dan-plan', true, null]
     ];
     function reminderPrefs() {
       const r = userPrefs().reminders || {};
@@ -12139,7 +12709,7 @@
             return `
             <div class="de-row">
               <span class="de-txt"><span style="color: ${on ? '#fafafa' : '#737373'};">${label}</span><small>${sub}</small></span>
-              ${k === 'screen' ? `<span class="rm-time auto">${screenAt}</span>`
+              ${k === 'screen' ? `<span class="rm-time auto">${screenAt}</span>` : k === 'ketens' ? `<span class="rm-time auto">per keten</span>`
                 : `<input type="time" class="rm-time" value="${esc(r[k].time)}" aria-label="Tijd ${esc(label)}" onchange="reminderSet('${k}', 'time', this.value)" ${on ? '' : 'disabled'}>`}
               <button class="de-sw ${on ? 'on' : ''}" role="switch" aria-checked="${on}" aria-label="${esc(label)}" onclick="reminderSet('${k}', 'on', ${!on})"><i></i></button>
             </div>`;
@@ -12161,7 +12731,7 @@
       } catch (e) {}
     }
     // Melding aangetikt of link met #onderdeel: naar dat onderdeel
-    const navSections = ['dashboard', 'journal', 'body', 'training', 'food', 'sleep', 'more', 'week', 'reminders', 'books', 'privacy', 'home', 'kompas', 'review', 'buddies'];
+    const navSections = ['dashboard', 'journal', 'body', 'training', 'food', 'sleep', 'more', 'week', 'reminders', 'books', 'privacy', 'home', 'kompas', 'review', 'buddies', 'ketens', 'challenges', 'ranks', 'values', 'retention'];
     function gotoFromHash() {
       const h = (location.hash || '').replace('#', '');
       const bm = h.match(/^buddy=([A-Za-z0-9]{6,10})$/);
@@ -12189,7 +12759,50 @@
     // ============================================
     // EVENT HANDLERS
     // ============================================
+    // ============================================
+    // NAVIGATIE: Home · Body · Mind · Ketens · Forge · Meer
+    // ============================================
+    const navGroups = [
+      { k: 'dashboard', icon: '🏠', label: 'Home' },
+      { k: 'bodyg', icon: '💪', label: 'Body', tabs: [['training', 'Training'], ['food', 'Voeding'], ['sleep', 'Slaap'], ['body', 'Lichaam']] },
+      { k: 'mind', icon: '🧠', label: 'Mind', tabs: [['journal', 'Journal'], ['kompas', 'Kompas'], ['values', 'Waarden'], ['books', 'Boeken']] },
+      { k: 'ketens', icon: '⛓️', label: 'Ketens' },
+      { k: 'forge', icon: '⚒️', label: 'Forge', tabs: [['challenges', 'Challenges'], ['ranks', 'Rangen'], ['week', 'Week']] },
+      { k: 'more', icon: '☰', label: 'Meer' }
+    ];
+    const sectionGroup = { dashboard: 'dashboard', training: 'bodyg', food: 'bodyg', sleep: 'bodyg', body: 'bodyg', journal: 'mind', kompas: 'mind', values: 'mind', books: 'mind', review: 'mind',
+      ketens: 'ketens', keten: 'ketens', ketenform: 'ketens', craving: 'ketens', retention: 'ketens', challenges: 'forge', ranks: 'forge', week: 'forge' };
+    function navGroupOf(sec) { return sectionGroup[sec] || 'more'; }
+    function navGo(k) {
+      const g = navGroups.find(x => x.k === k); if (!g) return;
+      if (!g.tabs) {
+        if (k === 'ketens') { state.kf = null; if (state.cr && state.activeSection !== 'craving') state.cr = null; }
+        if (state.activeSection === k) { window.scrollTo(0, 0); return; }
+        return setSection(k);
+      }
+      const last = (state.lastTab || {})[k];
+      navTab(g.tabs.some(t => t[0] === last) ? last : g.tabs[0][0]);
+    }
+    function navTab(sec) {
+      const same = state.activeSection === sec;
+      if (sec === 'food') state.fView = 'day';
+      if (same && sec === 'challenges') state.chView = 'list';
+      if (same && sec === 'training' && state.trainView !== 'edit') { state.trainView = 'list'; state.trainForm = null; }
+      if (sec === 'values' && !(state.valuesView === 'form' && state.vf)) state.valuesView = 'overview';
+      if (sec === 'week' && !same) state.weekOffset = 0;
+      if (same) { render(); window.scrollTo(0, 0); return; }
+      setSection(sec);
+    }
+    function renderGroupTabs() {
+      const g = navGroups.find(x => x.k === navGroupOf(state.activeSection));
+      if (!g || !g.tabs) return '';
+      const cur = state.activeSection === 'review' ? 'kompas' : state.activeSection;
+      return `<div class="gtabs" role="tablist" aria-label="${g.label}">${g.tabs.map(([sec, l]) => `<button role="tab" aria-selected="${cur === sec}" class="${cur === sec ? 'on' : ''}" onclick="navTab('${sec}')">${l}${sec === 'challenges' && activeChallenges().length ? ` <i>${activeChallenges().length}</i>` : ''}</button>`).join('')}</div>`;
+    }
     function setSection(section, fromBack) {
+      if (section === 'body' && state.bodyTab === 'challenges') { section = 'challenges'; state.bodyTab = 'metingen'; }
+      const grp = navGroups.find(x => x.k === navGroupOf(section));
+      if (grp && grp.tabs && grp.tabs.some(t => t[0] === section)) state.lastTab = { ...(state.lastTab || {}), [grp.k]: section };
       if (!fromBack && state.activeSection && state.activeSection !== section) {
         state.navStack = [...(state.navStack || []).filter(s => s !== section), state.activeSection].slice(-15);
       }
@@ -12247,11 +12860,11 @@
         if (state.trainView === 'edit' && state.trainForm && state.trainForm.exercises.length && !confirm('Training niet opgeslagen. Toch verlaten?')) return true;
         state.trainForm = null; state.trainView = 'list'; render(); window.scrollTo(0, 0); return true;
       }
-      if (sec === 'body' && state.bodyTab === 'challenges' && state.chView && state.chView !== 'list') {
+      if (sec === 'challenges' && state.chView && state.chView !== 'list') {
         state.chView = state.chView === 'setup' ? 'library' : state.chView === 'hard75setup' ? 'hard75' : 'list';
         render(); window.scrollTo(0, 0); return true;
       }
-      if (sec === 'journal' && state.journalTab === 'values' && state.valuesView === 'form') {
+      if (sec === 'values' && state.valuesView === 'form') {
         if (confirm('Stoppen? Je antwoorden worden niet bewaard.')) { state.vf = null; state.valuesView = 'overview'; render(); }
         return true;
       }
@@ -12342,6 +12955,7 @@
       }
       // pas na het laden van alle gewoonte-historie
       try { habitGradCheck(); } catch (e) {}
+      try { ketenMsCheck(); ketenSyncRisks(); } catch (e) {}
     }
 
     // Nieuwe versie online gezet? Dan een balk om bij te werken
