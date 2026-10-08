@@ -4609,7 +4609,7 @@
     // ============================================
     // MOTIVATIE: XP, DAGSCORE, RANGEN
     // ============================================
-    const APP_VERSION = '6 okt · 12:00';
+    const APP_VERSION = '9 okt · 01:00';
     const XP = {
       habit: 5,
       journal: 15,
@@ -7808,6 +7808,8 @@
     }
 
     function renderJournal() {
+      // 'today' (links uit Vandaag te doen) is hetzelfde tabblad als 'new'
+      if (state.journalTab === 'today') state.journalTab = 'new';
       return `
         <div class="page-header">
           <div class="page-sub">Mind</div>
@@ -7969,10 +7971,10 @@
         <div class="entry">
           <div class="entry-date">${formatDate(entry.date)}</div>
           <div class="entry-scores">
-            <span class="entry-score" style="color: ${getColor(entry.mood)}">😊 ${entry.mood}</span>
-            <span class="entry-score" style="color: ${getColor(entry.energy)}">⚡ ${entry.energy}</span>
-            <span class="entry-score" style="color: ${getColor(entry.libido)}">🔥 ${entry.libido}</span>
-            <span class="entry-score" style="color: ${getColor(entry.focus)}">🧠 ${entry.focus}</span>
+            ${entry.mood ? `<span class="entry-score" style="color: ${getColor(entry.mood)}">😊 ${entry.mood}</span>` : ''}
+            ${entry.energy ? `<span class="entry-score" style="color: ${getColor(entry.energy)}">⚡ ${entry.energy}</span>` : ''}
+            ${entry.libido ? `<span class="entry-score" style="color: ${getColor(entry.libido)}">🔥 ${entry.libido}</span>` : ''}
+            ${entry.focus ? `<span class="entry-score" style="color: ${getColor(entry.focus)}">🧠 ${entry.focus}</span>` : ''}
           </div>
           ${entry.content ? `<div class="entry-content">${esc(entry.content.substring(0, 200))}${entry.content.length > 200 ? '...' : ''}</div>` : ''}
           ${entry.habits ? `
@@ -12868,7 +12870,7 @@
         if (confirm('Stoppen? Je antwoorden worden niet bewaard.')) { state.vf = null; state.valuesView = 'overview'; render(); }
         return true;
       }
-      if (sec === 'journal' && state.journalTab && state.journalTab !== 'today') { setJournalTab('today'); window.scrollTo(0, 0); return true; }
+      if (sec === 'journal' && (state.journalTab === 'history' || state.journalTab === 'patterns')) { setJournalTab('new'); window.scrollTo(0, 0); return true; }
       // 3. Vorig onderdeel
       if (sec !== 'dashboard') {
         const stack = state.navStack || [];
