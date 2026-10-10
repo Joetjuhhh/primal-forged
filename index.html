@@ -2421,7 +2421,7 @@
       state.retentionAll = (state.retentionAll || []).map(r => r.id === state.retentionStreak.id ? { ...r, is_active: false, end_date: todayStr() } : r);
       state.retentionStreak = null;
       render();
-      showToast('Uitglijder genoteerd. Je bent niet terug bij nul.');
+      showToast('Uitglijder genoteerd. Je reeks staat weer op 0. Begin opnieuw.');
     }
 
     async function toggleHabit(habit) {
@@ -4609,7 +4609,7 @@
     // ============================================
     // MOTIVATIE: XP, DAGSCORE, RANGEN
     // ============================================
-    const APP_VERSION = '9 okt · 01:00';
+    const APP_VERSION = '10 okt · 09:00';
     const XP = {
       habit: 5,
       journal: 15,
@@ -4632,7 +4632,10 @@
       review: 25,        // wekelijkse review gedaan
       habitGrad: 100,    // gewoonte afgestudeerd (60 van 66 dagen)
       ketenDay: 5,       // per keten: dag vrij of binnen je doel
-      craving: 10        // craving doorstaan (max 3 per dag)
+      craving: 10,       // craving doorstaan (max 3 per dag)
+      courseLesson: 10,  // cursusles afgerond (eenmalig, app)
+      courseChallenge: 25, // eindchallenge van een cursuslevel gehaald (eenmalig, app)
+      courseExam: 150    // cursusexamen gehaald (eenmalig, app)
     };
 
     const ranks = [
@@ -4714,6 +4717,19 @@
       return progressCache;
     }
 
+    // Cursussen (in de app, bijv. Testosterone Mastery): XP op de dag dat je iets voor het eerst haalde.
+    // prefs.courses = { tm: { lessons: { '1.1': datum }, challenges: { '1': { at: datum } }, exam: { at: datum } } }
+    function courseXpByDate() {
+      const out = {}, add = (d, n) => { if (/^\d{4}-\d{2}-\d{2}$/.test(d || '')) out[d] = (out[d] || 0) + n; };
+      Object.values(userPrefs().courses || {}).forEach(c => {
+        if (!c || typeof c !== 'object') return;
+        Object.values(c.lessons || {}).forEach(d => add(d, XP.courseLesson));
+        Object.values(c.challenges || {}).forEach(x => x && add(x.at, XP.courseChallenge));
+        if (c.exam) add(c.exam.at, XP.courseExam);
+      });
+      return out;
+    }
+
     function computeProgress() {
       const today = todayStr();
       const hist = { ...state.habitHistory, [today]: { ...state.habits } };
@@ -4751,6 +4767,7 @@
       Object.keys(stepsData().log).forEach(d => starts.push(d));
       Object.values(bookStatus()).forEach(b => b && b.s === 'read' && starts.push(b.at));
       Object.values(homeSt()).forEach(v => v && v.s === 'have' && starts.push(v.at));
+      Object.keys(courseXpByDate()).forEach(d => starts.push(d));
       ketenChains(true).forEach(c => starts.push(c.start));
       const first = starts.filter(Boolean).filter(d => d <= today).sort()[0] || today;
 
@@ -4789,6 +4806,7 @@
       Object.values(reviews()).forEach(r => r && r.at && addH(r.at, XP.review));
       Object.values(habitGradLog()).forEach(arr => (arr || []).forEach(g => g && addH(g.at, XP.habitGrad)));
       const ketenXpOn = ketenXpByDate();
+      const courseXpOn = courseXpByDate();
       const fastXpOn = {};
       fastData().log.forEach(x => { if (x && x.e && (new Date(x.e) - new Date(x.s)) >= (Number(x.goal) || 16) * 3600e3) fastXpOn[localDateStr(new Date(x.e))] = XP.fast; });
       const protByDate = {};
@@ -4835,6 +4853,7 @@
         xp += fastXpOn[date] || 0;
         xp += homeXpOn[date] || 0;
         xp += ketenXpOn[date] || 0;
+        xp += courseXpOn[date] || 0;
         if (date === valuesDate) xp += VALUES_BONUS_XP;
         if (xp > 0) hadActivity = true;
         if ((score < 20 && hadActivity && date < today) || failDates.has(date)) comeback = true;
@@ -5043,10 +5062,13 @@
         ${ranks.map(rk => {
           const got = !!p.achieved[rk.n];
           const isNext = rk.n === p.current + 1;
-          const filter = got ? '' : isNext ? 'filter: grayscale(1) brightness(0.6);' : 'filter: grayscale(1) brightness(0.25);';
+          // Rangen voorbij de eerstvolgende blijven geheim tot je ze nadert (vaag embleem, naam ???)
+          const secret = !got && !isNext && rk.n > p.current + 1;
+          const filter = got ? '' : isNext ? 'filter: grayscale(1) brightness(0.6);' : secret ? 'filter: grayscale(1) brightness(0.45) blur(5px);' : 'filter: grayscale(1) brightness(0.25);';
           const xpLeft = Math.max(0, rk.xp - p.total);
           let status;
-          if (got) status = `<span style="color: #22c55e;">Behaald ${fmtDateLong(p.achieved[rk.n])}</span>`;
+          if (secret) status = `<span style="color: #525252;">${xpLeft > 0 ? 'Nog ' + fmtInt(xpLeft) + ' XP' : 'Eerst de vorige rang'}</span>`;
+          else if (got) status = `<span style="color: #22c55e;">Behaald ${fmtDateLong(p.achieved[rk.n])}</span>`;
           else {
             const bits = [];
             if (rk.n > 1 && xpLeft > 0) bits.push(`nog ${fmtInt(xpLeft)} XP`);
@@ -5060,7 +5082,7 @@
               <div style="flex-shrink: 0; cursor: ${got ? 'pointer' : 'default'};" ${got ? `onclick="state.showRankUp = ${rk.n}; render();"` : ''}>${rankImg(rk.n, 64, filter)}</div>
               <div style="flex: 1; min-width: 0;">
                 <div style="font-size: 9px; color: #8a8a8a; letter-spacing: 0.15em;">RANG ${rk.n}${rk.n > 1 ? ' · ' + fmtInt(rk.xp) + ' XP' : ''}${rk.n === p.current ? ' · <span style="color: #e5484d;">HUIDIG</span>' : ''}</div>
-                <div style="font-size: 15px; font-weight: 500; letter-spacing: 0.04em; margin-top: 2px; ${got || isNext ? '' : 'color: #737373;'}">${rk.name}</div>
+                <div style="font-size: 15px; font-weight: 500; letter-spacing: 0.04em; margin-top: 2px; ${got || isNext ? '' : 'color: #737373;'}">${secret ? '???' : rk.name}</div>
                 ${got || isNext ? `<div style="font-size: 11px; color: #a3a3a3; margin-top: 4px; line-height: 1.5; font-style: italic;">${rk.text}</div>` : ''}
                 <div style="font-size: 11px; margin-top: 4px;">${status}</div>
               </div>
@@ -5487,7 +5509,7 @@
     const homeKitOptions = [['db', 'Dumbbells'], ['band', 'Elastieken'], ['bar', 'Optrekstang'], ['bb', 'Barbell + rek']];
     const muscleGroups = {
       borst: 'Borst', rug: 'Rug', schouders: 'Schouders', achterschouder: 'Achterkant schouders', biceps: 'Biceps', triceps: 'Triceps',
-      quads: 'Quadriceps', hamstrings: 'Hamstrings', billen: 'Billen', kuiten: 'Kuiten', buik: 'Buik'
+      quads: 'Quadriceps', hamstrings: 'Hamstrings', billen: 'Billen', adductoren: 'Binnenkant bovenbeen', kuiten: 'Kuiten', buik: 'Buik'
     };
     const exerciseLib = [
       // Borst
@@ -5504,6 +5526,9 @@
       ['Push-ups', 'borst', ['bw'], 'zoveel mogelijk'],
       ['Deficit push-ups', 'borst', ['bw'], 'zoveel mogelijk'],
       ['Incline push-ups', 'borst', ['bw'], '12-20'],
+      ['Incline chest press machine', 'borst', ['machine'], '8-12'],
+      ['Smith machine bankdrukken', 'borst', ['machine'], '6-10'],
+      ['Cable crossover', 'borst', ['cable'], '12-15'],
       // Rug
       ['Pull-ups', 'rug', ['bar'], '6-10'],
       ['Lat pulldown', 'rug', ['cable', 'machine'], '8-12'],
@@ -5517,6 +5542,11 @@
       ['Inverted row', 'rug', ['bar'], '8-12'],
       ['Deurpost row', 'rug', ['bw'], '10-15'],
       ['Superman', 'rug', ['bw'], '12-15'],
+      ['Seated row machine', 'rug', ['machine'], '8-12'],
+      ['T-bar row', 'rug', ['machine'], '6-10'],
+      ['Assisted pull-up machine', 'rug', ['machine'], '8-12'],
+      ['Straight-arm pulldown', 'rug', ['cable'], '12-15'],
+      ['Back extension', 'rug', ['machine'], '12-15'],
       // Schouders
       ['Overhead press', 'schouders', ['bb'], '6-8'],
       ['Dumbbell schouderpress', 'schouders', ['db'], '8-10'],
@@ -5525,6 +5555,8 @@
       ['Cable lateral raise', 'schouders', ['cable'], '12-15'],
       ['Band lateral raise', 'schouders', ['band'], '15-20'],
       ['Pike push-ups', 'schouders', ['bw'], '8-12'],
+      ['Lateral raise machine', 'schouders', ['machine'], '12-15'],
+      ['Smith machine shoulder press', 'schouders', ['machine'], '8-10'],
       // Achterkant schouders
       ['Face pulls', 'achterschouder', ['cable'], '12-15'],
       ['Reverse fly', 'achterschouder', ['db'], '12-15'],
@@ -5539,6 +5571,7 @@
       ['Preacher curl', 'biceps', ['machine'], '10-12'],
       ['Band curl', 'biceps', ['band'], '12-15'],
       ['Handdoek curl', 'biceps', ['bw'], '10-15'],
+      ['Biceps curl machine', 'biceps', ['machine'], '10-12'],
       // Triceps
       ['Triceps pushdown', 'triceps', ['cable'], '12-15'],
       ['Overhead triceps extension', 'triceps', ['cable'], '10-12'],
@@ -5549,6 +5582,8 @@
       ['Band pushdown', 'triceps', ['band'], '15-20'],
       ['Diamond push-ups', 'triceps', ['bw'], 'zoveel mogelijk'],
       ['Bench dips', 'triceps', ['bw'], '10-15'],
+      ['Dip machine', 'triceps', ['machine'], '8-12'],
+      ['Triceps extension machine', 'triceps', ['machine'], '10-15'],
       // Quadriceps
       ['Squat', 'quads', ['bb'], '6-8'],
       ['Leg press', 'quads', ['machine'], '8-12'],
@@ -5558,6 +5593,8 @@
       ['Bulgarian split squat', 'quads', ['db', 'bw'], '8-10'],
       ['Lunges', 'quads', ['db', 'bw'], '10-12'],
       ['Bodyweight squats', 'quads', ['bw'], '15-25'],
+      ['Smith machine squat', 'quads', ['machine'], '8-10'],
+      ['Belt squat', 'quads', ['machine'], '8-12'],
       // Hamstrings
       ['Romanian deadlift', 'hamstrings', ['bb'], '6-10'],
       ['Deadlift', 'hamstrings', ['bb'], '4-6'],
@@ -5565,20 +5602,28 @@
       ['Leg curl', 'hamstrings', ['machine'], '10-15'],
       ['Nordic curl', 'hamstrings', ['bw'], 'zoveel mogelijk'],
       ['Single-leg RDL', 'hamstrings', ['bw', 'db'], '10-12'],
+      ['Seated leg curl', 'hamstrings', ['machine'], '10-15'],
       // Billen
       ['Hip thrust', 'billen', ['bb'], '8-12'],
       ['Dumbbell hip thrust', 'billen', ['db'], '10-15'],
       ['Cable kickback', 'billen', ['cable'], '12-15'],
       ['Glute bridge', 'billen', ['bw'], '15-20'],
+      ['Hip thrust machine', 'billen', ['machine'], '8-12'],
+      ['Hip abduction', 'billen', ['machine'], '12-20'],
+      ['Glute kickback machine', 'billen', ['machine'], '12-15'],
+      ['Hip adduction', 'adductoren', ['machine'], '12-20'],
       // Kuiten
       ['Calf raises', 'kuiten', ['machine'], '12-15'],
       ['Dumbbell calf raises', 'kuiten', ['db'], '12-15'],
       ['Calf raises (lichaamsgewicht)', 'kuiten', ['bw'], '15-25'],
+      ['Seated calf raise', 'kuiten', ['machine'], '12-20'],
       // Buik
       ['Hanging leg raises', 'buik', ['bar'], '10-15'],
       ['Cable crunch', 'buik', ['cable'], '12-15'],
       ['Leg raises', 'buik', ['bw'], '12-15'],
       ['Crunches', 'buik', ['bw'], '15-20'],
+      ['Ab crunch machine', 'buik', ['machine'], '12-15'],
+      ['Vertical knee raise', 'buik', ['machine'], '10-15'],
       ['Plank (seconden)', 'buik', ['bw'], '30-60 sec']
     ].map(([name, group, kit, range]) => ({ name, group, kit, range }));
 
@@ -12194,11 +12239,11 @@
       shoppen: { n: 'Impulsief shoppen', icon: '🛒', measure: 'free', modes: ['stop'], cost: 'week', build: ['Sparen', 'Primal Home'],
         win: 'Geld voor wat er écht toe doet, en minder spullen.',
         tips: ['48-uurregel: wil je iets, zet het op een lijstje en kijk over 2 dagen of je het nog wilt.', 'Verwijder opgeslagen betaalgegevens en shop-apps.', 'Zet je "bespaard"-geld op een aparte rekening.'] },
-      custom: { n: 'Eigen keten', icon: '⛓️', measure: 'free', modes: ['stop'], cost: 'week', build: [], win: '', tips: [] }
+      custom: { n: 'Mijn keten', icon: '⛓️', measure: 'free', modes: ['stop'], cost: 'week', build: [], win: '', tips: [] }
     };
     const ketenMs = [[1, 'Spark', 10], [3, 'Resist', 20], [7, 'Hold', 50], [14, 'Steel', 75], [30, 'Unchained', 150], [60, 'Unshaken', 200], [90, 'Sovereign Mind', 300], [180, 'Mastery', 500], [365, 'Free', 1000]];
     const cravTriggers = ['Stress', 'Verveling', 'Eenzaamheid', 'Boosheid', 'Gezelschap', 'Alcohol', 'Na het eten', 'Avond', 'Seksuele trigger', 'Social media', 'Anders'];
-    const cravDid = ['Gewacht', 'Gewandeld', 'Getraind', 'Gedoucht', 'Gebeld', 'Gemediteerd', 'Toch toegegeven'];
+    const cravDid = ['Gewacht', 'Ademhaling', 'Gewandeld', 'Getraind', 'Gedoucht', 'Gebeld', 'Gemediteerd', 'Toch toegegeven'];
     const cravDistract = ['20 push-ups of squats', 'Koud water over je gezicht of een koude douche', '10 minuten naar buiten', 'Iemand bellen of appen', 'Een glas water, langzaam', '10 pagina\'s lezen'];
 
     function ketenData() { const k = userPrefs().ketens; return k && typeof k === 'object' ? { chains: k.chains || [], log: k.log || {}, cravings: k.cravings || [], ms: k.ms || {} } : { chains: [], log: {}, cravings: [], ms: {} }; }
@@ -12206,7 +12251,7 @@
     function ketenChains(all) { return ketenData().chains.filter(c => all || !c.archived); }
     function ketenById(id) { return ketenData().chains.find(c => c.id === id); }
     function ketenType(c) { return ketenTypes[c.type] || ketenTypes.custom; }
-    function ketenName(c) { return c.type === 'custom' ? (c.name || 'Eigen keten') : ketenType(c).n; }
+    function ketenName(c) { return c.type === 'custom' ? (c.name || 'Mijn keten') : ketenType(c).n; }
     function ketenIcon(c) { return c.type === 'custom' ? (c.icon || '⛓️') : ketenType(c).icon; }
     function ketenLogVal(c, d) { const l = ketenData().log[c.id]; return l ? l[d] : undefined; }
     // Status van één dag: free | ok | over | slip | null (onbekend)
@@ -12310,7 +12355,7 @@
       const after = ketenDayState(c, d);
       ketenMsCheck();
       render();
-      if ((after === 'slip' || after === 'over') && before !== after) showToast('Uitglijder genoteerd. Je bent niet terug bij nul: je vrije dagen blijven staan.');
+      if ((after === 'slip' || after === 'over') && before !== after) showToast('Uitglijder genoteerd. Je reeks staat weer op 0. Begin opnieuw.');
     }
     function ketenStep(id, d, delta) { const v = Math.max(0, (Number(ketenLogVal(ketenById(id), d)) || 0) + delta); ketenLog(id, d, v); }
     function ketenMinutes(id, d) {
@@ -12392,7 +12437,7 @@
       state.cr = null;
       state.ketenId = c ? c.id : null;
       setSection(c ? 'keten' : 'ketens');
-      showToast(rec.gave ? 'Uitglijder genoteerd. Je bent niet terug bij nul. Wat leer je hiervan?' : `💪 Craving doorstaan · +${XP.craving} XP`);
+      showToast(rec.gave ? 'Uitglijder genoteerd. Je reeks staat weer op 0. Begin opnieuw.' : `💪 Craving doorstaan · +${XP.craving} XP`);
     }
     function cravPatterns(id) {
       const list = ketenData().cravings.filter(x => !id || x.cid === id);
@@ -12462,7 +12507,7 @@
           <div class="hm-pr"><b>1 · Herken</b><span>Wat beheerst jou? Niet alles wat plezier geeft is een keten. Een keten is iets waarvan jíj vindt dat het je vrijheid kost.</span></div>
           <div class="hm-pr"><b>2 · Breek</b><span>Doorbreek het patroon: weet wanneer het komt, heb een plan, en overbrug de craving.</span></div>
           <div class="hm-pr"><b>3 · Bouw</b><span>Gebruik de vrijgekomen tijd, energie en geld om jezelf sterker te maken.</span></div>
-          <div class="hs-small" style="margin-top: 10px;">Een uitglijder zet je niet terug naar nul. Wat telt is hoeveel van je dagen vrij zijn.</div>
+          <div class="hs-small" style="margin-top: 10px;">Een uitglijder zet je reeks terug op 0. Begin opnieuw.</div>
         </details>
         <label class="label" style="margin: 18px 0 10px;">${list.length ? 'Nog een keten breken' : 'Welke keten wil je breken?'}</label>
         <div class="kt-add">${Object.entries(ketenTypes).filter(([k]) => k === 'custom' || !used.has(k)).map(([k, t]) => `<button onclick="ketenNew('${k}')"><span>${t.icon}</span>${esc(t.n)}${t.sub ? `<small>${esc(t.sub)}</small>` : ''}</button>`).join('')}</div>
@@ -12528,7 +12573,7 @@
       const buildOpts = [...new Set([...(t.build || []), 'Training', 'Lezen', 'Wandelen', 'Slaap', 'Contact', 'Kwartaaldoel', 'Sparen', 'Meditatie'])];
       return `
         <button class="entry-action" style="margin-bottom: 14px;" onclick="state.kf = null; setSection(${f.editId ? `'keten'` : `'ketens'`})">← Terug</button>
-        <div class="page-header" style="margin-bottom: 8px;"><div class="page-sub">${f.editId ? 'Instellingen' : 'Nieuwe keten'}</div><div class="page-title">${t.icon} ${esc(f.type === 'custom' ? (f.name || 'Eigen keten') : t.n)}</div></div>
+        <div class="page-header" style="margin-bottom: 8px;"><div class="page-sub">${f.editId ? 'Instellingen' : 'Nieuwe keten'}</div><div class="page-title">${t.icon} ${esc(f.type === 'custom' ? (f.name || 'Mijn keten') : t.n)}</div></div>
         ${f.type === 'custom' ? `<div class="card">${inp('name', 'Naam', 'Bijv. energiedrank')}${inp('icon', 'Icoon', '⛓️')}</div>` : ''}
         <div class="card">
           <label class="label">Wat wil je?</label>
@@ -12590,7 +12635,7 @@
       }
       return `
         <div class="page-header" style="margin-bottom: 8px;"><div class="page-sub">${c ? esc(ketenName(c)) : 'Craving'}</div><div class="page-title">${cr.gave ? 'Uitglijder' : 'Doorstaan'}</div></div>
-        <div class="hm-sub">${cr.gave ? 'Je bent niet terug bij nul. Kijk eerlijk wat er gebeurde: daar leer je van.' : 'Sterk. Nu nog even vastleggen, dan leert de app je patroon.'}</div>
+        <div class="hm-sub">${cr.gave ? 'Je reeks staat weer op 0. Kijk eerlijk wat er gebeurde: daar leer je van.' : 'Sterk. Nu nog even vastleggen, dan leert de app je patroon.'}</div>
         <div class="card"><label class="label">Wat triggerde je?</label><div class="kp-chips">${cravTriggers.map(x => `<button class="${cr.trig.includes(x) ? 'on' : ''}" onclick="cravToggle('trig', '${x}')">${x}</button>`).join('')}</div></div>
         <div class="card"><label class="label">Wat deed je?</label><div class="kp-chips">${cravDid.map(x => `<button class="${cr.did.includes(x) ? 'on' : ''}" onclick="cravToggle('did', '${x}')">${x}</button>`).join('')}</div>
           ${cr.gave && c && t.measure === 'count' ? `<div class="kt-step" style="margin-top: 14px;"><span>Hoeveel</span><button onclick="state.cr.n = Math.max(1, (state.cr.n || 1) - 1); render();">−</button><b>${cr.n}</b><button onclick="state.cr.n = (state.cr.n || 1) + 1; render();">+</button><span>${t.unit}</span></div>` : ''}
