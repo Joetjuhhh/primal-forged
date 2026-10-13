@@ -1,1 +1,7 @@
+# Andere adressen sturen door naar het hoofdadres primal-forged.com (merkgids h9, Youri 13 okt)
+https://primal-forged.nl/*      https://primal-forged.com/:splat  301!
+https://www.primal-forged.nl/*  https://primal-forged.com/:splat  301!
+http://primal-forged.nl/*       https://primal-forged.com/:splat  301!
+http://www.primal-forged.nl/*   https://primal-forged.com/:splat  301!
+
 /*    /index.html   200
