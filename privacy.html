@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy · Primal Forged</title>
+<meta name="robots" content="index,follow">
+<!-- Openbare privacypagina voor Google Play (privacybeleid-URL): primal-forged.com/privacy.html (Youri 13 okt: "ik wil de app op playstore").
+     Tekst = de privacytekst uit de app (app/src/components/meer/Privacy.js), letterlijk.
+     Geen externe lettertypes of scripts: alles staat in deze ene pagina. -->
+<style>
+  /* Merkstijl (merkgids h6/h7): Ochtendlicht als basis, Houtskool voor tekst, Smeedrood voor accenten. Geen externe lettertypes. */
+  :root { --bg: #FBF3E4; --card: #FFFDF8; --line: #E6D8C0; --text: #1A1614; --soft: #2E2724; --dim: #554A43; --accent: #C8321E; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 18px/1.6 Barlow, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
+  .merk { color: var(--accent); font-size: 14px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; margin: 0; }
+  h1 { font-family: "Big Shoulders Display", Impact, "Arial Narrow", sans-serif; font-weight: 800; font-size: 44px; line-height: 1; text-transform: uppercase; margin: 6px 0 24px; }
+  h2 { font-family: "Big Shoulders Display", Impact, "Arial Narrow", sans-serif; font-size: 24px; font-weight: 800; text-transform: uppercase; margin: 32px 0 8px; }
+  p, li { color: var(--soft); }
+  ul { padding-left: 20px; }
+  li { margin: 8px 0; }
+  b { color: var(--text); font-weight: 600; }
+  a { color: var(--accent); }
+  .kaart { background: var(--card); border-radius: 16px; padding: 24px 20px; }
+  .klein { color: var(--dim); font-size: 14px; margin-top: 24px; }
+  .terug { display: inline-block; margin-top: 24px; font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+  <p class="merk">Primal Forged</p>
+  <h1>Privacy</h1>
+  <div class="kaart">
+    <p>Primal Forged is een persoonlijke app. Wat je invult is van jou. We verkopen niets, tonen geen advertenties en volgen je niet.</p>
+
+    <h2>Welke gegevens</h2>
+    <ul>
+      <li><b>Account:</b> je e-mailadres en een versleuteld wachtwoord.</li>
+      <li><b>Wat je zelf invult:</b> journal, gewoontes, challenges, retention, slaap, stappen, training, voeding, vasten, lichaamsmetingen, voortgangsfoto's, bloedwaarden, vitamine D, boeken, je leefomgeving-lijst en je instellingen.</li>
+      <li><b>Meldingen:</b> als je herinneringen aanzet, het adres van je toestel voor pushmeldingen en je tijdzone. In de app gaan meldingen via <b>Expo</b> en <b>Google Firebase Cloud Messaging</b>; die krijgen alleen de tekst van de melding en het adres van je toestel.</li>
+      <li><b>Buddy's:</b> als je buddy's gebruikt, zien zij je naam en alleen wat je zelf aanzet (zoals je focus of dagscore). Je journal, foto's, metingen, bloedwaarden, slaap, libido en retention zijn nooit zichtbaar voor anderen.</li>
+      <li><b>Locatie:</b> alleen als je bij Vitamine D je locatie deelt. Die blijft op je eigen toestel. Alleen voor de UV-index van vandaag stuurt de app je locatie, afgerond op ongeveer 10 km, naar de weerdienst <b>Open-Meteo</b>; zonder gedeelde locatie is dat Amsterdam. Open-Meteo krijgt verder niets uit de app.</li>
+      <li><b>Camera en foto's:</b> alleen als je zelf een voortgangsfoto maakt of een barcode scant. Barcodes worden niet bewaard; foto's alleen als je ze opslaat.</li>
+    </ul>
+
+    <h2>Gezondheidsgegevens</h2>
+    <p>Slaap, gewicht, foto's, bloedwaarden, libido en stemming zijn gezondheidsgegevens: bijzondere persoonsgegevens onder de AVG. We verwerken ze alleen omdat jij ze zelf invult en daarmee uitdrukkelijk toestemming geeft (AVG artikel 9 lid 2a). Je trekt die toestemming in door de gegevens of je account te verwijderen.</p>
+    <p><b>Garmin via Health Connect:</b> als je bij Meer › Garmin de koppeling aanzet, leest de app via Health Connect op je telefoon alleen je stappen, slaap (met slaapfases), trainingen en hartslag, en bij trainingen de afstand, hoogtemeters en verbrande calorieën. Bewaard worden alleen dagtotalen (stappen per dag, slaaptijden en minuten per slaapfase, je laagste hartslag per nacht) en je trainingen met hun totalen (afstand, gemiddelde en hoogste hartslag, calorieën, hoogtemeters), bij je eigen account. Geen routes of locatie. Losse metingen worden niet bewaard. Niets daarvan wordt gedeeld, ook niet met buddy's. Je zet het uit bij Meer › Garmin, of trekt de toestemming in bij Health Connect.</p>
+
+    <h2>Waarvoor</h2>
+    <p>Alleen om de app te laten werken: je gegevens bewaren, je voortgang, dagscore en XP berekenen en je herinneringen sturen. Niet voor iets anders.</p>
+
+    <h2>Waar staat het</h2>
+    <ul>
+      <li>Je gegevens en foto's staan in een database bij <b>Supabase</b>. Alleen jij kunt erbij: elke rij en elke foto is afgeschermd met je eigen account. Foto's staan in een privé-opslag.</li>
+      <li>Het lettertype, de bibliotheken en de voedingstabel (NEVO) zitten in de app zelf. Alleen voor boekcovers haalt je toestel plaatjes op bij <b>Open Library</b>, en als je een product zoekt of scant, zoekt het bij <b>Open Food Facts</b>. Die diensten zien dan je IP-adres, maar krijgen geen gegevens uit de app.</li>
+      <li>Alles gaat over een versleutelde verbinding (https).</li>
+    </ul>
+
+    <h2>Hoe lang</h2>
+    <p>Zolang je account bestaat. Verwijder je je account, dan worden al je gegevens en foto's direct gewist.</p>
+
+    <h2>Jouw rechten</h2>
+    <ul>
+      <li><b>Inzien en meenemen:</b> Meer → Back-up maken geeft je al je gegevens als bestand.</li>
+      <li><b>Aanpassen:</b> alles wat je invult kun je zelf bewerken of verwijderen.</li>
+      <li><b>Alles wissen:</b> Meer → Privacy &amp; account → Account verwijderen.</li>
+      <li><b>Vragen of een klacht:</b> mail naar <a href="mailto:info@primal-forged.com">info@primal-forged.com</a>. Je kunt ook een klacht indienen bij de <a href="https://autoriteitpersoonsgegevens.nl">Autoriteit Persoonsgegevens</a>.</li>
+    </ul>
+
+    <h2>Geen medisch advies</h2>
+    <p>De informatie in de app (over slaap, supplementen, voeding, bloedwaarden en training) is algemene informatie met bronnen. Het is geen medisch advies. Twijfel je over je gezondheid, ga dan naar een arts.</p>
+    <p class="klein">Laatst bijgewerkt: 11 oktober 2026</p>
+  </div>
+  <a class="terug" href="/">← Naar Primal Forged</a>
+</main>
+</body>
+</html>
