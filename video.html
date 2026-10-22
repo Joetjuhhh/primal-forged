@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Video · Primal Forged</title>
+<meta name="robots" content="noindex">
+<!-- Speler voor video's in de app (Herstel › Ademhaling, 22 okt). De app opent primal-forged.com/video.html?v=<id> in een
+     venster (expo-web-browser). YouTube speelt een ingesloten video alleen af binnen een website (anders "Fout 153"),
+     daarom deze pagina. Privacy-versie van de speler (youtube-nocookie.com). Alleen een geldig video-id wordt gebruikt.
+     Bron in Git: docs/website/video.html → kopiëren naar website-live/video.html. -->
+<style>
+  :root { --bg: #14100E; --text: #F4ECE0; --dim: #A89A8A; --accent: #E8551E; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font: 16px/1.5 -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { min-height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 16px; }
+  .speler { position: relative; width: 100%; max-width: 960px; margin: 0 auto; aspect-ratio: 16 / 9; background: #000; border-radius: 12px; overflow: hidden; }
+  .speler iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  p { color: var(--dim); font-size: 14px; text-align: center; max-width: 640px; margin: 16px auto 0; }
+  .merk { color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; text-align: center; margin: 0 0 12px; }
+</style>
+</head>
+<body>
+<main>
+  <p class="merk">Primal Forged</p>
+  <div class="speler" id="speler"></div>
+  <p id="uitleg">Tik op ⛶ voor volledig scherm. Sluit dit venster om terug te gaan naar de app.</p>
+</main>
+<script>
+  (function () {
+    var id = new URLSearchParams(location.search).get('v') || '';
+    var en = (new URLSearchParams(location.search).get('taal') || '') === 'en';
+    if (en) {
+      document.documentElement.lang = 'en';
+      document.getElementById('uitleg').textContent = 'Tap ⛶ for full screen. Close this window to go back to the app.';
+    }
+    if (!/^[A-Za-z0-9_-]{11}$/.test(id)) {
+      document.getElementById('uitleg').textContent = en ? 'Video not found.' : 'Video niet gevonden.';
+      return;
+    }
+    var f = document.createElement('iframe');
+    f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?rel=0&playsinline=0';
+    f.title = 'Video';
+    f.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+    f.allowFullscreen = true;
+    f.referrerPolicy = 'strict-origin-when-cross-origin';
+    document.getElementById('speler').appendChild(f);
+  })();
+</script>
+</body>
+</html>
